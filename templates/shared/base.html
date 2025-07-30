@@ -1,0 +1,390 @@
+<!-- templates/shared/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Title - Description{% endblock %}</title>
+
+    {% load static %}
+
+    <!-- Shared styles for layout components -->
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
+
+    <!-- External libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <!-- Page-specific styles -->
+    {% block extra_head %}{% endblock %}
+</head> 
+
+<body>
+    <!-- === Header starts here === -->
+    <header>
+        <nav class="primary-navbar">
+            <div class="nav-container">
+
+                <!-- Logo Section -->
+                <div class="logo">
+                    <h1>
+                        LO<span>GO</span>
+                    </h1>
+                </div>
+        
+                <!-- Search Bar -->
+                
+                <form class="search-bar">
+                    <input class="search__input" type="text" placeholder="Search">
+                </form>                
+        
+                <!-- Navigation Group (Wishlist, Cart, Profile) -->
+
+                
+                <div class="nav-group">
+                    <!-- Shopping Cart -->
+                    <div id="nav-shopping-cart-group">
+                        <button class="nav-btn">
+                        <!-- Your SVG -->
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                            <path d="M7.5 18C8.32843 18 9 18.6716 9 19.5C9 20.3284 8.32843 21 7.5 21C6.67157 21 6 20.3284 6 19.5C6 18.6716 6.67157 18 7.5 18Z" stroke="#000000" stroke-width="1.5"></path>
+                            <path d="M16.5 18.0001C17.3284 18.0001 18 18.6716 18 19.5001C18 20.3285 17.3284 21.0001 16.5 21.0001C15.6716 21.0001 15 20.3285 15 19.5001C15 18.6716 15.6716 18.0001 16.5 18.0001Z" stroke="#000000" stroke-width="1.5"></path>
+                            <path d="M2 3L2.26121 3.09184C3.5628 3.54945 4.2136 3.77826 4.58584 4.32298C4.95808 4.86771 4.95808 5.59126 4.95808 7.03836V9.76C4.95808 12.7016 5.02132 13.6723 5.88772 14.5862C6.75412 15.5 8.14857 15.5 10.9375 15.5H12M16.2404 15.5C17.8014 15.5 18.5819 15.5 19.1336 15.0504C19.6853 14.6008 19.8429 13.8364 20.158 12.3075L20.6578 9.88275C21.0049 8.14369 21.1784 7.27417 20.7345 6.69708C20.2906 6.12 18.7738 6.12 17.0888 6.12H11.0235M4.95808 6.12H7" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path>
+                            </g>
+                        </svg>
+                        <span>Shopping Cart</span>
+                        </button>
+
+                        <div id="nav-shopping-cart-text">
+                            <p>My Cart</p>
+                            <p><span id="nav-amount">&#x20B1;00.00</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Account -->
+                    <div id="nav-account">
+                        <div class="account-toggle">
+                            {% if user.is_authenticated %}
+
+                                <!-- Profile Section -->
+                                <div id="profileSection">
+                                    <img src="https://i.pinimg.com/1200x/c6/a4/da/c6a4daa0b957112153a96912645306df.jpg" alt="Profile Pic"/>
+                                    <span>{{ user.username }}</span>
+                                    <span style="font-size: 12px;">▼</span>
+                                </div>
+                            {% else %}
+                                <!-- Sign In -->
+                                <button class="nav-btn" id="signInBtn">
+                                    <h1>Login/Sign up</h1>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
+        <nav class="secondary-navbar">
+            <div class="secondary-nav-container">
+                <div class="secondary-navbar-navlist">
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Shop</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="secondary-navbar-contact">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.0002 4V5C15.0002 6.88562 15.0002 7.82843 15.586 8.41421C16.1718 9 17.1146 9 19.0002 9H20.5002M20.5002 9L18.0002 7M20.5002 9L18.0002 11" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M4.00655 7.93309C3.93421 9.84122 4.41713 13.0817 7.6677 16.3323C8.45191 17.1165 9.23553 17.7396 10 18.2327M5.53781 4.93723C6.93076 3.54428 9.15317 3.73144 10.0376 5.31617L10.6866 6.4791C11.2723 7.52858 11.0372 8.90532 10.1147 9.8278C10.1147 9.8278 10.1147 9.8278 10.1147 9.8278C10.1146 9.82792 8.99588 10.9468 11.0245 12.9755C13.0525 15.0035 14.1714 13.8861 14.1722 13.8853C14.1722 13.8853 14.1722 13.8853 14.1722 13.8853C15.0947 12.9628 16.4714 12.7277 17.5209 13.3134L18.6838 13.9624C20.2686 14.8468 20.4557 17.0692 19.0628 18.4622C18.2258 19.2992 17.2004 19.9505 16.0669 19.9934C15.2529 20.0243 14.1963 19.9541 13 19.6111" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+                    <p>(+63) 555-014</p>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- === Header ends here === -->
+
+    <!-- === Page-Specific Content === -->
+    {% block content %}{% endblock %}
+
+
+    <!-- === Footer Starts Here === -->
+    <!-- First Footer -->
+    <footer>
+        <!--Them Tags-->
+        <div id="footer-secondary-tags">
+            <!--Acts as gutter space-->
+            <div class="footer-container">
+
+                <!--Tag 1-->
+                <div class="tag">
+                    <div class="tag-image">
+                        <img class="tag-icon" src="{% static 'images/Deal-Icon.png' %}" alt="deal icon">
+                    </div>
+
+                    <div class="tag-information">
+                        <div class="tag-title">
+                            <h1>Best Prices & Deals</h1>
+                        </div>
+
+                        <div class="tag-description">
+                            <p>Don't miss our daily amazing deals and prices</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Tag 2-->
+                <div class="tag">
+                    <div class="tag-image">
+                        <img class="tag-icon" src="{% static 'images/Refund-Icon.png' %}" alt="refund icon">
+                    </div>
+
+                    <div class="tag-information">
+                        <div class="tag-title">
+                            <h1>Refundable</h1>
+                        </div>
+
+                        <div class="tag-description">
+                            <p>If your items have damage we agree to refund it</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Tag 3-->
+                <div class="tag">
+                    <div class="tag-image">
+                        <img class="tag-icon" src="IMAGES/Delivery-Icon.png" alt="delivery icon">
+                    </div>
+
+                    <div class="tag-information">
+                        <div class="tag-title">
+                            <h1>Free Delivery</h1>
+                        </div>
+
+                        <div class="tag-description">
+                            <p>Delivery coverage is currently restricted but free to Rizal and its surrounding communities.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!--Main Footer-->
+        <div id="primary-footer-links">
+            <div class="footer-container-primary">
+
+                <!--First Container (Info)-->
+                <div id="footer-anitubo-information">
+                    <div id="footer-anitubo-logo">
+                        <h1>
+                            ANI<span>TUB<img src="IMAGES/tomato.png" alt="ANITUBO Logo"></span>
+                        </h1>
+                    </div>
+
+                    <!--Address-->
+                    <div class="footer-information-content">
+                        <img class="footer-info-icon" src="IMAGES/location.png" alt="address icon">
+                        <h6>Address: </h6>
+                        <p>1762 Antipolo, Rizal</p>
+                    </div>
+
+                    <!--Call Us-->
+                    <div class="footer-information-content">
+                        <img class="footer-info-icon" src="IMAGES/telephone.png" alt="telephone icon">
+                        <h6>Call Us: </h6>
+                        <p>(+63) 555-014</p>
+                    </div>
+
+                    <!--Email-->
+                    <div class="footer-information-content">
+                        <img class="footer-info-icon" src="IMAGES/email.png" alt="email icon">
+                        <h6>Email: </h6>
+                        <p>anitubo@contact.com</p>
+                    </div>
+
+                    <!--Work hours: -->
+                    <div class="footer-information-content">
+                        <img class="footer-info-icon" src="IMAGES/time.png" alt="email icon">
+                        <h6>Work hours: </h6>
+                        <p>8AM - 10PM, Monday - Saturday</p>
+                    </div>
+
+                </div>
+
+                <!--Second Container (Account)-->
+                <div id="footer-account-links" class="footer-link">
+                    <div class="footer-link-title">
+                        <h5>My Account</h5>
+                    </div>
+
+                    <div class="footer-link-list">
+                        <ul>
+                            <li><a href="#">Wishlist</a></li>
+                            <li><a href="#">Cart</a></li>
+                            <li><a href="#">Track Order</a></li>
+                            <li><a href="#">Shipping Details</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+
+                <!--Third Container (Help)-->
+                <div id="footer-help-links" class="footer-link">
+                    <div class="footer-link-title">
+                        <h5>Help</h5>
+                    </div>
+
+                    <div class="footer-link-list">
+                        <ul>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Terms & Conditions</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!--Fourt Container (Useful Links)-->
+                <div id="footer-useful-links" class="footer-link">
+                    <div class="footer-link-title">
+                        <h5>Categories</h5>
+                    </div>
+
+                    <div class="footer-link-list">
+                        <ul>
+                            <li><a href="#">Fruits & Vegetables</a></li>
+                            <li><a href="#">Meat & Fish</a></li>
+                            <li><a href="#">Bread & Bakery</a></li>
+                            <li><a href="#">Others</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div id="final-footer-copyright">
+            <div class="footer-container-tertiary">
+                <div id="copyright">
+                    <h6>AniTubo eCommerce &copy; 2025, All Rights Reserved</h6>
+                </div>
+            </div>
+           
+        </div>
+    </footer>
+    <!-- === Footer Ends Here === -->
+
+
+
+
+
+    <!-- === Optional Modal (auth, etc) === -->
+    <!-- Chatbot -->
+    {% include 'shared/chatbot_widget.html' %}
+    
+    <!-- === vvv MODALS (Hidden by default) vvv === -->
+    <!-- Authentication Modal -->
+    <div id="authModal" class="modal hidden">
+        <div class="modal-content">
+
+            <!-- Close Button -->
+            <button id="closeModal" class="close-btn" aria-label="Close Modal">&times;</button>
+
+            <!-- Modal Title -->
+            <div id="authTitle">
+                <h2>Sign in</h2>
+            </div>
+
+            <!-- Sign In Form -->
+            <div id="signInForm">
+                <form id="loginForm" action="/login" method="POST">
+                    {% csrf_token %}
+                    
+                    <!-- Username or Email Input -->
+                    <div id="identifierInputContainer" class="inputContainer">
+                        <label for="identifier">Username or Email</label>
+                        <input type="text" id="identifier" name="identifier" placeholder="Enter your username or email" autocomplete="off" required />
+                        <p id="identifierError" class="error-message">Error message here.</p>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div id="passwordInputContainer" class="inputContainer">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required />
+                        <p id="passwordError" class="error-message">Error message here.</p>
+                    </div>
+
+                    <!-- Forgot Password -->
+                    <div id="forgotPasswordContainer">
+                        <a href="/forgot-password" id="forgotPassword">Forgot your password?</a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <div id="loginButtonContainer">
+                        <button type="submit">Log In</button>
+                    </div>
+
+                    <!-- Register Prompt -->
+                    <div id="registerButtonContainer">
+                        <p>Don't have an account?</p>
+                        <a href="/register" id="registerLink">Sign up</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- === ^^^ MODALS (Hidden by default) ^^^ === -->
+
+
+
+
+    <!-- === Scripts === -->
+    <!-- Chatbot Script -->
+    <script src="{% static 'js/chatbot.js' %}"></script>
+
+    <!--Temp should turn into js file (Toggle of modal)-->
+    <script>
+        console.log("Script loaded!");
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            const signInBtn = document.getElementById("signInBtn");
+            const authModal = document.getElementById("authModal");
+            const closeModal = document.getElementById("closeModal");
+
+            // Open modal when button clicked
+            signInBtn.addEventListener("click", () => {
+                authModal.classList.remove("hidden");
+            });
+
+            // Close modal when X is clicked
+            closeModal.addEventListener("click", () => {
+                authModal.classList.add("hidden");
+            });
+
+            // Optional: Close when clicking outside modal content
+            window.addEventListener("click", (event) => {
+                if (event.target === authModal) {
+                    authModal.classList.add("hidden");
+                }
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+
+</body>
+</html>

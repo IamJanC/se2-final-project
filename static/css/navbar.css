@@ -1,0 +1,497 @@
+/* === vvv GLOBAL CSS DO NOT TOUCH vvv === */
+/* Logo Font Temporary */
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+/* Search (Don't Touch) */
+@use postcss-color-function;
+@use postcss-nested;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+/* Reset Everything */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+    background: #f8f8f8;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+/* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
+
+
+/* === vvv HEADER vvv === */
+
+
+/* !! PRIMARY NAVBAR !! */
+nav {
+     background-color: #fefffe;
+}
+
+.nav-container {
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 auto;      /* Centers it */
+    padding: 0 2rem;     /* Adds spacing on the left & right */
+    height: 5rem; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+}
+
+
+/* Logo */
+.logo {
+    margin-right: auto;
+}
+.logo h1{
+    color: #5f862f;
+    font-family: "Lilita One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 3rem; /* Adjust as needed */
+    display: flex;
+    align-items: center; /* Vertically aligns text and image */
+    padding: 0;
+    margin: 0;
+    gap: 0.1px; /* Small spacing between letters */
+}
+.logo span {
+    margin: 0;
+    padding: 0;
+    color: #325a00;
+}
+
+
+/* Search Bar */
+.search-bar {
+    width: 50%; /* Makes the form wider */
+    max-width: 500px; /* Limits width on large screens */
+    margin: auto auto; /* Centers the form */
+    flex-grow: 1; /* Allows it to take space */
+}
+
+
+.search__title {
+    font-size: 22px;
+    font-weight: 900;
+    text-align: center;
+    color: #ff8b88;
+}
+
+.search__input {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 24px;
+    background-color: transparent;
+    transition: transform 250ms ease-in-out;
+    font-size: 14px;
+    line-height: 18px;
+    color: #575756;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 95% center;
+    border-radius: 50px;
+    border: 1px solid #575756;
+    transition: all 250ms ease-in-out;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}
+
+.search__input::placeholder {
+    color: rgba(87, 87, 86, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.search__input:hover,
+.search__input:focus {
+    padding: 12px 0;
+    outline: 0;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #575756;
+    border-radius: 0;
+    background-position: 100% center;
+}
+
+/* Right Buttons */
+.nav-group{
+    display: flex;
+    justify-content: center; /* Centers the items */
+    gap: 10rem;
+}
+
+/* Removes default button styling */
+.nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0; /* Remove padding */
+    width: auto;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Adjust icon size */
+.nav-btn svg {
+    width: auto; 
+    height: 30px;
+}
+
+/* Hide text (shopping cart) while keeping it accessible */
+.nav-btn span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+#nav-shopping-cart-group {
+    display: flex;
+    align-items: center; /* Centers items vertically */
+    gap: 0.5rem; /* Adjusts spacing between the icon and text */
+    padding: 0;
+    margin: 0;
+}
+
+#nav-shopping-cart-group p {
+    padding: 0;
+    margin: 0;
+    font-family: "Kantumruy Pro", sans-serif;
+    font-weight: 400;
+}
+
+
+#nav-amount {
+    color: #325a00;
+}
+
+#nav-account {
+  display: flex;
+  align-items: center;
+  height: 45px; /* same height as .nav-btn */
+  gap: 0.5rem;  /* spacing between profile elements */
+}
+
+#nav-account h1 {
+    font-family: "Kantumruy Pro", sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    color: black;
+}
+
+#nav-account svg {
+    width: auto;  
+    height: 10px; 
+    margin-left: 5px; /* Adds a little space between text and icon */
+}
+
+.nav-btn:hover {
+  cursor: pointer;      /* gives the hand cursor */
+  transform: scale(1.03); /* optional: slightly enlarges */
+  transition: all 0.1s ease-out; /* smooth effect */
+}
+
+
+
+#profileSection {
+  gap: 8px;
+
+}
+
+/* This reserves enough space so switching won’t shift nearby items */
+.account-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px; /* adjust to the widest content */
+  height: 40px;
+  position: relative;
+}
+
+/* Hide/show with class toggle logic */
+#signInBtn,
+#profileSection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+
+/* Default: only show one */
+#signInBtn {
+  display: flex;
+}
+
+#profileSection {
+  display: flex;
+  gap: 10px;
+}
+
+#profileSection img {
+    width: 26.4%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+#profileSection span{
+    font-family: "Kantumruy Pro", sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+
+
+
+/* !! SECONDARY NAVBAR !! */
+.secondary-navbar{
+    border-bottom: 2px solid #e8e9e9;
+}
+
+.secondary-nav-container{
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 auto;      /* Centers it */
+    padding: 0 2rem;     /* Adds spacing on the left & right */
+    height: 3rem; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+}
+
+.secondary-navbar-navlist ul{
+    list-style: none; 
+    margin: 0;
+    padding: 0;
+    display: flex; 
+    gap: 2rem; 
+    font-family: "Poiret One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+
+}
+
+
+.secondary-navbar-navlist a {
+    text-decoration: none; /* Remove underline */
+    font-size: 1rem; /* Adjust as needed */
+    font-weight: 600;
+    color: #000000; /* Dark gray, adjust for your theme */
+    transition: color 0.3s ease-in-out;
+}
+
+/* Hover Effect */
+.secondary-navbar-navlist a:hover {
+    color: #5f862f; 
+}
+
+/* Active State (Optional) */
+.secondary-navbar-navlist a:active {
+    color: #325a00; 
+}
+
+
+.secondary-navbar-contact {
+    display: flex;
+    align-items: center;
+    padding: 0;        
+    margin: 0; 
+    gap: 0.5rem;
+    font-family: "Kantumruy Pro", sans-serif;
+    font-weight: 400;
+ 
+}
+
+.secondary-navbar-contact svg {
+    width: auto; 
+    height: 30px;
+}
+/* === ^^^ HEADER ^^^ === */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*=== vvv MODALS (Hidden by default) vvv ===*/
+
+
+/* Modal Overlay */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Dimmed backdrop */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Class hidden by default for future modals */
+.hidden {
+  display: none;
+}
+
+/* Modal Box */
+.modal-content {
+  background: #fefeff;
+  padding: 2rem;
+  border-radius: 10px;
+
+  width: 100%;
+  max-width: 383px;
+
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  
+  animation: slideUp 0.3s ease;
+}
+
+/* Authentication Modal */
+#authTitle {
+    text-align: center;
+    font-family: "Zain", sans-serif;
+}
+
+.inputContainer{
+    margin-top: 20px;
+}
+
+#loginForm input {
+    width: 100%;
+    padding: 0.75em 1em;
+    font-size: 0.90rem;
+    border: 1px solid #949595;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+#loginForm label {
+    display: block; /* Add this */
+    font-size: 0.85em;
+    margin-bottom: 8px;
+    margin-left: 5px;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+#emailError, #passwordError{
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+#forgotPasswordContainer {
+    text-align: right;
+    margin: 10px 0;
+}
+
+#forgotPassword {
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-size:0.9em; 
+     color: #9095a4;
+}
+
+.error-message{
+    color: rgb(197, 47, 47);
+    font-size: 12px;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal; 
+}
+
+#loginForm button{
+    width: 100%;
+    padding: 1em 2em;
+    border-radius: 10px;
+    color: white;
+    background-color: #325a00;
+    border: 0px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#loginForm button:hover{
+    background-color: #5f862f;;
+}
+
+#loginButtonContainer{
+    margin-top: 25px;
+}
+
+#registerButtonContainer {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center; /* center horizontally */
+    align-items: center;     /* align vertically */
+    gap: 0.2em;              /* spacing between p and a */
+    color: #9095a4;
+    font-size: 0.9em;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#registerButtonContainer a {
+    text-decoration: none;
+    color: blue;
+    font-size: inherit;     /* use same font size as container */
+}
+
+
+
+/*=== ^^^ MODALS (Hidden by default) ^^^ ===*/

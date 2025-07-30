@@ -1,0 +1,252 @@
+/* === vvv GLOBAL CSS DO NOT TOUCH vvv === */
+/* Logo Font Temporary */
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+/* Search (Don't Touch) */
+@use postcss-color-function;
+@use postcss-nested;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+/* Reset Everything */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+    background: #f8f8f8;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+/* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
+
+
+
+
+
+
+
+/* === vvv FOOTER vvv === */
+
+/* Tags (First Footer) */
+.footer-container {
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 auto;      /* Centers it */
+    padding: 0 2rem;     /* Adds spacing on the left & right */
+    height: 7rem; 
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 50px;
+}
+
+.tag{
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    height: 7rem; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background-color: rgba(182, 174, 174, 0.144);
+}
+
+/* Container of image */
+.tag-image{
+    height: 100%;
+    display: flex; 
+    align-items: center;
+}
+
+.tag-icon {
+    height: 50%;
+    width: auto;
+}
+
+.tag-information {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 70%;
+}
+
+.tag-title h1 {
+    padding: 0;
+    margin: 0;
+    font-family: "Kantumruy Pro", sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    color: #101a04;
+}
+
+.tag-description p {
+    padding: 0;
+    margin: 0;
+    font-family: "Kantumruy Pro", sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+/* Second Footer */
+/* Main Footer, First Div (Information) */
+
+footer{
+    z-index: 10;
+    background-color: #f8f8f8;
+}
+.footer-container-primary {
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 auto;      /* Centers it */
+    padding: 0 2rem;     /* Adds spacing on the left & right */
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+#footer-anitubo-information{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* AniTubo Logo */
+#footer-anitubo-logo h1 {
+    color: #5f862f;
+    font-family: "Lilita One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.8rem; /* Adjust as needed */
+    display: flex;
+    align-items: center; /* Vertically aligns text and image */
+    gap: 0.1em; /* Small spacing between letters */
+
+    padding: 0;
+    margin: 0;
+}
+
+#footer-anitubo-logo span {
+    display: inline-flex;
+    align-items: center;
+    color: #325a00;
+}
+
+#footer-anitubo-logo h1 img {
+    height: 1em; /* Matches text height */
+    width: auto; /* Keeps aspect ratio */
+    vertical-align: middle; /* Ensures better alignment */
+}
+
+/* Info */
+.footer-link-list ul {
+    display: flex;
+    flex-direction: column; /* Stack the list items vertically */
+    gap: 0.75em; /* Adjust the gap between the list items */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+.footer-link-list li {
+    list-style: none; /* Remove default list styling */
+}
+
+.footer-link-list a {
+    text-decoration: none; /* Remove underline from links */
+    color: inherit; /* Keep the link color based on parent */
+}
+
+.footer-information-content{
+    display: flex;
+    gap: 4px;
+}
+
+.footer-information-content h6 {
+    padding: 0;
+    margin: 0;
+    font-family: "Kantumruy Pro", sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.footer-information-content p {
+    padding: 0;
+    margin: 0;
+    font-family: "Kantumruy Pro", sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.footer-information-content img {
+    height: 1em; /* Matches text height */
+    width: auto; /* Keeps aspect ratio */
+    vertical-align: middle; /* Ensures better alignment */
+}
+
+
+/* Main Footer, 2nd-4th Div (Links) */
+.footer-link-title {
+    margin-bottom: 2em; /* Adjust the value to control the space below the title */
+}
+
+.footer-link-title h5{
+    font-family: "Kantumruy Pro", sans-serif;
+    font-weight: 400;
+    font-size: 1.2rem; /* Adjust as needed */
+}
+
+.footer-link-list ul {
+    display: flex;
+    flex-direction: column; /* Stack the list items vertically */
+    gap: 0.75em; /* Adjust the gap between the list items */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+.footer-link-list li {
+    list-style: none; /* Remove default list styling */
+    font-family: "Kantumruy Pro", sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.footer-link-list a {
+    text-decoration: none; 
+    color: rgb(56, 47, 47); 
+}
+
+.footer-link-list a:hover {
+    text-decoration: underline; 
+    color: inherit; 
+}
+
+/* Last Footer */
+.footer-container-tertiary {
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 auto;      /* Centers it */
+    padding: 0 2rem;     /* Adds spacing on the left & right */
+    height: 4rem; 
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    border-top: 1px solid #e8e9e9;
+    align-items: center;
+}
+
+#copyright {
+    align-content: center;
+}
+
+#copyright h6 {
+    font-family: "Kantumruy Pro", sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    color: rgb(56, 47, 47); 
+}
+/* === ^^^ FOOTER ^^^ === */
