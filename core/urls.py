@@ -24,4 +24,5 @@ urlpatterns = [
     
     path('', include('main.urls')),  # 👈 This says: for any URL starting with '', check main.urls
     path('login', testdb_views.login_view, name='login'),  # 👈 the login route
+    path('register', testdb_views.register_view, name='register'),  # the register route
 ]

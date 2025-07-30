@@ -291,15 +291,24 @@
     
     <!-- === vvv MODALS (Hidden by default) vvv === -->
     <!-- Authentication Modal -->
-    <div id="authModal" class="modal hidden">
+    <div id="authModal" class="modal 
+    {% if identifier_error or password_error or show_login_modal %}
+        modal-visible
+    {% else %}
+        modal-hidden
+    {% endif %}
+    ">
         <div class="modal-content">
 
-            <!-- Close Button -->
-            <button id="closeModal" class="close-btn" aria-label="Close Modal">&times;</button>
+            <!-- Modal Title and Close Button Wrapper -->
+            <div class="auth-header-wrapper">
+                <h2 id="authTitle">Sign in</h2>
+                <button id="closeModal" class="close-btn" aria-label="Close Modal">&times;</button>
+            </div>
 
-            <!-- Modal Title -->
-            <div id="authTitle">
-                <h2>Sign in</h2>
+            <!-- Generic login failure message -->
+            <div id="loginError" class="generic-login-error {% if login_error %} {% else %}hidden{% endif %}">
+                {{ login_error }}
             </div>
 
             <!-- Sign In Form -->
@@ -311,15 +320,26 @@
                     <div id="identifierInputContainer" class="inputContainer">
                         <label for="identifier">Username or Email</label>
                         <input type="text" id="identifier" name="identifier" placeholder="Enter your username or email" autocomplete="off" required />
-                        <p id="identifierError" class="error-message">Error message here.</p>
+                        
+                        <!--Dynamic Error message here-->
+                        <p id="identifierError" class="error-message {% if identifier_error %} {% else %}hidden{% endif %}">
+                            {{ identifier_error }}
+                        </p>
                     </div>
 
                     <!-- Password Input -->
                     <div id="passwordInputContainer" class="inputContainer">
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password" placeholder="Enter your password" required />
-                        <p id="passwordError" class="error-message">Error message here.</p>
+
+                        <!--Dynamic Error message here-->
+                        <p id="passwordError" class="error-message {% if password_error %} {% else %}hidden{% endif %}">
+                            {{ password_error }}
+                        </p>
                     </div>
+
+                    
+
 
                     <!-- Forgot Password -->
                     <div id="forgotPasswordContainer">
@@ -334,11 +354,75 @@
                     <!-- Register Prompt -->
                     <div id="registerButtonContainer">
                         <p>Don't have an account?</p>
-                        <a href="/register" id="registerLink">Sign up</a>
+                        <a href="#" id="switchToRegister">Sign up</a>
                     </div>
 
                 </form>
             </div>
+
+            <!-- Sign Up Form (Initially hidden) -->
+            <div id="signUpForm" class="hidden">
+                <form id="registerForm" action="/register" method="POST">
+                    {% csrf_token %}
+
+                    <!-- Username -->
+                    <div id="newUsernameInputContainer" class="inputContainer-2">
+                        <label for="newUsername">Username</label>
+                        <input type="text" id="newUsername" name="username" placeholder="Choose a username" required />
+
+                        <!-- Dynamic Error -->
+                        <p id="newUsernameError" class="error-message {% if username_error %} {% else %}hidden{% endif %}">
+                            {{ username_error }}
+                        </p>
+                    </div>
+
+                    <!-- Email -->
+                    <div id="newEmailInputContainer" class="inputContainer-2">
+                        <label for="newEmail">Email</label>
+                        <input type="email" id="newEmail" name="email" placeholder="Your email" required />
+
+                        <!-- Dynamic Error -->
+                        <p id="newEmailError" class="error-message {% if email_error %} {% else %}hidden{% endif %}">
+                            {{ email_error }}
+                        </p>
+                    </div>
+
+                    <!-- Password -->
+                    <div id="newPasswordInputContainer" class="inputContainer-2">
+                        <label for="newPassword">Password</label>
+                        <input type="password" id="newPassword" name="password" placeholder="Create a password" required />
+
+                        <!-- Dynamic Error -->
+                        <p id="newPasswordError" class="error-message {% if password_error %} {% else %}hidden{% endif %}">
+                            {{ password_error }}
+                        </p>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div id="confirmPasswordInputContainer" class="inputContainer-2">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirm_password" placeholder="Confirm your password" required />
+
+                        <!-- Dynamic Error -->
+                        <p id="confirmPasswordError" class="error-message {% if confirm_password_error %} {% else %}hidden{% endif %}">
+                            {{ confirm_password_error }}
+                        </p>
+                    </div>
+
+                    <!-- Register Button -->
+                    <div id="registerButtonContainer">
+                        <button type="submit">Sign Up</button>
+                    </div>
+
+                    <!-- Login Prompt -->
+                    <div id="loginButtonContainer2">
+                        <p>Already have an account?</p>
+                        <a href="#" id="switchToLogin">Log in</a>
+                    </div>
+                </form>
+            </div>
+
+
         </div>
     </div>
 
@@ -352,32 +436,113 @@
     <script src="{% static 'js/chatbot.js' %}"></script>
 
     <!--Temp should turn into js file (Toggle of modal)-->
+
+    <!--Refactor later, after failed error. Display the modal-->
+    {% if show_login_modal %}
     <script>
-        console.log("Script loaded!");
-        
+        window.addEventListener("DOMContentLoaded", function () {
+            const authModal = document.getElementById("authModal");
+            if (authModal) {
+                authModal.classList.remove("modal-hidden");
+                authModal.classList.add("modal-visible");
+            }
+        });
+    </script>
+    {% endif %}
+
+
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             const signInBtn = document.getElementById("signInBtn");
             const authModal = document.getElementById("authModal");
-            const closeModal = document.getElementById("closeModal");
+            const closeModalBtn = document.getElementById("closeModal");
+            const loginError = document.getElementById("loginError");
+            const identifierError = document.getElementById("identifierError");
+            const passwordError = document.getElementById("passwordError");
+            const loginForm = document.getElementById("loginForm");
 
-            // Open modal when button clicked
-            signInBtn.addEventListener("click", () => {
-                authModal.classList.remove("hidden");
-            });
+            // Open modal
+            if (signInBtn && authModal) {
+                signInBtn.addEventListener("click", () => {
+                    // First: ensure it's visible with the hidden state
+                    authModal.classList.remove("modal-visible");
+                    authModal.classList.add("modal-hidden");
 
-            // Close modal when X is clicked
-            closeModal.addEventListener("click", () => {
-                authModal.classList.add("hidden");
-            });
+                    // Now force a reflow (forces the browser to register the hidden state)
+                    void authModal.offsetWidth;
 
-            // Optional: Close when clicking outside modal content
-            window.addEventListener("click", (event) => {
-                if (event.target === authModal) {
-                    authModal.classList.add("hidden");
-                }
-            });
+                    // Then after a small delay, transition to visible
+                    setTimeout(() => {
+                        authModal.classList.remove("modal-hidden");
+                        authModal.classList.add("modal-visible");
+                    }, 10);
+                });
+            }
+
+            // Close modal
+            if (closeModalBtn && authModal) {
+                closeModalBtn.addEventListener("click", () => {
+                    authModal.classList.remove("modal-visible");
+                    authModal.classList.add("modal-hidden");
+
+                    if (loginError) loginError.classList.add("hidden");
+                    if (identifierError) identifierError.classList.add("hidden");
+                    if (passwordError) passwordError.classList.add("hidden");
+                    if (loginForm) loginForm.reset();
+                });
+            }
         });
     </script>
+
+    <!--Script for switching forms-->
+    <script>
+        const authTitle = document.getElementById("authTitle");
+        const signInForm = document.getElementById("signInForm");
+        const signUpForm = document.getElementById("signUpForm");
+
+        const switchToRegister = document.getElementById("switchToRegister");
+        const switchToLogin = document.getElementById("switchToLogin");
+
+        const loginError = document.getElementById("loginError");
+
+        const clearErrors = (errorIds) => {
+            errorIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add("hidden");
+            });
+        };
+
+        if (switchToRegister && switchToLogin && signInForm && signUpForm && authTitle) {
+            switchToRegister.addEventListener("click", (e) => {
+                e.preventDefault();
+
+                // Hide login errors
+                if (loginError) loginError.classList.add("hidden");
+                clearErrors(["identifierError", "passwordError"]);
+
+                // Switch to Sign Up form
+                signInForm.classList.add("hidden");
+                signUpForm.classList.remove("hidden");
+                authTitle.textContent = "Sign up";
+            });
+
+            switchToLogin.addEventListener("click", (e) => {
+                e.preventDefault();
+
+                // Hide sign-up errors
+                clearErrors(["newUsernameError", "newEmailError", "newPasswordError", "confirmPasswordError"]);
+
+                // Switch to Sign In form
+                signUpForm.classList.add("hidden");
+                signInForm.classList.remove("hidden");
+                authTitle.textContent = "Sign in";
+            });
+        }
+    </script>
+
+
+
+
 
 
 

@@ -13,5 +13,6 @@ urlpatterns = [
     
     #login
     path('login', views.custom_login, name='login'),
+    path("register", register_view, name="register"),  # Add this
 ]
 

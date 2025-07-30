@@ -346,6 +346,20 @@ nav {
 
 
 /*=== vvv MODALS (Hidden by default) vvv ===*/
+/* Modal default (hidden + transparent) */
+.modal-hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Modal visible (fades/slides in) */
+.modal-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
 
 
 /* Modal Overlay */
@@ -359,7 +373,6 @@ nav {
   justify-content: center;
   align-items: center;
   z-index: 999;
-  animation: fadeIn 0.3s ease;
 }
 
 /* Class hidden by default for future modals */
@@ -378,14 +391,69 @@ nav {
 
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
   position: relative;
-  
-  animation: slideUp 0.3s ease;
 }
 
 /* Authentication Modal */
-#authTitle {
+.auth-header-wrapper {
+    position: relative;
     text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Title stays centered */
+#authTitle {
     font-family: "Zain", sans-serif;
+    margin: 0; /* Remove extra spacing */
+}
+
+/* Close button positioning */
+.close-btn {
+    all: unset; /* Resets all inherited styles */
+    position: absolute;
+    right: 0.5rem; /* slight spacing from the edge */
+    top: 50%;
+    transform: translateY(-50%);
+
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #333;
+    cursor: pointer;
+
+    padding: 0;
+    margin: 0;
+    width: auto;
+    height: auto;
+
+    font-family: sans-serif;
+    background: none;
+    border: none;
+}
+
+
+/* Optional: override universal button styles */
+.close-btn:focus,
+.close-btn:hover {
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+
+.generic-login-error {
+    background-color: #ffe6e6;
+    border: 1px solid #ff5e5e;
+    color: #b30000;
+
+    padding: 5px;
+    border-radius: 8px;
+    text-align: center;
+
+    
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 0.90rem;
 }
 
 .inputContainer{
@@ -427,6 +495,7 @@ nav {
     text-align: right;
     margin: 10px 0;
 }
+
 
 #forgotPassword {
     font-family: "Lexend", sans-serif;
@@ -491,6 +560,82 @@ nav {
     color: blue;
     font-size: inherit;     /* use same font size as container */
 }
+
+
+
+/* Registration Form */
+
+.inputContainer-2 {
+    margin-bottom: 15px;
+}
+
+#registerForm input{
+    width: 100%;
+    padding: 0.75em 1em;
+    font-size: 0.90rem;
+    border: 1px solid #949595;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+#registerForm label{
+    display: block; /* Add this */
+    font-size: 0.85em;
+    margin-bottom: 8px;
+    margin-left: 5px;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+#registerForm button{
+    width: 100%;
+    padding: 1em 2em;
+    border-radius: 10px;
+    color: white;
+    background-color: #325a00;
+    border: 0px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#registerForm button:hover {
+    background-color: #5f862f;;
+}
+
+#loginButtonContainer2   {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center; /* center horizontally */
+    align-items: center;     /* align vertically */
+    gap: 0.2em;              /* spacing between p and a */
+    color: #9095a4;
+    font-size: 0.9em;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#loginButtonContainer2 a{
+    text-decoration: none;
+    color: blue;
+    font-size: inherit;     /* use same font size as container */
+}
+
 
 
 
