@@ -3,5 +3,9 @@ from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
 from .models import Products
 
-admin.site.register(Products)
+class ProductsAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'stock')
+
+admin.site.register(Products, ProductsAdmin)
 admin.site.register(CustomUser, UserAdmin)
+

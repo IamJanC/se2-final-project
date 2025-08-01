@@ -366,12 +366,13 @@
                     {% csrf_token %}
 
                     <!-- Username -->
+                    <!-- Username -->
                     <div id="newUsernameInputContainer" class="inputContainer-2">
                         <label for="newUsername">Username</label>
                         <input type="text" id="newUsername" name="username" placeholder="Choose a username" required />
-
-                        <!-- Dynamic Error -->
-                        <p id="newUsernameError" class="error-message {% if username_error %} {% else %}hidden{% endif %}">
+                        
+                        <!-- Fixed error message element -->
+                        <p id="newUsernameError" class="error-message {% if not username_error %}hidden{% endif %}">
                             {{ username_error }}
                         </p>
                     </div>
@@ -442,112 +443,381 @@
     <script>
         window.addEventListener("DOMContentLoaded", function () {
             const authModal = document.getElementById("authModal");
+            const signInForm = document.getElementById("signInForm");
+            const signUpForm = document.getElementById("signUpForm");
+            const authTitle = document.getElementById("authTitle");
+
             if (authModal) {
                 authModal.classList.remove("modal-hidden");
                 authModal.classList.add("modal-visible");
             }
+
+            {% if register_mode %}
+                // Show sign-up tab
+                if (signInForm && signUpForm && authTitle) {
+                    signInForm.classList.add("hidden");
+                    signUpForm.classList.remove("hidden");
+                    authTitle.textContent = "Sign up";
+                }
+            {% else %}
+                // Default to login
+                if (signInForm && signUpForm && authTitle) {
+                    signUpForm.classList.add("hidden");
+                    signInForm.classList.remove("hidden");
+                    authTitle.textContent = "Sign in";
+                }
+            {% endif %}
         });
     </script>
     {% endif %}
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const signInBtn = document.getElementById("signInBtn");
-            const authModal = document.getElementById("authModal");
-            const closeModalBtn = document.getElementById("closeModal");
-            const loginError = document.getElementById("loginError");
-            const identifierError = document.getElementById("identifierError");
-            const passwordError = document.getElementById("passwordError");
-            const loginForm = document.getElementById("loginForm");
-
-            // Open modal
-            if (signInBtn && authModal) {
-                signInBtn.addEventListener("click", () => {
-                    // First: ensure it's visible with the hidden state
-                    authModal.classList.remove("modal-visible");
-                    authModal.classList.add("modal-hidden");
-
-                    // Now force a reflow (forces the browser to register the hidden state)
-                    void authModal.offsetWidth;
-
-                    // Then after a small delay, transition to visible
-                    setTimeout(() => {
-                        authModal.classList.remove("modal-hidden");
-                        authModal.classList.add("modal-visible");
-                    }, 10);
-                });
-            }
-
-            // Close modal
-            if (closeModalBtn && authModal) {
-                closeModalBtn.addEventListener("click", () => {
-                    authModal.classList.remove("modal-visible");
-                    authModal.classList.add("modal-hidden");
-
-                    if (loginError) loginError.classList.add("hidden");
-                    if (identifierError) identifierError.classList.add("hidden");
-                    if (passwordError) passwordError.classList.add("hidden");
-                    if (loginForm) loginForm.reset();
-                });
-            }
-        });
-    </script>
-
-    <!--Script for switching forms-->
-    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Modal elements
+        const signInBtn = document.getElementById("signInBtn");
+        const authModal = document.getElementById("authModal");
+        const closeModalBtn = document.getElementById("closeModal");
+        
+        // Form elements
+        const loginForm = document.getElementById("loginForm");
+        const registerForm = document.getElementById("registerForm");
+        
+        // Error elements
+        const loginError = document.getElementById("loginError");
+        const identifierError = document.getElementById("identifierError");
+        const passwordError = document.getElementById("passwordError");
+        
+        // Form toggle elements
+        const switchToRegister = document.getElementById("switchToRegister");
+        const switchToLogin = document.getElementById("switchToLogin");
         const authTitle = document.getElementById("authTitle");
         const signInForm = document.getElementById("signInForm");
         const signUpForm = document.getElementById("signUpForm");
 
-        const switchToRegister = document.getElementById("switchToRegister");
-        const switchToLogin = document.getElementById("switchToLogin");
-
-        const loginError = document.getElementById("loginError");
-
-        const clearErrors = (errorIds) => {
-            errorIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.add("hidden");
-            });
-        };
-
-        if (switchToRegister && switchToLogin && signInForm && signUpForm && authTitle) {
-            switchToRegister.addEventListener("click", (e) => {
+        // Open modal when sign in button is clicked
+        if (signInBtn && authModal) {
+            signInBtn.addEventListener("click", (e) => {
                 e.preventDefault();
-
-                // Hide login errors
-                if (loginError) loginError.classList.add("hidden");
-                clearErrors(["identifierError", "passwordError"]);
-
-                // Switch to Sign Up form
-                signInForm.classList.add("hidden");
-                signUpForm.classList.remove("hidden");
-                authTitle.textContent = "Sign up";
-            });
-
-            switchToLogin.addEventListener("click", (e) => {
-                e.preventDefault();
-
-                // Hide sign-up errors
-                clearErrors(["newUsernameError", "newEmailError", "newPasswordError", "confirmPasswordError"]);
-
-                // Switch to Sign In form
-                signUpForm.classList.add("hidden");
-                signInForm.classList.remove("hidden");
-                authTitle.textContent = "Sign in";
+                showModal();
             });
         }
+
+        // Close modal
+        if (closeModalBtn && authModal) {
+            closeModalBtn.addEventListener("click", () => {
+                hideModal();
+            });
+        }
+
+        // Close modal when clicking outside
+        if (authModal) {
+            authModal.addEventListener("click", (e) => {
+                if (e.target === authModal) {
+                    hideModal();
+                }
+            });
+        }
+
+        // Switch to register form
+        if (switchToRegister) {
+            switchToRegister.addEventListener("click", (e) => {
+                e.preventDefault();
+                switchToSignUp();
+            });
+        }
+
+        // Switch to login form
+        if (switchToLogin) {
+            switchToLogin.addEventListener("click", (e) => {
+                e.preventDefault();
+                switchToSignIn();
+            });
+        }
+
+        // Prevent register form submission and validate
+        if (registerForm) {
+            registerForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                validateRegisterForm();
+            });
+        }
+
+        // Helper functions
+        function showModal() {
+            authModal.classList.remove("modal-hidden");
+            authModal.classList.add("modal-visible");
+        }
+
+        function hideModal() {
+            authModal.classList.remove("modal-visible");
+            authModal.classList.add("modal-hidden");
+            
+            // Clear any visible errors
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            if (loginForm) loginForm.reset();
+        }
+
+        function switchToSignUp() {
+            signInForm.classList.add("hidden");
+            signUpForm.classList.remove("hidden");
+            authTitle.textContent = "Sign up";
+            
+            // Clear login form errors
+            document.querySelectorAll('#loginForm .error-message').forEach(el => {
+                el.classList.add('hidden');
+            });
+        }
+
+        function switchToSignIn() {
+            signUpForm.classList.add("hidden");
+            signInForm.classList.remove("hidden");
+            authTitle.textContent = "Sign in";
+            
+            // Clear registration form errors
+            document.querySelectorAll('#registerForm .error-message').forEach(el => {
+                el.classList.add('hidden');
+            });
+        }
+
+        function validateRegisterForm() {
+            const form = registerForm;
+            const username = form.elements['username'].value.trim();
+            const email = form.elements['email'].value.trim();
+            const password = form.elements['password'].value;
+            const confirmPassword = form.elements['confirm_password'].value;
+            let isValid = true;
+
+            // Clear previous errors
+            document.querySelectorAll('#registerForm .error-message').forEach(el => {
+                el.classList.add('hidden');
+            });
+
+            // Validate username
+            const usernameError = document.getElementById("newUsernameError"); 
+            if (!username) {
+                usernameError.textContent = 'Username is required';
+                usernameError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                usernameError.classList.add('hidden');
+            }
+
+            // Validate email
+            if (!email) {
+                document.getElementById("newEmailError").textContent = 'Email is required';
+                document.getElementById("newEmailError").classList.remove('hidden');
+                isValid = false;
+            } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+                document.getElementById("newEmailError").textContent = 'Enter a valid email';
+                document.getElementById("newEmailError").classList.remove('hidden');
+                isValid = false;
+            }
+
+            // Validate password
+            if (!password) {
+                document.getElementById("newPasswordError").textContent = 'Password is required';
+                document.getElementById("newPasswordError").classList.remove('hidden');
+                isValid = false;
+            } else if (password.length < 8) {
+                document.getElementById("newPasswordError").textContent = 'Password must be at least 8 characters';
+                document.getElementById("newPasswordError").classList.remove('hidden');
+                isValid = false;
+            }
+
+            // Validate confirm password
+            if (!confirmPassword) {
+                document.getElementById("confirmPasswordError").textContent = 'Please confirm your password';
+                document.getElementById("confirmPasswordError").classList.remove('hidden');
+                isValid = false;
+            } else if (password !== confirmPassword) {
+                document.getElementById("confirmPasswordError").textContent = 'Passwords do not match';
+                document.getElementById("confirmPasswordError").classList.remove('hidden');
+                isValid = false;
+            }
+
+            // If valid, submit the form
+            if (isValid) {
+                form.submit();
+            }
+        }
+
+        // Get form inputs
+        const usernameInput = document.getElementById("newUsername");
+        const emailInput = document.getElementById("newEmail");
+        const passwordInput = document.getElementById("newPassword");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+
+        // Real-time username availability check
+        if (usernameInput) {
+            let usernameTimeout;
+            let lastValidUsername = '';
+            
+            usernameInput.addEventListener("input", function() {
+                clearTimeout(usernameTimeout);
+                const username = this.value.trim();
+                const errorElement = document.getElementById("newUsernameError");
+                
+                // Reset error state if empty or same as last valid
+                if (!username || username === lastValidUsername) {
+                    errorElement.classList.add('hidden');
+                    return;
+                }
+
+                usernameTimeout = setTimeout(async () => {
+                    // Basic validation
+                    if (username.length < 3) {
+                        errorElement.textContent = 'Username must be at least 3 characters';
+                        errorElement.classList.remove('hidden');
+                        return;
+                    }
+
+                    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                        errorElement.textContent = 'Only letters, numbers and underscores allowed';
+                        errorElement.classList.remove('hidden');
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(`/check_username/?username=${encodeURIComponent(username)}`);
+                        
+                        if (!response.ok) {
+                            throw new Error(`Username check failed (Status: ${response.status})`);
+                        }
+                        
+                        const data = await response.json();
+                        
+                        if (data.available) {
+                            lastValidUsername = username;
+                            errorElement.classList.add('hidden');
+                        } else {
+                            errorElement.textContent = 'Username is already taken';
+                            errorElement.classList.remove('hidden');
+                        }
+                    } catch (error) {
+                        console.error('Username check error:', error);
+                        errorElement.textContent = 'Service unavailable. Please try again.';
+                        errorElement.classList.remove('hidden');
+                    }
+                }, 500);
+            });
+        }
+
+        // Real-time email availability check
+        if (emailInput) {
+            let emailTimeout;
+            let lastValidEmail = '';
+            
+            emailInput.addEventListener("input", function() {
+                clearTimeout(emailTimeout);
+                const email = this.value.trim().toLowerCase();
+                const errorElement = document.getElementById("newEmailError");
+                
+                // Reset error state if empty or same as last valid
+                if (!email || email === lastValidEmail) {
+                    errorElement.classList.add('hidden');
+                    return;
+                }
+
+                emailTimeout = setTimeout(async () => {
+                    // Basic validation
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                        errorElement.textContent = 'Please enter a valid email address';
+                        errorElement.classList.remove('hidden');
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(`/check_email/?email=${encodeURIComponent(email)}`);
+                        
+                        if (!response.ok) {
+                            throw new Error(`Email check failed (Status: ${response.status})`);
+                        }
+                        
+                        const data = await response.json();
+                        
+                        if (data.available) {
+                            lastValidEmail = email;
+                            errorElement.classList.add('hidden');
+                        } else {
+                            errorElement.textContent = 'Email is already registered';
+                            errorElement.classList.remove('hidden');
+                        }
+                    } catch (error) {
+                        console.error('Email check error:', error);
+                        errorElement.textContent = 'Service unavailable. Please try again.';
+                        errorElement.classList.remove('hidden');
+                    }
+                }, 500);
+            });
+        }
+        // Helper function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Password validation
+        if (passwordInput) {
+            passwordInput.addEventListener("input", validatePassword);
+            passwordInput.addEventListener("blur", validatePassword);
+        }
+
+        // Confirm password validation
+        if (confirmPasswordInput) {
+            confirmPasswordInput.addEventListener("input", validateConfirmPassword);
+            confirmPasswordInput.addEventListener("blur", validateConfirmPassword);
+        }
+
+        function validatePassword() {
+            const password = passwordInput.value;
+            const errorElement = document.getElementById("newPasswordError");
+            
+            if (!password) {
+                errorElement.textContent = 'Password is required';
+                errorElement.classList.remove('hidden');
+                return false;
+            } else if (password.length < 8) {
+                errorElement.textContent = 'Password must be at least 8 characters';
+                errorElement.classList.remove('hidden');
+                return false;
+            }
+            errorElement.classList.add('hidden');
+            return true;
+        }
+
+        function validateConfirmPassword() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const errorElement = document.getElementById("confirmPasswordError");
+            
+            if (!confirmPassword) {
+                errorElement.textContent = 'Please confirm your password';
+                errorElement.classList.remove('hidden');
+                return false;
+            } else if (password !== confirmPassword) {
+                errorElement.textContent = 'Passwords do not match';
+                errorElement.classList.remove('hidden');
+                return false;
+            }
+            errorElement.classList.add('hidden');
+            return true;
+        }
+    });
     </script>
-
-
-
-
-
-
-
-
-
 
 
 

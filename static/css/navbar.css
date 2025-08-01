@@ -636,6 +636,15 @@ nav {
     font-size: inherit;     /* use same font size as container */
 }
 
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.hidden {
+    display: none;
+}
 
 
 

@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
 
 User = get_user_model()
 
@@ -51,20 +52,16 @@ def login_view(request):
 
     return render(request, "main/home.html")
 
-
 def register_view(request):
-    print("🟡 register_view called")
     context = {}
-
+    
     if request.method == "POST":
-        print("🟢 POST request received")
-
         username = request.POST.get("username", "").strip()
         email = request.POST.get("email", "").strip()
         password = request.POST.get("password", "")
         confirm_password = request.POST.get("confirm_password", "")
 
-        # Field-level validation
+        # Field-level blank checks
         if not username:
             context["username_error"] = "Username is required."
         if not email:
@@ -73,25 +70,58 @@ def register_view(request):
             context["password_error"] = "Password is required."
         if not confirm_password:
             context["confirm_password_error"] = "Please confirm your password."
+
+        # Only check for existing username if username was provided
+        if username and not context.get("username_error"):
+            if User.objects.filter(username=username).exists():
+                context["username_error"] = "This username is already in use."
+
+        # Only check for existing email if email was provided
+        if email and not context.get("email_error"):
+            if User.objects.filter(email=email).exists():
+                context["email_error"] = "This email is already registered."
+
+        # Password match check
         if password and confirm_password and password != confirm_password:
             context["confirm_password_error"] = "Passwords do not match."
 
-        # Check for existing username/email
-        if username and User.objects.filter(username=username).exists():
-            context["username_error"] = "This username is already taken."
-
-        if email and User.objects.filter(email=email).exists():
-            context["email_error"] = "This email is already registered."
-
-        # If any errors, show modal and return
-        if any(context.get(key) for key in context):
-            context["show_login_modal"] = True  # Modal should open
+        if context:  # If any errors
+            context.update({
+                "show_login_modal": True,
+                "register_mode": True,
+                "form_data": {
+                    'username': username,
+                    'email': email
+                }
+            })
             return render(request, "main/home.html", context)
 
-        # Create new user
-        new_user = User.objects.create_user(username=username, email=email, password=password)
-        login(request, new_user)
-        print(f"🟢 Registration successful for user {new_user.username}")
-        return redirect("home")  # Redirect to home or profile
+        # Create user if no errors
+        try:
+            new_user = User.objects.create_user(username=username, email=email, password=password)
+            login(request, new_user)
+            return redirect("home")
+        except Exception as e:
+            context.update({
+                "username_error": "Registration failed. Please try again.",
+                "show_login_modal": True,
+                "register_mode": True,
+                "form_data": {
+                    'username': username,
+                    'email': email
+                }
+            })
+            return render(request, "main/home.html", context)
 
-    return redirect("home")  # Or render a registration page directly
+    return redirect("home")
+
+
+def home_view(request):
+    context = {}
+    if "form_errors" in request.session:
+        context.update(request.session.pop("form_errors"))
+    return render(request, "main/home.html", context)
+
+
+
+
