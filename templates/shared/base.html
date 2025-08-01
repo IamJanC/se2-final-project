@@ -69,15 +69,25 @@
                     <div id="nav-account">
                         <div class="account-toggle">
                             {% if user.is_authenticated %}
-
-                                <!-- Profile Section -->
-                                <div id="profileSection">
-                                    <img src="https://i.pinimg.com/1200x/c6/a4/da/c6a4daa0b957112153a96912645306df.jpg" alt="Profile Pic"/>
+                                <!-- ✅ Profile Section for Logged-In Users -->
+                                <div id="profileSection" style="position: relative;">
+                                    <img src="https://i.pinimg.com/1200x/c6/a4/da/c6a4daa0b957112153a96912645306df.jpg" alt="Profile Pic" />
                                     <span>{{ user.username }}</span>
                                     <span style="font-size: 12px;">▼</span>
+
+                                    <!-- ✅ Logout Dropdown Menu -->
+                                    <div style="position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ccc; display: none; min-width: 120px;" id="logoutDropdown">
+                                        <form method="POST" action="{% url 'logout' %}" style="margin: 0;">
+                                            {% csrf_token %}
+                                            <button type="submit"
+                                                style="display: block; padding: 10px 16px; color: #333; text-decoration: none; font-weight: 500; background: none; border: none; width: 100%; text-align: left; cursor: pointer;">
+                                                🚪 Logout
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             {% else %}
-                                <!-- Sign In -->
+                                <!-- 🚪 Login/Signup Button (shown when not authenticated) -->
                                 <button class="nav-btn" id="signInBtn">
                                     <h1>Login/Sign up</h1>
                                 </button>
@@ -362,16 +372,14 @@
 
             <!-- Sign Up Form (Initially hidden) -->
             <div id="signUpForm" class="hidden">
-                <form id="registerForm" action="/register" method="POST">
+                <form id="registerForm" action="{% url 'register' %}" method="POST">
                     {% csrf_token %}
 
                     <!-- Username -->
-                    <!-- Username -->
                     <div id="newUsernameInputContainer" class="inputContainer-2">
                         <label for="newUsername">Username</label>
-                        <input type="text" id="newUsername" name="username" placeholder="Choose a username" required />
-                        
-                        <!-- Fixed error message element -->
+                        <input type="text" id="newUsername" name="username" placeholder="Choose a username (e.g. yourname123)" 
+                            value="{{ form_data.username|default:'' }}" required />
                         <p id="newUsernameError" class="error-message {% if not username_error %}hidden{% endif %}">
                             {{ username_error }}
                         </p>
@@ -380,10 +388,9 @@
                     <!-- Email -->
                     <div id="newEmailInputContainer" class="inputContainer-2">
                         <label for="newEmail">Email</label>
-                        <input type="email" id="newEmail" name="email" placeholder="Your email" required />
-
-                        <!-- Dynamic Error -->
-                        <p id="newEmailError" class="error-message {% if email_error %} {% else %}hidden{% endif %}">
+                        <input type="email" id="newEmail" name="email" placeholder="Enter your email (e.g. you@example.com)"
+                            value="{{ form_data.email|default:'' }}" required />
+                        <p id="newEmailError" class="error-message {% if not email_error %}hidden{% endif %}">
                             {{ email_error }}
                         </p>
                     </div>
@@ -391,10 +398,8 @@
                     <!-- Password -->
                     <div id="newPasswordInputContainer" class="inputContainer-2">
                         <label for="newPassword">Password</label>
-                        <input type="password" id="newPassword" name="password" placeholder="Create a password" required />
-
-                        <!-- Dynamic Error -->
-                        <p id="newPasswordError" class="error-message {% if password_error %} {% else %}hidden{% endif %}">
+                        <input type="password" id="newPassword" name="password" placeholder="At least 6 characters, letters & numbers" required />
+                        <p id="newPasswordError" class="error-message {% if not password_error %}hidden{% endif %}">
                             {{ password_error }}
                         </p>
                     </div>
@@ -402,13 +407,16 @@
                     <!-- Confirm Password -->
                     <div id="confirmPasswordInputContainer" class="inputContainer-2">
                         <label for="confirmPassword">Confirm Password</label>
-                        <input type="password" id="confirmPassword" name="confirm_password" placeholder="Confirm your password" required />
-
-                        <!-- Dynamic Error -->
-                        <p id="confirmPasswordError" class="error-message {% if confirm_password_error %} {% else %}hidden{% endif %}">
+                        <input type="password" id="confirmPassword" name="confirm_password" placeholder="Re-type your password" required />
+                        <p id="confirmPasswordError" class="error-message {% if not confirm_password_error %}hidden{% endif %}">
                             {{ confirm_password_error }}
                         </p>
                     </div>
+
+                    <!-- Generic Registration Error (if any) -->
+                    {% if registration_error %}
+                        <p class="error-message">{{ registration_error }}</p>
+                    {% endif %}
 
                     <!-- Register Button -->
                     <div id="registerButtonContainer">
@@ -435,6 +443,25 @@
     <!-- === Scripts === -->
     <!-- Chatbot Script -->
     <script src="{% static 'js/chatbot.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const profileSection = document.getElementById('profileSection');
+            const logoutDropdown = document.getElementById('logoutDropdown');
+
+            if (profileSection && logoutDropdown) {
+                profileSection.addEventListener('click', function () {
+                    const isVisible = logoutDropdown.style.display === 'block';
+                    logoutDropdown.style.display = isVisible ? 'none' : 'block';
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (!profileSection.contains(e.target)) {
+                        logoutDropdown.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
 
     <!--Temp should turn into js file (Toggle of modal)-->
 

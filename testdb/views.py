@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
+from django.contrib.auth.models import User
+import re
 
 User = get_user_model()
 
@@ -54,64 +56,74 @@ def login_view(request):
 
 def register_view(request):
     context = {}
-    
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
         email = request.POST.get("email", "").strip()
         password = request.POST.get("password", "")
         confirm_password = request.POST.get("confirm_password", "")
 
-        # Field-level blank checks
+        # ✅ USERNAME VALIDATION
         if not username:
-            context["username_error"] = "Username is required."
+            context["username_error"] = "Please enter a username."
+        elif len(username) < 3:
+            context["username_error"] = "Username must be at least 3 characters long."
+        elif not re.match(r"^[A-Za-z0-9_.-]+$", username):
+            context["username_error"] = "Username can only use letters, numbers, underscores (_), dashes (-), and dots (.)"
+        elif User.objects.filter(username=username).exists():
+            context["username_error"] = "This username is already taken. Try another one."
+
+        # ✅ EMAIL VALIDATION
         if not email:
-            context["email_error"] = "Email is required."
+            context["email_error"] = "Please enter an email address."
+        elif not re.match(r"^[^@]+@[^@]+\.[^@]+$", email):
+            context["email_error"] = "Please enter a valid email address (e.g. you@example.com)."
+        elif User.objects.filter(email=email).exists():
+            context["email_error"] = "This email is already registered. Try logging in instead."
+
+        # ✅ PASSWORD VALIDATION
         if not password:
-            context["password_error"] = "Password is required."
+            context["password_error"] = "Please create a password."
+        elif len(password) < 6:
+            context["password_error"] = "Password must be at least 6 characters long."
+        elif not re.search(r"[A-Za-z]", password) or not re.search(r"\d", password):
+            context["password_error"] = "Password must contain both letters and numbers."
+
+        # ✅ CONFIRM PASSWORD CHECK
         if not confirm_password:
             context["confirm_password_error"] = "Please confirm your password."
-
-        # Only check for existing username if username was provided
-        if username and not context.get("username_error"):
-            if User.objects.filter(username=username).exists():
-                context["username_error"] = "This username is already in use."
-
-        # Only check for existing email if email was provided
-        if email and not context.get("email_error"):
-            if User.objects.filter(email=email).exists():
-                context["email_error"] = "This email is already registered."
-
-        # Password match check
-        if password and confirm_password and password != confirm_password:
+        elif password != confirm_password:
             context["confirm_password_error"] = "Passwords do not match."
 
-        if context:  # If any errors
+        # If any errors exist, return with feedback
+        if context:
             context.update({
                 "show_login_modal": True,
                 "register_mode": True,
                 "form_data": {
-                    'username': username,
-                    'email': email
+                    "username": username,
+                    "email": email
                 }
             })
             return render(request, "main/home.html", context)
 
-        # Create user if no errors
+        # ✅ Create the user if all validations pass
         try:
-            new_user = User.objects.create_user(username=username, email=email, password=password)
-            login(request, new_user)
+            user = User.objects.create_user(username=username, email=email, password=password)
+            login(request, user)
             return redirect("home")
         except Exception as e:
+            print("🔴 Exception while creating user:", e)
+
             context.update({
-                "username_error": "Registration failed. Please try again.",
+                "registration_error": "Something went wrong on our end. Please try again shortly.",
                 "show_login_modal": True,
                 "register_mode": True,
                 "form_data": {
-                    'username': username,
-                    'email': email
+                    "username": username,
+                    "email": email
                 }
             })
-            return render(request, "main/home.html", context)
+            return render(request, 'main/home.html', context)
 
     return redirect("home")
 
@@ -121,7 +133,3 @@ def home_view(request):
     if "form_errors" in request.session:
         context.update(request.session.pop("form_errors"))
     return render(request, "main/home.html", context)
-
-
-
-
