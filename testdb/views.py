@@ -26,7 +26,7 @@ def login_view(request):
         # If any field was blank, return early
         if context.get("identifier_error") or context.get("password_error"):
             context["show_login_modal"] = True
-            return render(request, "main/home.html", context)
+            return render(request, "templates/home.html", context)
 
         # Attempt to get user by username or email
         try:
@@ -38,21 +38,22 @@ def login_view(request):
                 print("🔴 User not found")
                 context["login_error"] = "Invalid username/email or password."
                 context["show_login_modal"] = True
-                return render(request, "main/home.html", context)
+                return render(request, "templates/home.html", context)
 
         # Attempt authentication
         authenticated_user = authenticate(request, username=user.username, password=password)
         if authenticated_user:
             login(request, authenticated_user)
             print(f"🟢 Login successful for user {authenticated_user.username}")
-            return redirect("home")
+            return redirect("main:home")
+
         else:
             print("🔴 Incorrect password")
             context["login_error"] = "Invalid username/email or password."
             context["show_login_modal"] = True
-            return render(request, "main/home.html", context)
+            return render(request, "templates/home.html", context)
 
-    return render(request, "main/home.html")
+    return render(request, "templates/home.html")
 
 def register_view(request):
     context = {}
@@ -110,7 +111,7 @@ def register_view(request):
         try:
             user = User.objects.create_user(username=username, email=email, password=password)
             login(request, user)
-            return redirect("home")
+            return redirect("main:home")
         except Exception as e:
             print("🔴 Exception while creating user:", e)
 
@@ -123,13 +124,13 @@ def register_view(request):
                     "email": email
                 }
             })
-            return render(request, 'main/home.html', context)
+            return render(request, 'templates/home.html', context)
 
-    return redirect("home")
+    return redirect("main:home")
 
 
 def home_view(request):
     context = {}
     if "form_errors" in request.session:
         context.update(request.session.pop("form_errors"))
-    return render(request, "main/home.html", context)
+    return render(request, "templates/home.html", context)

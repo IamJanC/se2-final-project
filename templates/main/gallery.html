@@ -1,0 +1,126 @@
+{% extends "shared/base.html" %}
+{% load static %}
+
+{% block title %}Gallery{% endblock %}
+
+{% block extra_head %}
+<!-- Homepage-specific styles only -->
+<link rel="stylesheet" href="{% static 'css/gallery.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="gallery-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <h3>All Categories</h3>
+      <ul>
+        <li><label><input type="checkbox"> Vegetables <span>(10)</span></label></li>
+        <li><label><input type="checkbox"> Egg <span>(12)</span></label></li>
+        <li><label><input type="checkbox"> Fruits <span>(8)</span></label></li>
+        <li><label><input type="checkbox"> Meat <span>(5)</span></label></li>
+        <li><label><input type="checkbox"> Oil <span>(3)</span></label></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Price</h3>
+      <input type="range" min="0" max="1000" value="500" id="priceRange">
+      <span id="priceDisplay">₱0 - ₱1000</span>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Rating</h3>
+      <ul class="rating-filter">
+        <li><label><input type="checkbox"> <span>★★★★★</span> 5.0</label></li>
+        <li><label><input type="checkbox"> <span>★★★★☆</span> 4.0 & up</label></li>
+        <li><label><input type="checkbox"> <span>★★★☆☆</span> 3.0 & up</label></li>
+        <li><label><input type="checkbox"> <span>★★☆☆☆</span> 2.0 & up</label></li>
+        <li><label><input type="checkbox"> <span>★☆☆☆☆</span> 1.0 & up</label></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Popular Tag</h3>
+      <div class="tags">
+        <span class="tag">Fresh</span>
+        <span class="tag">Organic</span>
+        <span class="tag">Sale</span>
+        <span class="tag">New</span>
+        <span class="tag">Local</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section discount-banner">
+      <img src="{% static 'img/discount.jpg' %}" alt="Discount" />
+      <div>
+        <strong>79% Discount</strong> on your first order<br>
+        <a href="#" class="shop-now-btn">Shop Now &rarr;</a>
+      </div>
+    </div>
+
+    <div class="sidebar-section sale-products">
+      <h3>Sale Products</h3>
+      <div class="sale-product-card">
+        <img src="{% static 'img/tomato.jpg' %}" alt="Tomato">
+        <div><span>Tomato</span><span class="sale-price">₱2.00</span></div>
+      </div>
+      <div class="sale-product-card">
+        <img src="{% static 'img/cabbage.jpg' %}" alt="Cabbage">
+        <div><span>Chinese Cabbage</span><span class="sale-price">₱3.00</span></div>
+      </div>
+      <div class="sale-product-card">
+        <img src="{% static 'img/eggplant.jpg' %}" alt="Eggplant">
+        <div><span>Green Eggplant</span><span class="sale-price">₱2.50</span></div>
+      </div>
+    </div>
+    <button class="filter-btn">Filter</button>
+  </aside>
+
+  <!-- Main Product Grid -->
+  <main class="product-gallery">
+    <div class="gallery-controls">
+      <select id="sortDropdown">
+        <option>Sort by: Latest</option>
+        <option>Price: Low to High</option>
+        <option>Price: High to Low</option>
+        <option>Rating: High to Low</option>
+      </select>
+      <span class="results-count">32 results found</span>
+    </div>
+
+
+    <div class="product-grid">
+      {% for product in products %}
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <img src="{% static 'img/'|add:product.image_url %}" alt="{{ product.name }}">
+            {% if product.stock == 0 %}
+              <span class="stock-out-badge">Out of stock</span>
+            {% endif %}
+          </div>
+          <div class="product-info">
+            <h3>{{ product.name }}</h3>
+            <div class="price">₱{{ product.price }}</div>
+            <div class="stock">{{ product.stock }} in stock</div>
+            <button class="add-cart-btn" {% if product.stock == 0 %}disabled{% endif %}>Add to cart</button>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+
+      <!-- Add more cards or later loop through products with Django -->
+    </div>
+
+    <div class="pagination">
+      <button>&laquo;</button>
+      <button class="active">1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>4</button>
+      <button>&raquo;</button>
+    </div>
+  </main>
+</div>
+{% endblock %}

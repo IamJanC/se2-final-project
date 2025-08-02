@@ -1,0 +1,35 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 40px auto;">
+
+    {% if messages %}
+        <ul style="padding: 10px; background-color: #d4edda; color: #155724; border-radius: 5px; list-style: none; margin-bottom: 20px;">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h2 style="margin-bottom: 20px;">My Orders</h2>
+
+    <div style="margin-bottom: 20px;">
+        <a href="{% url 'main:home' %}">Browse more</a>
+    </div>
+
+    {% if orders %}
+        <ul style="list-style: none; padding: 0;">
+            {% for order in orders %}
+            <li style="border-bottom: 1px solid #ccc; padding: 10px 0;">
+                <strong>{{ order.product }}</strong> – {{ order.quantity }} pcs<br>
+                <em>Status:</em> {{ order.status }}<br>
+                <small>Placed on {{ order.created_at }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No orders yet.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

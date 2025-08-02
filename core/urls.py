@@ -24,8 +24,11 @@ urlpatterns = [
     path('', include('main.urls')),   # 👈 main app routing
     path('login', testdb_views.login_view, name='login'),  # 👈 login
     path('register', testdb_views.register_view, name='register'),  # 👈 register
-
-    # ✅ logout that redirects to homepage after logging out
-    path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),  # 👈 logout
+    path('orders/', include('orders.urls')),            # orders app
+    
+     # Show product list at /shop/
+    path('shop/', product_views.product_list, name='shop'),  # 👈 This is the key line
+    
+    path('shop/', include('products.urls', namespace='products')),
 ]
-

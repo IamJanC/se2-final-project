@@ -258,3 +258,21 @@
       startChat();
     }
   };
+
+  document.addEventListener("DOMContentLoaded", function () {
+      const chatIcon = document.getElementById("chat-icon");
+      const chatContainer = document.getElementById("chatbot-container");
+      const closeBtn = document.getElementById("close-chat");
+
+      chatIcon.addEventListener("click", function () {
+          chatContainer.style.display = "block";
+          chatIcon.style.display = "none";
+      });
+
+      closeBtn.addEventListener("click", function () {
+          chatContainer.style.display = "none";
+          chatIcon.style.display = "block";
+      });
+  });
+
+

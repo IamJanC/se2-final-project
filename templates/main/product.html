@@ -59,59 +59,31 @@
         </div>
         
         <div class="product-details">
-            <div class="breadcrumbs">
-                <a href="index.html">Home</a> > 
-                <a href="GalleryPage.html">Eggs</a> > 
-                <span>Organic Eggs</span>
+            <div class="product-image">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
             </div>
-            
-            <h1>Organic Free-Range Eggs</h1>
-            <div class="rating">★★★★☆ <span class="rating-count">(42 reviews)</span></div>
-            
-            <div class="price-container">
-                <span class="price">$12.99</span>
-                <span class="old-price">$15.99</span>
-                <span class="discount">Save 20%</span>
-            </div>
-            
-            <div class="availability in-stock">
-                <i class="fas fa-check-circle"></i> In Stock (25 remaining)
-            </div>
-            
-            <div class="delivery-info">
-                <div class="delivery-option">
-                    <i class="fas fa-truck"></i>
-                    <span>Free delivery on orders over $50</span>
-                </div>
-                <div class="delivery-option">
-                    <i class="fas fa-store"></i>
-                    <span>Pickup available at our Makati store</span>
-                </div>
-            </div>
-            
-            <div class="quantity-selector">
-                <button class="qty-minus">-</button>
-                <input type="number" value="1" min="1" max="25" id="quantityInput">
-                <button class="qty-plus">+</button>
-                <span class="stock-notice">Max 25 per customer</span>
-            </div>
-            
-            <div class="action-buttons">
-                <button class="add-to-cart">
-                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                </button>
-                <button class="wishlist">
-                    <i class="far fa-heart"></i> Wishlist
-                </button>
-            </div>
+            <div class="product-info">
+                <h2>{{ product.name }}</h2>
+                <p class="price">₱{{ product.price }}</p>
+                <p class="description">{{ product.description }}</p>
 
-            <div class="social-share">
-                <span>Share:</span>
-                <a href="#"><i class="fab fa-facebook facebook-icon"></i></a>
-                <a href="#"><i class="fab fa-twitter twitter-icon"></i></a>
-                <a href="#"><i class="fab fa-instagram instagram-icon"></i></a>
-            </div>
+                <!-- Quantity Selector -->
+                <div class="quantity-selector">
+                    <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                    <input type="number" id="quantityInput" value="1" min="1">
+                    <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                </div>
 
+                <!-- Add to Cart / Order Form -->
+                <form method="POST" action="{% url 'main:add_to_cart' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <input type="hidden" name="quantity" id="formQuantity" value="1">
+                    <button type="submit" class="add-to-cart">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
+                </form>
+            </div>
         </div>
 
         <div class="product-tabs">

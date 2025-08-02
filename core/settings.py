@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'main',         # main app
     'testdb',        # authentication app
     'chatbot',      # chatbot app
+    'products',      # products app
+    'orders',     # orders app
 ]
 
 MIDDLEWARE = [

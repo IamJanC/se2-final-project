@@ -77,6 +77,10 @@
 
                                     <!-- ✅ Logout Dropdown Menu -->
                                     <div style="position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ccc; display: none; min-width: 120px;" id="logoutDropdown">
+                                        <a href="{% url 'orders:my_orders' %}"
+                                            style="display: block; padding: 10px 16px; color: #333; text-decoration: none; font-weight: 500; border-bottom: 1px solid #eee;">
+                                            📦 My Orders
+                                        </a>
                                         <form method="POST" action="{% url 'logout' %}" style="margin: 0;">
                                             {% csrf_token %}
                                             <button type="submit"
@@ -103,8 +107,8 @@
             <div class="secondary-nav-container">
                 <div class="secondary-navbar-navlist">
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Shop</a></li>
+                        <li><a href="{% url 'main:home' %}">Home</a></li>
+                        <li><a href="{% url 'main:shop' %}">Shop</a></li>
                         <li><a href="#">About Us</a></li>
                         <li><a href="#">Contact Us</a></li>
                     </ul>
@@ -537,15 +541,6 @@
             });
         }
 
-        // Close modal when clicking outside
-        if (authModal) {
-            authModal.addEventListener("click", (e) => {
-                if (e.target === authModal) {
-                    hideModal();
-                }
-            });
-        }
-
         // Switch to register form
         if (switchToRegister) {
             switchToRegister.addEventListener("click", (e) => {
@@ -682,19 +677,19 @@
         if (usernameInput) {
             let usernameTimeout;
             let lastValidUsername = '';
-            
-            usernameInput.addEventListener("input", function() {
+
+            usernameInput.addEventListener("input", function () {
                 clearTimeout(usernameTimeout);
                 const username = this.value.trim();
                 const errorElement = document.getElementById("newUsernameError");
-                
+
                 // Reset error state if empty or same as last valid
                 if (!username || username === lastValidUsername) {
                     errorElement.classList.add('hidden');
                     return;
                 }
 
-                usernameTimeout = setTimeout(async () => {
+                usernameTimeout = setTimeout(() => {
                     // Basic validation
                     if (username.length < 3) {
                         errorElement.textContent = 'Username must be at least 3 characters';
@@ -703,33 +698,15 @@
                     }
 
                     if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-                        errorElement.textContent = 'Only letters, numbers and underscores allowed';
+                        errorElement.textContent = 'Only letters, numbers, and underscores allowed';
                         errorElement.classList.remove('hidden');
                         return;
                     }
 
-                    try {
-                        const response = await fetch(`/check_username/?username=${encodeURIComponent(username)}`);
-                        
-                        if (!response.ok) {
-                            throw new Error(`Username check failed (Status: ${response.status})`);
-                        }
-                        
-                        const data = await response.json();
-                        
-                        if (data.available) {
-                            lastValidUsername = username;
-                            errorElement.classList.add('hidden');
-                        } else {
-                            errorElement.textContent = 'Username is already taken';
-                            errorElement.classList.remove('hidden');
-                        }
-                    } catch (error) {
-                        console.error('Username check error:', error);
-                        errorElement.textContent = 'Service unavailable. Please try again.';
-                        errorElement.classList.remove('hidden');
-                    }
-                }, 500);
+                    // Passed validation
+                    errorElement.classList.add('hidden');
+                    lastValidUsername = username;
+                }, 500); // ← Add 500ms delay before validating
             });
         }
 
@@ -756,29 +733,7 @@
                         errorElement.classList.remove('hidden');
                         return;
                     }
-
-                    try {
-                        const response = await fetch(`/check_email/?email=${encodeURIComponent(email)}`);
-                        
-                        if (!response.ok) {
-                            throw new Error(`Email check failed (Status: ${response.status})`);
-                        }
-                        
-                        const data = await response.json();
-                        
-                        if (data.available) {
-                            lastValidEmail = email;
-                            errorElement.classList.add('hidden');
-                        } else {
-                            errorElement.textContent = 'Email is already registered';
-                            errorElement.classList.remove('hidden');
-                        }
-                    } catch (error) {
-                        console.error('Email check error:', error);
-                        errorElement.textContent = 'Service unavailable. Please try again.';
-                        errorElement.classList.remove('hidden');
-                    }
-                }, 500);
+                });
             });
         }
         // Helper function to get CSRF token
@@ -845,7 +800,6 @@
         }
     });
     </script>
-
 
 
 </body>
