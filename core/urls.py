@@ -27,7 +27,7 @@ urlpatterns = [
     path('register', testdb_views.register_view, name='register'),  # 👈 register
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),  # 👈 logout
     path('orders/', include('orders.urls')),            # orders app
-
     
-    path('shop/', include('products.urls', namespace='products')),
+    
+    
 ]

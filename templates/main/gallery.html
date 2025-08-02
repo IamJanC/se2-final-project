@@ -93,21 +93,27 @@
     <div class="product-grid">
       {% for product in products %}
         <div class="product-card">
-          <div class="product-img-wrap">
-            <img src="{{ product.image_url }}" alt="{{ product.name }}">
-            {% if product.stock == 0 %}
-              <span class="stock-out-badge">Out of stock</span>
-            {% endif %}
-          </div>
-          <div class="product-info">
-            <h3>{{ product.name }}</h3>
-            <div class="price">₱{{ product.price }}</div>
-            <div class="stock">{{ product.stock }} in stock</div>
-            <button class="add-cart-btn" {% if product.stock == 0 %}disabled{% endif %}>Add to cart</button>
-          </div>
+          <a href="{% url 'main:product_detail' product.id %}" class="card-link">
+            <div class="product-img-wrap">
+              <img src="{{ product.image_url }}" alt="{{ product.name }}">
+              {% if product.stock == 0 %}
+                <span class="stock-out-badge">Out of stock</span>
+              {% endif %}
+            </div>
+            <div class="product-info">
+              <h3>{{ product.name }}</h3>
+              <div class="price">₱{{ product.price }}</div>
+              <div class="stock">{{ product.stock }} in stock</div>
+            </div>
+          </a>
+          <button class="add-cart-btn" {% if product.stock == 0 %}disabled{% endif %}>
+            Add to cart
+          </button>
         </div>
       {% endfor %}
     </div>
+
+
 
 
       <!-- Add more cards or later loop through products with Django -->
