@@ -94,7 +94,7 @@
       {% for product in products %}
         <div class="product-card">
           <div class="product-img-wrap">
-            <img src="{% static 'img/'|add:product.image_url %}" alt="{{ product.name }}">
+            <img src="{{ product.image_url }}" alt="{{ product.name }}">
             {% if product.stock == 0 %}
               <span class="stock-out-badge">Out of stock</span>
             {% endif %}

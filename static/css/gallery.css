@@ -192,18 +192,23 @@ body {
 .product-img-wrap {
   position: relative;
   width: 100%;
-  height: 180px;
+  height: 200px; /* Fixed height */
   background: #f8f8f8;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  border-radius: 0.5rem;
 }
-
 
 .product-img-wrap img {
   width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures image fills the box while cropping excess */
   border-radius: 0.5rem;
+  display: block;
 }
+
 
 
 .badge {

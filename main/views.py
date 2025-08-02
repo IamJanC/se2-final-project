@@ -2,6 +2,7 @@ from django.shortcuts import render                 # type: ignore
 from products.models import Product
 from orders.models import Order
 from django.contrib import messages
+from products.models import Product  # ✅ Make sure this is here
 
 def home(request):
     print(f"[DEBUG] request.user: {request.user}")
@@ -12,7 +13,9 @@ def product(request):
     return render(request, 'main/product.html')
 
 def shop(request):
-    return render(request, 'main/gallery.html')  # <- rename your HTML to gallery.html
+    products = Product.objects.select_related('category').all()
+    print("✅ shop() in main/views.py — PRODUCT COUNT:", products.count())
+    return render(request, 'main/gallery.html', {'products': products})
 
 def add_to_cart(request):
     if request.method == 'POST':
