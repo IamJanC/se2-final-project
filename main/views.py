@@ -20,7 +20,7 @@ def shop(request):
 # Product Description Rendering
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)  # 🔄 Use this instead
-    return render(request, 'main/productTemp.html', {'product': product})
+    return render(request, 'main/product.html', {'product': product})
 
 
 

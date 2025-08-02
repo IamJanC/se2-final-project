@@ -6,7 +6,6 @@
 
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/product.css' %}">
 {% endblock %}
 
@@ -16,25 +15,16 @@
         <div class="product-gallery">
             <!-- Main image -->
             <div class="main-image-container">
-                <img src="https://i.pinimg.com/474x/87/3f/2d/873f2dcf56d29f8db5f8fd3ed98b6477.jpg" alt="Organic Eggs" class="main-image" id="mainImage">
+                <!-- After -->
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="main-image" id="mainImage">
                 <div class="image-badge">FRESH</div>
             </div>
             
             <!-- Thumbnails -->
             <div class="thumbnail-container">
                 <div class="thumbnail-item active" data-image="https://i.pinimg.com/474x/87/3f/2d/873f2dcf56d29f8db5f8fd3ed98b6477.jpg">
-                    <img src="https://i.pinimg.com/474x/87/3f/2d/873f2dcf56d29f8db5f8fd3ed98b6477.jpg" alt="Eggs Front View">
+                    <img src="https://i.pinimg.com/474x/87/3f/2d/873f2dcf56d29f8db5f8fd3ed98b6477.jpg" alt="Product Picture View">
                 </div>
-                <div class="thumbnail-item" data-image="https://i.pinimg.com/474x/6a/5f/4a/6a5f4a8e0fb8ef4a731f8b3ff70b656f.jpg">
-                    <img src="https://i.pinimg.com/474x/6a/5f/4a/6a5f4a8e0fb8ef4a731f8b3ff70b656f.jpg" alt="Eggs Side View">
-                </div>
-                <div class="thumbnail-item" data-image="https://i.pinimg.com/474x/aa/23/44/aa23446987905e68b0c2140a35c5e7b9.jpg">
-                    <img src="https://i.pinimg.com/474x/aa/23/44/aa23446987905e68b0c2140a35c5e7b9.jpg" alt="Eggs Close Up">
-                </div>
-                <div class="thumbnail-item" data-image="https://i.pinimg.com/474x/b1/5d/a9/b15da9e9e5bca8ff3b1d0ad9e6b1c5a3.jpg">
-                    <img src="https://i.pinimg.com/474x/b1/5d/a9/b15da9e9e5bca8ff3b1d0ad9e6b1c5a3.jpg" alt="Eggs Packaging">
-                </div>
-            </div>
             
             <div class="image-zoom">
                 <button id="zoomIn"><i class="fas fa-search-plus"></i></button>
@@ -59,9 +49,6 @@
         </div>
         
         <div class="product-details">
-            <div class="product-image">
-                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            </div>
             <div class="product-info">
                 <h2>{{ product.name }}</h2>
                 <p class="price">₱{{ product.price }}</p>
@@ -310,15 +297,6 @@
     <script src="js/main.js"></script>
     <script src="js/product.js"></script>
     <script>
-        // Product Gallery Image Switching
-        document.querySelectorAll('.thumbnail-item').forEach(thumbnail => {
-            thumbnail.addEventListener('click', function() {
-                document.querySelectorAll('.thumbnail-item').forEach(item => item.classList.remove('active'));
-                this.classList.add('active');
-                const newImage = this.getAttribute('data-image');
-                document.getElementById('mainImage').src = newImage;
-            });
-        });
         // Tab Switching Functionality
         document.querySelectorAll('.tab-header').forEach(tab => {
             tab.addEventListener('click', function() {
