@@ -1,0 +1,369 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+
+
+{% block title %}Product - MyShop{% endblock %}
+
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/product.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="product-container">
+        <div class="product-gallery">
+            <!-- Main image -->
+            <div class="main-image-container">
+                <img src="https://i.pinimg.com/474x/87/3f/2d/873f2dcf56d29f8db5f8fd3ed98b6477.jpg" alt="Organic Eggs" class="main-image" id="mainImage">
+                <div class="image-badge">FRESH</div>
+            </div>
+            
+            <!-- Thumbnails -->
+            <div class="thumbnail-container">
+                <div class="thumbnail-item active" data-image="https://i.pinimg.com/474x/87/3f/2d/873f2dcf56d29f8db5f8fd3ed98b6477.jpg">
+                    <img src="https://i.pinimg.com/474x/87/3f/2d/873f2dcf56d29f8db5f8fd3ed98b6477.jpg" alt="Eggs Front View">
+                </div>
+                <div class="thumbnail-item" data-image="https://i.pinimg.com/474x/6a/5f/4a/6a5f4a8e0fb8ef4a731f8b3ff70b656f.jpg">
+                    <img src="https://i.pinimg.com/474x/6a/5f/4a/6a5f4a8e0fb8ef4a731f8b3ff70b656f.jpg" alt="Eggs Side View">
+                </div>
+                <div class="thumbnail-item" data-image="https://i.pinimg.com/474x/aa/23/44/aa23446987905e68b0c2140a35c5e7b9.jpg">
+                    <img src="https://i.pinimg.com/474x/aa/23/44/aa23446987905e68b0c2140a35c5e7b9.jpg" alt="Eggs Close Up">
+                </div>
+                <div class="thumbnail-item" data-image="https://i.pinimg.com/474x/b1/5d/a9/b15da9e9e5bca8ff3b1d0ad9e6b1c5a3.jpg">
+                    <img src="https://i.pinimg.com/474x/b1/5d/a9/b15da9e9e5bca8ff3b1d0ad9e6b1c5a3.jpg" alt="Eggs Packaging">
+                </div>
+            </div>
+            
+            <div class="image-zoom">
+                <button id="zoomIn"><i class="fas fa-search-plus"></i></button>
+                <button id="zoomOut"><i class="fas fa-search-minus"></i></button>
+            </div>
+
+            <div class="product-highlights">
+                <div class="highlight">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Certified Organic</span>
+                </div>
+                <div class="highlight">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Free-range chickens</span>
+                </div>
+                <div class="highlight">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Farm fresh daily</span>
+                </div>
+            </div>
+                
+        </div>
+        
+        <div class="product-details">
+            <div class="breadcrumbs">
+                <a href="index.html">Home</a> > 
+                <a href="GalleryPage.html">Eggs</a> > 
+                <span>Organic Eggs</span>
+            </div>
+            
+            <h1>Organic Free-Range Eggs</h1>
+            <div class="rating">★★★★☆ <span class="rating-count">(42 reviews)</span></div>
+            
+            <div class="price-container">
+                <span class="price">$12.99</span>
+                <span class="old-price">$15.99</span>
+                <span class="discount">Save 20%</span>
+            </div>
+            
+            <div class="availability in-stock">
+                <i class="fas fa-check-circle"></i> In Stock (25 remaining)
+            </div>
+            
+            <div class="delivery-info">
+                <div class="delivery-option">
+                    <i class="fas fa-truck"></i>
+                    <span>Free delivery on orders over $50</span>
+                </div>
+                <div class="delivery-option">
+                    <i class="fas fa-store"></i>
+                    <span>Pickup available at our Makati store</span>
+                </div>
+            </div>
+            
+            <div class="quantity-selector">
+                <button class="qty-minus">-</button>
+                <input type="number" value="1" min="1" max="25" id="quantityInput">
+                <button class="qty-plus">+</button>
+                <span class="stock-notice">Max 25 per customer</span>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="add-to-cart">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+                <button class="wishlist">
+                    <i class="far fa-heart"></i> Wishlist
+                </button>
+            </div>
+
+            <div class="social-share">
+                <span>Share:</span>
+                <a href="#"><i class="fab fa-facebook facebook-icon"></i></a>
+                <a href="#"><i class="fab fa-twitter twitter-icon"></i></a>
+                <a href="#"><i class="fab fa-instagram instagram-icon"></i></a>
+            </div>
+
+        </div>
+
+        <div class="product-tabs">
+            <div class="tab-headers">
+                <div class="tab-header active" data-tab="description">Description</div>
+                <div class="tab-header" data-tab="specs">Specifications</div>
+                <div class="tab-header" data-tab="reviews">Reviews (42)</div>
+                <div class="tab-header" data-tab="shipping">Shipping</div>
+            </div>
+            
+            <div class="tab-content active" id="description">
+                <h3>Product Description</h3>
+                <p>Our premium organic eggs come from happy, free-range chickens raised on local farms without antibiotics or hormones. These eggs feature:</p>
+                <ul>
+                    <li>Rich, golden yolks with superior taste</li>
+                    <li>Higher omega-3 fatty acids than conventional eggs</li>
+                    <li>Vegetarian-fed hens with outdoor access</li>
+                    <li>Certified by Philippine Organic Standards</li>
+                    <li>Packed in eco-friendly, recyclable containers</li>
+                </ul>
+                <p>Each egg is collected daily and carefully inspected to ensure the highest quality and freshness for your family.</p>
+            </div>
+            
+            <div class="tab-content" id="specs">
+                <h3>Product Specifications</h3>
+                <table class="specs-table">
+                    <tr>
+                        <td class="spec-name">Brand</td>
+                        <td>FreshFarm Organics</td>
+                    </tr>
+                    <tr>
+                        <td class="spec-name">Quantity</td>
+                        <td>12 eggs per pack</td>
+                    </tr>
+                    <tr>
+                        <td class="spec-name">Egg Size</td>
+                        <td>Large (63-73g per egg)</td>
+                    </tr>
+                    <tr>
+                        <td class="spec-name">Shelf Life</td>
+                        <td>30 days refrigerated</td>
+                    </tr>
+                    <tr>
+                        <td class="spec-name">Certification</td>
+                        <td>Philippine Organic, USDA Organic</td>
+                    </tr>
+                    <tr>
+                        <td class="spec-name">Farm Location</td>
+                        <td>Barangay Dalig, Antipolo City, Philippines</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="tab-content" id="reviews">
+                <h3>Customer Ratings & Reviews</h3>
+                <div class="review-summary">
+                    <div class="average-rating">
+                        <div class="rating-value">4.2</div>
+                        <div class="rating-stars">★★★★☆</div>
+                        <div class="rating-count">42 reviews</div>
+                    </div>
+                    <div class="rating-bars">
+                        <div class="rating-bar">
+                            <div class="label">
+                                <span>★★★★★ </span>
+                                <span class="count">(28 Reviews)</span>
+                            </div>
+                            <progress value="28" max="42"></progress>
+                        </div>
+                        <div class="rating-bar">
+                            <div class="label">
+                                <span>★★★★ </span>
+                                <span class="count">(10 Reviews)</span>
+                            </div>
+                            <progress value="10" max="42"></progress>
+                        </div>
+                        <div class="rating-bar">
+                            <div class="label">
+                                <span>★★★ </span>
+                                <span class="count">(3 Reviews)</span>
+                            </div>
+                            <progress value="3" max="42"></progress>                             
+                        </div>
+                        <div class="rating-bar">
+                            <div class="label">
+                                <span>★★ </span>
+                                <span class="count">(1 Reviews)</span>
+                            </div>
+                            <progress value="1" max="42"></progress> 
+                        </div>
+                        <div class="rating-bar">
+                            <div class="label">
+                                <span>★ </span>
+                                <span class="count">(0 Reviews)</span>
+                            </div>
+                            <progress value="0" max="42"></progress>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="customer-reviews">
+                    <div class="review">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <span class="reviewer-name">Maria S.</span>
+                                <div class="review-rating">★★★★★</div>
+                            </div>
+                            <span class="review-date">March 15, 2023</span>
+                        </div>
+                        <p class="review-text">The eggs were incredibly fresh and had rich, golden yolks. Perfect for making my morning omelets! Will definitely buy again.</p>
+                    </div>
+                    
+                    <div class="review">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <span class="reviewer-name">Juan D.</span>
+                                <div class="review-rating">★★★★☆</div>
+                            </div>
+                            <span class="review-date">February 28, 2023</span>
+                        </div>
+                        <p class="review-text">Great quality eggs, though a bit pricey. The yolks are noticeably darker than regular eggs. Packaging could be more secure.</p>
+                    </div>
+                </div>
+                
+            <div class="star-rating">
+                <div class="rating-label">Tap to Rate</div>
+                    <div class="star-input">
+                        <input type="radio" name="rating" id="rating-5" value="5"><label for="rating-5" class="fas fa-star"></label>
+                        <input type="radio" name="rating" id="rating-4" value="4"><label for="rating-4" class="fas fa-star"></label>
+                        <input type="radio" name="rating" id="rating-3" value="3"><label for="rating-3" class="fas fa-star"></label>
+                        <input type="radio" name="rating" id="rating-2" value="2"><label for="rating-2" class="fas fa-star"></label>
+                        <input type="radio" name="rating" id="rating-1" value="1"><label for="rating-1" class="fas fa-star"></label>
+                    </div>
+            </div>
+
+                <button class="write-review">
+                    <i class="fas fa-pen"></i> Write a Review
+                </button>
+            </div>
+
+            <div class="tab-content" id="shipping">
+                <h3>Shipping & Returns</h3>
+                <div class="shipping-options">
+                        <div class="option">
+                            <div class="option-details">
+                                <div class="row">
+                                    <h4><i class="fas fa-truck"></i> Standard Delivery</h4>
+                                    <p class="time">3–5 business days</p>
+                                    <p class="price">Free for orders over $50</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <div class="option-details">
+                                <div class="row">
+                                    <h4><i class="fas fa-bolt"></i> Express Delivery</h4>
+                                    <p class="time">1–2 business days</p>
+                                    <p class="price">+$5.00</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="option">
+                            <div class="option-details">
+                                <div class="row">
+                                    <h4><i class="fas fa-store"></i> Store Pickup</h4>
+                                    <p class="time">Available at our Makati branch</p>
+                                    <p class="price">Free</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="option">
+                            <div class="option-details">
+                                <div class="row">
+                                    <h4><i class="fas fa-undo"></i> Return Policy</h4>
+                                    <p class="time">Returns within 7 days for damaged or defective products. Eggs must be returned with receipt.</p>
+                                    <p class="price">Free</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<!-- Related Products Section -->
+<section class="related-products" aria-labelledby="related-heading">
+  <h2 id="related-heading">You May Also Like</h2>
+
+  <div class="products-list">
+    <!-- Example of a single product card -->
+    <article class="product-card">
+      <a href="#" class="product-link">
+        <img src="product1.jpg" alt="Product Name" class="product-image">
+        <h3 class="product-name">Product Name</h3>
+        <p class="product-price">$12.99</p>
+      </a>
+    </article>
+
+    <article class="product-card">
+      <a href="#" class="product-link">
+        <img src="product1.jpg" alt="Product Name" class="product-image">
+        <h3 class="product-name">Product Name</h3>
+        <p class="product-price">$12.99</p>
+      </a>
+    </article>
+
+    <article class="product-card">
+      <a href="#" class="product-link">
+        <img src="product1.jpg" alt="Product Name" class="product-image">
+        <h3 class="product-name">Product Name</h3>
+        <p class="product-price">$12.99</p>
+      </a>
+    </article>
+
+    <!-- Repeat more <article> for other products -->
+  </div>
+</section>
+
+ 
+    <script src="js/main.js"></script>
+    <script src="js/product.js"></script>
+    <script>
+        // Product Gallery Image Switching
+        document.querySelectorAll('.thumbnail-item').forEach(thumbnail => {
+            thumbnail.addEventListener('click', function() {
+                document.querySelectorAll('.thumbnail-item').forEach(item => item.classList.remove('active'));
+                this.classList.add('active');
+                const newImage = this.getAttribute('data-image');
+                document.getElementById('mainImage').src = newImage;
+            });
+        });
+        // Tab Switching Functionality
+        document.querySelectorAll('.tab-header').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.tab-header, .tab-content').forEach(item => item.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        // Quantity Selector
+        document.querySelector('.qty-minus').addEventListener('click', function() {
+            const input = document.getElementById('quantityInput');
+            if (parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;
+        });
+        document.querySelector('.qty-plus').addEventListener('click', function() {
+            const input = document.getElementById('quantityInput');
+            if (parseInt(input.value) < 25) input.value = parseInt(input.value) + 1;
+        });
+    </script>
+{% endblock %}
