@@ -202,3 +202,9 @@
 #chatbot-close:hover {
   color: #333;
 }
+
+
+#chat-icon svg{
+  height: 30px;
+  width: 30px;
+}

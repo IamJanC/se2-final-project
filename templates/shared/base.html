@@ -28,9 +28,7 @@
 
                 <!-- Logo Section -->
                 <div class="logo">
-                    <h1>
-                        LO<span>GO</span>
-                    </h1>
+                    <img src="/static/images/Temporaries/Logo 9.png" alt="AniHub Logo" id="logo-img">
                 </div>
         
                 <!-- Search Bar -->
@@ -115,7 +113,7 @@
                 </div>
 
                 <div class="secondary-navbar-contact">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.0002 4V5C15.0002 6.88562 15.0002 7.82843 15.586 8.41421C16.1718 9 17.1146 9 19.0002 9H20.5002M20.5002 9L18.0002 7M20.5002 9L18.0002 11" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M4.00655 7.93309C3.93421 9.84122 4.41713 13.0817 7.6677 16.3323C8.45191 17.1165 9.23553 17.7396 10 18.2327M5.53781 4.93723C6.93076 3.54428 9.15317 3.73144 10.0376 5.31617L10.6866 6.4791C11.2723 7.52858 11.0372 8.90532 10.1147 9.8278C10.1147 9.8278 10.1147 9.8278 10.1147 9.8278C10.1146 9.82792 8.99588 10.9468 11.0245 12.9755C13.0525 15.0035 14.1714 13.8861 14.1722 13.8853C14.1722 13.8853 14.1722 13.8853 14.1722 13.8853C15.0947 12.9628 16.4714 12.7277 17.5209 13.3134L18.6838 13.9624C20.2686 14.8468 20.4557 17.0692 19.0628 18.4622C18.2258 19.2992 17.2004 19.9505 16.0669 19.9934C15.2529 20.0243 14.1963 19.9541 13 19.6111" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17 12C19.7614 12 22 9.76142 22 7C22 4.23858 19.7614 2 17 2C14.2386 2 12 4.23858 12 7C12 7.79984 12.1878 8.55582 12.5217 9.22624C12.6105 9.4044 12.64 9.60803 12.5886 9.80031L12.2908 10.9133C12.1615 11.3965 12.6035 11.8385 13.0867 11.7092L14.1997 11.4114C14.392 11.36 14.5956 11.3895 14.7738 11.4783C15.4442 11.8122 16.2002 12 17 12Z" stroke="#000000" stroke-width="1.5"></path> <path d="M8.03759 7.31617L8.6866 8.4791C9.2723 9.52858 9.03718 10.9053 8.11471 11.8278C8.11471 11.8278 8.11471 11.8278 8.11471 11.8278C8.11459 11.8279 6.99588 12.9468 9.02451 14.9755C11.0525 17.0035 12.1714 15.8861 12.1722 15.8853C12.1722 15.8853 12.1722 15.8853 12.1722 15.8853C13.0947 14.9628 14.4714 14.7277 15.5209 15.3134L16.6838 15.9624C18.2686 16.8468 18.4557 19.0692 17.0628 20.4622C16.2258 21.2992 15.2004 21.9505 14.0669 21.9934C12.1588 22.0658 8.91828 21.5829 5.6677 18.3323C2.41713 15.0817 1.93421 11.8412 2.00655 9.93309C2.04952 8.7996 2.7008 7.77423 3.53781 6.93723C4.93076 5.54428 7.15317 5.73144 8.03759 7.31617Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
                     <p>(+63) 555-014</p>
                 </div>
             </div>
@@ -172,7 +170,7 @@
                 <!--Tag 3-->
                 <div class="tag">
                     <div class="tag-image">
-                        <img class="tag-icon" src="IMAGES/Delivery-Icon.png" alt="delivery icon">
+                        <img class="tag-icon" src="{% static 'images/Delivery-Icon.png' %}" alt="delivery icon">
                     </div>
 
                     <div class="tag-information">
@@ -181,7 +179,7 @@
                         </div>
 
                         <div class="tag-description">
-                            <p>Delivery coverage is currently restricted but free to Rizal and its surrounding communities.
+                            <p>Delivery coverage is currently restricted but free to Dalig, Antipolo, Rizal.
                             </p>
                         </div>
                     </div>
@@ -196,36 +194,34 @@
 
                 <!--First Container (Info)-->
                 <div id="footer-anitubo-information">
-                    <div id="footer-anitubo-logo">
-                        <h1>
-                            ANI<span>TUB<img src="IMAGES/tomato.png" alt="ANITUBO Logo"></span>
-                        </h1>
+                    <div id="footer-agrihub-logo">
+                        <img src="{% static 'images/Temporaries/Logo 9.png' %}" alt="footer-logo" id="footer-logo">
                     </div>
 
                     <!--Address-->
                     <div class="footer-information-content">
-                        <img class="footer-info-icon" src="IMAGES/location.png" alt="address icon">
+                        <img class="footer-info-icon" src="{% static 'images/location.png' %}" alt="address icon">
                         <h6>Address: </h6>
                         <p>1762 Antipolo, Rizal</p>
                     </div>
 
                     <!--Call Us-->
                     <div class="footer-information-content">
-                        <img class="footer-info-icon" src="IMAGES/telephone.png" alt="telephone icon">
+                        <img class="footer-info-icon" src="{% static 'images/telephone.png' %}" alt="telephone icon">
                         <h6>Call Us: </h6>
                         <p>(+63) 555-014</p>
                     </div>
 
                     <!--Email-->
                     <div class="footer-information-content">
-                        <img class="footer-info-icon" src="IMAGES/email.png" alt="email icon">
+                        <img class="footer-info-icon" src="{% static 'images/email.png' %}" alt="email icon">
                         <h6>Email: </h6>
                         <p>anitubo@contact.com</p>
                     </div>
 
                     <!--Work hours: -->
                     <div class="footer-information-content">
-                        <img class="footer-info-icon" src="IMAGES/time.png" alt="email icon">
+                        <img class="footer-info-icon" src="{% static 'images/time.png' %}" alt="time icon">
                         <h6>Work hours: </h6>
                         <p>8AM - 10PM, Monday - Saturday</p>
                     </div>
@@ -287,7 +283,7 @@
         <div id="final-footer-copyright">
             <div class="footer-container-tertiary">
                 <div id="copyright">
-                    <h6>AniTubo eCommerce &copy; 2025, All Rights Reserved</h6>
+                    <h6>AgriHub eCommerce &copy; 2025, All Rights Reserved</h6>
                 </div>
             </div>
            

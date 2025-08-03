@@ -12,340 +12,73 @@
 
 {% block content %}
 <!-- === Main Starts Here ==== -->
- <main class="temporary">
-    <!-- Carousel -->
-    <div class="carousel-container">
-        <div class="carousel-slides">
-            <div class="carousel-slide">
-                <img src="https://i.pinimg.com/736x/4c/19/73/4c197343ccd4b7098d0248439b2baed1.jpg" alt="Banner 3">
-            </div>
-            <div class="carousel-slide">
-                <img src="https://i.pinimg.com/474x/8b/b5/e1/8bb5e1be6fbac4d9bc0393afd95eeb82.jpg" alt="Banner 1">
-            </div>
-            <div class="carousel-slide">
-                <img src="https://i.pinimg.com/474x/ba/ce/d4/baced4f5f27e9132e3c81f7cba6c94fa.jpg" alt="Banner 2">
-            </div>
-        </div>
-        <button class="carousel-btn" id="prevBtn">&#10094;</button>
-        <button class="carousel-btn" id="nextBtn">&#10095;</button>
-        <div class="carousel-indicators">
-            <div class="indicator active" data-index="0"></div>
-            <div class="indicator" data-index="1"></div>
-            <div class="indicator" data-index="2"></div>
-        </div>
-    </div>
+<main class="page-main">
 
-    <!-- Product Sections -->
-    <main class="container">
-        <!-- Daily Best Sells -->
-        <section class="products">
-            <div class="products-header">
-                <h2>Daily Best Sells</h2>
-                <div class="categories">
-                    <span class="featured">Featured</span>
-                    <span>Popular</span>
-                    <span>New</span>
+    <!-- === Carousel Section ==== -->
+    <section class="carousel-section">
+        <div class="carousel-container">
+            <div class="carousel-slides">
+                <div class="carousel-slide">
+                    <img src="/static/images/Temporaries/temp agri banner.jpg" alt="Banner 3">
                 </div>
-                <div class="countdown-timer">Expires in: <span id="timer">10:56:21</span></div>
-                <div class="nav-arrows">
-                    <button class="prev">←</button>
-                    <button class="next">→</button>
+                <div class="carousel-slide">
+                    <img src="/static/images/Temporaries/temp agri banner.jpg" alt="Banner 1">
+                </div>
+                <div class="carousel-slide">
+                    <img src="/static/images/Temporaries/temp agri banner.jpg" alt="Banner 2">
                 </div>
             </div>
-            <div class="products-list">
-                <div class="product">
-                <img src="https://i.pinimg.com/474x/45/fd/d3/45fdd38b20a18b1fe3308158b9e8ea70.jpg" alt="Apple">
-                <h3>Apple</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By Mr.food</p>
-                <p class="price">$20 <span>$25</span></p>
-                <p>Sold: 20/50</p>
-                <p>Number of Available: 30</p>
-                <progress value="20" max="50"></progress>
-                <button class="add-to-cart-btn">Add to cart</button>
+            <button class="carousel-btn" id="prevBtn">&#10094;</button>
+            <button class="carousel-btn" id="nextBtn">&#10095;</button>
+            <div class="carousel-indicators">
+                <div class="indicator active" data-index="0"></div>
+                <div class="indicator" data-index="1"></div>
+                <div class="indicator" data-index="2"></div>
             </div>
-    
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/80/e2/43/80e24373a711af0b737075b7cb0a9b05.jpg" alt="Orange">
-                <h3>Orange</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By Mr.food</p>
-                <p class="price">$20 <span>$25</span></p>
-                <p>Sold: 50/50</p>
-                <p><span class="sold-out">Sold Out</span></p>
-                <progress value="50" max="50"></progress>
-                <button class="add-to-cart-btn" disabled>Sold Out</button>
-            </div>
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/a9/10/f7/a910f76ccc5a6a547078d18eb4a3189d.jpg" alt="Avocado">
-                <h3>Avocado</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By Mr.food</p>
-                <p class="price">$20 <span>$25</span></p>
-                <p>Sold: 20/50</p>
-                <p>Number of Available: 30</p>
-                <progress value="20" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/1c/16/62/1c1662f546cc85a1d77732c840ff9113.jpg" alt="Banana">
-                <h3>Banana</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By Mr.food</p>
-                <p class="price">$20 <span>$25</span></p>
-                <p>Sold: 10/50</p>
-                <p>Number of Available: 40</p>
-                <progress value="10" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/80/e2/43/80e24373a711af0b737075b7cb0a9b05.jpg" alt="Orange">
-                <h3>Orange</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By Mr.food</p>
-                <p class="price">$20 <span>$25</span></p>
-                <p>Sold: 40/50</p>
-                <p>Number of Available: 40</p>
-                <progress value="40" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-            </div>
-        </section>
+        </div>
+    </section>
 
-<!--Fruits-->
-    <div class="products">
-        <div class="products-header">
-            <h2>Fruits</h2>
-        </div>
-        <div class="products-list">
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/52/72/3d/52723d87b2d0639480a833690f56aadc.jpg" alt="Strawberry">
-                <h3>Strawberry</h3>
-                <div class="rating">★★★☆☆ (3)</div>
-                <p>By Mr.food</p>
-                <p class="price">$20 <span>$25</span></p>
-                <p>Sold: 5/50</p>
-                <p>Number of Available: 45</p>
-                <progress value="5" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-    
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/8b/6b/3d/8b6b3d6034e59f8f1fa8b5b393b06dc1.jpg" alt="Mango">
-                <h3>Mango</h3>
-                <div class="rating">★★★☆☆ (3)</div>
-                <p>By Mr.food</p>
-                <p class="price">$20 <span>$25</span></p>
-                <p>Sold: 15/50</p>
-                <p>Number of Available: 35</p>
-                <progress value="15" max="50"></progress>
-                <button class="add-to-cart-btn">Sold Out</button>
-            </div>
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/ba/3b/a5/ba3ba5322939bb8ebf8f46d1877f9f47.jpg" alt="Pineapple">
-                <h3>Pineapple</h3>
-                <div class="rating">★★★☆☆ (3)</div>
-                <p>By Mr.food</p>
-                <p class="price">$20 <span>$25</span></p>
-                <p>Sold: 20/50</p>
-                <p>Number of Available: 30</p>
-                <progress value="20" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/17/5c/3a/175c3ab8e0937157438012bf7f9edf04.jpg" alt="Pear">
-                <h3>Pear</h3>
-                <div class="rating">★★★☆☆ (3)</div>
-                <p>By Mr.food</p>
-                <p class="price">$20 <span>$25</span></p>
-                <p>Sold: 10/50</p>
-                <p>Number of Available: 40</p>
-                <progress value="10" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/f7/a3/20/f7a320909aee1475ab397bee2ea2f63c.jpg" alt="Watermelon">
-                <h3>Watermelon</h3>
-                <div class="rating">★★★☆☆ (3)</div>
-                <p>By Mr.food</p>
-                <p class="price">$20 <span>$25</span></p>
-                <p>Sold: 10/50</p>
-                <p>Number of Available: 40</p>
-                <progress value="10" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-        </div>
+    <!-- === Product Section ==== -->
+<!-- === Product Section ==== -->
+<section class="container product-section">
+
+  {% for category, products in products_by_category.items %}
+  <div class="category-product-list" id="{{ category.slug }}">
+
+    <div class="product-category-header">
+      <h3>{{ category.name }}</h3>
+      <a href="#">View All ></a>
     </div>
 
-    <!--Vegetables-->
-    <div class="products">
-        <div class="products-header">
-            <h2>Vegetables</h2>
+    <div class="products-list">
+      {% if products %}
+        {% for product in products %}
+        <div class="product">
+            <a href="{% url 'main:product_detail' product.id %}" class="product-card-link">
+                <div class="product-img-wrap">
+                  <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                </div>
+                <div class="product-title">
+                  <h3>{{ product.name }}</h3>
+                </div>
+                <div class="product-info-left">
+                  <p class="price">₱{{ product.price }}</p>
+                  <progress value="{{ product.stock }}" max="100"></progress>
+                  <p class="stock">Stock: {{ product.stock }}</p>
+                </div>
+            </a>
+            <button class="add-to-cart-btn">Add to cart</button>
         </div>
-        <div class="products-list">
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/2b/3d/a5/2b3da5d7ad9a37e6d27e63b4c6a3bff9.jpg" alt="Carrot">
-                <h3>Carrot</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By FreshFarm</p>
-                <p class="price">$5 <span>$7</span></p>
-                <p>Sold: 20/50</p>
-                <p>Number of Available: 30</p>
-                <progress value="20" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/6b/4d/b3/6b4db36c6f5e4e4289c3178c73722f15.jpg" alt="Broccoli">
-                <h3>Broccoli</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By GreenHarvest</p>
-                <p class="price">$8 <span>$10</span></p>
-                <p>Sold: 35/50</p>
-                <p>Number of Available: 15</p>
-                <progress value="35" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/df/8e/61/df8e61a71c85c19d9c5c8b6f1df8f65e.jpg" alt="Lettuce">
-                <h3>Lettuce</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By FreshFarm</p>
-                <p class="price">$4 <span>$6</span></p>
-                <p>Sold: 25/50</p>
-                <p>Number of Available: 25</p>
-                <progress value="25" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/23/45/a8/2345a878896d34f317c71b7f7dcfa02b.jpg" alt="Tomato">
-                <h3>Tomato</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By OrganicFoods</p>
-                <p class="price">$6 <span>$8</span></p>
-                <p>Sold: 40/50</p>
-                <p>Number of Available: 10</p>
-                <progress value="40" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/9f/57/65/9f576514a28748e98f4b47d624e8f6e1.jpg" alt="Onion">
-                <h3>Onion</h3>
-                <div class="rating">★★★☆☆ (3)</div>
-                <p>By FarmFresh</p>
-                <p class="price">$3 <span>$5</span></p>
-                <p>Sold: 10/50</p>
-                <p>Number of Available: 40</p>
-                <progress value="10" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-        </div>
+        {% endfor %}
+      {% else %}
+        <p>No products available in this category.</p>
+      {% endif %}
     </div>
+  </div>
+  {% endfor %}
 
-    <!--Eggs-->
-    <div class="products">
-        <div class="products-header">
-            <h2>Eggs</h2>
-        </div>
-        <div class="products-list">
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/87/3f/2d/873f2dcf56d29f8db5f8fd3ed98b6477.jpg" alt="Organic Eggs">
-                <h3>Organic Eggs</h3>
-                <div class="rating">★★★★★ (5)</div>
-                <p>By FarmFresh</p>
-                <p class="price">$12 <span>$15</span></p>
-                <p>Sold: 30/50</p>
-                <p>Number of Available: 20</p>
-                <progress value="30" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
+</section>
 
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/6a/5f/4a/6a5f4a8e0fb8ef4a731f8b3ff70b656f.jpg" alt="Brown Eggs">
-                <h3>Brown Eggs</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By GreenHarvest</p>
-                <p class="price">$10 <span>$13</span></p>
-                <p>Sold: 20/50</p>
-                <p>Number of Available: 30</p>
-                <progress value="20" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/aa/23/44/aa23446987905e68b0c2140a35c5e7b9.jpg" alt="White Eggs">
-                <h3>White Eggs</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By FreshNest</p>
-                <p class="price">$11 <span>$14</span></p>
-                <p>Sold: 25/50</p>
-                <p>Number of Available: 25</p>
-                <progress value="25" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/b1/5d/a9/b15da9e9e5bca8ff3b1d0ad9e6b1c5a3.jpg" alt="Quail Eggs">
-                <h3>Quail Eggs</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By ExoticFarm</p>
-                <p class="price">$9 <span>$12</span></p>
-                <p>Sold: 15/50</p>
-                <p>Number of Available: 35</p>
-                <progress value="15" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-
-            <div class="product">
-                <img src="https://i.pinimg.com/474x/b1/5d/a9/b15da9e9e5bca8ff3b1d0ad9e6b1c5a3.jpg" alt="Salted Eggs">
-                <h3>Salted Eggs</h3>
-                <div class="rating">★★★★☆ (4)</div>
-                <p>By ExoticFarm</p>
-                <p class="price">$9 <span>$12</span></p>
-                <p>Sold: 15/50</p>
-                <p>Number of Available: 35</p>
-                <progress value="15" max="50"></progress>
-                <a href="GalleryPage.html">
-                    <button class="add-to-cart-btn">Add to cart</button>
-                </a>
-            </div>
-        </div>
-    </div>
- </main>
+</main>
 <!-- === Main Ends Here ==== -->
 {% endblock %}

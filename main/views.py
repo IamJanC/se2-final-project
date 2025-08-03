@@ -4,11 +4,28 @@ from orders.models import Order
 from django.contrib import messages
 from django.shortcuts import get_object_or_404  
 from products.views import get_all_products  # import logic layer for product gallery
+from collections import defaultdict
+from products.models import Category, Product
+
+
 
 
 def home(request):
-    return render(request, 'main/home.html')
+    products_by_category = defaultdict(list)
+    
+    categories = Category.objects.all()
+    for category in categories:
+        products = Product.objects.filter(category=category)[:5]
+        if products.exists():
+            products_by_category[category] = products
 
+    # Convert defaultdict to dict
+    products_by_category = dict(products_by_category)
+
+    return render(request, 'main/home.html', {
+        'products_by_category': products_by_category
+    })
+    
 def product(request):
     return render(request, 'main/product.html')
 

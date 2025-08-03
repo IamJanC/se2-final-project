@@ -117,31 +117,10 @@ footer{
     gap: 20px;
 }
 
-/* AniTubo Logo */
-#footer-anitubo-logo h1 {
-    color: #5f862f;
-    font-family: "Lilita One", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 1.8rem; /* Adjust as needed */
-    display: flex;
-    align-items: center; /* Vertically aligns text and image */
-    gap: 0.1em; /* Small spacing between letters */
 
-    padding: 0;
-    margin: 0;
-}
-
-#footer-anitubo-logo span {
-    display: inline-flex;
-    align-items: center;
-    color: #325a00;
-}
-
-#footer-anitubo-logo h1 img {
-    height: 1em; /* Matches text height */
-    width: auto; /* Keeps aspect ratio */
-    vertical-align: middle; /* Ensures better alignment */
+#footer-logo{
+    height: 50px; /* or width: 120px; */
+    object-fit: contain;
 }
 
 /* Info */

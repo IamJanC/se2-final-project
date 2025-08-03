@@ -51,22 +51,10 @@ nav {
 .logo {
     margin-right: auto;
 }
-.logo h1{
-    color: #5f862f;
-    font-family: "Lilita One", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 3rem; /* Adjust as needed */
-    display: flex;
-    align-items: center; /* Vertically aligns text and image */
-    padding: 0;
-    margin: 0;
-    gap: 0.1px; /* Small spacing between letters */
-}
-.logo span {
-    margin: 0;
-    padding: 0;
-    color: #325a00;
+
+#logo-img{
+    height: 75px; /* or width: 120px; */
+    object-fit: contain;
 }
 
 
@@ -284,8 +272,9 @@ nav {
     padding: 0;
     display: flex; 
     gap: 2rem; 
-    font-family: "Kantumruy Pro", sans-serif;
-    font-weight: 400;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
     font-style: normal;
 
 }
@@ -294,7 +283,6 @@ nav {
 .secondary-navbar-navlist a {
     text-decoration: none; /* Remove underline */
     font-size: 1rem; /* Adjust as needed */
-    font-weight: 600;
     color: #000000; /* Dark gray, adjust for your theme */
     transition: color 0.3s ease-in-out;
 }
