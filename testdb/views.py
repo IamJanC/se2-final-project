@@ -26,7 +26,8 @@ def login_view(request):
         # If any field was blank, return early
         if context.get("identifier_error") or context.get("password_error"):
             context["show_login_modal"] = True
-            return render(request, "templates/home.html", context)
+            return render(request, "main/home.html", context)
+
 
         # Attempt to get user by username or email
         try:
@@ -38,7 +39,8 @@ def login_view(request):
                 print("🔴 User not found")
                 context["login_error"] = "Invalid username/email or password."
                 context["show_login_modal"] = True
-                return render(request, "templates/home.html", context)
+                return render(request, "main/home.html", context)
+
 
         # Attempt authentication
         authenticated_user = authenticate(request, username=user.username, password=password)
@@ -51,7 +53,8 @@ def login_view(request):
             print("🔴 Incorrect password")
             context["login_error"] = "Invalid username/email or password."
             context["show_login_modal"] = True
-            return render(request, "templates/home.html", context)
+            return render(request, "main/home.html", context)
+
 
     return render(request, "templates/home.html")
 
@@ -133,4 +136,5 @@ def home_view(request):
     context = {}
     if "form_errors" in request.session:
         context.update(request.session.pop("form_errors"))
-    return render(request, "templates/home.html", context)
+    return render(request, "main/home.html", context)
+
