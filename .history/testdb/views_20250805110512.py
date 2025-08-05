@@ -17,15 +17,19 @@ def login_view(request):
         identifier = request.POST.get("identifier")
         password = request.POST.get("password")
 
+        # Field-level blank checks
         if not identifier:
             context["identifier_error"] = "Please enter your username or email."
         if not password:
             context["password_error"] = "Please enter your password."
 
+        # If any field was blank, return early
         if context.get("identifier_error") or context.get("password_error"):
             context["show_login_modal"] = True
             return render(request, "main/home.html", context)
 
+
+        # Attempt to get user by username or email
         try:
             user = User.objects.get(username=identifier)
         except User.DoesNotExist:
@@ -37,6 +41,8 @@ def login_view(request):
                 context["show_login_modal"] = True
                 return render(request, "main/home.html", context)
 
+
+        # Attempt authentication
         authenticated_user = authenticate(request, username=user.username, password=password)
         if authenticated_user:
             login(request, authenticated_user)
@@ -49,8 +55,8 @@ def login_view(request):
             context["show_login_modal"] = True
             return render(request, "main/home.html", context)
 
-    # 🔧 FIXED TEMPLATE PATH BELOW
-    return render(request, "main/home.html")
+
+    return render(request, "templates/home.html")
 
 def register_view(request):
     context = {}
