@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+
 .product-container {
   display: flex;
   flex-wrap: wrap;
@@ -37,12 +41,22 @@
   font-size: 2rem;
   font-weight: 700;
   color: #2c3e50;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
 }
 
 .product-price {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #27ae60;
+  color: #659e08;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
 }
 
 .product-category {
@@ -52,11 +66,16 @@
 
 .product-stock {
   font-size: 1rem;
-  font-weight: 600;
+
+
+  font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .product-stock.in-stock {
-  color: #2ecc71;
+  color: #659e08;
 }
 
 .product-stock.out-of-stock {
@@ -65,9 +84,14 @@
 
 .product-description {
   font-size: 1rem;
-  color: #444;
+  color: black;
   line-height: 1.6;
   margin-top: 0.5rem;
+
+  font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
 }
 
 .add-cart-btn {
@@ -75,15 +99,20 @@
   font-size: 1rem;
   font-weight: 600;
   color: white;
-  background-color: #3498db;
+  background-color: #5c8b25;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+
+  font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .add-cart-btn:hover:not(:disabled) {
-  background-color: #2980b9;
+  background-color: #325a00;
 }
 
 .add-cart-btn:disabled {

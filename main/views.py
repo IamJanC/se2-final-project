@@ -8,9 +8,8 @@ from collections import defaultdict
 from products.models import Category, Product
 
 
-
-
-def home(request):
+def get_home_context():
+    from collections import defaultdict
     products_by_category = defaultdict(list)
     
     categories = Category.objects.all()
@@ -19,20 +18,34 @@ def home(request):
         if products.exists():
             products_by_category[category] = products
 
-    # Convert defaultdict to dict
-    products_by_category = dict(products_by_category)
+    return {
+        'products_by_category': dict(products_by_category)
+    }
 
-    return render(request, 'main/home.html', {
-        'products_by_category': products_by_category
-    })
+
+
+def home(request):
+    context = get_home_context()
+    return render(request, 'main/home.html', context)
+
     
 def product(request):
     return render(request, 'main/product.html')
 
-# Gallery Rendering 
 def shop(request):
-    products = get_all_products()
-    return render(request, 'main/gallery.html', {'products': products})
+    category_slug = request.GET.get('category')
+
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        products = Product.objects.filter(category=category)
+    else:
+        products = get_all_products()
+
+    return render(request, 'main/gallery.html', {
+        'products': products,
+        'selected_category': category_slug
+    })
+
 
 # Product Description Rendering
 def product_detail(request, product_id):

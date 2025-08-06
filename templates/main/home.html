@@ -47,7 +47,7 @@
 
     <div class="product-category-header">
       <h3>{{ category.name }}</h3>
-      <a href="#">View All ></a>
+      <a href="{% url 'main:shop' %}?category={{ category.slug }}">View All ></a>
     </div>
 
     <div class="products-list">

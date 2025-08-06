@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 import re
+from main.views import get_home_context
 
 User = get_user_model()
 
@@ -24,7 +25,9 @@ def login_view(request):
 
         if context.get("identifier_error") or context.get("password_error"):
             context["show_login_modal"] = True
+            context.update(get_home_context())
             return render(request, "main/home.html", context)
+
 
         try:
             user = User.objects.get(username=identifier)
@@ -35,7 +38,9 @@ def login_view(request):
                 print("🔴 User not found")
                 context["login_error"] = "Invalid username/email or password."
                 context["show_login_modal"] = True
+                context.update(get_home_context())
                 return render(request, "main/home.html", context)
+
 
         authenticated_user = authenticate(request, username=user.username, password=password)
         if authenticated_user:
@@ -47,10 +52,14 @@ def login_view(request):
             print("🔴 Incorrect password")
             context["login_error"] = "Invalid username/email or password."
             context["show_login_modal"] = True
+            context.update(get_home_context())
             return render(request, "main/home.html", context)
 
+
     # 🔧 FIXED TEMPLATE PATH BELOW
-    return render(request, "main/home.html")
+    context.update(get_home_context())
+    return render(request, "main/home.html", context)
+
 
 def register_view(request):
     context = {}
@@ -102,7 +111,9 @@ def register_view(request):
                     "email": email
                 }
             })
+            context.update(get_home_context())
             return render(request, "main/home.html", context)
+
 
         # ✅ Create the user if all validations pass
         try:
@@ -121,7 +132,9 @@ def register_view(request):
                     "email": email
                 }
             })
-            return render(request, 'templates/home.html', context)
+            context.update(get_home_context())
+            return render(request, "main/home.html", context)
+
 
     return redirect("main:home")
 
@@ -130,5 +143,7 @@ def home_view(request):
     context = {}
     if "form_errors" in request.session:
         context.update(request.session.pop("form_errors"))
-    return render(request, "main/home.html", context)
+        context.update(get_home_context())
+        return render(request, "main/home.html", context)
+
 
