@@ -93,7 +93,6 @@
     <div class="product-grid">
       {% for product in products %}
         <div class="product-card">
-          <!-- Whole product card clickable -->
           <a href="{% url 'main:product_detail' product.id %}" class="card-link">
             <div class="product-img-wrap">
               <img src="{{ product.image_url }}" alt="{{ product.name }}">
@@ -107,13 +106,9 @@
               <div class="stock">{{ product.stock }} in stock</div>
             </div>
           </a>
-
-          <!-- Add to Cart redirects to product detail -->
-          <a href="{% url 'main:product_detail' product.id %}" class="add-cart-link">
-            <button class="add-cart-btn" {% if product.stock == 0 %}disabled{% endif %}>
-              Add to cart
-            </button>
-          </a>
+          <button class="add-cart-btn" {% if product.stock == 0 %}disabled{% endif %}>
+            Add to cart
+          </button>
         </div>
       {% endfor %}
     </div>

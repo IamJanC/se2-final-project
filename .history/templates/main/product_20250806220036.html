@@ -1,0 +1,67 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="product-container">
+  <div class="product-image">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% else %}
+      <img src="{% static 'images/default-product.png' %}" alt="No Image">
+    {% endif %}
+  </div>
+
+  <div class="product-details">
+    <div>
+      <h2 class="product-name">{{ product.name }}</h2>
+      <p class="product-price">₱{{ product.price }}</p>
+      <p class="product-category">Category: {{ product.category }}</p>
+      <p class="product-stock {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+        {% if product.stock > 0 %}
+          In Stock ({{ product.stock }})
+        {% else %}
+          Out of Stock
+        {% endif %}
+      </p>
+      <p class="product-description">{{ product.description }}</p>
+    </div>
+
+    <form method="post" id="add-to-cart-form">
+      {% csrf_token %}
+      <input type="hidden" name="product_id" value="{{ product.id }}">
+      <button type="submit" class="add-cart-btn" {% if product.stock <= 0 %}disabled{% endif %}>
+        Add to Cart
+      </button>
+    </form>
+
+    <div id="successModal" class="success-message" style="display: none;">
+      ✅ Added to cart!
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    fetch(form.action || "", {
+      method: "POST",
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        document.getElementById('successModal').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('successModal').style.display = 'none';
+        }, 2000);
+      }
+    });
+  });
+</script>
+{% endblock %}

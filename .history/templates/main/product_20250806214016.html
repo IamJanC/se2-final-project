@@ -1,0 +1,55 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="product-detail-container">
+  <div class="product-detail-wrapper">
+    <div class="product-detail-image">
+      <img src="{{ product.image_url }}" alt="{{ product.name }}">
+    </div>
+
+    <div class="product-detail-info">
+      <h2>{{ product.name }}</h2>
+      <p class="product-price">₱{{ product.price }}</p>
+      <p class="product-stock">{{ product.stock }} in stock</p>
+      <form action="{% url 'main:add_to_cart' product.id %}" method="post">
+        {% csrf_token %}
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock }}">
+        <button type="submit" class="add-to-cart-btn" {% if product.stock == 0 %}disabled{% endif %}>Add to Cart</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="product-tabs">
+    <ul class="tabs">
+      <li class="active" data-tab="description-tab">Description</li>
+      <li data-tab="reviews-tab">Reviews</li>
+    </ul>
+
+    <div id="description-tab" class="tab-content active">
+      <p>{{ product.description|linebreaks }}</p>
+    </div>
+
+    <div id="reviews-tab" class="tab-content">
+      <p>No reviews yet.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll(".tabs li");
+  const contents = document.querySelectorAll(".tab-content");
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active"));
+      contents.forEach(c => c.classList.remove("active"));
+
+      tab.classList.add("active");
+      const target = document.getElementById(tab.getAttribute("data-tab"));
+      target.classList.add("active");
+    });
+  });
+</script>
+{% endblock %}
