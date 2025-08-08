@@ -111,6 +111,39 @@ nav {
     background-position: 100% center;
 }
 
+
+
+.search-suggestions {
+  position: relative;
+  margin-top: 10px;
+  background-color: white;
+  border: 1px solid #ddd;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.search-suggestions a {
+  display: block;
+  padding: 10px;
+  color: black;
+  text-decoration: none;
+}
+
+.search-suggestions a:hover {
+  background-color: #f0f0f0;
+}
+
+.search-suggestions .no-results {
+  padding: 10px;
+  color: #999;
+}
+
+
+
+
+
 /* Right Buttons */
 .nav-group{
     display: flex;

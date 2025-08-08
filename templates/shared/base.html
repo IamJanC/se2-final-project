@@ -31,11 +31,17 @@
                     <img src="/static/images/Temporaries/Logo 9.png" alt="AniHub Logo" id="logo-img">
                 </div>
         
-                <!-- Search Bar -->
-                
-                <form class="search-bar">
-                    <input class="search__input" type="text" placeholder="Search">
-                </form>                
+               <!-- Search Bar -->
+                <form class="search-bar" autocomplete="off">
+                    <input 
+                        class="search__input" 
+                        type="text" 
+                        placeholder="Search..." 
+                        id="searchInput"
+                    >
+                    <div class="search-suggestions" id="suggestionsBox"></div>
+                </form>
+
         
                 <!-- Navigation Group (Wishlist, Cart, Profile) -->
 
@@ -443,6 +449,9 @@
     <!-- === Scripts === -->
     <!-- Chatbot Script -->
     <script src="{% static 'js/chatbot.js' %}"></script>
+    <script src="{% static 'js/search.js' %}"></script>
+    
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const profileSection = document.getElementById('profileSection');
