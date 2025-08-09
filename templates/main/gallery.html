@@ -12,22 +12,38 @@
 <div class="gallery-layout">
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="sidebar-section">
+    <div class="sidebar-section"> 
       <h3>All Categories</h3>
-      <ul>
-        <li><label><input type="checkbox"> Vegetables <span>(10)</span></label></li>
-        <li><label><input type="checkbox"> Egg <span>(12)</span></label></li>
-        <li><label><input type="checkbox"> Fruits <span>(8)</span></label></li>
-        <li><label><input type="checkbox"> Meat <span>(5)</span></label></li>
-        <li><label><input type="checkbox"> Oil <span>(3)</span></label></li>
-      </ul>
+      <form method="get" id="categoryForm">
+        <ul>
+          {% for cat in categories %}
+          <li>
+            <label>
+              <input type="radio" name="category" value="{{ cat.slug }}"
+                    {% if selected_category == cat.slug %}checked{% endif %}>
+              {{ cat.name }} ({{ cat.product_count }})
+            </label>
+          </li>
+          {% endfor %}
+          <li>
+            <label>
+              <input type="radio" name="category" value=""
+                    {% if not selected_category %}checked{% endif %}>
+              All
+            </label>
+          </li>
+        </ul>
+
+        <h3>Price</h3>
+        <input type="range" name="price_max" min="{{ min_price|default:0 }}" max="{{ max_price|default:1000 }}" value="{{ request.GET.price_max|default:max_price }}" id="priceRange">
+        <span id="priceDisplay">₱{{ min_price|default:0}} - ₱ {{ request.GET.price_max|default:max_price}} </span>
+        
+        <button class="filter-btn">Filter</button>
+      </form>
     </div>
 
-    <div class="sidebar-section">
-      <h3>Price</h3>
-      <input type="range" min="0" max="1000" value="500" id="priceRange">
-      <span id="priceDisplay">₱0 - ₱1000</span>
-    </div>
+      <!-- <input type="range" name="price_max" min="{{ min_price|default:0 }}" max="{{ max_price|default:1000 }}" value="{{ request.GET.price_max|default:max_price }}" id="priceRange">
+      <span id="priceDisplay">₱{{ min_price|default:0}} - ₱ {{ request.GET.price_max|default:max_price}} </span> -->
 
     <div class="sidebar-section">
       <h3>Rating</h3>
@@ -74,7 +90,6 @@
         <div><span>Green Eggplant</span><span class="sale-price">₱2.50</span></div>
       </div>
     </div>
-    <button class="filter-btn">Filter</button>
   </aside>
 
   <!-- Main Product Grid -->
@@ -141,4 +156,33 @@
     </div>
   </main>
 </div>
+
+
+<script>
+document.querySelectorAll('#categoryForm input[type=radio]')
+  .forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.getElementById('categoryForm').submit();
+    });
+  });
+</script>
+
+<script>
+const form = document.getElementById('filterForm');
+
+document.querySelectorAll('#filterForm input[name=category]').forEach(radio => {
+  radio.addEventListener('change', () => form.submit());
+});
+
+document.getElementById('sortDropdown').addEventListener('change', () => form.submit());
+
+const priceRange = document.getElementById('priceRange');
+const priceDisplay = document.getElementById('priceDisplay');
+priceRange.addEventListener('input', () => {
+  priceDisplay.textContent = `₱{{ min_price|default:0 }} - ₱${priceRange.value}`;
+});
+
+priceRange.addEventListener('change', () => form.submit());
+</script>
+
 {% endblock %}

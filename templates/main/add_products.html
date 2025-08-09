@@ -1,0 +1,51 @@
+<!-- templates/add_products.html -->
+{% extends 'admin.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{% if editing %}Edit{% else %}Add{% endif %} Product</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="id_name" class="form-label">Product Name</label>
+            {{ form.name }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_price" class="form-label">Price</label>
+            {{ form.price }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_description" class="form-label">Description</label>
+            {{ form.description }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_stock" class="form-label">Stock</label>
+            {{ form.stock }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_category" class="form-label">Category</label>
+            {{ form.category }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_image" class="form-label">Product Image</label>
+            {{ form.image }}
+            {% if editing and product.image %}
+            <div class="mt-2">
+                <small>Current image:</small><br>
+                <img src="{{ product.image.url }}" width="100" class="mt-1">
+            </div>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'manage_products' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
