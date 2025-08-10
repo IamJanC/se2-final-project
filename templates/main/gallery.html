@@ -4,8 +4,11 @@
 {% block title %}Gallery{% endblock %}
 
 {% block extra_head %}
-<!-- Homepage-specific styles only -->
-<link rel="stylesheet" href="{% static 'css/gallery.css' %}" />
+  <!-- Homepage-specific styles only -->
+  <link rel="stylesheet" href="{% static 'css/gallery.css' %}" />
+
+  <!-- Shared styles for layout components -->
+  <link rel="stylesheet" href="{% static 'css/miniview.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -95,12 +98,6 @@
   <!-- Main Product Grid -->
   <main class="product-gallery">
 
-     <!--Temporary-->
-    {% include 'shared/product_miniview_cart.html' %}
-    <button type="button" data-bs-toggle="modal" data-bs-target="#productQuickViewModal">
-      Open Quick View (Test)
-    </button>
-
     <div class="gallery-controls">
       <select id="sortDropdown">
         <option>Sort by: Latest</option>
@@ -156,6 +153,14 @@
     </div>
   </main>
 </div>
+
+
+    <!-- ==== vvv MODALS (hidden by default) vvv ==== -->
+
+    <!--Product Miniview-->
+    {% include 'shared/product_miniview_cart.html' %}
+
+    <!-- ==== ^^^ MODALS (hidden by default) ^^^ ==== -->
 
 
 <script>

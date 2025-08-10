@@ -5,8 +5,11 @@
 {% block title %}Home{% endblock %}
 
 {% block extra_head %}
-<!-- Homepage-specific styles only -->
-<link rel="stylesheet" href="{% static 'css/Homepage.css' %}" />
+  <!-- Homepage-specific styles only -->
+  <link rel="stylesheet" href="{% static 'css/Homepage.css' %}" />
+
+  <!-- Shared styles for layout components -->
+  <link rel="stylesheet" href="{% static 'css/miniview.css' %}">
 {% endblock %}
 
 
@@ -81,4 +84,8 @@
 
 </main>
 <!-- === Main Ends Here ==== -->
+
+<!-- === MODALS === -->
+  <!--Product Miniview-->
+  {% include 'shared/product_miniview_cart.html' %}
 {% endblock %}

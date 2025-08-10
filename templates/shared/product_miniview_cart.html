@@ -1,17 +1,86 @@
-<!-- Modal
-<div class="modal fade" id="productQuickViewModal" tabindex="-1" aria-labelledby="productQuickViewLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="productQuickViewLabel">Product Quick View</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Product Mini View Modal -->
+<div class="miniview-modal">
+  <div class="miniview-modal-content">
+
+    
+
+    <!-- Left: Product Picture -->
+    <div id="product-picture-left">
+      <img src="https://i.imgur.com/1OAb9H6.png" alt="placeholder pic">
+    </div>
+
+    <!-- Right: Product Details -->
+    <div id="product-details-right">
+
+      <!-- Title & Stock -->
+      <div id="product-title">
+        <h2 class="lexend-500">Product Title</h2>
       </div>
-      <div class="modal-body">
-        Hi  Replace this with your design later -->
-      <!-- </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+      <!-- Price -->
+      <div id="product-price">
+        <p class="lexend-400">₱20.00</p>
       </div>
+
+      <!-- Category -->
+      <div id="product-category">
+        <p>Category: Example</p>
+      </div>
+
+      <!-- Stock -->
+      <div id="product-stock">
+        <p class="stock-status lexend-400">In stock: number</p>
+      </div>
+
+      <!-- Description -->
+      <div id="product-description">
+        <p class="lexend-300">Short description of the product.</p>
+      </div>
+
+      <!--Quantity-->
+      <div class="quantity-container">
+          <p class="lexend-300">Quantity:</p>
+
+          <div class="quantity-selector">
+            <button class="qty-btn minus" aria-label="Decrease quantity">−</button>
+            <input type="number" class="quantity-input" value="1" min="1">
+            <button class="qty-btn plus" aria-label="Increase quantity">+</button>
+          </div>
+      </div>
+      
+
+      <!-- Add to Cart -->
+      <div id="add-to-cart-container">
+        <button class="cancel-add-to-cart-btn">Cancel</button>
+        <button class="add-to-cart-btn">Add to cart</button>
+      </div>
+
     </div>
   </div>
-</div> --> 
+</div>
+
+<script>
+document.querySelectorAll('.quantity-selector').forEach(selector => {
+  const minusBtn = selector.querySelector('.minus');
+  const plusBtn = selector.querySelector('.plus');
+  const input = selector.querySelector('.quantity-input');
+
+  minusBtn.addEventListener('click', () => {
+    let value = parseInt(input.value, 10) || 1;
+    if (value > 1) input.value = value - 1;
+  });
+
+  plusBtn.addEventListener('click', () => {
+    let value = parseInt(input.value, 10) || 1;
+    input.value = value + 1;
+  });
+});
+
+// Close modal on Cancel
+document.querySelectorAll('.cancel-add-to-cart-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const modal = btn.closest('.miniview-modal');
+    if (modal) modal.classList.add('hidden');
+  });
+});
+</script>

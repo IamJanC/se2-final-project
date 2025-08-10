@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+/* Fonts */
+.lexend-100 {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.lexend-200 {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.lexend-300 {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.lexend-400 {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.lexend-500 {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.lexend-600 {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.lexend-700 {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.lexend-800 {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.lexend-900 {
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+}
+
+
+/* ===== Product Mini View Modal Styles ===== */
+.miniview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Dimmed backdrop */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+}
+
+/* Modal box */
+.miniview-modal-content {
+    position: relative; /* for close button positioning */
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 1000px;
+    display: flex; /* side-by-side layout */
+    gap: 5rem;
+    text-align: left;
+}
+
+/* Left: Image */
+#product-picture-left img {
+    max-width: 400px;
+    height: auto;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+/* Right: Details */
+#product-details-right {
+    flex: 1; /* take remaining space */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#product-title h2{
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 7px;
+}
+
+#product-price{
+    font-size: 1.5rem;
+    color: #659e08;
+    margin-bottom: 7px;
+}
+
+#product-category{
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin-bottom: 7px;
+}
+
+#product-stock{
+    font-size: 1rem;
+    color: #659e08;
+}
+
+#product-description{
+    font-size: 1rem;
+    color: black;
+    line-height: 1.6;
+    margin-top: 0.5rem;
+    margin-bottom: 20px;
+}
+
+/* Make quantity label & selector sit in one line with gap */
+.quantity-container {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* space between "Quantity:" and buttons */
+}
+
+
+/* Keep capsule shape, but let it size to content */
+.quantity-selector {
+    display: inline-flex; /* prevents full-width stretching */
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 999px;
+    overflow: hidden;
+    background: white;
+    padding: 5px;
+}
+
+/* Quantity buttons - perfect circles */
+.qty-btn {
+    background: #f5f5f5;
+    border: none;
+    width: 32px; /* same width/height for circle */
+    height: 32px;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    transition: background 0.2s;
+    border-radius: 50%; /* make button round */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.qty-btn:hover {
+    background: #e0e0e0;
+}
+
+/* Quantity input - same height, no border */
+.quantity-input {
+    width: 40px;
+    height: 32px;
+    text-align: center;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+/* Remove default number input arrows (Chrome, Edge, Safari) */
+.quantity-input::-webkit-inner-spin-button,
+.quantity-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Remove default number input arrows (Firefox) */
+.quantity-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+
+
+
+
+
+/* Add to cart container */
+#add-to-cart-container {
+    margin-top: auto; /* push it to bottom */
+    display: flex;
+    gap: 10px;
+}
+
+.add-to-cart-btn {
+    background: #5c8b25; 
+    color: white;
+    border: none;
+    padding: 0.6rem;
+    width: 100%;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.3s ease;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+.add-to-cart-btn:hover {
+    background: #325a00;
+}
+
+.cancel-add-to-cart-btn {
+    background: #dddddd; 
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 0.6rem;
+    width: 100%;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.3s ease;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* Optional hidden state */
+.hidden {
+    display: none;
+}
+
