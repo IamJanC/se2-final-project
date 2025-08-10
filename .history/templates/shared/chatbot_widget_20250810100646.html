@@ -16,8 +16,7 @@
     justify-content: center;
     cursor: pointer;
     z-index: 999;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3); /* deeper shadow */
-    filter: hue-rotate(-20deg) saturate(1.4); /* greener & more vibrant */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 ">
 </div>
 
@@ -69,7 +68,21 @@
 </div>
 
 <!-- Load chatbot functionality -->
-<script>
-  const isUserLoggedIn = {{ user.is_authenticated|yesno:"true,false" }};
-</script>
 <script src="{% static 'js/chatbot.js' %}"></script>
+
+<!-- Extra toggle script -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const chatIcon = document.getElementById("chat-icon");
+    const chatContainer = document.getElementById("chatbot-container");
+    const closeChat = document.getElementById("close-chat");
+
+    chatIcon.addEventListener("click", () => {
+        chatContainer.style.display = "flex";
+    });
+
+    closeChat.addEventListener("click", () => {
+        chatContainer.style.display = "none";
+    });
+});
+</script>

@@ -1,0 +1,89 @@
+{% load static %}
+
+<!-- Floating Chat Icon -->
+<!-- Chatbot Container -->
+<div id="chatbot-container" style="
+    display: none;
+    position: fixed;
+    bottom: 50px; /* half of icon height (60px / 2) + gap */
+    right: 50px;  /* half of icon width (60px / 2) + gap */
+    width: 350px;
+    max-height: 500px;
+    border: 1px solid #ccc;
+    background-color: white;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-direction: column;
+">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="#f3fece">
+        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04346 16.4525C3.22094 16.8088 3.28001 17.2161 3.17712 17.6006L2.58151 19.8267C2.32295 20.793 3.20701 21.677 4.17335 21.4185L6.39939 20.8229C6.78393 20.72 7.19121 20.7791 7.54753 20.9565C8.88837 21.6244 10.4003 22 12 22Z"/>
+    </svg>
+</div>
+
+<!-- Chatbot Container -->
+<div id="chatbot-container" style="
+    display: none;
+    position: fixed;
+    bottom: 5px; /* Just above icon */
+    right: 20px;
+    width: 350px;
+    max-height: 500px;
+    border: 1px solid #ccc;
+    background-color: white;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-direction: column;
+">
+    <!-- Header -->
+    <div id="chat-header" style="
+        background-color: #5f862c;
+        color: white;
+        padding: 10px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    ">
+        AgriHub Chatbot
+        <span id="close-chat" style="cursor: pointer;">✖</span>
+    </div>
+
+    <!-- Chat log -->
+    <div id="chat-log" style="
+        padding: 10px;
+        height: 250px;
+        overflow-y: auto;
+        font-size: 14px;
+        background: #f8f8f8;
+    "></div>
+
+    <!-- Question options -->
+    <div id="question-options" style="
+        padding: 10px;
+        background: #fff;
+    "></div>
+</div>
+
+<!-- Load chatbot functionality -->
+<script src="{% static 'js/chatbot.js' %}"></script>
+
+<!-- Extra toggle script -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const chatIcon = document.getElementById("chat-icon");
+    const chatContainer = document.getElementById("chatbot-container");
+    const closeChat = document.getElementById("close-chat");
+
+    chatIcon.addEventListener("click", () => {
+        chatContainer.style.display = "flex";
+    });
+
+    closeChat.addEventListener("click", () => {
+        chatContainer.style.display = "none";
+    });
+});
+</script>

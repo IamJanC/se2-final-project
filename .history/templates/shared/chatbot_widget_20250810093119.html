@@ -1,0 +1,45 @@
+{% load static %}
+
+<!-- Floating Chat Icon -->
+<div id="chat-icon">
+    <svg 
+        width="32" 
+        height="32" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.477 17.5228 2 12 2C6.477 2 2 6.477 2 12C2 13.6 2.376 15.112 3.043 16.453C3.221 16.809 3.28 17.216 3.177 17.601L2.582 19.827C2.323 20.793 3.207 21.677 4.173 21.419L6.399 20.823C6.784 20.72 7.191 20.779 7.548 20.957C8.888 21.624 10.4 22 12 22Z" fill="#f3fece"></path>
+    </svg>
+</div>
+
+<!-- Chatbot Container -->
+<div id="chatbot-container">
+    <div id="chat-header">
+        <span>AgriHub Chatbot</span>
+        <span id="close-chat" title="Close">✖</span>
+    </div>
+
+    <div id="chat-log"></div>
+
+    <!-- Complaint Form -->
+    <div id="complaint-section" style="display:none;">
+        <h4>Submit a Complaint</h4>
+        <form id="complaint-form">
+            {% csrf_token %}
+            <textarea 
+                name="complaint_text" 
+                id="complaint-text" 
+                placeholder="Type your complaint here..." 
+                required
+            ></textarea>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <!-- Question Options -->
+    <div id="question-options"></div>
+</div>
+
+<!-- Chatbot Script -->
+<script src="{% static 'js/chatbot.js' %}"></script>

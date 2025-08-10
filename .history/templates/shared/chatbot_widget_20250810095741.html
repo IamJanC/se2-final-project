@@ -5,28 +5,28 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-image: url('https://i.pinimg.com/736x/17/7b/43/177b43997c6ea57100e336574dc00ddf.jpg');
-    background-size: cover;
-    background-position: center;
+    background-color: #39600c;
+    color: white;
     border-radius: 50%;
     width: 60px;
     height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 28px;
     cursor: pointer;
     z-index: 999;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3); /* deeper shadow */
-    filter: hue-rotate(-20deg) saturate(1.4); /* greener & more vibrant */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
 ">
+    💬
 </div>
-
 
 <!-- Chatbot Container -->
 <div id="chatbot-container" style="
     display: none;
     position: fixed;
-    bottom: 5px; /* Just above icon */
+    bottom: 50px; /* Just above icon */
     right: 20px;
     width: 350px;
     max-height: 500px;
@@ -69,7 +69,21 @@
 </div>
 
 <!-- Load chatbot functionality -->
-<script>
-  const isUserLoggedIn = {{ user.is_authenticated|yesno:"true,false" }};
-</script>
 <script src="{% static 'js/chatbot.js' %}"></script>
+
+<!-- Extra toggle script -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const chatIcon = document.getElementById("chat-icon");
+    const chatContainer = document.getElementById("chatbot-container");
+    const closeChat = document.getElementById("close-chat");
+
+    chatIcon.addEventListener("click", () => {
+        chatContainer.style.display = "flex";
+    });
+
+    closeChat.addEventListener("click", () => {
+        chatContainer.style.display = "none";
+    });
+});
+</script>

@@ -5,40 +5,45 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-image: url('https://i.pinimg.com/736x/17/7b/43/177b43997c6ea57100e336574dc00ddf.jpg');
-    background-size: cover;
-    background-position: center;
+    background-color: #39600c;
+    color: white;
     border-radius: 50%;
     width: 60px;
     height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 30px;
     cursor: pointer;
     z-index: 999;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3); /* deeper shadow */
-    filter: hue-rotate(-20deg) saturate(1.4); /* greener & more vibrant */
 ">
+    <svg 
+        width="50" 
+        height="50" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04346 16.4525C3.22094 16.8088 3.28001 17.2161 3.17712 17.6006L2.58151 19.8267C2.32295 20.793 3.20701 21.677 4.17335 21.4185L6.39939 20.8229C6.78393 20.72 7.19121 20.7791 7.54753 20.9565C8.88837 21.6244 10.4003 22 12 22Z" fill="#f3fece"></path>
+    </svg>
 </div>
-
 
 <!-- Chatbot Container -->
 <div id="chatbot-container" style="
     display: none;
     position: fixed;
-    bottom: 5px; /* Just above icon */
+    bottom: 80px;
     right: 20px;
     width: 350px;
     max-height: 500px;
     border: 1px solid #ccc;
     background-color: white;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
     z-index: 1000;
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
     flex-direction: column;
 ">
-    <!-- Header -->
     <div id="chat-header" style="
         background-color: #5f862c;
         color: white;
@@ -51,25 +56,9 @@
         AgriHub Chatbot
         <span id="close-chat" style="cursor: pointer;">✖</span>
     </div>
-
-    <!-- Chat log -->
-    <div id="chat-log" style="
-        padding: 10px;
-        height: 250px;
-        overflow-y: auto;
-        font-size: 14px;
-        background: #f8f8f8;
-    "></div>
-
-    <!-- Question options -->
-    <div id="question-options" style="
-        padding: 10px;
-        background: #fff;
-    "></div>
+    <div id="chat-log" style="padding: 10px; height: 200px; overflow-y: auto;"></div>
+    <div id="question-options" style="padding: 10px;"></div>
 </div>
 
 <!-- Load chatbot functionality -->
-<script>
-  const isUserLoggedIn = {{ user.is_authenticated|yesno:"true,false" }};
-</script>
 <script src="{% static 'js/chatbot.js' %}"></script>

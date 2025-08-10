@@ -69,7 +69,4 @@
 </div>
 
 <!-- Load chatbot functionality -->
-<script>
-  const isUserLoggedIn = {{ user.is_authenticated|yesno:"true,false" }};
-</script>
 <script src="{% static 'js/chatbot.js' %}"></script>

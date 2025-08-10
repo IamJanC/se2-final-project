@@ -2,11 +2,6 @@ const chatLog = document.getElementById('chat-log');
 const questionOptions = document.getElementById('question-options');
 const botAvatar = 'https://cdn-icons-png.flaticon.com/512/4712/4712035.png';
 
-// This should be defined in your template like:
-// <script>const isUserLoggedIn = {{ user.is_authenticated|yesno:"true,false" }};</script>
-// For testing, you can set manually:
-// const isUserLoggedIn = false; // or true
-
 const questions = {
   start: {
     prompt: "Please choose one of the following:",
@@ -55,32 +50,6 @@ const responses = {
 const fallbackOptions = [
   { text: "🔙 Back to Main Menu", next: "start" }
 ];
-
-function createOptionButton(option) {
-  const btn = document.createElement('button');
-  btn.className = 'option-button';
-  btn.innerText = option.text;
-
-  // Disable complaint option if not logged in
-  if (option.next === 'complaintStart' && !isUserLoggedIn) {
-    btn.disabled = true;
-    btn.title = "You must be logged in to file a complaint.";
-    btn.style.cursor = 'not-allowed';
-  }
-
-  btn.onclick = () => {
-    // If complaintStart clicked but user not logged in, show message instead of complaint form
-    if (option.next === 'complaintStart' && !isUserLoggedIn) {
-      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      addMessage("bot", "⚠️ Please log in to file a complaint.", time);
-      saveChatToSession("bot", "Please log in to file a complaint.", time);
-      return;
-    }
-    handleUserChoice(option);
-  };
-
-  return btn;
-}
 
 function showComplaintInput() {
   questionOptions.innerHTML = '';
@@ -195,12 +164,16 @@ function showOptions(key) {
   const group = questions[key];
   if (!group) return;
 
+  // Add prompt message only when navigating normally (not restore)
   const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   addMessage("bot", group.prompt, time);
   saveChatToSession("bot", group.prompt, time);
 
   group.options.forEach(option => {
-    const btn = createOptionButton(option);
+    const btn = document.createElement('button');
+    btn.className = 'option-button';
+    btn.innerText = option.text;
+    btn.onclick = () => handleUserChoice(option);
     questionOptions.appendChild(btn);
   });
 
@@ -213,7 +186,10 @@ function showButtonsOnly(key) {
   if (!group) return;
 
   group.options.forEach(option => {
-    const btn = createOptionButton(option);
+    const btn = document.createElement('button');
+    btn.className = 'option-button';
+    btn.innerText = option.text;
+    btn.onclick = () => handleUserChoice(option);
     questionOptions.appendChild(btn);
   });
 }
@@ -221,7 +197,10 @@ function showButtonsOnly(key) {
 function showDynamicOptions(options) {
   questionOptions.innerHTML = '';
   options.forEach(option => {
-    const btn = createOptionButton(option);
+    const btn = document.createElement('button');
+    btn.className = 'option-button';
+    btn.innerText = option.text;
+    btn.onclick = () => handleUserChoice(option);
     questionOptions.appendChild(btn);
   });
 }
@@ -294,12 +273,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeBtn = document.getElementById("close-chat");
 
   chatIcon.addEventListener("click", function () {
-    chatContainer.style.display = "flex";
+    chatContainer.style.display = "flex";  // Use flex to keep layout intact
     chatIcon.style.display = "none";
   });
 
   closeBtn.addEventListener("click", function () {
     chatContainer.style.display = "none";
-    chatIcon.style.display = "flex";
+    chatIcon.style.display = "flex";  // Use flex here so icon shows nicely
   });
 });

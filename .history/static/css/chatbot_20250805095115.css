@@ -1,0 +1,210 @@
+/* === Chatbot Container === */
+#chatbot-container {
+  position: fixed;
+  bottom: 90px; /* moved up to make room for toggle button */
+  right: 20px;
+  width: 320px;
+  height: 460px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background-color: #fefefe;
+  display: none; /* hidden by default */
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+/* === Chat Header === */
+#chat-header {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* === Chat Log === */
+#chat-log {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+.bot .message-row {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.user .message-row {
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.message-content {
+  max-width: 75%;
+  padding: 8px 12px;
+  border-radius: 16px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  position: relative;
+}
+
+.bot .message-content {
+  background-color: #e4f7ea;
+  color: #2d6a4f;
+  border-bottom-left-radius: 0;
+  margin-right: auto;
+}
+
+.user .message-content {
+  background-color: #e0e0e0;
+  color: #333;
+  margin-left: auto;
+  border-bottom-right-radius: 0;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 2px 6px 0 0;
+}
+
+.timestamp {
+  font-size: 10px;
+  color: #888;
+  margin-top: 2px;
+}
+
+/* === Options Buttons === */
+#question-options {
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  background-color: #fafafa;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.option-button {
+  flex: 1 1 100%;
+  padding: 8px 10px;
+  background-color: #e0f3e6;
+  color: #333;
+  border: 1px solid #b6e2c9;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.option-button:hover {
+  background-color: #cdebd9;
+}
+
+/* === Typing Indicator === */
+.typing-indicator {
+  font-style: italic;
+  color: #666;
+  font-size: 12px;
+  margin-left: 36px;
+}
+
+/* === Complaint Form === */
+#complaint-form {
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #fff8f0;
+  border-top: 1px solid #ccc;
+}
+
+#complaint-text {
+  width: 100%;
+  height: 60px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  resize: none;
+}
+
+#submit-complaint {
+  background-color: #ffaf60;
+  color: #fff;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.complaint-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 8px;
+  font-family: inherit;
+  resize: none;
+}
+
+.bot-text-input {
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+/* === Floating Toggle Button === */
+#chat-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 26px;
+  cursor: pointer;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.2s;
+}
+
+#chat-toggle:hover {
+  background-color: #45a049;
+}
+
+/* === Close Button inside Chatbot === */
+#chatbot-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #999;
+  z-index: 1002;
+}
+
+#chatbot-close:hover {
+  color: #333;
+}
+
+
+#chat-icon svg{
+  height: 30px;
+  width: 30px;
+}
