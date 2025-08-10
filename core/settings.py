@@ -47,13 +47,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     
     # Our apps
     'main',         # main app
-    'testdb',        # authentication app
+    'testdb',       # authentication app
     'chatbot',      # chatbot app
-    'products',      # products app
-    'orders',     # orders app
+    'products',     # products app
+    'orders',       # orders app
+    'cart',         #carts app
 ]
 
 MIDDLEWARE = [
@@ -102,6 +104,7 @@ DATABASES = {
 
 # Authentication
 AUTH_USER_MODEL = 'testdb.CustomUser'
+LOGIN_URL = '/'
 
 
 

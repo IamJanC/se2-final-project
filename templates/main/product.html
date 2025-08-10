@@ -22,9 +22,31 @@
     </p>
     <p class="product-description">{{ product.description }}</p>
 
+    <!-- Messages block to show success or errors -->
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="message {{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
     {% if product.stock > 0 %}
-      <form method="post">
+      <form method="post" action="{% url 'cart:add_to_cart' product.id %}">
         {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+
+        <!-- Quantity Selector inside form -->
+        <div class="quantity-container">
+          <p class="lexend-300">Quantity:</p>
+
+          <div class="quantity-selector">
+            <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
+            <input type="number" name="quantity" class="quantity-input" value="1" min="1" max="{{ product.stock }}">
+            <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+
         <button type="submit" class="add-cart-btn">Add to Cart</button>
       </form>
     {% else %}
@@ -33,23 +55,37 @@
   </div>
 </div>
 
-{% if added_to_cart %}
-<div id="cartModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <p>✅ {{ product.name }} has been added to your cart!</p>
-  </div>
-</div>
 <script>
-  function closeModal() {
-    document.getElementById('cartModal').style.display = 'none';
-  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const minusBtn = document.querySelector('.qty-btn.minus');
+    const plusBtn = document.querySelector('.qty-btn.plus');
+    const qtyInput = document.querySelector('.quantity-input');
 
-  // Open modal if product added
-  window.onload = function () {
-    document.getElementById('cartModal').style.display = 'block';
-  };
+    if (minusBtn && plusBtn && qtyInput) {
+      minusBtn.addEventListener('click', () => {
+        let val = parseInt(qtyInput.value, 10) || 1;
+        if (val > parseInt(qtyInput.min || '1', 10)) {
+          qtyInput.value = val - 1;
+        }
+      });
+
+      plusBtn.addEventListener('click', () => {
+        let val = parseInt(qtyInput.value, 10) || 1;
+        const max = parseInt(qtyInput.max || '9999', 10);
+        if (val < max) {
+          qtyInput.value = val + 1;
+        }
+      });
+
+      qtyInput.addEventListener('input', () => {
+        let val = parseInt(qtyInput.value, 10) || 1;
+        const min = parseInt(qtyInput.min || '1', 10);
+        const max = parseInt(qtyInput.max || '9999', 10);
+        if (val < min) qtyInput.value = min;
+        else if (val > max) qtyInput.value = max;
+      });
+    }
+  });
 </script>
-{% endif %}
 
 {% endblock %}

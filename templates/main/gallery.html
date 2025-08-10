@@ -128,11 +128,13 @@
           </a>
 
           <!-- Add to Cart redirects to product detail -->
-          <a href="{% url 'main:product_detail' product.id %}" class="add-cart-link">
-            <button class="add-cart-btn" {% if product.stock == 0 %}disabled{% endif %}>
-              Add to cart
-            </button>
-          </a>
+          <!-- after -->
+          <button type="button"
+                  class="add-cart-btn open-miniview-btn"
+                  data-product-id="{{ product.id }}"
+                  {% if product.stock == 0 %}disabled{% endif %}>
+            Add to cart
+          </button>
         </div>
       {% endfor %}
     </div>

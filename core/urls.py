@@ -19,6 +19,7 @@ from django.urls import path, include       # type: ignore
 from testdb import views as testdb_views    # 👈 import your login_view
 from django.contrib.auth import views as auth_views  # 🔐 built-in authentication views
 from products import views as product_views  # 👈 make sure this is still imported
+from main import views as main_views # main
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # 👈 admin panel
@@ -29,6 +30,7 @@ urlpatterns = [
     path('orders/', include('orders.urls')),            # 👈 orders app
     path('products/', include('products.urls')),  # 👈 for products
     path('chatbot/', include('chatbot.urls')),   #chatbot
+    path('cart/', include('cart.urls')), #cart
     
     
 ]

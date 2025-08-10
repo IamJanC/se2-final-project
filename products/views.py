@@ -6,7 +6,11 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.db.models import Q
 
+import json
+from django.views.decorators.http import require_POST
 
+
+from django.shortcuts import render
 
 
 # Logic-only function to fetch all products (for use in main/views.py)
@@ -36,6 +40,19 @@ def search_products(request):
 
     return JsonResponse(results, safe=False)
 
+#Logic for miniview
+def product_detail_json(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    data = {
+        'id': product.id,
+        'name': product.name,
+        'price': str(product.price),
+        'category': product.category.name if product.category else '',
+        'stock': product.stock,
+        'description': product.description or '',
+        'image_url': product.image_url or ''
+    }
+    return JsonResponse(data)
 
 
 # Logic for product_listing - created after developing the search feature (temp)
@@ -47,5 +64,8 @@ def product_list(request):
 # Optional: You can keep this if you want a product detail page under /products/<id>/
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    return render(request, 'main/product_detail.html', {'product': product})
+    return render(request, 'main/product.html', {'product': product})
+
+
+
 

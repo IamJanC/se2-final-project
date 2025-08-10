@@ -70,8 +70,14 @@
                   <p class="stock">Stock: {{ product.stock }}</p>
                 </div>
             </a>
-            <button class="add-to-cart-btn">Add to cart</button>
+            <button type="button"
+                    class="add-to-cart-btn open-miniview-btn"
+                    data-product-id="{{ product.id }}"
+                    {% if product.stock == 0 %}disabled{% endif %}>
+              Add to cart
+            </button>
         </div>
+        
         {% endfor %}
       {% else %}
         <p>No products available in this category.</p>

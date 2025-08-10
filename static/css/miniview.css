@@ -146,6 +146,7 @@
     display: flex;
     align-items: center;
     gap: 8px; /* space between "Quantity:" and buttons */
+    margin-bottom: 20px;
 }
 
 

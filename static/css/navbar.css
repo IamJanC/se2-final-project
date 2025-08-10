@@ -145,10 +145,11 @@ nav {
 
 
 /* Right Buttons */
-.nav-group{
-    display: flex;
-    justify-content: center; /* Centers the items */
-    gap: 10rem;
+.nav-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem; /* smaller gap to keep some breathing room */
+  align-items: center;
 }
 
 /* Removes default button styling */
@@ -188,6 +189,7 @@ nav {
     gap: 0.5rem; /* Adjusts spacing between the icon and text */
     padding: 0;
     margin: 0;
+    margin-right: 8rem;
 }
 
 #nav-shopping-cart-group p {

@@ -6,6 +6,14 @@ from django.shortcuts import get_object_or_404, render
 from products.views import get_all_products  # import logic layer for product gallery
 from collections import defaultdict
 from django.db.models import Min, Max, Count
+from cart.models import CartItem
+
+
+
+import json
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+
 
 def get_home_context():
     from collections import defaultdict
@@ -25,6 +33,7 @@ def get_home_context():
 
 def home(request):
     context = get_home_context()
+    context['show_login_modal'] = request.GET.get('show_login') == '1'
     return render(request, 'main/home.html', context)
 
     
@@ -77,27 +86,10 @@ def product_detail(request, product_id):
     return render(request, 'main/product.html', {'product': product})
 
 
-
-
-# will fix this later
-def add_to_cart(request):
-    if request.method == 'POST':
-        product_id = request.POST.get('product_id')
-        quantity = int(request.POST.get('quantity', 1))
-
-        product = get_object_or_404(Product, id=product_id)
-
-        Order.objects.create(
-            user=request.user,
-            product=product,
-            quantity=quantity,
-            status='Pending'
-        )
-
-        messages.success(request, 'Order placed successfully!')  # ✅ Add this
-        return redirect('home')
     
 def admin_dashboard(request):
     recent_orders = Order.objects.select_related('user').order_by('-created_at')[:5]  # last 5 orders
     return render(request, 'main/admin.html')
+
+
 

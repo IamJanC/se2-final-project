@@ -49,11 +49,9 @@
                 <!-- Navigation Group (Wishlist, Cart, Profile) -->
 
                 
-                <div class="nav-group">
-                    <!-- Shopping Cart -->
-                    <div id="nav-shopping-cart-group">
-                        <button class="nav-btn">
-                        <!-- Your SVG -->
+                <div id="nav-shopping-cart-group">
+                    <a href="{% url 'cart:cart' %}" class="nav-btn" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <!-- SVG icon here -->
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -64,13 +62,14 @@
                             </g>
                         </svg>
                         <span>Shopping Cart</span>
-                        </button>
+                    </a>
 
-                        <div id="nav-shopping-cart-text">
-                            <p>My Cart</p>
-                            <p><span id="nav-amount">&#x20B1;00.00</span></p>
-                        </div>
+                    <div id="nav-shopping-cart-text">
+                        <p>My Cart</p>
+                        <p><span id="nav-amount">&#x20B1;00.00</span></p>
                     </div>
+                </div>
+
 
                     <!-- Account -->
                     <div id="nav-account">
