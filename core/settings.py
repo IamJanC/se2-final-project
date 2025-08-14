@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'products',     # products app
     'orders',       # orders app
     'cart',         #carts app
+    'adminpanel',    # admin panel app
 ]
 
 MIDDLEWARE = [

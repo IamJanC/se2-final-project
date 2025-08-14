@@ -46,7 +46,11 @@ def login_view(request):
         if authenticated_user:
             login(request, authenticated_user)
             print(f"🟢 Login successful for user {authenticated_user.username}")
-            return redirect("main:home")
+            
+            if authenticated_user.is_staff:
+                return redirect("adminpanel:dashboard")
+            else:
+                return redirect("main:home")
 
         else:
             print("🔴 Incorrect password")
@@ -88,12 +92,23 @@ def register_view(request):
             context["email_error"] = "This email is already registered. Try logging in instead."
 
         # ✅ PASSWORD VALIDATION
+        password = password.strip()
+        
         if not password:
             context["password_error"] = "Please create a password."
-        elif len(password) < 6:
-            context["password_error"] = "Password must be at least 6 characters long."
-        elif not re.search(r"[A-Za-z]", password) or not re.search(r"\d", password):
-            context["password_error"] = "Password must contain both letters and numbers."
+        elif len(password) < 8:
+            context["password_error"] = "Password must be at least 8 characters long."
+        elif not re.search(r"[A-Z]", password):
+            context["password_error"] = "Password must contain at least one uppercase letter."
+        elif not re.search(r"[a-z]", password):
+            context["password_error"] = "Password must contain at least one lowercase letter."
+        elif not re.search(r"\d", password):
+            context["password_error"] = "Password must contain at least one number."
+        # elif not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        #     context["password_error"] = "Password must contain at least one special character."
+        elif password.lower() in ["password", "123456", "qwerty", "admin", "letmein"]:
+            context["password_error"] = "This password is too common. Please choose another one."
+
 
         # ✅ CONFIRM PASSWORD CHECK
         if not confirm_password:

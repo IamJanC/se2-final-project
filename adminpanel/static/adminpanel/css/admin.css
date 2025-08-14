@@ -1,0 +1,39 @@
+body {
+    display: block;
+    overflow-x: hidden; /* Prevents horizontal scroll bar */
+}
+
+.sidebar {
+    min-width: 200px; 
+    height: 100vh; 
+    background-color: #343a40;
+}
+
+.sidebar .nav-link {
+    color: white;
+    padding: 10px;
+    display: block;
+    text-decoration: none;
+}
+
+.sidebar .nav-link.active {
+    background-color: #495057;
+}
+
+.sidebar .nav-link.active {
+    background-color: #495057 !important;
+    color: white !important;
+}
+
+.sidebar .nav-link:hover {
+    background-color: gray !important;
+    color: white !important;
+}
+.logout-button {
+    border: #343a40;
+    border-radius: 10%;
+}
+.logout-button:hover {
+    color: #495057;
+    transform:scale();
+}
