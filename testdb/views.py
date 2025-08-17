@@ -9,7 +9,6 @@ from main.views import get_home_context
 User = get_user_model()
 
 def login_view(request):
-    print("🟡 login_view called")
     context = {}
 
     if request.method == "POST":

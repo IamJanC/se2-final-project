@@ -77,16 +77,12 @@
                             {% if user.is_authenticated %}
                                 <!-- ✅ Profile Section for Logged-In Users -->
                                 <div id="profileSection" style="position: relative;">
-                                    <img src="https://i.pinimg.com/1200x/c6/a4/da/c6a4daa0b957112153a96912645306df.jpg" alt="Profile Pic" />
+                                    <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile Pic" />
                                     <span>{{ user.username }}</span>
                                     <span style="font-size: 12px;">▼</span>
 
                                     <!-- ✅ Logout Dropdown Menu -->
                                     <div style="position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ccc; display: none; min-width: 120px;" id="logoutDropdown">
-                                        <a href="{% url 'orders:my_orders' %}"
-                                            style="display: block; padding: 10px 16px; color: #333; text-decoration: none; font-weight: 500; border-bottom: 1px solid #eee;">
-                                            📦 My Orders
-                                        </a>
                                         <form method="POST" action="{% url 'logout' %}" style="margin: 0;">
                                             {% csrf_token %}
                                             <button type="submit"
