@@ -58,41 +58,6 @@
         <li><label><input type="checkbox"> <span>★☆☆☆☆</span> 1.0 & up</label></li>
       </ul>
     </div>
-
-    <div class="sidebar-section">
-      <h3>Popular Tag</h3>
-      <div class="tags">
-        <span class="tag">Fresh</span>
-        <span class="tag">Organic</span>
-        <span class="tag">Sale</span>
-        <span class="tag">New</span>
-        <span class="tag">Local</span>
-      </div>
-    </div>
-
-    <div class="sidebar-section discount-banner">
-      <img src="{% static 'img/discount.jpg' %}" alt="Discount" />
-      <div>
-        <strong>79% Discount</strong> on your first order<br>
-        <a href="#" class="shop-now-btn">Shop Now &rarr;</a>
-      </div>
-    </div>
-
-    <div class="sidebar-section sale-products">
-      <h3>Sale Products</h3>
-      <div class="sale-product-card">
-        <img src="{% static 'img/tomato.jpg' %}" alt="Tomato">
-        <div><span>Tomato</span><span class="sale-price">₱2.00</span></div>
-      </div>
-      <div class="sale-product-card">
-        <img src="{% static 'img/cabbage.jpg' %}" alt="Cabbage">
-        <div><span>Chinese Cabbage</span><span class="sale-price">₱3.00</span></div>
-      </div>
-      <div class="sale-product-card">
-        <img src="{% static 'img/eggplant.jpg' %}" alt="Eggplant">
-        <div><span>Green Eggplant</span><span class="sale-price">₱2.50</span></div>
-      </div>
-    </div>
   </aside>
 
   <!-- Main Product Grid -->
@@ -110,34 +75,39 @@
 
 
     <div class="product-grid">
-      {% for product in products %}
-        <div class="product-card">
-          <!-- Whole product card clickable -->
-          <a href="{% url 'main:product_detail' product.id %}" class="card-link">
-            <div class="product-img-wrap">
-              <img src="{{ product.image_url }}" alt="{{ product.name }}">
-              {% if product.stock == 0 %}
-                <span class="stock-out-badge">Out of stock</span>
-              {% endif %}
-            </div>
-            <div class="product-info">
-              <h3>{{ product.name }}</h3>
-              <div class="price">₱{{ product.price }}</div>
-              <div class="stock">{{ product.stock }} in stock</div>
-            </div>
-          </a>
-
-          <!-- Add to Cart redirects to product detail -->
-          <!-- after -->
-          <button type="button"
-                  class="add-cart-btn open-miniview-btn"
-                  data-product-id="{{ product.id }}"
-                  {% if product.stock == 0 %}disabled{% endif %}>
-            Add to cart
-          </button>
+  {% for product in products %}
+    <div class="product">
+      <!-- Whole product card clickable -->
+      <a href="{% url 'main:product_detail' product.id %}" class="product-card-link">
+        <div class="product-img-wrap">
+          <img src="{{ product.image_url }}" alt="{{ product.name }}">
         </div>
-      {% endfor %}
+
+        <div class="product-info-left">
+          <div class="product-title">
+            <h3>{{ product.name }}</h3>
+          </div>
+          <div class="price">₱{{ product.price }}</div>
+          <div class="stock">Stock: {{ product.stock }}</div>
+
+          <!-- Optional: Progress bar for stock (only show if stock > 0 and you want this feature) -->
+          {% if product.stock > 0 %}
+            <progress value="{{ product.stock }}" max="100"></progress>
+          {% endif %}
+        </div>
+      </a>
+
+      <!-- Add to Cart -->
+      <button type="button"
+              class="add-to-cart-btn open-miniview-btn"
+              data-product-id="{{ product.id }}"
+              {% if product.stock == 0 %}disabled{% endif %}>
+        Add to cart
+      </button>
     </div>
+  {% endfor %}
+</div>
+
 
 
 
