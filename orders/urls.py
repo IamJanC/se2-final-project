@@ -6,4 +6,9 @@ app_name = 'orders'
 urlpatterns = [
     path('', views.my_orders, name='my_orders'),  # User-facing orders page
     path('create/', views.create_order, name='create_order'),  # Page to create a new order
+    
+    
+    
+    
+    path("checkout/", views.checkout_view, name="checkout"), #final ^ temp ^
 ]

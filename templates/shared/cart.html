@@ -36,4 +36,12 @@
   <p>Your cart is empty.</p>
 {% endif %}
 
+{% if cart_items %}
+  <a href="{% url 'orders:checkout' %}" class="btn btn-primary">
+    Proceed to Checkout
+  </a>
+{% endif %}
+
+
+
 {% endblock %}

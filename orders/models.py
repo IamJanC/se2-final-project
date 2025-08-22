@@ -13,12 +13,17 @@ class Order(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=100)   # customer's name
+    phone = models.CharField(max_length=15)        # contact number
+    email = models.EmailField(blank=True)          # optional, for receipts
+    address = models.TextField()                   # delivery address
+
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
-    address = models.TextField(blank=True)  # optional if you need shipping
 
     def __str__(self):
         return f"Order #{self.id} by {self.user.username}"
+
 
 
 class OrderItem(models.Model):

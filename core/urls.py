@@ -32,5 +32,4 @@ urlpatterns = [
     path('chatbot/', include('chatbot.urls')),   #chatbot
     path('cart/', include('cart.urls')), #cart
     path('adminpanel/', include('adminpanel.urls')),  # Custom admin dashboard
-
 ]
