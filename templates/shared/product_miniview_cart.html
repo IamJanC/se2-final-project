@@ -19,7 +19,7 @@
 
       <!-- Price -->
       <div id="product-price">
-        <p class="lexend-400">₱20.00</p>
+        <p class="lexend-400">₱ 20.00</p>
       </div>
 
       <!-- Category -->
@@ -107,7 +107,7 @@
         modal.dataset.productId = product.id;
         imgEl.src = product.image_url || '/static/images/placeholder.png';
         titleEl.textContent = product.name;
-        priceEl.textContent = '₱' + (parseFloat(product.price) || 0).toFixed(2);
+        priceEl.textContent = '₱ ' + (parseFloat(product.price) || 0).toFixed(2);
         categoryEl.textContent = 'Category: ' + (product.category || '');
         stockEl.textContent = product.stock > 0 ? 'In stock: ' + product.stock : 'Out of Stock';
         descEl.textContent = product.description || '';

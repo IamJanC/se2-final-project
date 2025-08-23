@@ -1,5 +1,6 @@
 {% extends 'shared/base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
@@ -32,13 +33,20 @@
   <h3>Order Summary</h3>
   <ul>
     {% for item in cart_items %}
-      <li>{{ item.quantity }} × {{ item.product.name }} — ₱{{ item.subtotal|floatformat:2 }}</li>
+      <li>{{ item.quantity }} × {{ item.product.name }} — ₱ {{ item.subtotal|floatformat:2|intcomma }}</li>
     {% endfor %}
   </ul>
 
-  <h3>Total: ₱{{ total|floatformat:2 }}</h3>
+  <h3>Total: ₱ {{ total|floatformat:2|intcomma }}</h3>
 
   <button type="submit" class="btn btn-primary">Place Order</button>
 </form>
+
+{% if order_created %}
+   <div class="alert alert-success">
+      Order placed successfully! Your order number is {{ order.id }}.
+   </div>
+{% endif %}
+
 
 {% endblock %}

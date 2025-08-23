@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'django.contrib.humanize', # For human-friendly number formatting
     
     # Our apps
     'main',         # main app

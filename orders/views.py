@@ -35,7 +35,9 @@ def checkout_view(request):
     cart = get_object_or_404(Cart, user=request.user)
     cart_items = cart.items.all()
     total = sum(item.product.price * item.quantity for item in cart_items)  # ✅ inline subtotal
-
+    for item in cart_items:
+        item.subtotal = item.product.price * item.quantity
+    
     if request.method == "POST":
         full_name = request.POST.get("full_name")
         phone = request.POST.get("phone")
@@ -71,4 +73,3 @@ def checkout_view(request):
         "total": total,
     }
     return render(request, "main/checkout.html", context)
-

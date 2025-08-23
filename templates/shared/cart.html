@@ -1,5 +1,6 @@
 {% extends 'shared/base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block content %}
 
@@ -22,15 +23,15 @@
       {% for item in cart_items %}
       <tr>
         <td>{{ item.product.name }}</td>
-        <td>₱{{ item.product.price }}</td>
+        <td>₱ {{ item.product.price }}</td>
         <td>{{ item.quantity }}</td>
-        <td>₱{{ item.subtotal|floatformat:2 }}</td>
+        <td>₱ {{ item.subtotal|floatformat:2|intcomma }}</td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 
-  <h3>Total: ₱{{ total }}</h3>
+  <h3>Total: ₱ {{ total|intcomma }}</h3>
 
 {% else %}
   <p>Your cart is empty.</p>

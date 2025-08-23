@@ -21,7 +21,7 @@
         <ul style="list-style: none; padding: 0;">
             {% for order in orders %}
             <li style="border-bottom: 1px solid #ccc; padding: 10px 0;">
-                <strong>{{ order.product }}</strong> – {{ order.quantity }} pcs<br>
+                <strong>{{ order.id }}</strong><br>
                 <em>Status:</em> {{ order.status }}<br>
                 <small>Placed on {{ order.created_at }}</small>
             </li>

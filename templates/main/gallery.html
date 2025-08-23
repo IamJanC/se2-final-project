@@ -39,7 +39,7 @@
 
         <h3>Price</h3>
         <input type="range" name="price_max" min="{{ min_price|default:0 }}" max="{{ max_price|default:1000 }}" value="{{ request.GET.price_max|default:max_price }}" id="priceRange">
-        <span id="priceDisplay">₱{{ min_price|default:0}} - ₱ {{ request.GET.price_max|default:max_price}} </span>
+        <span id="priceDisplay">₱ {{ min_price|default:0}} - ₱ {{ request.GET.price_max|default:max_price}} </span>
         
         <button class="filter-btn">Filter</button>
       </form>
@@ -87,7 +87,7 @@
           <div class="product-title">
             <h3>{{ product.name }}</h3>
           </div>
-          <div class="price">₱{{ product.price }}</div>
+          <div class="price">₱ {{ product.price }}</div>
           <div class="stock">Stock: {{ product.stock }}</div>
 
           <!-- Optional: Progress bar for stock (only show if stock > 0 and you want this feature) -->
@@ -156,7 +156,7 @@ document.getElementById('sortDropdown').addEventListener('change', () => form.su
 const priceRange = document.getElementById('priceRange');
 const priceDisplay = document.getElementById('priceDisplay');
 priceRange.addEventListener('input', () => {
-  priceDisplay.textContent = `₱{{ min_price|default:0 }} - ₱${priceRange.value}`;
+  priceDisplay.textContent = `₱ {{ min_price|default:0 }} - ₱ ${priceRange.value}`;
 });
 
 priceRange.addEventListener('change', () => form.submit());

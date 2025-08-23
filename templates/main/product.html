@@ -11,7 +11,7 @@
 
   <div class="product-details">
     <h2 class="product-name">{{ product.name }}</h2>
-    <p class="product-price">₱{{ product.price }}</p>
+    <p class="product-price">₱ {{ product.price }}</p>
     <p class="product-category">Category: {{ product.category }}</p>
     <p class="product-stock {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
       {% if product.stock > 0 %}
