@@ -1,11 +1,13 @@
 # products/forms.py
 from django import forms
-from .models import Product
+from .models import Product, Category
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'price', 'description', 'stock', 'image', 'category']
-        widgets = {
-            'description': forms.Textarea(attrs={'rows': 3}),
-        }
+        fields = ['name', 'price', 'description', 'stock', 'image_url', 'category']
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
