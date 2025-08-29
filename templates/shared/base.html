@@ -81,8 +81,18 @@
                                     <span>{{ user.username }}</span>
                                     <span style="font-size: 12px;">▼</span>
 
-                                    <!-- ✅ Logout Dropdown Menu -->
+
                                     <div style="position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ccc; display: none; min-width: 120px;" id="logoutDropdown">
+                                        <!-- ✅ My Orders Dropdown Menu -->
+                                        <form method="POST" action="{% url 'orders:my_orders' %}" style="margin: 0;">
+                                            {% csrf_token %}
+                                            <button type="submit"
+                                                style="display: block; padding: 10px 16px; color: #333; text-decoration: none; font-weight: 500; background: none; border: none; width: 100%; text-align: left; cursor: pointer;">
+                                                📦 My Orders
+                                            </button>
+                                        </form>
+                                        
+                                        <!-- ✅ Logout Dropdown Menu -->
                                         <form method="POST" action="{% url 'logout' %}" style="margin: 0;">
                                             {% csrf_token %}
                                             <button type="submit"

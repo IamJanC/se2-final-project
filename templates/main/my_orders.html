@@ -1,4 +1,6 @@
 {% extends 'shared/base.html' %}
+{% load custom_filters %}
+
 
 {% block content %}
 <div style="max-width: 800px; margin: 40px auto;">
@@ -17,19 +19,33 @@
         <a href="{% url 'main:home' %}">Browse more</a>
     </div>
 
-    {% if orders %}
-        <ul style="list-style: none; padding: 0;">
-            {% for order in orders %}
-            <li style="border-bottom: 1px solid #ccc; padding: 10px 0;">
-                <strong>{{ order.id }}</strong><br>
-                <em>Status:</em> {{ order.status }}<br>
-                <small>Placed on {{ order.created_at }}</small>
-            </li>
+    {% for order in orders %}
+    <div class="order-card">
+        <h3>Order #{{ order.id }}</h3>
+        <p>Date: {{ order.created_at }}</p>
+
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price Each</th>
+                <th>Total</th>
+            </tr>
+            {% for item in order.items.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>₱ {{ item.price_at_purchase }}</td>
+                    <td>₱ {{ item.quantity|multiply:item.price_at_purchase }}</td>
+                </tr>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>No orders yet.</p>
-    {% endif %}
+        </table>
+    </div>
+
+    {% empty %}
+    <p>You have no orders yet.</p>
+    {% endfor %}
+
 
 </div>
 {% endblock %}

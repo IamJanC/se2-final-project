@@ -8,27 +8,8 @@ from cart.models import Cart  # adjust if your cart app has a different path
 
 @login_required
 def my_orders(request):
-    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    orders = Order.objects.filter(user=request.user).order_by('-created_at').prefetch_related('items__product')
     return render(request, 'main/my_orders.html', {'orders': orders})
-
-@login_required
-def create_order(request):
-    if request.method == 'POST':
-        product = request.POST.get('product')
-        quantity = request.POST.get('quantity')
-        address = request.POST.get('address')
-
-        Order.objects.create(
-            user=request.user,
-            product=product,
-            quantity=quantity,
-            address=address
-        )
-
-        messages.success(request, 'Order placed successfully!')  # ✅ Add this before redirect
-        return redirect('my_orders')
-
-    return render(request, 'main/create_order.html')
 
 @login_required
 def checkout_view(request):
