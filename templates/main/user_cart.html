@@ -1,0 +1,136 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/user_cart.css' %}">
+
+<main>
+    
+    <h1>Your Cart</h1>
+    
+    <section class="main-content">
+        <div class="cart-items-left">
+            <!-- One Cart Item -->
+            <div class="cart-item">
+
+                <!-- Product Head -->
+                <div class="product-head mcui-checkbox">
+                <label>
+                    <input type="checkbox" id="select-product">
+                    <div>
+                    <svg class="mcui-check" viewBox="0 0 24 24">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    </div>
+                </label>
+                <span class="stock-label">In Stock</span>
+                </div>
+
+
+                <div class="product-detail">
+
+                    <div class="item-picture">
+                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Chou-fleur_02.jpg" alt="Product Image" class="product-image">
+                    </div>
+
+                    <div class="item-details-container">
+                        <div class="item-details">
+                            <h2 class="product-title">Cauliflower</h2>
+                            <div class="product-description">
+                                
+                            </div>
+                            <div class="stock-detail">
+                                <p class="product-stock-label">Stock: 100</p>
+                            </div>
+                            
+
+                            <div class="quantity-selector">
+                                <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
+                                <input type="number" name="quantity" class="quantity-input" value="1" min="1">
+                                <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-pricing-container">
+                         <p class="product-price">PHP 1,299.00</p>
+                    </div>  
+
+
+
+                </div>
+            </div>
+
+            <!-- Duplicate more .cart-item divs later for other products -->
+        </div>
+
+        <!--  === RIGHT: Order Summary ===  -->
+        <div class="order-information-right">
+            <!-- Payment Methods Section -->
+            <div class="payment-method">
+                <h3>Choose your payment method</h3>
+                
+                <label>
+                    <input type="radio" name="payment" value="cod" checked>
+                    Cash on Delivery
+                </label>
+                <br>
+    
+                <label class="disabled-option">
+                    <input type="radio" name="payment" value="gcash" disabled>
+                    GCash (Coming Soon)
+                </label>
+                <br>
+                
+                <label class="disabled-option">
+                    <input type="radio" name="payment" value="card" disabled>
+                    Credit/Debit Card (Coming Soon)
+                </label>
+            </div>
+
+
+            <div class="summary-row" id="items-total-group">
+                <span>Item(s) Total</span>
+                <span>PHP 3,605.09</span>
+            </div>
+
+            <div class="summary-row" id="shop-discount-group">
+                <span>Shop Discount</span>
+                <span>PHP 823.66</span>
+            </div>
+            
+            <div class="summary-row" id="divider">
+
+            </div>
+
+            <div class="summary-row" id="subtotal-group">
+                <span>Subtotal</span>
+                <span>2,781.43</span> 
+            </div>
+            <div class="summary-row" id="shipping-fee-group">
+                <span>Shipping Fee</span>
+                <span>PHP 1,665.46</span>
+            </div>
+
+            <div class="summary-row" id="divider">
+                
+            </div>
+
+            <div class="summary-row total" id="final-total-group">
+                <span>Total (3 items)</span>
+                <span><strong>PHP 4,446.89</strong></span>
+            </div>
+
+
+            <!-- Checkout Button -->
+            <div class="checkout-btn-container">
+                <button class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+{% endblock %}

@@ -1,0 +1,373 @@
+
+/* === vvv GLOBAL CSS DO NOT TOUCH vvv === */
+/* Logo Font Temporary */
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+/* Search (Don't Touch) */
+@use postcss-color-function;
+@use postcss-nested;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+/* Reset Everything */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+    background: #f8f8f8;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+/* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
+
+main {
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 auto;      /* Centers it */
+    padding: 0 2rem;     /* Adds spacing on the left & right */
+}
+
+.main-content{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; 
+}
+
+/*LEFT COLUMN */
+
+.cart-items-left{
+    flex: 1;            
+}
+.cart-item{
+    border: 1px solid #d4d4d4;
+    border-radius: 15px;
+    width: 100%;
+    align-items: stretch; /* 🔑 makes children match height */
+}
+
+/* Product Head */
+.product-head {
+  display: flex;
+  justify-content: space-between; /* push checkbox left, label right */
+  align-items: center;            /* vertically center them */
+  padding: 20px 24px 0px 24px;
+}
+
+/* === Checkbox DO NOT TOUCH === */
+:root {
+  --main: black;   /* you can change to #008cff */
+  --grey: #8d9aa9;
+  --bezier: cubic-bezier(0.65, 0.25, 0.56, 0.96);
+}
+
+.mcui-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.mcui-checkbox input[type="checkbox"] {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+.mcui-checkbox input[type="checkbox"] + div {
+    display: flex;             /* center the check */
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #a09b9b;
+    height: 1.5em;
+    width: 1.5em;
+    box-sizing: border-box;
+    border-radius: 50%;
+    position: relative;
+}
+
+.mcui-checkbox input[type="checkbox"] ~ div:last-child {
+  padding-left: 0.5em;
+}
+
+.mcui-checkbox input[type="checkbox"]:checked + div {
+    border-color: #5c8b25;   /* green border */
+    background-color: #5c8b25; /* green fill */
+    transition: border-color 107ms var(--bezier);
+}
+
+.mcui-checkbox input[type="checkbox"]:checked + div .mcui-check {
+  opacity: 1;
+  transition: opacity 107ms var(--bezier);
+}
+
+.mcui-checkbox input[type="checkbox"]:checked + div .mcui-check polyline {
+  animation: dash-check 107ms var(--bezier) forwards;
+}
+
+.mcui-checkbox input[type="checkbox"]:disabled ~ div {
+  color: var(--grey);
+  cursor: not-allowed;
+}
+
+.mcui-check {
+    height: 100%;
+    width: 100%;
+    transform: scale(1);
+    color: white;   /* white checkmark */
+    opacity: 0;
+    transform: translate(-4px, 0px);  /* tweak X (horizontal) and Y (vertical) */
+}
+
+.mcui-check polyline {
+  fill: none;
+  transform-origin: 50% 50%;
+  stroke-width: 5px;
+  stroke-dasharray: 22.77;
+  stroke-dashoffset: 22.77;
+  stroke: currentcolor;
+}
+
+@keyframes dash-check {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+
+
+.stock-label {
+    font-size: 15px;
+    font-weight: bold;
+    color: white;               /* text color */
+    background-color: #5c8b25;    /* box color */
+    padding: 2px 8px;           /* spacing inside box */
+    border-radius: 4px;         /* rounded corners */
+    display: inline-block;      /* makes padding & bg work */
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+.stock-detail{
+    margin-top: 15px;
+    margin-left: 1px;
+    margin-bottom: 80px;
+}
+
+
+
+.product-stock-label{
+    font-size: 16px;
+    margin-bottom: 0.3rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.product-detail{
+    display: flex;
+    gap: 20px; /* adds space between image and details */  
+    padding: 0px 24px;
+}
+
+.item-picture {
+    width: 250px;
+    height: 250px;
+    overflow: hidden; /* ensures the image doesn’t spill out */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px; /* optional: rounded corners for aesthetics */
+
+}
+
+.product-image {
+    max-width: 100%;
+    max-height: auto;
+    object-fit: cover; /* ensures it fills the box while keeping ratio */
+    border-radius: 5px; /* match container rounding */
+}
+
+.item-details-container{
+    display: flex;
+    flex: 2 1 0; /* grow: 2, shrink: 1, basis: 0 */
+    background-color: red;
+}
+
+.item-details{
+    margin-top: 25px;
+}
+
+
+.product-title{
+    font-size: 25px;
+    color: #2b2c2a;
+    margin-bottom: 0.5rem;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+
+/* Make quantity label & selector sit in one line with gap */
+.quantity-container {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* space between "Quantity:" and buttons */
+    margin-bottom: 20px;
+}
+
+
+/* Keep capsule shape, but let it size to content */
+.quantity-selector {
+    display: inline-flex; /* prevents full-width stretching */
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 999px;
+    overflow: hidden;
+    background: white;
+    padding: 5px;
+}
+
+/* Quantity buttons - perfect circles */
+.qty-btn {
+    background: #f5f5f5;
+    border: none;
+    width: 32px; /* same width/height for circle */
+    height: 32px;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    transition: background 0.2s;
+    border-radius: 50%; /* make button round */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.qty-btn:hover {
+    background: #e0e0e0;
+}
+
+/* Quantity input - same height, no border */
+.quantity-input {
+    width: 40px;
+    height: 32px;
+    text-align: center;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+/* Remove default number input arrows (Chrome, Edge, Safari) */
+.quantity-input::-webkit-inner-spin-button,
+.quantity-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Remove default number input arrows (Firefox) */
+.quantity-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.product-pricing-container{
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    flex: 1 1 50px; /* grow: 1, shrink: 1, base width: 100px */
+    align-items: center;              /* so we can center inside */
+}
+
+.product-price{
+    font-weight: bold;
+    color: #659e08;
+    font-size: 20px;
+    margin-bottom: 0.3rem;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+
+/* RIGHT COLUMN */
+.order-information-right{
+    padding: 24px;
+}
+
+.payment-method h3{
+    font-size: 20px;
+    font-family: "Zain", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.payment-method label {
+    display: inline-block;
+    padding: 6px 0px 0px;
+}
+
+.summary-row{
+    display: flex;
+    justify-content: space-between;
+    margin: 0.4rem 0;
+    padding: 6px 0px 0px;
+}
+
+#divider{
+    border-bottom: 1px solid #d5d5d4;
+}
+
+.checkout-btn-container{
+    padding: 12px 0px;
+}
+.checkout-btn {
+    display: block;            /* make it a block element so it can expand */
+    width: 100%;               /* expand to parent container */
+    padding: 12px 20px;        /* some padding for height and spacing */
+    background: #5c8b25; 
+    color: #fff;               /* white text */
+    border: none;              /* remove default border */
+    cursor: pointer;           /* pointer cursor */
+    text-align: center;        /* center text */
+    transition: background-color 0.3s ease;
+
+
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.checkout-btn:hover {
+  background: #325a00;
+}
+
+.checkout-btn:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+}
+
+
+

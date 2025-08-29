@@ -21,6 +21,11 @@ from django.contrib.auth import views as auth_views  # 🔐 built-in authenticat
 from products import views as product_views  # 👈 make sure this is still imported
 from main import views as main_views # main
 
+
+#Temporary
+from django.shortcuts import render
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),  # 👈 admin panel
     path('', include('main.urls')),   # 👈 main app routing
@@ -32,4 +37,7 @@ urlpatterns = [
     path('chatbot/', include('chatbot.urls')),   #chatbot
     path('cart/', include('cart.urls')), #cart
     path('adminpanel/', include('adminpanel.urls')),  # Custom admin dashboard
+    
+    # existing paths...
+    path("cart/design/", lambda request: render(request, "main/user_cart.html"), name="user_cart_design"),
 ]

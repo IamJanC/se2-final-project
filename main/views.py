@@ -88,7 +88,7 @@ def product_detail(request, product_id):
 
     
 def admin_dashboard(request):
-    recent_orders = Order.objects.select_related('user').order_by('-created_at')[:5]  # last 5 orders
+    recent_orders = Order.objects.select_related('user').order_by('-created_at')[:10]  # last 10 orders
     return render(request, 'main/admin.html')
 
 
