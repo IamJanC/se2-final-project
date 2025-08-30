@@ -31,7 +31,7 @@
                 <div class="product-head mcui-checkbox">
                     <!-- Checkbox -->
                     <label>
-                        <input type="checkbox" class="select-product">
+                          <input type="checkbox" class="select-product" data-item-id="{{ item.id }}">
                         <div>
                             <svg class="mcui-check" viewBox="0 0 24 24">
                                 <polyline points="20 6 9 17 4 12"></polyline>
@@ -287,24 +287,24 @@
 });
 </script>
 
-<!--Checkout Button-->
+<!-- Checkout Button -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const checkoutBtn = document.getElementById('checkout-btn');
-
     checkoutBtn.addEventListener('click', (e) => {
-        e.preventDefault(); // prevent default behavior just in case
-
-        const anySelected = Array.from(document.querySelectorAll('.select-product'))
-            .some(cb => cb.checked);
-
-        if (!anySelected) {
-            window.alert('No items selected. Please select at least one item to proceed.');
+        e.preventDefault();
+        const selectedIds = Array.from(document.querySelectorAll('.select-product'))
+            .filter(cb => cb.checked)
+            .map(cb => cb.dataset.itemId);
+        if (selectedIds.length === 0) {
+            alert('No items selected. Please select at least one item to proceed.');
             return;
         }
 
-        // Redirect to checkout page
-        window.location.href = "{% url 'orders:checkout' %}";
+        // Redirect to checkout page with selected IDs in query params
+        const url = new URL("{% url 'orders:checkout' %}", window.location.origin);
+        url.searchParams.append('items', selectedIds.join(','));
+        window.location.href = url.toString();
     });
 });
 </script>

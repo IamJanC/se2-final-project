@@ -14,18 +14,27 @@ def my_orders(request):
 @login_required
 def checkout_view(request):
     cart = get_object_or_404(Cart, user=request.user)
-    cart_items = cart.items.all()
-    total = sum(item.product.price * item.quantity for item in cart_items)  # ✅ inline subtotal
+
+    # Grab selected items from query params
+    selected_items_ids = request.GET.get('items')
+    if selected_items_ids:
+        ids_list = [int(i) for i in selected_items_ids.split(',') if i.isdigit()]
+        cart_items = cart.items.filter(id__in=ids_list)
+    else:
+        cart_items = cart.items.none()  # No items selected
+
+    # Calculate total
+    total = sum(item.product.price * item.quantity for item in cart_items)
     for item in cart_items:
         item.subtotal = item.product.price * item.quantity
-    
+
     if request.method == "POST":
         full_name = request.POST.get("full_name")
         phone = request.POST.get("phone")
         email = request.POST.get("email")
         address = request.POST.get("address")
 
-        # ✅ Create Order linked to the logged-in user
+        # Create Order
         order = Order.objects.create(
             user=request.user,
             full_name=full_name,
@@ -35,7 +44,7 @@ def checkout_view(request):
             status="pending",
         )
 
-        # ✅ Create OrderItem for each cart item
+        # Create OrderItem only for selected cart items
         for item in cart_items:
             order.items.create(
                 product=item.product,
@@ -43,8 +52,8 @@ def checkout_view(request):
                 price_at_purchase=item.product.price,
             )
 
-        # ✅ Clear the cart after checkout
-        cart.items.all().delete()
+        # Remove **only the purchased items** from cart
+        cart.items.filter(id__in=[i.id for i in cart_items]).delete()
 
         messages.success(request, "Your order has been placed successfully!")
         return redirect("orders:my_orders")
@@ -54,3 +63,6 @@ def checkout_view(request):
         "total": total,
     }
     return render(request, "main/checkout.html", context)
+
+
+

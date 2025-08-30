@@ -32,12 +32,16 @@
 
   <h3>Order Summary</h3>
   <ul>
-    {% for item in cart_items %}
-      <li>{{ item.quantity }} × {{ item.product.name }} — ₱ {{ item.subtotal|floatformat:2|intcomma }}</li>
-    {% endfor %}
+      {% for item in cart_items %}
+        <li>{{ item.quantity }} × {{ item.product.name }} — ₱ {{ item.subtotal|floatformat:2|intcomma }}</li>
+      {% empty %}
+        <li>No items selected.</li>
+      {% endfor %}
   </ul>
 
   <h3>Total: ₱ {{ total|floatformat:2|intcomma }}</h3>
+
+
 
   <button type="submit" class="btn btn-primary">Place Order</button>
 </form>
