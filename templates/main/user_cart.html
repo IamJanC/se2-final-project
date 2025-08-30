@@ -23,187 +23,72 @@
         </label>
     </div>
 
-
-
-
-
-    
     <section class="main-content">
         <div class="cart-items-left">
-            <!-- One Cart Item -->
+            {% for item in cart_items %}
             <div class="cart-item">
                 <!-- Product Head -->
                 <div class="product-head mcui-checkbox">
-
-                <!-- Checkbox -->
-                <label>
-                    <input type="checkbox" id="select-product">
-                    <div>
-                    <svg class="mcui-check" viewBox="0 0 24 24">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    </div>
-                </label>
-
-                <!-- Delete button -->
-                <button class="delete-btn" aria-label="Delete item">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.5001 6H3.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M9.5 11L10 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M14.5 11L14 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="#000000" stroke-width="1.5"></path> <path d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
-                </button>
-                
-                </div>
-
-
-                <div class="product-detail">
-
-                    <div class="item-picture">
-                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Chou-fleur_02.jpg" alt="Product Image" class="product-image">
-                    </div>
-
-                    <div class="item-details-container">
-                        <div class="item-details">
-                            <h2 class="product-title">Cauliflower</h2>
-                            <div class="product-description">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dictum enim et facilisis euismod. Donec eget porttitor odio. Nulla sed sapien ligula. Nulla auctor nisi lorem, ac feugiat quam pharetra ac. Etiam fermentum non erat non iaculis. Ut sed metus venenatis, scelerisque ante eget, vehicula tortor. Pellentesque a molestie justo. Vestibulum at dolor mattis, aliquam ligula in, mollis enim. Integer tortor lorem, tempus quis finibus id, ultricies sit amet justo. Suspendisse ullamcorper maximus orci, ac placerat mi volutpat sit amet. Quisque venenatis tristique vehicula. Aenean maximus ullamcorper velit, in ultricies ipsum sollicitudin nec. Maecenas porta aliquam suscipit. Vivamus sed dolor non erat euismod semper non in risus. Sed id velit et tellus vulputate iaculis nec sed nisi. Quisque sed turpis in arcu suscipit ultricies nec eu mauris. Ut posuere rhoncus tortor, vel accumsan est blandit sit amet. Proin sed libero quis metus congue sodales vitae a sapien. Nunc accumsan pharetra consequat. Mauris vestibulum risus a imperdiet egestas. Nunc scelerisque urna sed dui facilisis, ut tincidunt nulla finibus. Aliquam scelerisque pretium diam, at laoreet sapien molestie at. In fermentum, est quis gravida placerat, tellus est mattis magna, nec pharetra enim est ac neque.
-                            </div>
-                            <div class="stock-detail">
-                                <p class="product-stock-label">Stock: 75</p>
-                                 <div class="stock-bar">
-                                    <div class="stock-fill filled-stock-bar" style="width: 75%;"></div> <!-- simulate % filled -->
-                                </div>
-                            </div>
-                            
-
-                            <div class="quantity-selector">
-                                <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
-                                <input type="number" name="quantity" class="quantity-input" value="1" min="1">
-                                <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-pricing-container">
-                        <p class="product-price">PHP 1,299.00</p>
-                        <span class="stock-label in-stock">In Stock</span>
-                    </div>  
-                </div>
-            </div>
-
-            <!-- (TEMP) SECOND -->
-           <!-- One Cart Item -->
-            <div class="cart-item">
-                <!-- Product Head -->
-                <div class="product-head mcui-checkbox">
+                    <!-- Checkbox -->
                     <label>
-                        <input type="checkbox" id="select-product">
+                        <input type="checkbox" class="select-product">
                         <div>
-                        <svg class="mcui-check" viewBox="0 0 24 24">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
+                            <svg class="mcui-check" viewBox="0 0 24 24">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
                         </div>
                     </label>
 
                     <!-- Delete button -->
-                    <button class="delete-btn" aria-label="Delete item">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.5001 6H3.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M9.5 11L10 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M14.5 11L14 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="#000000" stroke-width="1.5"></path> <path d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+                    <button class="delete-btn" aria-label="Delete item" data-item-id="{{ item.id }}">
+                        <!-- SVG here -->
                     </button>
-
                 </div>
 
-
                 <div class="product-detail">
-
                     <div class="item-picture">
-                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Chou-fleur_02.jpg" alt="Product Image" class="product-image">
+                        <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="product-image">
                     </div>
 
                     <div class="item-details-container">
                         <div class="item-details">
-                            <h2 class="product-title">Cauliflower</h2>
+                            <h2 class="product-title">{{ item.product.name }}</h2>
                             <div class="product-description">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dictum enim et facilisis euismod. Donec eget porttitor odio. Nulla sed sapien ligula. Nulla auctor nisi lorem, ac feugiat quam pharetra ac. Etiam fermentum non erat non iaculis. Ut sed metus venenatis, scelerisque ante eget, vehicula tortor. Pellentesque a molestie justo. Vestibulum at dolor mattis, aliquam ligula in, mollis enim. Integer tortor lorem, tempus quis finibus id, ultricies sit amet justo. Suspendisse ullamcorper maximus orci, ac placerat mi volutpat sit amet. Quisque venenatis tristique vehicula. Aenean maximus ullamcorper velit, in ultricies ipsum sollicitudin nec. Maecenas porta aliquam suscipit. Vivamus sed dolor non erat euismod semper non in risus. Sed id velit et tellus vulputate iaculis nec sed nisi. Quisque sed turpis in arcu suscipit ultricies nec eu mauris. Ut posuere rhoncus tortor, vel accumsan est blandit sit amet. Proin sed libero quis metus congue sodales vitae a sapien. Nunc accumsan pharetra consequat. Mauris vestibulum risus a imperdiet egestas. Nunc scelerisque urna sed dui facilisis, ut tincidunt nulla finibus. Aliquam scelerisque pretium diam, at laoreet sapien molestie at. In fermentum, est quis gravida placerat, tellus est mattis magna, nec pharetra enim est ac neque.
+                                {{ item.product.description }}
                             </div>
                             <div class="stock-detail">
-                                <p class="product-stock-label">Stock: 25</p>
-                                 <div class="stock-bar">
-                                    <div class="stock-fill low-stock-bar" style="width: 25%;"></div> <!-- simulate % low -->
+                                <span class="stock-label {% if item.product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+                                    {% if item.product.stock > 0 %}In Stock{% else %}Out of Stock{% endif %}
+                                </span>
+                                <p class="product-stock-label">Stock: {{ item.product.stock }}</p>
+                                <div class="stock-bar">
+                                    <div class="stock-fill filled-stock-bar" style="width: {{ item.product.stock }}%;"></div>
                                 </div>
                             </div>
-                            
 
                             <div class="quantity-selector">
-                                <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
-                                <input type="number" name="quantity" class="quantity-input" value="1" min="1">
-                                <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+                                <button type="button" class="qty-btn minus" aria-label="Decrease quantity" data-item-id="{{ item.id }}">−</button>
+                                <input type="number" name="quantity" class="quantity-input" value="{{ item.quantity }}" min="1" data-item-id="{{ item.id }}">
+                                <button type="button" class="qty-btn plus" aria-label="Increase quantity" data-item-id="{{ item.id }}">+</button>
                             </div>
                         </div>
                     </div>
 
                     <div class="product-pricing-container">
-                        <p class="product-price">PHP 1,299.00</p>
-                        <span class="stock-label low-stock">Low Stock</span>
-                    </div>  
+                        <p class="product-price" data-item-id="{{ item.id }}">
+                            PHP {{ item.subtotal|floatformat:2|intcomma }}
+                        </p>
+
+                        <!-- Price per unit -->
+                        <p class="product-price-unit" data-item-id="{{ item.id }}" data-unit-price="{{ item.product.price }}">
+                            (PHP {{ item.product.price|floatformat:2|intcomma }} per unit)
+                        </p>
+                    </div>
                 </div>
             </div>
-            <!-- (TEMP) SECOND -->
-
-            <!-- (TEMP) THIRD -->
-            <!-- One Cart Item -->
-            <div class="cart-item">
-                <!-- Product Head -->
-                <div class="product-head mcui-checkbox">
-                <label>
-                    <input type="checkbox" id="select-product">
-                    <div>
-                    <svg class="mcui-check" viewBox="0 0 24 24">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    </div>
-                </label>
-
-                 <!-- Delete button -->
-                <button class="delete-btn" aria-label="Delete item">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.5001 6H3.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M9.5 11L10 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M14.5 11L14 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="#000000" stroke-width="1.5"></path> <path d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
-                </button>
-                </div>
-
-
-                <div class="product-detail">
-
-                    <div class="item-picture">
-                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Chou-fleur_02.jpg" alt="Product Image" class="product-image">
-                    </div>
-
-                    <div class="item-details-container">
-                        <div class="item-details">
-                            <h2 class="product-title">Cauliflower</h2>
-                            <div class="product-description">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dictum enim et facilisis euismod. Donec eget porttitor odio. Nulla sed sapien ligula. Nulla auctor nisi lorem, ac feugiat quam pharetra ac. Etiam fermentum non erat non iaculis. Ut sed metus venenatis, scelerisque ante eget, vehicula tortor. Pellentesque a molestie justo. Vestibulum at dolor mattis, aliquam ligula in, mollis enim. Integer tortor lorem, tempus quis finibus id, ultricies sit amet justo. Suspendisse ullamcorper maximus orci, ac placerat mi volutpat sit amet. Quisque venenatis tristique vehicula. Aenean maximus ullamcorper velit, in ultricies ipsum sollicitudin nec. Maecenas porta aliquam suscipit. Vivamus sed dolor non erat euismod semper non in risus. Sed id velit et tellus vulputate iaculis nec sed nisi. Quisque sed turpis in arcu suscipit ultricies nec eu mauris. Ut posuere rhoncus tortor, vel accumsan est blandit sit amet. Proin sed libero quis metus congue sodales vitae a sapien. Nunc accumsan pharetra consequat. Mauris vestibulum risus a imperdiet egestas. Nunc scelerisque urna sed dui facilisis, ut tincidunt nulla finibus. Aliquam scelerisque pretium diam, at laoreet sapien molestie at. In fermentum, est quis gravida placerat, tellus est mattis magna, nec pharetra enim est ac neque.
-                            </div>
-                            <div class="stock-detail">
-                                <p class="product-stock-label">Stock: 0</p>
-                                 <div class="stock-bar">
-                                    <div class="stock-fill out-stock-bar" style="width: 0%;"></div> <!-- simulate % filled -->
-                                </div>
-                            </div>
-                            
-
-                            <div class="quantity-selector">
-                                <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
-                                <input type="number" name="quantity" class="quantity-input" value="1" min="1">
-                                <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="product-pricing-container">
-                        <p class="product-price">PHP 1,299.00</p>
-                        <span class="stock-label out-stock">Out-of-Stock</span>
-                    </div>  
-                </div>
-            </div>
-            <!-- (TEMP) THIRD -->
-
-            <!-- Duplicate more .cart-item divs later for other products -->
+            {% empty %}
+            <p>Your cart is empty.</p>
+            {% endfor %}
         </div>
 
         <!--  === RIGHT: Order Summary ===  -->
@@ -233,55 +118,197 @@
 
             <div class="summary-row" id="items-total-group">
                 <span>Item(s) Total</span>
-                <span>PHP 3,605.09</span>
+                <span>PHP {{ total|floatformat:2|intcomma }}</span>
             </div>
 
             <div class="summary-row" id="shop-discount-group">
                 <span>Shop Discount</span>
-                <span>PHP 823.66</span>
+                <span>PHP {{ discount|floatformat:2|intcomma }}</span>
             </div>
-            
-            <div class="summary-row" class="divider" id="divider1">
 
-            </div>
+            <div class="summary-row divider" id="divider1"></div>
 
             <div class="summary-row" id="subtotal-group">
                 <span>Subtotal</span>
-                <span>2,781.43</span> 
+                <span>PHP {{ subtotal_after_discount|floatformat:2|intcomma }}</span>
             </div>
+
             <div class="summary-row" id="shipping-fee-group">
                 <span>Shipping Fee</span>
-                <span>PHP 1,665.46</span>
+                <span>PHP {{ shipping_fee|floatformat:2|intcomma }}</span>
             </div>
 
-            <div class="summary-row" class="divider">
-                
-            </div>
+            <div class="summary-row divider"></div>
 
             <div class="summary-row total" id="final-total-group">
-                <span>Total (3 items)</span>
-                <span><strong>PHP 4,446.89</strong></span>
+                <span>Total (<span id="selected-count">0</span> items)</span>
+                <span><strong>PHP {{ final_total|floatformat:2|intcomma }}</strong></span>
             </div>
+
+
 
 
             <!-- Checkout Button -->
             <div class="checkout-btn-container">
-                <button class="checkout-btn">Proceed to Checkout</button>
+                <button type="button" class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
             </div>
         </div>
     </section>
 </main>
 
+<!-- Quantity, Select and Calculation Logic -->
 <script>
-        const selectAll = document.getElementById('select-all');
-        const productCheckboxes = document.querySelectorAll('#select-product');
+    document.addEventListener('DOMContentLoaded', () => {
+    const selectAll = document.getElementById('select-all');
+    const productCheckboxes = document.querySelectorAll('.select-product');
+    const qtyInputs = document.querySelectorAll('.quantity-input');
+    const plusBtns = document.querySelectorAll('.qty-btn.plus');
+    const minusBtns = document.querySelectorAll('.qty-btn.minus');
 
-        selectAll.addEventListener('change', (e) => {
-        productCheckboxes.forEach(checkbox => {
-        checkbox.checked = selectAll.checked;
+    function recalcTotals() {
+        let total = 0;
+        let selectedCount = 0;
+
+        document.querySelectorAll('.cart-item').forEach(item => {
+            const checkbox = item.querySelector('.select-product');
+            if (checkbox.checked) {
+                const qtyInput = item.querySelector('.quantity-input');
+                const unitPriceEl = item.querySelector('.product-price-unit');
+                const qty = parseInt(qtyInput.value) || 1;
+                const unitPrice = parseFloat(unitPriceEl.dataset.unitPrice);
+                total += qty * unitPrice;
+                selectedCount += 1;
+            }
+        });
+
+        const discount = 500;
+        const shipping = 100;
+        const subtotal = Math.max(total - discount, 0);
+        const finalTotal = subtotal + shipping;
+
+        document.querySelector('#items-total-group span:last-child').textContent =
+            `PHP ${total.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+        document.querySelector('#shop-discount-group span:last-child').textContent =
+            `PHP ${discount.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+        document.querySelector('#subtotal-group span:last-child').textContent =
+            `PHP ${subtotal.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+        document.querySelector('#shipping-fee-group span:last-child').textContent =
+            `PHP ${shipping.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+        
+         // ✅ Update selected item count and final total price
+        document.getElementById('selected-count').textContent = selectedCount;
+        document.querySelector('#final-total-group span strong').textContent =
+            `PHP ${finalTotal.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+    }
+
+    function updateSubtotalFrontend(itemId, quantity) {
+        const priceEl = document.querySelector(`.product-price[data-item-id="${itemId}"]`);
+        const unitPriceEl = document.querySelector(`.product-price-unit[data-item-id="${itemId}"]`);
+        const unitPrice = parseFloat(unitPriceEl.dataset.unitPrice);
+
+        // Update subtotal for this item
+        const subtotal = unitPrice * quantity;
+        priceEl.textContent = `PHP ${subtotal.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+
+        // Recalculate totals considering only checked items
+        recalcTotals();
+    }
+
+    function sendQuantityUpdate(itemId, quantity) {
+        fetch("{% url 'cart:update_cart_item' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ 'item_id': itemId, 'quantity': quantity })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (!data.success) alert(data.message || 'Error updating cart');
+        })
+        .catch(() => alert('Failed to update cart.'));
+    }
+
+    // Quantity events
+    qtyInputs.forEach(input => {
+        input.addEventListener('input', e => {
+            let qty = parseInt(e.target.value) || 1;
+            if (qty < 1) qty = 1;
+            e.target.value = qty;
+            updateSubtotalFrontend(e.target.dataset.itemId, qty);
+            sendQuantityUpdate(e.target.dataset.itemId, qty);
+        });
+    });
+
+    plusBtns.forEach(btn => {
+        btn.addEventListener('click', e => {
+            const input = btn.parentElement.querySelector('.quantity-input');
+            let qty = parseInt(input.value) + 1;
+            input.value = qty;
+            updateSubtotalFrontend(input.dataset.itemId, qty);
+            sendQuantityUpdate(input.dataset.itemId, qty);
+        });
+    });
+
+    minusBtns.forEach(btn => {
+        btn.addEventListener('click', e => {
+            const input = btn.parentElement.querySelector('.quantity-input');
+            let qty = Math.max(parseInt(input.value) - 1, 1);
+            input.value = qty;
+            updateSubtotalFrontend(input.dataset.itemId, qty);
+            sendQuantityUpdate(input.dataset.itemId, qty);
+        });
+    });
+
+    // Checkbox events
+    selectAll.addEventListener('change', () => {
+        const checked = selectAll.checked;
+        productCheckboxes.forEach(cb => cb.checked = checked);
+        recalcTotals();
+    });
+
+    productCheckboxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+        // Update the selectAll checkbox
+        if (!cb.checked) {
+            selectAll.checked = false; // Uncheck "Select All" if any checkbox is unchecked
+        } else {
+            // If all individual checkboxes are checked, check "Select All"
+            selectAll.checked = Array.from(productCheckboxes).every(chk => chk.checked);
+        }
+
+        recalcTotals(); // Still recalc totals
+    });
+});
+
+    // Initial totals on page load
+    recalcTotals();
+});
+</script>
+
+<!--Checkout Button-->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const checkoutBtn = document.getElementById('checkout-btn');
+
+    checkoutBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // prevent default behavior just in case
+
+        const anySelected = Array.from(document.querySelectorAll('.select-product'))
+            .some(cb => cb.checked);
+
+        if (!anySelected) {
+            window.alert('No items selected. Please select at least one item to proceed.');
+            return;
+        }
+
+        // Redirect to checkout page
+        window.location.href = "{% url 'orders:checkout' %}";
     });
 });
 </script>
+
 
 
 {% endblock %}

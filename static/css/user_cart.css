@@ -69,7 +69,7 @@ main {
   display: flex;
   justify-content: space-between; /* push checkbox left, label right */
   align-items: center;            /* vertically center them */
-  padding: 20px 24px 0px 24px;
+  padding: 20px 24px 20px 24px;
 }
 
 /* === Checkbox DO NOT TOUCH === */
@@ -259,6 +259,7 @@ main {
     font-optical-sizing: auto;
     font-weight: 300;
     font-style: normal;
+    margin-bottom: 10px;
 }
 
 .stock-label.in-stock {
@@ -278,7 +279,7 @@ main {
 .product-detail{
     display: flex;
     gap: 20px; /* adds space between image and details */  
-    padding: 0px 24px;
+    padding: 10px 24px 20px 24px;
 }
 
 .item-picture {
@@ -305,7 +306,7 @@ main {
 }
 
 .item-details{
-    margin-top: 25px;
+    margin-top: 5px;
 }
 
 
@@ -464,6 +465,18 @@ main {
     font-family: "Lexend", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;
+    font-style: normal;
+}
+
+.product-price-unit{
+    font-weight: bold;
+    color: #8f8f8f;;
+    font-size: 16px;
+    margin-bottom: 0.3rem;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
     font-style: normal;
 }
 
