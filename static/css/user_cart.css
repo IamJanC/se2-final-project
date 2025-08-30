@@ -39,16 +39,29 @@ main {
     gap: 20px; 
 }
 
+.cart-title{
+    margin: 20px 0px 5px 25px;
+}
+
+.cart-title h3{
+    font-size: 1.5rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
 /*LEFT COLUMN */
 
 .cart-items-left{
-    flex: 1;            
+    flex: 1;         
 }
 .cart-item{
     border: 1px solid #d4d4d4;
     border-radius: 15px;
     width: 100%;
     align-items: stretch; /* 🔑 makes children match height */
+    margin: 20px 0px;
 }
 
 /* Product Head */
@@ -144,11 +157,100 @@ main {
 
 
 
+/* === Select All Checkbox DO NOT TOUCH === */
+/* Reuse existing .mcui-checkbox styles for display, gap, etc. */
+.select-all-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+    margin-top: 20px;
+}
+
+/* Keep the checkbox styling same as product checkboxes */
+.select-all-label input[type="checkbox"] {
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+.select-all-label input[type="checkbox"] + div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #a09b9b;
+    height: 1.5em;
+    width: 1.5em;
+    box-sizing: border-box;
+    border-radius: 50%;
+    position: relative;
+}
+
+.select-all-label input[type="checkbox"]:checked + div {
+    border-color: #5c8b25;
+    background-color: #5c8b25;
+    transition: border-color 107ms var(--bezier);
+}
+
+.select-all-label input[type="checkbox"]:checked + div .mcui-check {
+    opacity: 1;
+    transition: opacity 107ms var(--bezier);
+}
+
+.select-all-label .mcui-check {
+    transform: scale(0.6);  /* combine scale and translate */
+    height: 100%;
+    width: 100%;
+    color: white;
+    opacity: 0;
+}
+
+.select-all-text {
+    font-family: "Lexend", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #2b2c2a;
+}
+
+.select-all-label .mcui-check polyline {
+    stroke-width: 5px; /* adjust thickness for select-all checkbox */
+}
+
+
+
+.delete-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;             /* adjust if needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;   /* center the SVG inside */
+}
+
+
+.delete-btn svg {
+    width: 30px;       /* desired width */
+    height: auto;      /* desired height */
+    display: block;    /* remove extra space below SVG */
+    stroke: currentColor; /* inherit button color */
+}
+
+.delete-btn:hover{
+    cursor: pointer;      /* gives the hand cursor */
+    transform: scale(1.2); /* optional: slightly enlarges */
+    transition: all 0.1s ease-out; /* smooth effect */
+}
+
+
+
+
 .stock-label {
     font-size: 15px;
     font-weight: bold;
     color: white;               /* text color */
-    background-color: #5c8b25;    /* box color */
     padding: 2px 8px;           /* spacing inside box */
     border-radius: 4px;         /* rounded corners */
     display: inline-block;      /* makes padding & bg work */
@@ -159,23 +261,19 @@ main {
     font-style: normal;
 }
 
+.stock-label.in-stock {
+    background-color: #5c8b25;  /* green */
+}
 
-.stock-detail{
-    margin-top: 15px;
-    margin-left: 1px;
-    margin-bottom: 80px;
+.stock-label.low-stock {
+    background-color: #ffb702;  /* amber / yellow */ 
+}
+
+.stock-label.out-stock {
+    background-color: #AA4A44  /* red */
 }
 
 
-
-.product-stock-label{
-    font-size: 16px;
-    margin-bottom: 0.3rem;
-    font-family: "Lexend", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-}
 
 .product-detail{
     display: flex;
@@ -204,7 +302,6 @@ main {
 .item-details-container{
     display: flex;
     flex: 2 1 0; /* grow: 2, shrink: 1, basis: 0 */
-    background-color: red;
 }
 
 .item-details{
@@ -213,9 +310,9 @@ main {
 
 
 .product-title{
-    font-size: 25px;
+    font-size: 20px;
     color: #2b2c2a;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 
     font-family: "Lexend", sans-serif;
     font-optical-sizing: auto;
@@ -223,6 +320,67 @@ main {
     font-style: normal;
 }
 
+.product-description {
+    display: -webkit-box;        /* enables the line clamping */
+    -webkit-line-clamp: 2;       /* show max 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;            /* hide overflow */
+    text-overflow: ellipsis;     /* show … */
+    font-size: 16px;
+    color: #333;
+    margin: 1rem 0;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-left: 2px;
+}
+
+
+.stock-detail{
+    margin-top: 15px;
+    margin-left: 1px;
+    margin-bottom: 20px;
+}
+
+
+.product-stock-label{
+    font-size: 16px;
+    margin-bottom: 0.3rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* TEMP */
+.stock-bar {
+    width: 100%;
+    background-color: #e0e0e0; /* light grey track */
+    overflow: hidden;
+    margin: 0.5rem 0;
+    height: 6px;
+    border-radius: 3px;
+    width: 150px;
+}
+
+
+.stock-fill {
+    height: 100%;
+    width: 0; /* dynamically set via inline style or JS */
+    border-radius: 6px 0 0 6px;
+    transition: width 0.3s ease;
+}
+/* TEMP */
+
+
+.filled-stock-bar{
+    background-color: #5c8b25; /* green fill */
+}
+
+.low-stock-bar{
+    background-color: #e23e32  /* red */
+}
 
 
 /* Make quantity label & selector sit in one line with gap */
@@ -287,12 +445,14 @@ main {
     -moz-appearance: textfield;
 }
 
-.product-pricing-container{
+.product-pricing-container {
     display: flex;
+    flex-direction: column;  /* stack children vertically */
+    align-items: flex-end;    /* align to right */
     margin-top: 20px;
     margin-bottom: 20px;
-    flex: 1 1 50px; /* grow: 1, shrink: 1, base width: 100px */
-    align-items: center;              /* so we can center inside */
+    flex: 1 1 50px;
+    gap: 10px
 }
 
 .product-price{
@@ -310,19 +470,32 @@ main {
 
 /* RIGHT COLUMN */
 .order-information-right{
+    flex: 0 0 350px;   /* do not grow, fixed width 300px */
     padding: 24px;
 }
 
 .payment-method h3{
-    font-size: 20px;
-    font-family: "Zain", sans-serif;
-    font-weight: 200;
+    margin-bottom: 10px;
+    font-size: 18;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
     font-style: normal;
 }
 
 .payment-method label {
     display: inline-block;
-    padding: 6px 0px 0px;
+    padding: 7px 0px 7px 0px;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.disabled-option {
+    color: #8f8f8f;
 }
 
 .summary-row{
@@ -330,10 +503,22 @@ main {
     justify-content: space-between;
     margin: 0.4rem 0;
     padding: 6px 0px 0px;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
 }
 
-#divider{
+#items-total-group{
+    margin-top: 20px;
+}
+
+
+#divider1{
     border-bottom: 1px solid #d5d5d4;
+    margin-bottom: 10px;
 }
 
 .checkout-btn-container{
