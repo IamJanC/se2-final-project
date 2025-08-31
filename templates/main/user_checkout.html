@@ -1,0 +1,210 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/user_checkout.css' %}">
+
+<main>
+    <!--Temporary Button for Toggling divs-->
+        <button id="show-selection">Show Address Selection</button>
+        <button id="show-form">Show Address Form</button>
+
+    <section class="main-content">
+
+
+        <!-- === LEFT: Address Section === -->
+        <div class="address-section-left">
+
+            <div class="address-forms">
+                
+                <div class="address-forms-title">
+                    <h3>Billing Information</h3>
+                </div>
+                
+
+                <div class="name-form-section">
+                    <div class="form-group">
+                        <label for="fname">First Name</label>
+                        <input type="text" id="fname" name="fname" placeholder="Your first name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lname">Last Name</label>
+                        <input type="text" id="lname" name="lname" placeholder="Your last name">
+                    </div>
+                </div>
+
+                <div class="address-form-section-fillable">
+                    <div class="form-group">
+                        <label for="house">House No./Building/Unit:</label>
+                        <input type="text" id="house" name="house" placeholder="Blk 4 Lot 5/Unit 2B/Sunshine Bldg">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="street">Street Name:</label>
+                        <input type="text" id="street" name="street" placeholder="Dahlia Street">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lname">Label</label>
+                        <input type="text" id="lname" name="lname" placeholder="Home/Workplace/Friend's House">
+                    </div>
+                </div>
+
+                <div class="address-form-section-unfillable">
+                    <div class="form-group">
+                        <label for="barangay">Barangay:</label>
+                        <input type="text" id="barangay" value="Dalig" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">City:</label>
+                        <input type="text" id="city" value="Antipolo" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="province">Province:</label>
+                        <input type="text" id="province" value="Rizal" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="zipcode">ZIP Code:</label>
+                        <input type="text" id="zipcode" value="1870" disabled>
+                    </div>
+                </div>
+
+                <div class="landmark-form-section">
+                    <div class="form-group">
+                        <label for="landmark">Landmark:</label>
+                        <textarea id="landmark" name="landmark" 
+                            placeholder="Nearby reference point to help locate your address (e.g. City Hall, Mall, Church)"></textarea>
+                    </div>
+                </div>
+
+                <div class="contact-form-section">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="text" id="email" name="email" placeholder="Email Address">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone:</label>
+                        <input type="text" id="phone" name="phone" placeholder="Phone Number">
+                    </div>
+                </div>
+
+                <div class="address-forms-title">
+                        <h4>Addional Information</h4>
+                </div>
+
+                <div class="additional-info-form-section">
+                    <div class="form-group">
+                        <label for="note">Order Notes (optional):</label>
+                        <textarea id="note" name="note" placeholder="Notes about your order, e.g. special instructions for delivery"></textarea>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="address-selection">
+                <h1>Selection of Address Here</h1>
+            </div>
+        </div>
+
+        <!--  === RIGHT: Order Summary ===  -->
+        <div class="order-information-right">
+            <!-- Payment Methods Section -->
+            <div class="payment-method">
+                <h3>Choose your payment method</h3>
+                
+                <label>
+                    <input type="radio" name="payment" value="cod" checked>
+                    Cash on Delivery
+                </label>
+                <br>
+    
+                <label class="disabled-option">
+                    <input type="radio" name="payment" value="gcash" disabled>
+                    GCash (Unavailable)
+                </label>
+                <br>
+                
+                <label class="disabled-option">
+                    <input type="radio" name="payment" value="card" disabled>
+                    Credit/Debit Card (Unavailable)
+                </label>
+            </div>
+
+
+            <div class="summary-row" id="items-total-group">
+                <span>Item(s) Total</span>
+                <span>PHP 3,605.09</span>
+            </div>
+
+            <div class="summary-row" id="shop-discount-group">
+                <span>Shop Discount</span>
+                <span>PHP 823.66</span>
+            </div>
+            
+            <div class="summary-row" class="divider" id="divider1">
+
+            </div>
+
+            <div class="summary-row" id="subtotal-group">
+                <span>Subtotal</span>
+                <span>2,781.43</span> 
+            </div>
+            <div class="summary-row" id="shipping-fee-group">
+                <span>Shipping Fee</span>
+                <span>PHP 1,665.46</span>
+            </div>
+
+            <div class="summary-row" class="divider">
+                
+            </div>
+
+            <div class="summary-row total" id="final-total-group">
+                <span>Total (3 items)</span>
+                <span><strong>PHP 4,446.89</strong></span>
+            </div>
+
+
+            <!-- Checkout Button -->
+            <div class="checkout-btn-container">
+                <button class="checkout-btn">Place Order</button>
+            </div>
+        </div>
+
+
+    </section>
+</main>
+
+<!-- Basic Temporary Toggling of two divs-->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const showSelectionBtn = document.getElementById("show-selection");
+        const showFormBtn = document.getElementById("show-form");
+        const formDiv = document.querySelector(".address-forms");
+        const selectionDiv = document.querySelector(".address-selection");
+
+        // Default state → show selection, hide form
+        formDiv.style.display = "none";
+        selectionDiv.style.display = "block";
+
+        showSelectionBtn.addEventListener("click", () => {
+            formDiv.style.display = "none";
+            selectionDiv.style.display = "block";
+        });
+
+        showFormBtn.addEventListener("click", () => {
+            selectionDiv.style.display = "none";
+            formDiv.style.display = "block";
+        });
+    });
+</script>
+
+
+
+{% endblock %}

@@ -12,6 +12,10 @@ def my_orders(request):
     return render(request, 'main/my_orders.html', {'orders': orders})
 
 @login_required
+def checkout_design_view(request):
+    return render(request, "main/user_checkout.html")
+
+@login_required
 def checkout_view(request):
     cart = get_object_or_404(Cart, user=request.user)
 
