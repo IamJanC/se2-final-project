@@ -195,25 +195,274 @@ textarea::placeholder {
     flex: 1; /* each child takes equal width */
 }
 
-
-.additional-info-form-section{
+.form-buttons {
     display: flex;
-    flex-wrap: wrap;   /* <-- lets items go to next line */
-    gap: 1rem;         /* spacing between inputs */
-    margin: 20px 0px 5px 25px;
+    gap: 1rem;                 /* spacing between buttons */
+    margin: 8px 0px 10px 26px;
+    padding: 12px 0px;
 }
 
-.additional-info-form-section .form-group {
-    flex: 1; /* each child takes equal width */
+.btn-save-address-form, .btn-cancel-address-form{
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
 }
 
-#note{
-    width: 100%;      /* full width of parent */
-    height: 120px;    /* make it taller */
-    padding: 10px;    /* breathing room */
-    font-size: 16px;  /* adjust text size */
-    resize: none; /* user can stretch vertically (set to none if you don’t want resizing) */
+.btn-save-address-form{
+    background: #5c8b25; 
 }
+
+.btn-save-address-form:hover{
+    background: #325a00;
+}
+
+.btn-cancel-address-form {
+    background: #e0e0e0;   
+    color: #333;           /* dark text */
+}
+.btn-cancel-address-form:hover {
+    background: #c0c0c0;  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Address Selection */
+.delivery-address{
+    margin: 20px 0px 5px 0px;
+}
+
+.address-selection-title {
+    margin-bottom: 20px;
+}
+
+.address-selection-title h3{
+    font-size: 1.3rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.address-card{
+    background-color: rgba(180, 173, 173, 0.144);
+    padding: 20px 25px 15px 35px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.top-section{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.label-top {
+  display: flex;             /* put SVG + text side by side */
+  align-items: center;       /* vertically center */
+  gap: 8px;                  /* space between SVG and text */
+}
+
+.modifier-icon-btn svg {
+  width: auto;
+  height: 23px;
+}
+
+
+.button-modifier-section{
+    display: flex;
+    gap: 10px;    
+}
+
+.modifier-icon-btn {
+  background: none;        /* no background */
+  border: none;            /* remove border */
+  padding: 6px;            /* small clickable area */
+  cursor: pointer;         /* pointer on hover */
+  display: flex;           /* center SVG */
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;      /* optional: rounded hover effect */
+  color: #333;             /* icon color */
+  transition: background 0.2s ease;
+}
+
+.modifier-icon-btn:hover {
+    cursor: pointer;      /* gives the hand cursor */
+    transform: scale(1.2); /* optional: slightly enlarges */
+    transition: all 0.1s ease-out; /* smooth effect */
+}
+
+.upper-address-label-section{
+    margin-bottom: 10px;
+}
+
+.address-label{
+    font-size: 16px;
+    font-weight: bold;
+    color: white;               /* text color */
+    padding: 2px 8px;           /* spacing inside box */
+    border-radius: 4px;         /* rounded corners */
+    display: inline-block;      /* makes padding & bg work */
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 10px;
+
+    background-color: #5c8b25;  /* green */
+    color: white;  
+}
+
+.address-card-name{
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.address-card-address, 
+.address-card-landmark,
+.address-card-email,
+.address-card-phone {
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+} 
+
+.middle-address-section{
+    margin-bottom: 15px;
+}
+
+.lower-address-contact-section{
+    margin-bottom: 10px;
+}
+
+.select-address-buttons{
+    padding: 12px 0px;
+    display: flex;
+    gap: 1rem;             
+}
+.select-address-btn{
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.select-address-btn{
+    background: #5c8b25; 
+}
+
+.select-address-btn:hover{
+    background: #325a00;
+}
+
+.add-more-address-section {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center; /* centers button horizontally */
+}
+
+.add-more-address-btn {
+    display: flex;
+    align-items: center;  /* vertically center icon + text */
+    gap: 0.5rem;          /* spacing between icon and text */
+    background: #f8f9fa;
+    border: 1px solid #ccc;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    transition: background 0.2s;
+
+    font-size: 16px;
+    margin-bottom: 1rem;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.add-more-address-btn:hover {
+  background: #cfcfcf;
+}
+
+.add-more-address-btn svg {
+  width: 25px;
+  height: 25px;
+}
+
+
+
+
+
+
+
 
 
 
@@ -295,9 +544,7 @@ textarea::placeholder {
     font-style: normal;
 }
 
-.checkout-btn:hover {
-  background: #325a00;
-}
+
 
 .checkout-btn:disabled {
     background: #95a5a6;
