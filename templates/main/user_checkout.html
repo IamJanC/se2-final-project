@@ -17,7 +17,8 @@
             <form method ="POST">
                 {% csrf_token %}
                 <input type="hidden" name="address_id" id="selectedAddressId" value="{{ addresses.first.id }}">
-                <div class="address-forms">
+
+                <div class="address-forms" style="display: none;">
                     
                     <div class="address-forms-title">
                         <h3>Billing Information</h3>
@@ -109,7 +110,7 @@
         
                 <div class="delivery-address">
 
-                    <div class="address-selection-title">
+                    <div class="address-selection-title" style="display: none;">
                         <svg version="1.0" class="location-icon-address-selection" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#5d8b24" d="M32,0C18.746,0,8,10.746,8,24c0,5.219,1.711,10.008,4.555,13.93c0.051,0.094,0.059,0.199,0.117,0.289l16,24 C29.414,63.332,30.664,64,32,64s2.586-0.668,3.328-1.781l16-24c0.059-0.09,0.066-0.195,0.117-0.289C54.289,34.008,56,29.219,56,24 C56,10.746,45.254,0,32,0z M32,32c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z"></path> </g></svg>
                         <h3>Delivery Address</h3>
                     </div>  
@@ -198,46 +199,36 @@
                     </div>
 
                     <!-- Checkout Address Card -->
+                    {% if addresses %}
                     <div class="checkout-address-card">
-
                         <div class="checkout-top-section">
-                            <!-- Label -->
                             <div class="label-top">
-                                <span class="address-label">Home</span>
+                                <span class="address-label">{{ addresses.first.label|default:"Home" }}</span>
                             </div>
-
-                            <!-- Change button -->
                             <div class="change-address">
-                                <!-- Change button -->
                                 <button class="change-btn">Change</button>
                             </div>
                         </div>
-
-                        
-
                         <div class="upper-address-label-section">
-                            <!-- Name -->
-                            <p class="address-card-name">Juan Dela Cruz</p>
+                            <p class="address-card-name">{{ addresses.first.full_name }}</p>
                         </div>
-
-
                         <div class="middle-address-section">
-                             <!-- Full address (combined) -->
                             <p class="address-card-address">
-                                Blk 4 Lot 5, Dahlia Street, Dalig, Antipolo, Rizal 1870
+                                {{ addresses.first.house }}, {{ addresses.first.street }}, Dalig, Antipolo, Rizal 1870
                             </p>
-
-                            <!-- Landmark (with ellipsis if too long) -->
                             <p class="address-card-landmark">
-                                Landmark: Near Antipolo City Hall...
+                                Landmark: {{ addresses.first.landmark }}
                             </p>
                         </div>
                         <div class="lower-address-contact-section">
-                            <!-- Contact -->
-                            <p class="address-card-email">juan@email.com</p>
-                            <p class="address-card-phone">+63 917 123 4567</p>
+                            <p class="address-card-email">{{ addresses.first.email }}</p>
+                            <p class="address-card-phone">{{ addresses.first.phone }}</p>
                         </div>
                     </div>
+                    {% else %}
+                        <p>No address registered. Please add one.</p>
+                    {% endif %}
+
                 </div>
 
                 <!-- Product Summary Section -->
@@ -498,8 +489,48 @@ document.addEventListener("DOMContentLoaded", () => {
         backBtnSection.style.display = "block";
     }
 
+    if (checkoutCard) {
+        // If there is a saved address, show checkout card
+        formDiv.style.display = "none";
+        selectionDiv.style.display = "none";
+        checkoutDiv.style.display = "block";
+    } else {
+        // If no saved address, show form directly
+        formDiv.style.display = "block";
+        selectionDiv.style.display = "none";
+        checkoutDiv.style.display = "none";
+    }
 
-});
+    // Change button
+    document.querySelectorAll(".change-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            if(selectionDiv) selectionDiv.style.display = "block";
+            if(checkoutCard) checkoutCard.style.display = "none";
+            if(formDiv) formDiv.style.display = "none";
+        });
+    });
+
+    // Add more address button
+    document.querySelectorAll(".add-more-address-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            if(formDiv) formDiv.style.display = "block";
+            if(selectionDiv) selectionDiv.style.display = "none";
+            if(checkoutCard) checkoutCard.style.display = "none";
+        });
+    });
+
+    // Back button inside selection section
+    document.querySelectorAll(".back-to-checkout-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            if(checkoutCard) checkoutCard.style.display = "block";
+            if(selectionDiv) selectionDiv.style.display = "none";
+            if(formDiv) formDiv.style.display = "none";
+        });
+    });
+
+});    
+    
+
 </script>
 
 {% endblock %}
