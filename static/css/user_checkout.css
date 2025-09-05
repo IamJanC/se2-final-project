@@ -280,6 +280,9 @@ textarea::placeholder {
 }
 
 .address-selection-title {
+    display: flex;
+    align-items: center;  /* vertical alignment */
+    gap: 5px;
     margin-bottom: 20px;
 }
 
@@ -287,8 +290,15 @@ textarea::placeholder {
     font-size: 1.3rem;
     font-family: "Lexend", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 400;
+    font-weight: 300;
     font-style: normal;
+}
+
+.address-selection-title .location-icon-address-selection {
+    width: 1.3rem;   /* match h3 font-size */
+    height: 1.3rem;
+    flex-shrink: 0;  /* don’t let it shrink */
+    color: #000;     /* inherits from text (or override) */
 }
 
 .address-card{
@@ -458,6 +468,133 @@ textarea::placeholder {
 }
 
 
+
+
+
+
+
+/* === Main === */
+
+.checkout-main{
+    margin: 20px 0px 5px 0px;
+}
+
+.checkout-main-product-section{
+    margin-bottom: 25px;
+}
+
+
+/* Address section main */
+.checkout-address-selection-title {
+    display: flex;
+    align-items: center;  /* vertical alignment */
+    gap: 5px;             /* spacing between icon and text */
+    margin-bottom: 20px;
+}
+
+.checkout-address-selection-title .location-icon {
+    width: 1.3rem;   /* match h3 font-size */
+    height: 1.3rem;
+    flex-shrink: 0;  /* don’t let it shrink */
+    color: #000;     /* inherits from text (or override) */
+}
+
+.checkout-address-selection-title h3 {
+    font-size: 1.3rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+
+.checkout-address-card{
+    background-color: rgba(180, 173, 173, 0.144);
+    padding: 20px 25px 15px 35px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+
+.checkout-top-section{
+    display: flex;
+    justify-content: space-between;
+}
+
+.change-btn {
+    background: none;
+    border: none;
+    color: #007BFF;        /* blue text */
+    text-decoration: underline;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0;            /* removes button padding */
+
+    font-size: 14px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.change-btn:hover {
+    color: #0056b3;        /* darker on hover */
+}
+
+/* Table */
+
+.checkout-product-title h3{
+    font-size: 1.3rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+.checkout-product-header,
+.checkout-product-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr; /* product, price, qty, subtotal */
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.checkout-product-header {
+    font-weight: 600;
+    background: #f8f8f8;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.product-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.product-col{
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.product-name, .price-col, .qty-col, .subtotal-col{
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
 
 
 

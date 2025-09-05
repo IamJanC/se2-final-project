@@ -68,7 +68,7 @@
 
                             <div class="quantity-selector">
                                 <button type="button" class="qty-btn minus" aria-label="Decrease quantity" data-item-id="{{ item.id }}">−</button>
-                                <input type="number" name="quantity" class="quantity-input" value="{{ item.quantity }}" min="1" data-item-id="{{ item.id }}">
+                                <input type="number" name="quantity" class="quantity-input" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" data-item-id="{{ item.id }}">
                                 <button type="button" class="qty-btn plus" aria-label="Increase quantity" data-item-id="{{ item.id }}">+</button>
                             </div>
                         </div>
@@ -234,7 +234,9 @@
     qtyInputs.forEach(input => {
         input.addEventListener('input', e => {
             let qty = parseInt(e.target.value) || 1;
+            const max = parseInt(e.target.getAttribute('max'), 10);
             if (qty < 1) qty = 1;
+            if (max && qty > max) qty = max;
             e.target.value = qty;
             updateSubtotalFrontend(e.target.dataset.itemId, qty);
             sendQuantityUpdate(e.target.dataset.itemId, qty);
@@ -244,7 +246,9 @@
     plusBtns.forEach(btn => {
         btn.addEventListener('click', e => {
             const input = btn.parentElement.querySelector('.quantity-input');
+            const max = parseInt(input.getAttribute('max'), 10);
             let qty = parseInt(input.value) + 1;
+            if (max && qty > max) qty = max; 
             input.value = qty;
             updateSubtotalFrontend(input.dataset.itemId, qty);
             sendQuantityUpdate(input.dataset.itemId, qty);

@@ -87,12 +87,23 @@ function showComplaintInput() {
 
   const instruction = document.createElement('div');
   instruction.className = 'bot-text-input';
-  instruction.innerText = "Please type your complaint below:";
+  instruction.innerText = "Please type your complaint:                ";
 
   const input = document.createElement('textarea');
   input.className = 'complaint-input';
   input.rows = 3;
   input.placeholder = "Type your complaint...";
+  input.maxLength = 500; // 🚨 Hard limit in textarea itself
+
+  const charCount = document.createElement('div');
+  charCount.className = 'char-count';
+  charCount.style.fontSize = '12px';
+  charCount.style.marginTop = '5px';
+  charCount.innerText = "0 / 500";
+
+  input.addEventListener('input', () => {
+    charCount.innerText = `${input.value.length} / 500`;
+  });
 
   const buttonContainer = document.createElement('div');
   buttonContainer.style.display = 'flex';
@@ -109,7 +120,14 @@ function showComplaintInput() {
 
   submitBtn.onclick = async () => {
     const complaint = input.value.trim();
-    if (complaint === '') return;
+    if (complaint.length < 1) {
+      alert("⚠️ Complaint cannot be empty.");
+      return;
+    }
+    if (complaint.length > 500) {
+      alert("⚠️ Complaint cannot exceed 500 characters.");
+      return;
+    }
 
     submitBtn.disabled = true;
     backBtn.disabled = true;
@@ -145,7 +163,7 @@ function showComplaintInput() {
   buttonContainer.appendChild(backBtn);
 
   questionOptions.appendChild(instruction);
-  questionOptions.appendChild(input);
+  questionOptions.appendChild(input); 
   questionOptions.appendChild(buttonContainer);
 }
 

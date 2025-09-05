@@ -22,7 +22,7 @@
     </p>
     <p class="product-description">{{ product.description }}</p>
 
-    <!-- Messages block to show success or errors -->
+    <!-- Messages -->
     {% if messages %}
       <ul class="messages">
         {% for message in messages %}
@@ -36,14 +36,21 @@
         {% csrf_token %}
         <input type="hidden" name="product_id" value="{{ product.id }}">
 
-        <!-- Quantity Selector inside form -->
+        <!-- Quantity Selector -->
         <div class="quantity-container">
           <p class="lexend-300">Quantity:</p>
 
           <div class="quantity-selector">
-            <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
-            <input type="number" name="quantity" class="quantity-input" value="1" min="1" max="{{ product.stock }}">
-            <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+            <button type="button" class="qty-btn minus" aria-label="Decrease quantity" data-item-id="{{ product.id }}">−</button>
+            <input 
+              type="number" 
+              name="quantity" 
+              class="quantity-input" 
+              value="1" 
+              min="1" 
+              max="{{ product.stock }}" 
+              data-item-id="{{ product.id }}">
+            <button type="button" class="qty-btn plus" aria-label="Increase quantity" data-item-id="{{ product.id }}">+</button>
           </div>
         </div>
 
@@ -57,34 +64,40 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const minusBtn = document.querySelector('.qty-btn.minus');
-    const plusBtn = document.querySelector('.qty-btn.plus');
-    const qtyInput = document.querySelector('.quantity-input');
+    const qtyInputs = document.querySelectorAll('.quantity-input');
+    const plusBtns = document.querySelectorAll('.qty-btn.plus');
+    const minusBtns = document.querySelectorAll('.qty-btn.minus');
 
-    if (minusBtn && plusBtn && qtyInput) {
-      minusBtn.addEventListener('click', () => {
-        let val = parseInt(qtyInput.value, 10) || 1;
-        if (val > parseInt(qtyInput.min || '1', 10)) {
-          qtyInput.value = val - 1;
-        }
+    // Quantity input change
+    qtyInputs.forEach(input => {
+      input.addEventListener('input', e => {
+        let qty = parseInt(e.target.value) || 1;
+        const max = parseInt(e.target.getAttribute('max'), 10);
+        if (qty < 1) qty = 1;
+        if (max && qty > max) qty = max;
+        e.target.value = qty;
       });
+    });
 
-      plusBtn.addEventListener('click', () => {
-        let val = parseInt(qtyInput.value, 10) || 1;
-        const max = parseInt(qtyInput.max || '9999', 10);
-        if (val < max) {
-          qtyInput.value = val + 1;
-        }
+    // Plus button
+    plusBtns.forEach(btn => {
+      btn.addEventListener('click', e => {
+        const input = btn.parentElement.querySelector('.quantity-input');
+        const max = parseInt(input.getAttribute('max'), 10);
+        let qty = parseInt(input.value) + 1;
+        if (max && qty > max) qty = max;
+        input.value = qty;
       });
+    });
 
-      qtyInput.addEventListener('input', () => {
-        let val = parseInt(qtyInput.value, 10) || 1;
-        const min = parseInt(qtyInput.min || '1', 10);
-        const max = parseInt(qtyInput.max || '9999', 10);
-        if (val < min) qtyInput.value = min;
-        else if (val > max) qtyInput.value = max;
+    // Minus button
+    minusBtns.forEach(btn => {
+      btn.addEventListener('click', e => {
+        const input = btn.parentElement.querySelector('.quantity-input');
+        let qty = Math.max(parseInt(input.value) - 1, 1);
+        input.value = qty;
       });
-    }
+    });
   });
 </script>
 

@@ -10,6 +10,8 @@
     <!--Temporary Button for Toggling divs-->
         <button id="show-selection">Show Address Selection</button>
         <button id="show-form">Show Address Form</button>
+        <button id="show-checkout">Show Checkout Main</button>
+
 
     <section class="main-content">
 
@@ -109,6 +111,7 @@
                 <div class="delivery-address">
 
                     <div class="address-selection-title">
+                        <svg version="1.0" class="location-icon-address-selection" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#5d8b24" d="M32,0C18.746,0,8,10.746,8,24c0,5.219,1.711,10.008,4.555,13.93c0.051,0.094,0.059,0.199,0.117,0.289l16,24 C29.414,63.332,30.664,64,32,64s2.586-0.668,3.328-1.781l16-24c0.059-0.09,0.066-0.195,0.117-0.289C54.289,34.008,56,29.219,56,24 C56,10.746,45.254,0,32,0z M32,32c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z"></path> </g></svg>
                         <h3>Delivery Address</h3>
                     </div>  
 
@@ -225,32 +228,6 @@
                         </div>
                     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     <div class="add-more-address-section">
                         <button class="add-more-address-btn">
                             <!-- SVG plus icon -->
@@ -259,10 +236,104 @@
                         </button>
                     </div>
                 </div>
-                
-
-
             </div>
+
+            <div class="checkout-main">
+                
+                <div class="checkout-main-address-section">
+                   <div class="checkout-address-selection-title">
+                        <svg version="1.0" class="location-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#5d8b24" d="M32,0C18.746,0,8,10.746,8,24c0,5.219,1.711,10.008,4.555,13.93c0.051,0.094,0.059,0.199,0.117,0.289l16,24 C29.414,63.332,30.664,64,32,64s2.586-0.668,3.328-1.781l16-24c0.059-0.09,0.066-0.195,0.117-0.289C54.289,34.008,56,29.219,56,24 C56,10.746,45.254,0,32,0z M32,32c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z"></path> </g></svg>
+                        <h3>Delivery Address</h3>
+                    </div>
+
+                    <!-- Checkout Address Card -->
+                    <div class="checkout-address-card">
+
+                        <div class="checkout-top-section">
+                            <!-- Label -->
+                            <div class="label-top">
+                                <span class="address-label">Home</span>
+                            </div>
+
+                            <!-- Change button -->
+                            <div class="change-address">
+                                <!-- Change button -->
+                                <button class="change-btn">Change</button>
+                            </div>
+                        </div>
+
+                        
+
+                        <div class="upper-address-label-section">
+                            <!-- Name -->
+                            <p class="address-card-name">Juan Dela Cruz</p>
+                        </div>
+
+
+                        <div class="middle-address-section">
+                             <!-- Full address (combined) -->
+                            <p class="address-card-address">
+                                Blk 4 Lot 5, Dahlia Street, Dalig, Antipolo, Rizal 1870
+                            </p>
+
+                            <!-- Landmark (with ellipsis if too long) -->
+                            <p class="address-card-landmark">
+                                Landmark: Near Antipolo City Hall...
+                            </p>
+                        </div>
+                        <div class="lower-address-contact-section">
+                            <!-- Contact -->
+                            <p class="address-card-email">juan@email.com</p>
+                            <p class="address-card-phone">+63 917 123 4567</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Summary Section -->
+                <div class="checkout-main-product-section">
+                    <div class="checkout-product-title">
+                        <h3>Order Summary</h3>
+                    </div>
+
+                    <!-- Header row -->
+                    <div class="checkout-product-header">
+                        <div class="product-col">Product</div>
+                        <div class="price-col">Price</div>
+                        <div class="qty-col">Quantity</div>
+                        <div class="subtotal-col">Subtotal</div>
+                    </div>
+
+                    <!-- Product row -->
+
+                    <!-- First Product -->
+                    <div class="checkout-product-row">
+                        <div class="product-col product-info">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwckcNgTxvnO59wSlstyhCts-2edL1BXI0lA&s" alt="Red Capsicum" class="product-img">
+                            <span class="product-name">Red Capsicum</span>
+                        </div>
+                        <div class="price-col">₱14.00</div>
+                        <div class="qty-col">x5</div>
+                        <div class="subtotal-col">₱70.00</div>
+                    </div>
+
+                    <!-- Second Product -->
+                    <div class="checkout-product-row">
+                        <div class="product-col product-info">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwckcNgTxvnO59wSlstyhCts-2edL1BXI0lA&s" alt="Red Capsicum" class="product-img">
+                            <span class="product-name">Red Capsicum</span>
+                        </div>
+                        <div class="price-col">₱14.00</div>
+                        <div class="qty-col">x5</div>
+                        <div class="subtotal-col">₱70.00</div>
+                    </div>
+
+                   
+                </div>
+
+
+            
+            </div>
+
         </div>
 
         <!--  === RIGHT: Order Summary ===  -->
@@ -335,27 +406,40 @@
 
 <!-- Basic Temporary Toggling of two divs-->
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const showSelectionBtn = document.getElementById("show-selection");
-        const showFormBtn = document.getElementById("show-form");
-        const formDiv = document.querySelector(".address-forms");
-        const selectionDiv = document.querySelector(".address-selection");
+document.addEventListener("DOMContentLoaded", () => {
+    const showSelectionBtn = document.getElementById("show-selection");
+    const showFormBtn = document.getElementById("show-form");
+    const showCheckoutBtn = document.getElementById("show-checkout");
 
-        // Default state → show selection, hide form
+    const formDiv = document.querySelector(".address-forms");
+    const selectionDiv = document.querySelector(".address-selection");
+    const checkoutDiv = document.querySelector(".checkout-main");
+
+    // Default state → show selection only
+    formDiv.style.display = "none";
+    selectionDiv.style.display = "block";
+    checkoutDiv.style.display = "none";
+
+    showSelectionBtn.addEventListener("click", () => {
         formDiv.style.display = "none";
         selectionDiv.style.display = "block";
-
-        showSelectionBtn.addEventListener("click", () => {
-            formDiv.style.display = "none";
-            selectionDiv.style.display = "block";
-        });
-
-        showFormBtn.addEventListener("click", () => {
-            selectionDiv.style.display = "none";
-            formDiv.style.display = "block";
-        });
+        checkoutDiv.style.display = "none";
     });
+
+    showFormBtn.addEventListener("click", () => {
+        selectionDiv.style.display = "none";
+        formDiv.style.display = "block";
+        checkoutDiv.style.display = "none";
+    });
+
+    showCheckoutBtn.addEventListener("click", () => {
+        selectionDiv.style.display = "none";
+        formDiv.style.display = "none";
+        checkoutDiv.style.display = "block";
+    });
+});
 </script>
+
 
 
 

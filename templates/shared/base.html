@@ -39,7 +39,8 @@
                     <input 
                         class="search__input" 
                         type="text" 
-                        placeholder="Search..." 
+                        placeholder="Search..."
+                        maxlength="30" 
                         id="searchInput"
                     >
                     <div class="search-suggestions" id="suggestionsBox"></div>
@@ -70,6 +71,9 @@
                     </div>
                 </div>
 
+                <a href="/templates/main/account.html">
+                    <button type="button">Go to My Account</button>
+                </a>
 
                     <!-- Account -->
                     <div id="nav-account">
@@ -342,7 +346,7 @@
                     <!-- Username or Email Input -->
                     <div id="identifierInputContainer" class="inputContainer">
                         <label for="identifier">Username or Email</label>
-                        <input type="text" id="identifier" name="identifier" placeholder="Enter your username or email" autocomplete="off" required />
+                        <input type="text" id="identifier" name="identifier" placeholder="Enter your username or email" minlength="3" maxlength="20" autocomplete="off" required />
                         
                         <!--Dynamic Error message here-->
                         <p id="identifierError" class="error-message {% if identifier_error %} {% else %}hidden{% endif %}">
@@ -353,7 +357,7 @@
                     <!-- Password Input -->
                     <div id="passwordInputContainer" class="inputContainer">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Enter your password" required />
+                        <input type="password" id="password" name="password" placeholder="Enter your password" minlength="8" maxlength="20" required />
 
                         <!--Dynamic Error message here-->
                         <p id="passwordError" class="error-message {% if password_error %} {% else %}hidden{% endif %}">
@@ -405,6 +409,7 @@
                         <label for="newEmail">Email</label>
                         <input type="email" id="newEmail" name="email" 
                             placeholder="Enter a valid email (e.g. john@example.com)"
+                            minlength="11" maxlength="50"
                             value="{{ form_data.email|default:'' }}" required />
                         <p id="newEmailError" class="error-message {% if not email_error %}hidden{% endif %}">
                             {{ email_error }}

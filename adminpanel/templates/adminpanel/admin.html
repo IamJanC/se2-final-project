@@ -249,6 +249,7 @@
                             <th>Name</th>
                             <th>Price</th>
                             <th>Category</th>
+                            <Th>Quantity</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
@@ -258,6 +259,13 @@
                             <td>{{ product.name }}</td>
                             <td>₱ {{ product.price }}</td>
                             <td>{{ product.category }}</td>
+                            <td>
+                                {% if product.stock < 20 %}
+                                    <span class="badge bg-warning text-dark">{{ product.stock }} (Low)</span>
+                                {% else %}
+                                    {{ product.stock }}
+                                {% endif %}
+                            </td>    
                             <td class="text-center">
                                 <a href="{% url 'adminpanel:delete_product' product.pk %}"
                                 class="btn btn-sm btn-danger me-2"
