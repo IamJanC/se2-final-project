@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test, login_required
 from products.models import Product, Category
-from products.forms import ProductForm, CategoryForm
+from products.forms import ProductForm, CategoryForm, ProductEditForm
 from orders.models import Order
 from orders.models import OrderItem
 from django.db.models import Sum, Count, F, FloatField, ExpressionWrapper
@@ -90,3 +90,13 @@ def delete_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     product.delete()
     return redirect('adminpanel:dashboard')
+
+def edit_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    if request.method == "POST":
+        form = ProductEditForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect("adminpanel:dashboard")
+    return redirect("adminpanel:dashboard")

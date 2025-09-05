@@ -38,6 +38,15 @@ def checkout_view(request):
         email = request.POST.get("email")
         address = request.POST.get("address")
 
+        # Check stock availability BEFORE creating the order
+        for item in cart_items:
+            if item.product.stock < item.quantity:
+                messages.error(
+                    request,
+                    f"Not enough stock for {item.product.name}. Only {item.product.stock} left."
+                )
+                return redirect("cart:cart_view")  # redirect user back to cart
+
         # Create Order
         order = Order.objects.create(
             user=request.user,
@@ -48,13 +57,16 @@ def checkout_view(request):
             status="pending",
         )
 
-        # Create OrderItem only for selected cart items
+        # Create OrderItem and deduct stock
         for item in cart_items:
             order.items.create(
                 product=item.product,
                 quantity=item.quantity,
                 price_at_purchase=item.product.price,
             )
+            # Deduct stock
+            item.product.stock -= item.quantity
+            item.product.save()
 
         # Remove **only the purchased items** from cart
         cart.items.filter(id__in=[i.id for i in cart_items]).delete()
@@ -67,6 +79,19 @@ def checkout_view(request):
         "total": total,
     }
     return render(request, "main/checkout.html", context)
+
+
+
+# Test for Design
+from django.shortcuts import render
+
+def orders_page(request):
+    return render(request, "main/orders.html")  # this is your design-only template
+
+
+
+
+
 
 
 

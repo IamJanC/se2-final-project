@@ -9,6 +9,9 @@ urlpatterns = [
     
     
     
-    path("checkout/design/", views.checkout_design_view, name="checkout_design"), #for designing
+    path("checkout/design/", views.checkout_design_view, name="checkout_design"), #for designing user_checkout.html
     path("checkout/", views.checkout_view, name="checkout"), #final ^ temp ^
+    
+    
+    path("design/", views.orders_page, name="orders_design"), #for designing orders.html
 ]

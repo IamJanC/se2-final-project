@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Title - Description{% endblock %}</title>
+    <title>{% block title %}AgriHub Philippines | Your Trusted Agriculture Marketplace{% endblock %}</title>
+    
 
     {% load static %}
 
@@ -12,6 +13,10 @@
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
     <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
     <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'images/Favicon.png' %}">
+
 
 
     <!-- External libraries -->
@@ -70,10 +75,6 @@
                         <p><span id="nav-amount">&#x20B1;00.00</span></p>
                     </div>
                 </div>
-
-                <a href="/templates/main/account.html">
-                    <button type="button">Go to My Account</button>
-                </a>
 
                     <!-- Account -->
                     <div id="nav-account">
@@ -243,7 +244,6 @@
                         <h6>Work hours: </h6>
                         <p>8AM - 10PM, Monday - Saturday</p>
                     </div>
-
                 </div>
 
                 <!--Second Container (Account)-->
@@ -258,7 +258,6 @@
                             <li><a href="#">Cart</a></li>
                             <li><a href="#">Track Order</a></li>
                             <li><a href="#">Shipping Details</a></li>
-
                         </ul>
                     </div>
                 </div>
@@ -279,7 +278,7 @@
                     </div>
                 </div>
 
-                <!--Fourt Container (Useful Links)-->
+                <!--Fourth Container (Categories)-->
                 <div id="footer-useful-links" class="footer-link">
                     <div class="footer-link-title">
                         <h5>Categories</h5>
@@ -287,10 +286,13 @@
 
                     <div class="footer-link-list">
                         <ul>
-                            <li><a href="#">Fruits & Vegetables</a></li>
-                            <li><a href="#">Meat & Fish</a></li>
-                            <li><a href="#">Bread & Bakery</a></li>
-                            <li><a href="#">Others</a></li>
+                            {% for category in footer_categories %}
+                            <li>
+                                <a href="{% url 'main:shop' %}?category={{ category.slug }}">
+                                    {{ category.name }}
+                                </a>
+                            </li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>

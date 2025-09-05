@@ -61,19 +61,10 @@ function createOptionButton(option) {
   btn.className = 'option-button';
   btn.innerText = option.text;
 
-  // Disable complaint option if not logged in
-  if (option.next === 'complaintStart' && !isUserLoggedIn) {
-    btn.disabled = true;
-    btn.title = "You must be logged in to file a complaint.";
-    btn.style.cursor = 'not-allowed';
-  }
-
   btn.onclick = () => {
-    // If complaintStart clicked but user not logged in, show message instead of complaint form
     if (option.next === 'complaintStart' && !isUserLoggedIn) {
-      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      addMessage("bot", "⚠️ Please log in to file a complaint.", time);
-      saveChatToSession("bot", "Please log in to file a complaint.", time);
+      // Redirect to your login modal trigger URL
+      window.location.href = "http://127.0.0.1:8000/?show_login=1";
       return;
     }
     handleUserChoice(option);
@@ -82,12 +73,22 @@ function createOptionButton(option) {
   return btn;
 }
 
+// Function to open login modal
+function openLoginModal() {
+  const modal = document.getElementById("loginModal");
+  if (modal) {
+    modal.style.display = "flex"; // Show modal
+  } else {
+    alert("Please log in to file a complaint."); // fallback
+  }
+}
+
 function showComplaintInput() {
   questionOptions.innerHTML = '';
 
   const instruction = document.createElement('div');
   instruction.className = 'bot-text-input';
-  instruction.innerText = "Please type your complaint:                ";
+  instruction.innerText = "Please type your complaint:";
 
   const input = document.createElement('textarea');
   input.className = 'complaint-input';

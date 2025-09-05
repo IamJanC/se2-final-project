@@ -18,7 +18,7 @@ class Order(models.Model):
     phone = models.CharField(max_length=15)        # contact number
     email = models.EmailField(blank=True)          # optional, for receipts
     address = models.TextField()                   # delivery address
-
+    
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     

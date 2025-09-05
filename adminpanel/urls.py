@@ -8,4 +8,5 @@ urlpatterns = [
     path('admin/', views.dashboard, name='dashboard'),
     path('logout/', LogoutView.as_view(next_page='main:home'), name='logout'),
     path('delete/<int:pk>/', views.delete_product, name='delete_product'),
+    path("edit/<int:pk>/", views.edit_product, name="edit_product"),
 ]

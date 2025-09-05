@@ -7,10 +7,10 @@
 <link rel="stylesheet" href="{% static 'css/user_checkout.css' %}">
 
 <main>
-    <!--Temporary Button for Toggling divs-->
+    {% comment %} <!--Temporary Button for Toggling divs-->
         <button id="show-selection">Show Address Selection</button>
         <button id="show-form">Show Address Form</button>
-        <button id="show-checkout">Show Checkout Main</button>
+        <button id="show-checkout">Show Checkout Main</button> {% endcomment %}
 
 
     <section class="main-content">
@@ -405,7 +405,7 @@
 </main>
 
 <!-- Basic Temporary Toggling of two divs-->
-<script>
+{% comment %} <script>
 document.addEventListener("DOMContentLoaded", () => {
     const showSelectionBtn = document.getElementById("show-selection");
     const showFormBtn = document.getElementById("show-form");
@@ -436,6 +436,92 @@ document.addEventListener("DOMContentLoaded", () => {
         selectionDiv.style.display = "none";
         formDiv.style.display = "none";
         checkoutDiv.style.display = "block";
+    });
+});
+</script> {% endcomment %}
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const formDiv = document.querySelector(".address-forms");
+    const selectionDiv = document.querySelector(".address-selection");
+    const checkoutDiv = document.querySelector(".checkout-main");
+
+    // Buttons inside sections
+    const addMoreBtn = document.querySelector(".add-more-address-btn");
+    const changeBtn = document.querySelector(".change-btn");
+    const editBtns = document.querySelectorAll(".button-modifier-section .modifier-icon-btn:first-child"); // pencil icons
+    const cancelBtn = document.querySelector(".btn-cancel-address-form");
+    const saveBtn = document.querySelector(".btn-save-address-form");
+
+    // Default state → checkout page
+    formDiv.style.display = "none";
+    selectionDiv.style.display = "none";
+    checkoutDiv.style.display = "block";
+
+    // When user clicks CHANGE → show address selection
+    changeBtn.addEventListener("click", () => {
+        checkoutDiv.style.display = "none";
+        selectionDiv.style.display = "block";
+        formDiv.style.display = "none";
+    });
+
+    // When user clicks ADD MORE ADDRESS → show billing form
+    addMoreBtn.addEventListener("click", () => {
+        // 🔹 clear all input fields so form is empty
+        document.getElementById("fname").value = "";
+        document.getElementById("lname").value = "";
+        document.getElementById("house").value = "";
+        document.getElementById("street").value = "";
+        document.getElementById("landmark").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("phone").value = "";
+
+        // 🔹 switch to form view
+        selectionDiv.style.display = "none";
+        formDiv.style.display = "block";
+        checkoutDiv.style.display = "none";
+    });
+
+    // When user clicks EDIT (pencil) → show form filled with data
+    editBtns.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // find parent card
+            const card = btn.closest(".address-card");
+
+            // grab info from card
+            document.getElementById("fname").value = card.querySelector(".address-card-name").textContent.split(" ")[0] || "";
+            document.getElementById("lname").value = card.querySelector(".address-card-name").textContent.split(" ")[1] || "";
+            document.getElementById("house").value = card.querySelector(".address-card-address").textContent.split(",")[0] || "";
+            document.getElementById("street").value = card.querySelector(".address-card-address").textContent.split(",")[1] || "";
+            document.getElementById("landmark").value = card.querySelector(".address-card-landmark").textContent.replace("Landmark: ", "") || "";
+            document.getElementById("email").value = card.querySelector(".address-card-email").textContent || "";
+            document.getElementById("phone").value = card.querySelector(".address-card-phone").textContent || "";
+
+            // switch to form
+            selectionDiv.style.display = "none";
+            formDiv.style.display = "block";
+            checkoutDiv.style.display = "none";
+        });
+    });
+
+    // CANCEL in form → go back to selection
+    cancelBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        formDiv.style.display = "none";
+        selectionDiv.style.display = "block";
+        checkoutDiv.style.display = "none";
+    });
+
+    // SAVE → (for now, just go back to checkout)
+    saveBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        formDiv.style.display = "none";
+        selectionDiv.style.display = "none";
+        checkoutDiv.style.display = "block";
+
+        // later: also update address in checkout card dynamically
     });
 });
 </script>
