@@ -7,103 +7,102 @@
 <link rel="stylesheet" href="{% static 'css/user_checkout.css' %}">
 
 <main>
-    {% comment %} <!--Temporary Button for Toggling divs-->
-        <button id="show-selection">Show Address Selection</button>
-        <button id="show-form">Show Address Form</button>
-        <button id="show-checkout">Show Checkout Main</button> {% endcomment %}
-
 
     <section class="main-content">
 
 
         <!-- === LEFT: Address Section === -->
         <div class="address-section-left">
+            
+            <form method ="POST">
+                {% csrf_token %}
+                <input type="hidden" name="address_id" id="selectedAddressId" value="{{ addresses.first.id }}">
+                <div class="address-forms">
+                    
+                    <div class="address-forms-title">
+                        <h3>Billing Information</h3>
+                    </div>
+                    
 
-            <div class="address-forms">
-                
-                <div class="address-forms-title">
-                    <h3>Billing Information</h3>
+                    <div class="name-form-section">
+                        <div class="form-group">
+                            <label for="fname">First Name</label>
+                            <input type="text" id="fname" name="fname" placeholder="Your first name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lname">Last Name</label>
+                            <input type="text" id="lname" name="lname" placeholder="Your last name" required>
+                        </div>
+                    </div>
+
+                    <div class="address-form-section-fillable">
+                        <div class="form-group">
+                            <label for="house">House No./Building/Unit:</label>
+                            <input type="text" id="house" name="house" placeholder="Blk 4 Lot 5/Unit 2B/Sunshine Bldg">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="street">Street Name:</label>
+                            <input type="text" id="street" name="street" placeholder="Dahlia Street">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lname">Label</label>
+                            <input type="text" id="lname" name="lname" placeholder="Home/Workplace/Friend's House">
+                        </div>
+                    </div>
+
+                    <div class="address-form-section-unfillable">
+                        <div class="form-group">
+                            <label for="barangay">Barangay:</label>
+                            <input type="text" id="barangay" value="Dalig" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city">City:</label>
+                            <input type="text" id="city" value="Antipolo" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="province">Province:</label>
+                            <input type="text" id="province" value="Rizal" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="zipcode">ZIP Code:</label>
+                            <input type="text" id="zipcode" value="1870" disabled>
+                        </div>
+                    </div>
+
+                    <div class="landmark-form-section">
+                        <div class="form-group">
+                            <label for="landmark">Landmark:</label>
+                            <textarea id="landmark" name="landmark" 
+                                placeholder="Nearby reference point to help locate your address (e.g. City Hall, Mall, Church)"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="contact-form-section">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="text" id="email" name="email" placeholder="Email Address">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone:</label>
+                            <input type="text" id="phone" name="phone" placeholder="Phone Number">
+                        </div>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit" class="btn-save-address-form">Save</button>
+                        <button type="button" class="btn-cancel-address-form">Cancel</button>
+                    </div>
+
+
                 </div>
-                
-
-                <div class="name-form-section">
-                    <div class="form-group">
-                        <label for="fname">First Name</label>
-                        <input type="text" id="fname" name="fname" placeholder="Your first name">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lname">Last Name</label>
-                        <input type="text" id="lname" name="lname" placeholder="Your last name">
-                    </div>
-                </div>
-
-                <div class="address-form-section-fillable">
-                    <div class="form-group">
-                        <label for="house">House No./Building/Unit:</label>
-                        <input type="text" id="house" name="house" placeholder="Blk 4 Lot 5/Unit 2B/Sunshine Bldg">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="street">Street Name:</label>
-                        <input type="text" id="street" name="street" placeholder="Dahlia Street">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lname">Label</label>
-                        <input type="text" id="lname" name="lname" placeholder="Home/Workplace/Friend's House">
-                    </div>
-                </div>
-
-                <div class="address-form-section-unfillable">
-                    <div class="form-group">
-                        <label for="barangay">Barangay:</label>
-                        <input type="text" id="barangay" value="Dalig" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="city">City:</label>
-                        <input type="text" id="city" value="Antipolo" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="province">Province:</label>
-                        <input type="text" id="province" value="Rizal" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="zipcode">ZIP Code:</label>
-                        <input type="text" id="zipcode" value="1870" disabled>
-                    </div>
-                </div>
-
-                <div class="landmark-form-section">
-                    <div class="form-group">
-                        <label for="landmark">Landmark:</label>
-                        <textarea id="landmark" name="landmark" 
-                            placeholder="Nearby reference point to help locate your address (e.g. City Hall, Mall, Church)"></textarea>
-                    </div>
-                </div>
-
-                <div class="contact-form-section">
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="text" id="email" name="email" placeholder="Email Address">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone">Phone:</label>
-                        <input type="text" id="phone" name="phone" placeholder="Phone Number">
-                    </div>
-                </div>
-
-                <div class="form-buttons">
-                    <button type="submit" class="btn-save-address-form">Save</button>
-                    <button type="button" class="btn-cancel-address-form">Cancel</button>
-                </div>
-
-
-            </div>
+            </form>
 
 
             <div class="address-selection">
@@ -115,118 +114,70 @@
                         <h3>Delivery Address</h3>
                     </div>  
 
-                    <!-- Address Card 1-->
-                    <div class="address-card">
-
-                        <div class="top-section">
-                            <!-- Label -->
-                            <div class="label-top">
-                                <span class="address-label">Home</span>
-                            </div>
-
-                            <div class="button-modifier-section">
-                                <button class="modifier-icon-btn" aria-label="Edit">
-                                    <!-- Example: pencil/edit icon -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" 
-                                        width="20" height="20" viewBox="0 0 24 24" fill="none" 
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M12 20h9" />
-                                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-                                    </svg>
-                                </button>
-
-                                <button class="modifier-icon-btn" aria-label="Edit">
-                                    <!-- Example: Trash Icon    -->
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.5001 6H3.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M9.5 11L10 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M14.5 11L14 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="#000000" stroke-width="1.5"></path> <path d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="upper-address-label-section">
-
-                            <!-- Name -->
-                            <p class="address-card-name">Juan Dela Cruz</p>
-                        </div>
-                        <div class="middle-address-section">
-                             <!-- Full address (combined) -->
-                            <p class="address-card-address">
-                                Blk 4 Lot 5, Dahlia Street, Dalig, Antipolo, Rizal 1870
-                            </p>
-
-                            <!-- Landmark (with ellipsis if too long) -->
-                            <p class="address-card-landmark">
-                                Landmark: Near Antipolo City Hall...
-                            </p>
-                        </div>
-                        <div class="lower-address-contact-section">
-                            <!-- Contact -->
-                            <p class="address-card-email">juan@email.com</p>
-                            <p class="address-card-phone">+63 917 123 4567</p>
-                        </div>
-                        
-                    
-                         <div class="select-address-buttons">
-                            <button type="submit" class="select-address-btn">Select</button>
-                        </div>
+                    <!-- Back Button -->
+                    <div class="back-button-section" style="margin-bottom: 1rem;">
+                        <button type="button" class="back-to-checkout-btn">← Back</button>
                     </div>
 
+                    {% if addresses %}
+                        {% for addr in addresses%}
+                        <div class="address-card">
 
+                            <div class="top-section">
+                                <!-- Label -->
+                                <div class="label-top">
+                                    <span class="address-label">{{ addr.label|default:"Address" }}</span>
+                                </div>
 
+                                <div class="button-modifier-section">
+                                    <button class="modifier-icon-btn" aria-label="Edit">
+                                        <!-- Example: pencil/edit icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" 
+                                            width="20" height="20" viewBox="0 0 24 24" fill="none" 
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 20h9" />
+                                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                                        </svg>
+                                    </button>
 
-
-                    <!--Temporary, Second Card-->
-                    <!-- Address Card 2-->
-                    <div class="address-card">
-
-                        <div class="top-section">
-                            <!-- Label -->
-                            <div class="label-top">
-                                <span class="address-label">Friend's House</span>
+                                    <button class="modifier-icon-btn" aria-label="Edit">
+                                        <!-- Example: Trash Icon    -->
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.5001 6H3.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M9.5 11L10 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M14.5 11L14 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="#000000" stroke-width="1.5"></path> <path d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+                                    </button>
+                                </div>
                             </div>
+                            <div class="upper-address-label-section">
 
-                            <div class="button-modifier-section">
-                                <button class="modifier-icon-btn" aria-label="Edit">
-                                    <!-- Example: pencil/edit icon -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" 
-                                        width="20" height="20" viewBox="0 0 24 24" fill="none" 
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M12 20h9" />
-                                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-                                    </svg>
-                                </button>
-
-                                <button class="modifier-icon-btn" aria-label="Edit">
-                                    <!-- Example: Trash Icon    -->
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.5001 6H3.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M9.5 11L10 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M14.5 11L14 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="#000000" stroke-width="1.5"></path> <path d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
-                                </button>
+                                <!-- Name -->
+                                <p class="address-card-name">{{ addr.full_name }}</p>
                             </div>
-                        </div>
-                        <div class="upper-address-label-section">
+                            <div class="middle-address-section">
+                                <!-- Full address (combined) -->
+                                <p class="address-card-address">
+                                    {{ addr.house }}, {{ addr.street }}, Dalig, Antipolo, Rizal 1870
+                                </p>
 
-                            <!-- Name -->
-                            <p class="address-card-name">Mark Justin Montesines</p>
-                        </div>
-                        <div class="middle-address-section">
-                             <!-- Full address (combined) -->
-                            <p class="address-card-address">
-                                Blk 13 Lot 7, Rose Street, Dalig, Antipolo, Rizal 1870
-                            </p>
-
-                            <!-- Landmark (with ellipsis if too long) -->
-                            <p class="address-card-landmark">
-                                Landmark: Blue Gate near right intersection road...
-                            </p>
-                        </div>
-                        <div class="lower-address-contact-section">
-                            <!-- Contact -->
-                            <p class="address-card-email">marksample@email.com</p>
-                            <p class="address-card-phone">+63 914 231 2322</p>
-                        </div>
+                                <!-- Landmark (with ellipsis if too long) -->
+                                <p class="address-card-landmark">
+                                     Landmark: {{ addr.landmark }}
+                                </p>
+                            </div>
+                            <div class="lower-address-contact-section">
+                                <!-- Contact -->
+                                <p class="address-card-email">{{ addr.email }}</p>
+                                <p class="address-card-phone">{{ addr.phone }}</p>
+                            </div>
+                            
                         
-                    
-                         <div class="select-address-buttons">
-                            <button type="submit" class="select-address-btn">Select</button>
+                            <div class="select-address-buttons">
+                                <button type="button" class="select-address-btn" data-id="{{ addr.id }}">Select</button>
+                            </div>
                         </div>
-                    </div>
+                        {% endfor %}
+
+                    {% else %}
+                        <p>No saved addresses yet. Please add a new address.</p>
+                    {% endif %}
 
                     <div class="add-more-address-section">
                         <button class="add-more-address-btn">
@@ -318,34 +269,9 @@
                     {% empty %}
                     <p>No items selected.</p>
                     {% endfor %}
-
-                    {% comment %} <!-- First Product -->
-                    <div class="checkout-product-row">
-                        <div class="product-col product-info">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwckcNgTxvnO59wSlstyhCts-2edL1BXI0lA&s" alt="Red Capsicum" class="product-img">
-                            <span class="product-name">Red Capsicum</span>
-                        </div>
-                        <div class="price-col">₱14.00</div>
-                        <div class="qty-col">x5</div>
-                        <div class="subtotal-col">₱70.00</div>
-                    </div>
-
-                    <!-- Second Product -->
-                    <div class="checkout-product-row">
-                        <div class="product-col product-info">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwckcNgTxvnO59wSlstyhCts-2edL1BXI0lA&s" alt="Red Capsicum" class="product-img">
-                            <span class="product-name">Red Capsicum</span>
-                        </div>
-                        <div class="price-col">₱14.00</div>
-                        <div class="qty-col">x5</div>
-                        <div class="subtotal-col">₱70.00</div>
-                    </div> {% endcomment %}
-
-
+                
                 </div>
 
-
-            
             </div>
 
         </div>
@@ -418,42 +344,6 @@
     </section>
 </main>
 
-<!-- Basic Temporary Toggling of two divs-->
-{% comment %} <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const showSelectionBtn = document.getElementById("show-selection");
-    const showFormBtn = document.getElementById("show-form");
-    const showCheckoutBtn = document.getElementById("show-checkout");
-
-    const formDiv = document.querySelector(".address-forms");
-    const selectionDiv = document.querySelector(".address-selection");
-    const checkoutDiv = document.querySelector(".checkout-main");
-
-    // Default state → show selection only
-    formDiv.style.display = "none";
-    selectionDiv.style.display = "block";
-    checkoutDiv.style.display = "none";
-
-    showSelectionBtn.addEventListener("click", () => {
-        formDiv.style.display = "none";
-        selectionDiv.style.display = "block";
-        checkoutDiv.style.display = "none";
-    });
-
-    showFormBtn.addEventListener("click", () => {
-        selectionDiv.style.display = "none";
-        formDiv.style.display = "block";
-        checkoutDiv.style.display = "none";
-    });
-
-    showCheckoutBtn.addEventListener("click", () => {
-        selectionDiv.style.display = "none";
-        formDiv.style.display = "none";
-        checkoutDiv.style.display = "block";
-    });
-});
-</script> {% endcomment %}
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const formDiv = document.querySelector(".address-forms");
@@ -467,6 +357,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const cancelBtn = document.querySelector(".btn-cancel-address-form");
     const saveBtn = document.querySelector(".btn-save-address-form");
     const selectBtns = document.querySelectorAll(".select-address-btn"); // "Select" buttons
+    const backBtnSection = document.querySelector(".back-button-section");
+    const backBtn = backBtnSection.querySelector(".back-to-checkout-btn"); // "← Back" button
+    const deleteBtns = document.querySelectorAll(".button-modifier-section .modifier-icon-btn:last-child"); // trash icons
+
 
     // Target elements in checkout card
     const checkoutCard = document.querySelector(".checkout-address-card");
@@ -536,28 +430,76 @@ document.addEventListener("DOMContentLoaded", () => {
         formDiv.style.display = "none";
         selectionDiv.style.display = "none";
         checkoutDiv.style.display = "block";
+
+        // After saving, show/hide back button based on whether there are saved addresses
+        updateBackButtonVisibility();
     });
 
     // ✅ SELECT BUTTON → update checkout card with chosen address
     selectBtns.forEach(btn => {
-        btn.addEventListener("click", () => {
-            const card = btn.closest(".address-card");
+    btn.addEventListener("click", () => {
+        const card = btn.closest(".address-card");
 
-            checkoutName.textContent = card.querySelector(".address-card-name").textContent;
-            checkoutAddress.textContent = card.querySelector(".address-card-address").textContent;
-            checkoutEmail.textContent = card.querySelector(".address-card-email").textContent;
-            checkoutPhone.textContent = card.querySelector(".address-card-phone").textContent;
+        // Update checkout preview card
+        checkoutName.textContent = card.querySelector(".address-card-name").textContent;
+        checkoutAddress.textContent = card.querySelector(".address-card-address").textContent;
+        checkoutEmail.textContent = card.querySelector(".address-card-email").textContent;
+        checkoutPhone.textContent = card.querySelector(".address-card-phone").textContent;
 
-            selectionDiv.style.display = "none";
-            checkoutDiv.style.display = "block";
-            formDiv.style.display = "none";
+        // Store selected address ID in hidden input
+        let hiddenInput = document.getElementById("selectedAddressId");
+        if (!hiddenInput) {
+            hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "address_id";
+            hiddenInput.id = "selectedAddressId";
+            document.querySelector(".checkout-main form")?.appendChild(hiddenInput);
+        }
+        hiddenInput.value = btn.dataset.id;
+
+        // Switch views
+        selectionDiv.style.display = "none";
+        checkoutDiv.style.display = "block";
+        formDiv.style.display = "none";
         });
     });
+
+    // DELETE (trash) → remove address card
+    deleteBtns.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const card = btn.closest(".address-card");
+            card.remove(); // remove the address card from DOM
+
+            // After deletion, update back button visibility
+            updateBackButtonVisibility();
+        });
+    });
+
+
+    backBtn.addEventListener("click", () => {
+        selectionDiv.style.display = "none";
+        checkoutDiv.style.display = "block";
+    });
+
+    // Show/hide back button based on whether there are saved addresses
+    function updateBackButtonVisibility() {
+        const hasAddress = document.querySelector(".address-card");
+        if (hasAddress) {
+            backBtnSection.style.display = "none";
+        } else {
+            backBtnSection.style.display = "block";
+        }
+    }
+
+    updateBackButtonVisibility();
+
+    if (!document.querySelector(".address-card")) {
+        backBtnSection.style.display = "block";
+    }
+
+
 });
-
 </script>
-
-
-
 
 {% endblock %}

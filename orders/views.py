@@ -6,6 +6,7 @@ from cart.models import Cart  # adjust if your cart app has a different path
 
 
 
+
 @login_required
 def my_orders(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at').prefetch_related('items__product')
@@ -33,10 +34,31 @@ def checkout_view(request):
         item.subtotal = item.product.price * item.quantity
 
     if request.method == "POST":
-        full_name = request.POST.get("full_name")
-        phone = request.POST.get("phone")
-        email = request.POST.get("email")
-        address = request.POST.get("address")
+    # First, check if user selected an existing address
+        selected_address_id = request.POST.get("address_id")
+        if selected_address_id:
+            address_obj = get_object_or_404(UserAddress, id=selected_address_id, user=request.user)
+        else:
+            # Otherwise, use data from the new address form
+            full_name = request.POST.get("full_name")
+            phone = request.POST.get("phone")
+            email = request.POST.get("email")
+            house = request.POST.get("house")
+            street = request.POST.get("street")
+            landmark = request.POST.get("landmark")
+            label = request.POST.get("label", "Home")
+
+            # Save the new address
+            if full_name and phone:
+                address_obj = request.user.addresses.create(
+                    full_name=full_name,
+                    phone=phone,
+                    email=email,
+                    house=house,
+                    street=street,
+                    landmark=landmark,
+                )
+
 
         # Check stock availability BEFORE creating the order
         for item in cart_items:
@@ -50,10 +72,10 @@ def checkout_view(request):
         # Create Order
         order = Order.objects.create(
             user=request.user,
-            full_name=full_name,
-            phone=phone,
-            email=email,
-            address=address,
+            full_name=address_obj.full_name,
+            phone=address_obj.phone,
+            email=address_obj.email,
+            address=f"{address_obj.house}, {address_obj.street}, Dalig, Antipolo, Rizal 1870, {address_obj.landmark}",
             status="pending",
         )
 
