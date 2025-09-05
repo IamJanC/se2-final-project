@@ -286,13 +286,14 @@
 
                     <div class="footer-link-list">
                         <ul>
-                            {% for category in footer_categories %}
-                            <li>
-                                <a href="{% url 'main:shop' %}?category={{ category.slug }}">
-                                    {{ category.name }}
-                                </a>
-                            </li>
-                            {% endfor %}
+{% for category in footer_categories %}
+<li>
+    <a href="{% url 'main:shop' %}?category={{ category.slug }}">
+        {{ category.name }}
+    </a>
+</li>
+{% endfor %}
+
                         </ul>
                     </div>
                 </div>

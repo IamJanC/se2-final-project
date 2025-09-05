@@ -77,8 +77,9 @@ def checkout_view(request):
     context = {
         "cart_items": cart_items,
         "total": total,
+        "addresses": request.user.addresses.all(),  # ✅ Pass addresses to template
     }
-    return render(request, "main/checkout.html", context)
+    return render(request, "main/user_checkout.html", context)
 
 
 

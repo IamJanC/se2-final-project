@@ -8,11 +8,113 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'css/my_orders.css' %}">
+<link rel="stylesheet" href="{% static 'css/orders.css' %}">
 
 <main>
-    
+    <div class="main-content">
+        <div class="user-tab-left">
+            <h1>Testing</h1>
+        </div>
+
+        <div class="order-history-right">
+             <!-- Navigation Tabs -->
+            <div class="order-tabs">
+                <button class="tab active" data-tab="all">All (n)</button>
+                <button class="tab" data-tab="processing">Processing (n) </button>
+                <button class="tab" data-tab="to-ship">To Ship (n) </button>
+                <button class="tab" data-tab="to-receive">To Receive (n) </button>
+                <button class="tab" data-tab="completed">Completed (n) </button>
+                <button class="tab" data-tab="cancelled">Cancelled (n) </button>
+            </div>
+
+            <!-- Orders Page Search -->
+            <form class="orders-search-bar" autocomplete="off">
+                <input 
+                    class="orders-search__input" 
+                    type="text" 
+                    placeholder="Search by Order ID, Product, or Date..."
+                    maxlength="30" 
+                    id="ordersSearchInput"
+                >
+            </form>
+
+
+            
+            <!-- Orders Content -->
+            <div class="orders-container">
+                <div class="orders-list" id="all">
+                    
+                    <!--Cards (Same styling across containers)-->
+                    <div class="order-card">
+                        <!-- Order details would go here (product info, status, etc.) -->
+
+                        <!-- Order Action Buttons -->
+                        <div class="order-card-buttons">
+                            <button class="order-btn order-received">Order Received</button>
+                            <button class="order-btn cancel-order">Cancel Order</button>
+                            <button class="order-btn request-refund">Request Return/Refund</button>
+                            <button class="order-btn buy-again">Buy Again</button>
+                            <button class="order-btn show-details">Show Details</button>
+                            <button class="order-btn contact-seller">Contact Seller</button>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+
+                <div class="orders-list hidden" id="processing">
+                    <p>Processing orders will show here.</p>
+                </div>
+
+                <div class="orders-list hidden" id="to-ship">
+                    <p>Orders to ship will show here.</p>
+                </div>
+
+                <div class="orders-list hidden" id="to-receive">
+                    <p>Orders to receive will show here.</p>
+                </div>
+
+                <div class="orders-list hidden" id="completed">
+                    <p>Completed orders will show here.</p>
+                </div>
+
+                <div class="orders-list hidden" id="cancelled">
+                    <p>Cancelled orders will show here.</p>
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
 </main>
+
+
+<!-- === Scripts === -->
+
+<!-- Script for Toggling Containers -->
+<script>
+document.querySelectorAll(".order-tabs .tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+        // Remove active class from all tabs
+        document.querySelectorAll(".order-tabs .tab").forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+
+        // Hide all order lists
+        document.querySelectorAll(".orders-list").forEach(list => list.classList.add("hidden"));
+
+        // Show selected list
+        const target = tab.getAttribute("data-tab");
+        document.getElementById(target).classList.remove("hidden");
+    });
+});
+</script>
 
 
 

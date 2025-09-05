@@ -305,7 +305,21 @@
 
                     <!-- Product row -->
 
-                    <!-- First Product -->
+                    {% for item in cart_items %}
+                    <div class="checkout-product-row">
+                        <div class="product-col product-info">
+                            <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="product-img">
+                            <span class="product-name">{{ item.product.name }}</span>
+                        </div>
+                        <div class="price-col">₱ {{ item.product.price|floatformat:2 }}</div>
+                        <div class="qty-col">x{{ item.quantity }}</div>
+                        <div class="subtotal-col">₱ {{ item.subtotal|floatformat:2 }}</div>
+                    </div>
+                    {% empty %}
+                    <p>No items selected.</p>
+                    {% endfor %}
+
+                    {% comment %} <!-- First Product -->
                     <div class="checkout-product-row">
                         <div class="product-col product-info">
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwckcNgTxvnO59wSlstyhCts-2edL1BXI0lA&s" alt="Red Capsicum" class="product-img">
@@ -325,9 +339,9 @@
                         <div class="price-col">₱14.00</div>
                         <div class="qty-col">x5</div>
                         <div class="subtotal-col">₱70.00</div>
-                    </div>
+                    </div> {% endcomment %}
 
-                   
+
                 </div>
 
 
@@ -389,8 +403,8 @@
             </div>
 
             <div class="summary-row total" id="final-total-group">
-                <span>Total (3 items)</span>
-                <span><strong>PHP 4,446.89</strong></span>
+                <span>Total ({{ cart_items.count }} items)</span>
+                <span><strong>PHP {{ total|floatformat:2 }}</strong></span>
             </div>
 
 
@@ -452,6 +466,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const editBtns = document.querySelectorAll(".button-modifier-section .modifier-icon-btn:first-child"); // pencil icons
     const cancelBtn = document.querySelector(".btn-cancel-address-form");
     const saveBtn = document.querySelector(".btn-save-address-form");
+    const selectBtns = document.querySelectorAll(".select-address-btn"); // "Select" buttons
+
+    // Target elements in checkout card
+    const checkoutCard = document.querySelector(".checkout-address-card");
+    const checkoutName = checkoutCard.querySelector(".address-card-name");
+    const checkoutAddress = checkoutCard.querySelector(".address-card-address");
+    const checkoutEmail = checkoutCard.querySelector(".address-card-email");
+    const checkoutPhone = checkoutCard.querySelector(".address-card-phone");
 
     // Default state → checkout page
     formDiv.style.display = "none";
@@ -465,9 +487,8 @@ document.addEventListener("DOMContentLoaded", () => {
         formDiv.style.display = "none";
     });
 
-    // When user clicks ADD MORE ADDRESS → show billing form
+    // ADD MORE ADDRESS → empty form
     addMoreBtn.addEventListener("click", () => {
-        // 🔹 clear all input fields so form is empty
         document.getElementById("fname").value = "";
         document.getElementById("lname").value = "";
         document.getElementById("house").value = "";
@@ -476,21 +497,17 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("email").value = "";
         document.getElementById("phone").value = "";
 
-        // 🔹 switch to form view
         selectionDiv.style.display = "none";
         formDiv.style.display = "block";
         checkoutDiv.style.display = "none";
     });
 
-    // When user clicks EDIT (pencil) → show form filled with data
+    // EDIT (pencil) → pre-fill form
     editBtns.forEach(btn => {
         btn.addEventListener("click", (e) => {
             e.preventDefault();
-
-            // find parent card
             const card = btn.closest(".address-card");
 
-            // grab info from card
             document.getElementById("fname").value = card.querySelector(".address-card-name").textContent.split(" ")[0] || "";
             document.getElementById("lname").value = card.querySelector(".address-card-name").textContent.split(" ")[1] || "";
             document.getElementById("house").value = card.querySelector(".address-card-address").textContent.split(",")[0] || "";
@@ -499,7 +516,6 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("email").value = card.querySelector(".address-card-email").textContent || "";
             document.getElementById("phone").value = card.querySelector(".address-card-phone").textContent || "";
 
-            // switch to form
             selectionDiv.style.display = "none";
             formDiv.style.display = "block";
             checkoutDiv.style.display = "none";
@@ -514,16 +530,31 @@ document.addEventListener("DOMContentLoaded", () => {
         checkoutDiv.style.display = "none";
     });
 
-    // SAVE → (for now, just go back to checkout)
+    // SAVE → for now, just return to checkout
     saveBtn.addEventListener("click", (e) => {
         e.preventDefault();
         formDiv.style.display = "none";
         selectionDiv.style.display = "none";
         checkoutDiv.style.display = "block";
+    });
 
-        // later: also update address in checkout card dynamically
+    // ✅ SELECT BUTTON → update checkout card with chosen address
+    selectBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const card = btn.closest(".address-card");
+
+            checkoutName.textContent = card.querySelector(".address-card-name").textContent;
+            checkoutAddress.textContent = card.querySelector(".address-card-address").textContent;
+            checkoutEmail.textContent = card.querySelector(".address-card-email").textContent;
+            checkoutPhone.textContent = card.querySelector(".address-card-phone").textContent;
+
+            selectionDiv.style.display = "none";
+            checkoutDiv.style.display = "block";
+            formDiv.style.display = "none";
+        });
     });
 });
+
 </script>
 
 
