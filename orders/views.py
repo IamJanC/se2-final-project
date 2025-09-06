@@ -61,6 +61,9 @@ def checkout_view(request):
                     street=street,
                     landmark=landmark,
                 )
+                
+                # ✅ Auto-select this new address
+                selected_address_id = address_obj.id
             else:
                 messages.error(request, "Please provide your name and phone number.")
                 return redirect("orders:checkout_view")

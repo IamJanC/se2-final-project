@@ -81,40 +81,36 @@
                         <div class="account-toggle">
                             {% if user.is_authenticated %}
                                 <!-- ✅ Profile Section for Logged-In Users -->
-                                <div id="profileSection" style="position: relative;">
+                                <div id="profileSection">
                                     <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile Pic" />
-                                    <span>{{ user.username }}</span>
-                                    <span style="font-size: 12px;">▼</span>
+                                    <span class="username">{{ user.username }}</span>
+                                    <span class="dropdown-arrow">▼</span>
 
-
-                                    <div style="position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ccc; display: none; min-width: 120px;" id="logoutDropdown">
+                                    <div id="logoutDropdown" class="dropdown-menu">
                                         <!-- ✅ My Orders Dropdown Menu -->
-                                        <form method="POST" action="{% url 'orders:my_orders' %}" style="margin: 0;">
+                                        <form method="POST" action="{% url 'orders:my_orders' %}">
                                             {% csrf_token %}
-                                            <button type="submit"
-                                                style="display: block; padding: 10px 16px; color: #333; text-decoration: none; font-weight: 500; background: none; border: none; width: 100%; text-align: left; cursor: pointer;">
-                                                📦 My Orders
-                                            </button>
+                                            <button type="submit" class="dropdown-btn">📦 My Orders</button>
                                         </form>
                                         
                                         <!-- ✅ Logout Dropdown Menu -->
-                                        <form method="POST" action="{% url 'logout' %}" style="margin: 0;">
+                                        <form method="POST" action="{% url 'logout' %}">
                                             {% csrf_token %}
-                                            <button type="submit"
-                                                style="display: block; padding: 10px 16px; color: #333; text-decoration: none; font-weight: 500; background: none; border: none; width: 100%; text-align: left; cursor: pointer;">
-                                                🚪 Logout
-                                            </button>
+                                            <button type="submit" class="dropdown-btn">🚪 Logout</button>
                                         </form>
                                     </div>
                                 </div>
                             {% else %}
-                                <!-- 🚪 Login/Signup Button (shown when not authenticated) -->
+                                <!-- 🚪 Login/Signup Button -->
                                 <button class="nav-btn" id="signInBtn">
                                     <h1>Login/Sign up</h1>
                                 </button>
                             {% endif %}
                         </div>
                     </div>
+
+
+
 
                 </div>
             </div>

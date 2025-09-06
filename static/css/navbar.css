@@ -267,14 +267,19 @@ nav {
 }
 
 #profileSection {
-  display: flex;
-  gap: 10px;
+    display: flex;
+    gap: 10px;
+
+   position: relative;
+    cursor: pointer;
 }
 
 #profileSection img {
     width: 26.4%;
     height: 100%;
     border-radius: 50%;
+    border-radius: 50%;
+    vertical-align: middle;
 }
 
 #profileSection span{
@@ -283,7 +288,49 @@ nav {
     font-size: 18px;
 }
 
+.username {
+    margin-left: 8px;
+    font-weight: 500;
+}
 
+.dropdown-arrow {
+    font-size: 12px;
+    margin-left: 4px;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    display: none;
+    min-width: 120px;
+    z-index: 100;
+}
+
+.dropdown-btn {
+    display: block;
+    padding: 10px 16px;
+    color: #333;
+    font-weight: 500;
+    text-align: left;
+    background: none;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+}
+
+.dropdown-btn:hover {
+    background-color: #f0f0f0;
+}
+
+/* Login Button */
+.nav-btn h1 {
+    margin: 0;
+    font-size: 16px;
+}
 
 
 /* !! SECONDARY NAVBAR !! */
