@@ -39,8 +39,11 @@ def checkout_view(request):
         if selected_address_id:
             address_obj = get_object_or_404(UserAddress, id=selected_address_id, user=request.user)
         else:
-            # Otherwise, use data from the new address form
-            full_name = request.POST.get("full_name")
+            # --- Case 2: User submitted a new address ---
+            fname = request.POST.get("fname")
+            lname = request.POST.get("lname")
+            full_name = f"{fname} {lname}".strip()  # combine into full name
+            
             phone = request.POST.get("phone")
             email = request.POST.get("email")
             house = request.POST.get("house")
@@ -58,6 +61,9 @@ def checkout_view(request):
                     street=street,
                     landmark=landmark,
                 )
+            else:
+                messages.error(request, "Please provide your name and phone number.")
+                return redirect("orders:checkout_view")
 
 
         # Check stock availability BEFORE creating the order
