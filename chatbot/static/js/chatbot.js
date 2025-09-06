@@ -61,19 +61,10 @@ function createOptionButton(option) {
   btn.className = 'option-button';
   btn.innerText = option.text;
 
-  // Disable complaint option if not logged in
-  if (option.next === 'complaintStart' && !isUserLoggedIn) {
-    btn.disabled = true;
-    btn.title = "You must be logged in to file a complaint.";
-    btn.style.cursor = 'not-allowed';
-  }
-
   btn.onclick = () => {
-    // If complaintStart clicked but user not logged in, show message instead of complaint form
     if (option.next === 'complaintStart' && !isUserLoggedIn) {
-      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      addMessage("bot", "⚠️ Please log in to file a complaint.", time);
-      saveChatToSession("bot", "Please log in to file a complaint.", time);
+      // Redirect to your login modal trigger URL
+      window.location.href = "http://127.0.0.1:8000/?show_login=1";
       return;
     }
     handleUserChoice(option);
@@ -82,17 +73,38 @@ function createOptionButton(option) {
   return btn;
 }
 
+// Function to open login modal
+function openLoginModal() {
+  const modal = document.getElementById("loginModal");
+  if (modal) {
+    modal.style.display = "flex"; // Show modal
+  } else {
+    alert("Please log in to file a complaint."); // fallback
+  }
+}
+
 function showComplaintInput() {
   questionOptions.innerHTML = '';
 
   const instruction = document.createElement('div');
   instruction.className = 'bot-text-input';
-  instruction.innerText = "Please type your complaint below:";
+  instruction.innerText = "Please type your complaint:";
 
   const input = document.createElement('textarea');
   input.className = 'complaint-input';
   input.rows = 3;
   input.placeholder = "Type your complaint...";
+  input.maxLength = 500; // 🚨 Hard limit in textarea itself
+
+  const charCount = document.createElement('div');
+  charCount.className = 'char-count';
+  charCount.style.fontSize = '12px';
+  charCount.style.marginTop = '5px';
+  charCount.innerText = "0 / 500";
+
+  input.addEventListener('input', () => {
+    charCount.innerText = `${input.value.length} / 500`;
+  });
 
   const buttonContainer = document.createElement('div');
   buttonContainer.style.display = 'flex';
@@ -109,7 +121,14 @@ function showComplaintInput() {
 
   submitBtn.onclick = async () => {
     const complaint = input.value.trim();
-    if (complaint === '') return;
+    if (complaint.length < 1) {
+      alert("⚠️ Complaint cannot be empty.");
+      return;
+    }
+    if (complaint.length > 500) {
+      alert("⚠️ Complaint cannot exceed 500 characters.");
+      return;
+    }
 
     submitBtn.disabled = true;
     backBtn.disabled = true;
@@ -145,7 +164,7 @@ function showComplaintInput() {
   buttonContainer.appendChild(backBtn);
 
   questionOptions.appendChild(instruction);
-  questionOptions.appendChild(input);
+  questionOptions.appendChild(input); 
   questionOptions.appendChild(buttonContainer);
 }
 

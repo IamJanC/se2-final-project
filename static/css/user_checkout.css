@@ -1,0 +1,691 @@
+/* === vvv GLOBAL CSS DO NOT TOUCH vvv === */
+/* Logo Font Temporary */
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+/* Search (Don't Touch) */
+@use postcss-color-function;
+@use postcss-nested;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+/* Reset Everything */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+    background: #f8f8f8;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+/* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
+
+
+main {
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 auto;      /* Centers it */
+    padding: 0 2rem;     /* Adds spacing on the left & right */
+}
+
+.main-content{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; 
+}
+
+
+/*LEFT COLUMN */
+.address-section-left{
+    flex: 1;      
+}
+
+/* General Form Styling */
+/* Ensure label is always above input */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem; /* space between fields */
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+}
+
+/* Apply the same styling to inputs and textareas */
+.form-group input,
+.form-group textarea {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 8px 8px 8px 15px;   
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-left: 2px;
+    box-sizing: border-box; /* ensures padding doesn't mess up width */
+}
+
+/* Input height (single line) */
+.form-group input {
+    height: 50px;
+    line-height: 40px;
+}
+
+/* Optional: Disabled fields styling */
+.form-group input:disabled {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+/* Textarea height (multi-line) */
+.form-group textarea {
+    height: 120px;        /* default taller box */
+    resize: vertical;     /* allow vertical resizing only */
+    line-height: 1.5;     /* normal multiline spacing */
+}
+
+/* Label styling */
+label {
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-left: 2px;
+
+}
+
+/* Placeholder styling (works for both) */
+input::placeholder,
+textarea::placeholder {
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-left: 2px;
+    color: #888;
+}
+
+.address-forms{
+    flex: 1;       
+}
+
+.address-forms-title h3{
+    font-size: 1.5rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.address-forms-title h4{
+    font-size: 1.5rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.address-forms-title{
+    margin: 20px 0px 5px 25px;
+}
+
+.name-form-section{
+    display: flex;
+    gap: 1rem;
+    margin: 20px 0px 5px 25px;
+}
+
+.name-form-section .form-group {
+    flex: 1; /* each child takes equal width */
+}
+
+.address-form-section-fillable {
+  display: flex;
+  flex-wrap: wrap;   
+  gap: 1rem;        
+  margin: 20px 0px 5px 25px;
+}
+
+.address-form-section-fillable .form-group {
+  flex: 1;  
+}
+
+.address-form-section-unfillable{
+    display: flex;
+    flex-wrap: wrap;   
+    gap: 1rem;        
+    margin: 20px 0px 5px 25px;
+}
+
+.address-form-section-unfillable .form-group {
+    flex: 1;  
+}
+
+.landmark-form-section{
+    margin: 20px 0px 5px 25px;
+}
+
+#landmark {
+  width: 100%;      /* full width of parent */
+  height: 120px;    /* make it taller */
+  padding: 10px;    /* breathing room */
+  font-size: 16px;  /* adjust text size */
+  resize: none; /* user can stretch vertically (set to none if you don’t want resizing) */
+}
+
+
+.contact-form-section{
+    display: flex;
+    flex-wrap: wrap;   /* <-- lets items go to next line */
+    gap: 1rem;         /* spacing between inputs */
+    margin: 20px 0px 5px 25px;
+    justify-content: space-around;
+}
+
+.contact-form-section .form-group {
+    flex: 1; /* each child takes equal width */
+}
+
+.form-buttons {
+    display: flex;
+    gap: 1rem;                 /* spacing between buttons */
+    margin: 8px 0px 10px 26px;
+    padding: 12px 0px;
+}
+
+.btn-save-address-form, .btn-cancel-address-form{
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.btn-save-address-form{
+    background: #5c8b25; 
+}
+
+.btn-save-address-form:hover{
+    background: #325a00;
+}
+
+.btn-cancel-address-form {
+    background: #e0e0e0;   
+    color: #333;           /* dark text */
+}
+.btn-cancel-address-form:hover {
+    background: #c0c0c0;  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Address Selection */
+.delivery-address{
+    margin: 20px 0px 5px 0px;
+}
+
+.address-selection-title {
+    display: flex;
+    align-items: center;  /* vertical alignment */
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.address-selection-title h3{
+    font-size: 1.3rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.address-selection-title .location-icon-address-selection {
+    width: 1.3rem;   /* match h3 font-size */
+    height: 1.3rem;
+    flex-shrink: 0;  /* don’t let it shrink */
+    color: #000;     /* inherits from text (or override) */
+}
+
+.address-card{
+    background-color: rgba(180, 173, 173, 0.144);
+    padding: 20px 25px 15px 35px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.top-section{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.label-top {
+  display: flex;             /* put SVG + text side by side */
+  align-items: center;       /* vertically center */
+  gap: 8px;                  /* space between SVG and text */
+}
+
+.modifier-icon-btn svg {
+  width: auto;
+  height: 23px;
+}
+
+
+.button-modifier-section{
+    display: flex;
+    gap: 10px;    
+}
+
+.modifier-icon-btn {
+  background: none;        /* no background */
+  border: none;            /* remove border */
+  padding: 6px;            /* small clickable area */
+  cursor: pointer;         /* pointer on hover */
+  display: flex;           /* center SVG */
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;      /* optional: rounded hover effect */
+  color: #333;             /* icon color */
+  transition: background 0.2s ease;
+}
+
+.modifier-icon-btn:hover {
+    cursor: pointer;      /* gives the hand cursor */
+    transform: scale(1.2); /* optional: slightly enlarges */
+    transition: all 0.1s ease-out; /* smooth effect */
+}
+
+.upper-address-label-section{
+    margin-bottom: 10px;
+}
+
+.address-label{
+    font-size: 16px;
+    font-weight: bold;
+    color: white;               /* text color */
+    padding: 2px 8px;           /* spacing inside box */
+    border-radius: 4px;         /* rounded corners */
+    display: inline-block;      /* makes padding & bg work */
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 10px;
+
+    background-color: #5c8b25;  /* green */
+    color: white;  
+}
+
+.address-card-name{
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.address-card-address, 
+.address-card-landmark,
+.address-card-email,
+.address-card-phone {
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+} 
+
+.middle-address-section{
+    margin-bottom: 15px;
+}
+
+.lower-address-contact-section{
+    margin-bottom: 10px;
+}
+
+.select-address-buttons{
+    padding: 12px 0px;
+    display: flex;
+    gap: 1rem;             
+}
+.select-address-btn{
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.select-address-btn{
+    background: #5c8b25; 
+}
+
+.select-address-btn:hover{
+    background: #325a00;
+}
+
+.add-more-address-section {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center; /* centers button horizontally */
+}
+
+.add-more-address-btn {
+    display: flex;
+    align-items: center;  /* vertically center icon + text */
+    gap: 0.5rem;          /* spacing between icon and text */
+    background: #f8f9fa;
+    border: 1px solid #ccc;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    transition: background 0.2s;
+
+    font-size: 16px;
+    margin-bottom: 1rem;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.add-more-address-btn:hover {
+  background: #cfcfcf;
+}
+
+.add-more-address-btn svg {
+  width: 25px;
+  height: 25px;
+}
+
+
+
+
+
+
+
+/* === Main === */
+
+.checkout-main{
+    margin: 20px 0px 5px 0px;
+}
+
+.checkout-main-product-section{
+    margin-bottom: 70px;
+}
+
+
+/* Address section main */
+.checkout-address-selection-title {
+    display: flex;
+    align-items: center;  /* vertical alignment */
+    gap: 5px;             /* spacing between icon and text */
+    margin-bottom: 20px;
+}
+
+.checkout-address-selection-title .location-icon {
+    width: 1.3rem;   /* match h3 font-size */
+    height: 1.3rem;
+    flex-shrink: 0;  /* don’t let it shrink */
+    color: #000;     /* inherits from text (or override) */
+}
+
+.checkout-address-selection-title h3 {
+    font-size: 1.3rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+
+.checkout-address-card{
+    background-color: rgba(180, 173, 173, 0.144);
+    padding: 20px 25px 15px 35px;
+    border-radius: 15px;
+    margin-bottom: 60px;
+}
+
+
+.checkout-top-section{
+    display: flex;
+    justify-content: space-between;
+}
+
+.change-btn {
+    background: none;
+    border: none;
+    color: #007BFF;        /* blue text */
+    text-decoration: underline;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0;            /* removes button padding */
+
+    font-size: 14px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.change-btn:hover {
+    color: #0056b3;        /* darker on hover */
+}
+
+/* Table */
+
+.checkout-product-title h3{
+    font-size: 1.3rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+.checkout-product-header,
+.checkout-product-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr; /* product, price, qty, subtotal */
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.checkout-product-header {
+    font-weight: 600;
+    background: #f8f8f8;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.product-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.product-col{
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.product-name, .price-col, .qty-col, .subtotal-col{
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+
+
+
+
+
+
+
+/*RIGHT COLUMN */
+.order-information-right{
+    flex: 0 0 350px;   /* do not grow, fixed width 300px */
+    padding: 24px;
+}
+
+.payment-method h3{
+    margin-bottom: 10px;
+    font-size: 18;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.payment-method label {
+    display: inline-block;
+    padding: 7px 0px 7px 0px;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.disabled-option {
+    color: #8f8f8f;
+}
+
+.summary-row{
+    display: flex;
+    justify-content: space-between;
+    margin: 0.4rem 0;
+    padding: 6px 0px 0px;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+#items-total-group{
+    margin-top: 20px;
+}
+
+
+#divider1{
+    border-bottom: 1px solid #d5d5d4;
+    margin-bottom: 10px;
+}
+
+.checkout-btn-container{
+    padding: 12px 0px;
+}
+.checkout-btn {
+    display: block;            /* make it a block element so it can expand */
+    width: 100%;               /* expand to parent container */
+    padding: 12px 20px;        /* some padding for height and spacing */
+    background: #5c8b25; 
+    color: #fff;               /* white text */
+    border: none;              /* remove default border */
+    cursor: pointer;           /* pointer cursor */
+    text-align: center;        /* center text */
+    transition: background-color 0.3s ease;
+
+
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+
+.checkout-btn:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+}
+
+

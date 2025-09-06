@@ -6,7 +6,12 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['name', 'price', 'description', 'stock', 'image_url', 'category']
-
+    
+class ProductEditForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'price', 'description', 'stock', 'category']
+        
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category

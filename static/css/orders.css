@@ -1,0 +1,484 @@
+
+/* === vvv GLOBAL CSS DO NOT TOUCH vvv === */
+/* Logo Font Temporary */
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+/* Search (Don't Touch) */
+@use postcss-color-function;
+@use postcss-nested;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+/* Reset Everything */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+    background: #f8f8f8;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+/* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
+
+
+
+main {
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 auto;      /* Centers it */
+    padding: 0 2rem;     /* Adds spacing on the left & right */
+}
+
+.main-content{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; 
+}
+
+.user-tab-left {
+    
+}
+
+.order-history-right {
+    flex: 3; /* bigger portion */
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+/* === Left Side === */
+.user-tab-left {
+    flex: 1; /* small portion */
+    max-width: 500px; /* optional, to keep it from stretching too much */
+    padding: 1rem;
+    border-radius: 8px;
+    padding: 1.5rem;
+    font-family: "Lexend", sans-serif;
+    padding-top: 40px;
+}
+
+/* Profile section */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #5f862f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+
+    font-size: 1.2rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.username {
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.edit-profile {
+    color: #9a9b9a;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+
+    font-size: 0.9rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* Navigation links */
+.user-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: #f9f9f8;
+}
+
+.user-nav svg {
+    width: 25px;
+    height: 25px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #333;
+
+    padding-bottom: 0.3rem;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+
+    font-size: 1rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    background: none;   /* remove background */
+    outline: none;      /* remove focus outline */
+}
+
+.nav-link:hover {
+    color: #5f862f;
+}
+
+.nav-link.active {
+    border-left: 3px solid #5f862f;
+
+    font-size: 1rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    padding-left: 10px;
+}
+
+.nav-link:focus,
+.nav-link:active {
+    background: none;
+    outline: none;
+}
+
+
+
+
+
+/* === Right Side === */
+
+/* Tabs Navigation */
+.order-tabs {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid #d5d5d4;
+    margin-bottom: 10px;
+}
+
+.order-tabs .tab {
+    background: none;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease-in-out;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.order-tabs .tab:hover {
+    color: #5f862f; /* greenish accent */
+}
+
+.order-tabs .tab.active {
+    border-bottom: 3px solid #5f862f;
+    font-weight: 400;
+    color: #5f862f; 
+}
+
+
+
+/* Orders Page Search Bar */
+.orders-search-bar {
+    width: 100%; /* Makes the form wider */
+    max-width: none; /* Limits width on large screens */
+    margin: 1rem 0; /* Spacing above/below */
+    flex-grow: 1; /* Allows it to take space */
+}
+
+.orders-search__input {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 24px 12px 60px; /* top, right, bottom, left */
+    font-size: 14px;
+    line-height: 18px;
+    color: #575756;
+    background-color: transparent;
+
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 25px center;
+
+    border-radius: 0px;
+    border: 1px solid #575756;
+    transition: all 250ms ease-in-out;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.orders-search__input::placeholder {
+    color: rgba(87, 87, 86, 0.8);
+    letter-spacing: 1.5px;
+
+
+    font-size: 14px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.orders-search__input:hover,
+.orders-search__input:focus {
+    padding: 12px 14px 12px 40px; /* top, right, bottom, left */
+    outline: 0;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #575756;
+    border-radius: 0;
+    background-position: 13px center;
+}
+
+
+
+/* Orders Content */
+
+.hidden {
+    display: none;
+}
+
+
+/* === ORDER CARDS === */
+
+.order-card{
+    background: #fff;
+    margin: 50px 0px 25px 0px; 
+}
+
+.order-card-top-section{
+    display: flex;
+    justify-content: space-between;
+    padding: 25px 15px 0px 15px;
+}
+
+.order-card-top-section h3{
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.order-card-order-status{
+    font-size: 16px;
+    font-weight: bold;
+    color: white;               /* text color */
+    padding: 2px 8px;           /* spacing inside box */
+    border-radius: 4px;         /* rounded corners */
+    display: inline-block;      /* makes padding & bg work */
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 10px;
+
+    background-color: #5c8b25;  /* green */
+    color: white;  
+}
+
+.order-card-middle-section{
+    padding: 0px 15px 0px 15px;
+}
+
+.order-card-middle-section h3{
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.order-card-total-price {
+    display: flex;
+    margin-top: 25px;
+    padding: 20px 15px 0px 15px;
+}
+
+.order-card-product-price{
+    font-size: 20px;
+    margin-bottom: 0.3rem;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.order-card-item-list{
+    padding: 10px 15px;
+}
+
+/* Table */
+.orders-product-header,
+.orders-product-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr; /* product, price, qty, subtotal */
+    align-items: center;
+    padding: 12px;
+    
+}
+
+.orders-product-row{
+    border-bottom: 1px solid #ddd;
+}
+
+.orders-product-header {
+    font-weight: 600;
+     background: #f8f8f8;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.product-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.product-col{
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.product-name, .price-col, .qty-col, .subtotal-col{
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.show-more-products-section{
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center; /* centers button horizontally */
+}
+
+.show-more-products-btn{
+    display: flex;
+    align-items: center;  /* vertically center icon + text */
+    gap: 0.5rem;          /* spacing between icon and text */
+    background: #f8f9fa;
+    border: 1px solid #ccc;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    transition: background 0.2s;
+
+    font-size: 16px;
+    margin-bottom: 1rem;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.show-more-products-btn:hover {
+  background: #cfcfcf;
+}
+
+.show-more-products-btn svg {
+  width: 25px;
+  height: 25px;
+}
+
+
+
+/* Order Cards Buttons */
+.order-card-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Wrap if too many buttons */
+    gap: 0.5rem;
+    margin-top: 1rem;
+    justify-content: end;
+
+    padding: 10px 25px 25px 0px;
+}
+
+.order-btn {
+    display: inline-flex;      /* shrink to fit content but still flexible */
+    justify-content: center;   /* center the text inside */
+    align-items: center;
+    padding: 10px 18px;        /* balanced padding */
+    background: #5c8b25; 
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-weight: 300;
+}
+
+
+.order-received, .contact-seller, .buy-again {
+    background: #5c8b25; 
+}
+
+.order-received:hover, .contact-seller:hover, .buy-again:hover {
+    background: #325a00;
+}
+
+.cancel-order, .request-refund, .show-details{
+    background: #e0e0e0;   
+    color: #333;           /* dark text */
+}
+
+.cancel-order:hover, .request-refund:hover, .show-details:hover{
+    background: #c0c0c0;  
+}
+

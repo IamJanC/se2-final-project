@@ -1,0 +1,524 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/user_checkout.css' %}">
+
+<main>
+
+    <section class="main-content">
+
+
+        <!-- === LEFT: Address Section === -->
+        <div class="address-section-left">
+            
+            <form method ="POST">
+                {% csrf_token %}
+                <input type="hidden" name="address_id" id="selectedAddressId" value="{{ addresses.first.id }}">
+
+                <div class="address-forms">
+                    
+                    <div class="address-forms-title">
+                        <h3>Billing Information</h3>
+                    </div>
+                    
+
+                    <div class="name-form-section">
+                        <div class="form-group">
+                            <label for="fname">First Name</label>
+                            <input type="text" id="fname" name="fname" placeholder="Your first name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lname">Last Name</label>
+                            <input type="text" id="lname" name="lname" placeholder="Your last name" required>
+                        </div>
+                    </div>
+
+                    <div class="address-form-section-fillable">
+                        <div class="form-group">
+                            <label for="house">House No./Building/Unit:</label>
+                            <input type="text" id="house" name="house" placeholder="Blk 4 Lot 5/Unit 2B/Sunshine Bldg">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="street">Street Name:</label>
+                            <input type="text" id="street" name="street" placeholder="Dahlia Street">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lname">Label</label>
+                            <input type="text" id="lname" name="lname" placeholder="Home/Workplace/Friend's House">
+                        </div>
+                    </div>
+
+                    <div class="address-form-section-unfillable">
+                        <div class="form-group">
+                            <label for="barangay">Barangay:</label>
+                            <input type="text" id="barangay" value="Dalig" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city">City:</label>
+                            <input type="text" id="city" value="Antipolo" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="province">Province:</label>
+                            <input type="text" id="province" value="Rizal" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="zipcode">ZIP Code:</label>
+                            <input type="text" id="zipcode" value="1870" disabled>
+                        </div>
+                    </div>
+
+                    <div class="landmark-form-section">
+                        <div class="form-group">
+                            <label for="landmark">Landmark:</label>
+                            <textarea id="landmark" name="landmark" 
+                                placeholder="Nearby reference point to help locate your address (e.g. City Hall, Mall, Church)"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="contact-form-section">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="text" id="email" name="email" placeholder="Email Address">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone:</label>
+                            <input type="text" id="phone" name="phone" placeholder="Phone Number">
+                        </div>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit" class="btn-save-address-form">Save</button>
+                        <button type="button" class="btn-cancel-address-form">Cancel</button>
+                    </div>
+
+
+                </div>
+            </form>
+
+
+            <div class="address-selection">
+        
+                <div class="delivery-address">
+
+                    <div class="address-selection-title">
+                        <svg version="1.0" class="location-icon-address-selection" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#5d8b24" d="M32,0C18.746,0,8,10.746,8,24c0,5.219,1.711,10.008,4.555,13.93c0.051,0.094,0.059,0.199,0.117,0.289l16,24 C29.414,63.332,30.664,64,32,64s2.586-0.668,3.328-1.781l16-24c0.059-0.09,0.066-0.195,0.117-0.289C54.289,34.008,56,29.219,56,24 C56,10.746,45.254,0,32,0z M32,32c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z"></path> </g></svg>
+                        <h3>Delivery Address</h3>
+                    </div>  
+
+                    <!-- Back Button -->
+                    <div class="back-button-section" style="margin-bottom: 1rem;">
+                        <button type="button" class="back-to-checkout-btn">← Back</button>
+                    </div>
+
+                    {% if addresses %}
+                        {% for addr in addresses%}
+                        <div class="address-card">
+
+                            <div class="top-section">
+                                <!-- Label -->
+                                <div class="label-top">
+                                    <span class="address-label">{{ addr.label|default:"Address" }}</span>
+                                </div>
+
+                                <div class="button-modifier-section">
+                                    <button class="modifier-icon-btn" aria-label="Edit">
+                                        <!-- Example: pencil/edit icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" 
+                                            width="20" height="20" viewBox="0 0 24 24" fill="none" 
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 20h9" />
+                                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                                        </svg>
+                                    </button>
+
+                                    <button class="modifier-icon-btn" aria-label="Edit">
+                                        <!-- Example: Trash Icon    -->
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.5001 6H3.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M9.5 11L10 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M14.5 11L14 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="#000000" stroke-width="1.5"></path> <path d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="upper-address-label-section">
+
+                                <!-- Name -->
+                                <p class="address-card-name">{{ addr.full_name }}</p>
+                            </div>
+                            <div class="middle-address-section">
+                                <!-- Full address (combined) -->
+                                <p class="address-card-address">
+                                    {{ addr.house }}, {{ addr.street }}, Dalig, Antipolo, Rizal 1870
+                                </p>
+
+                                <!-- Landmark (with ellipsis if too long) -->
+                                <p class="address-card-landmark">
+                                     Landmark: {{ addr.landmark }}
+                                </p>
+                            </div>
+                            <div class="lower-address-contact-section">
+                                <!-- Contact -->
+                                <p class="address-card-email">{{ addr.email }}</p>
+                                <p class="address-card-phone">{{ addr.phone }}</p>
+                            </div>
+                            
+                        
+                            <div class="select-address-buttons">
+                                <button type="button" class="select-address-btn" data-id="{{ addr.id }}">Select</button>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    {% else %}
+                        <p>No saved addresses yet. Please add a new address.</p>
+                    {% endif %}
+
+                    <div class="add-more-address-section">
+                        <button class="add-more-address-btn">
+                            <!-- SVG plus icon -->
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z" fill="#000000"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z" fill="#000000"></path> </g></svg>
+                            <span>Add more address</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkout-main">
+                
+                <div class="checkout-main-address-section">
+                   <div class="checkout-address-selection-title">
+                        <svg version="1.0" class="location-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#5d8b24" d="M32,0C18.746,0,8,10.746,8,24c0,5.219,1.711,10.008,4.555,13.93c0.051,0.094,0.059,0.199,0.117,0.289l16,24 C29.414,63.332,30.664,64,32,64s2.586-0.668,3.328-1.781l16-24c0.059-0.09,0.066-0.195,0.117-0.289C54.289,34.008,56,29.219,56,24 C56,10.746,45.254,0,32,0z M32,32c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z"></path> </g></svg>
+                        <h3>Delivery Address</h3>
+                    </div>
+
+                    <!-- Checkout Address Card -->
+                    <div class="checkout-address-card">
+                        {% if addresses %}
+                            {% with addr=addresses.first %}
+                            <div class="checkout-top-section">
+                                <div class="label-top">
+                                    <span class="address-label">{{ addr.label|default:"Address" }}</span>
+                                </div>
+                                <div class="change-address">
+                                    <button class="change-btn">Change</button>
+                                </div>
+                            </div>
+                            <div class="upper-address-label-section">
+                                <p class="address-card-name">{{ addr.full_name }}</p>
+                            </div>
+                            <div class="middle-address-section">
+                                <p class="address-card-address">
+                                    {{ addr.house }}, {{ addr.street }}, Dalig, Antipolo, Rizal 1870
+                                </p>
+                                <p class="address-card-landmark">Landmark: {{ addr.landmark }}</p>
+                            </div>
+                            <div class="lower-address-contact-section">
+                                <p class="address-card-email">{{ addr.email }}</p>
+                                <p class="address-card-phone">{{ addr.phone }}</p>
+                            </div>
+                            {% endwith %}
+                        {% else %}
+                            <p>No saved address. Please add one.</p>
+                        {% endif %}
+
+                        <div class="add-more-address-section">
+                            <button class="add-more-address-btn">
+                                <!-- SVG plus icon -->
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z" fill="#000000"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z" fill="#000000"></path> </g></svg>
+                                <span>Add address</span>
+                            </button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- Product Summary Section -->
+                <div class="checkout-main-product-section">
+                    <div class="checkout-product-title">
+                        <h3>Order Summary</h3>
+                    </div>
+
+                    <!-- Header row -->
+                    <div class="checkout-product-header">
+                        <div class="product-col">Product</div>
+                        <div class="price-col">Price</div>
+                        <div class="qty-col">Quantity</div>
+                        <div class="subtotal-col">Subtotal</div>
+                    </div>
+
+                    <!-- Product row -->
+
+                    {% for item in cart_items %}
+                    <div class="checkout-product-row">
+                        <div class="product-col product-info">
+                            <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="product-img">
+                            <span class="product-name">{{ item.product.name }}</span>
+                        </div>
+                        <div class="price-col">₱ {{ item.product.price|floatformat:2 }}</div>
+                        <div class="qty-col">x{{ item.quantity }}</div>
+                        <div class="subtotal-col">₱ {{ item.subtotal|floatformat:2 }}</div>
+                    </div>
+                    {% empty %}
+                    <p>No items selected.</p>
+                    {% endfor %}
+                
+                </div>
+
+            </div>
+
+        </div>
+
+        <!--  === RIGHT: Order Summary ===  -->
+        <div class="order-information-right">
+            <!-- Payment Methods Section -->
+            <div class="payment-method">
+                <h3>Choose your payment method</h3>
+                
+                <label>
+                    <input type="radio" name="payment" value="cod" checked>
+                    Cash on Delivery
+                </label>
+                <br>
+    
+                <label class="disabled-option">
+                    <input type="radio" name="payment" value="gcash" disabled>
+                    GCash (Unavailable)
+                </label>
+                <br>
+                
+                <label class="disabled-option">
+                    <input type="radio" name="payment" value="card" disabled>
+                    Credit/Debit Card (Unavailable)
+                </label>
+            </div>
+
+
+            <div class="summary-row" id="items-total-group">
+                <span>Item(s) Total</span>
+                <span>PHP 3,605.09</span>
+            </div>
+
+            <div class="summary-row" id="shop-discount-group">
+                <span>Shop Discount</span>
+                <span>PHP 823.66</span>
+            </div>
+            
+            <div class="summary-row" class="divider" id="divider1">
+
+            </div>
+
+            <div class="summary-row" id="subtotal-group">
+                <span>Subtotal</span>
+                <span>2,781.43</span> 
+            </div>
+            <div class="summary-row" id="shipping-fee-group">
+                <span>Shipping Fee</span>
+                <span>PHP 1,665.46</span>
+            </div>
+
+            <div class="summary-row" class="divider">
+                
+            </div>
+
+            <div class="summary-row total" id="final-total-group">
+                <span>Total ({{ cart_items.count }} items)</span>
+                <span><strong>PHP {{ total|floatformat:2 }}</strong></span>
+            </div>
+
+
+            <!-- Checkout Button -->
+            <div class="checkout-btn-container">
+                <button class="checkout-btn">Place Order</button>
+            </div>
+        </div>
+
+
+    </section>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const formDiv = document.querySelector(".address-forms");
+    const selectionDiv = document.querySelector(".address-selection");
+    const checkoutDiv = document.querySelector(".checkout-main");
+
+    // Buttons inside sections
+    const addMoreBtn = document.querySelector(".add-more-address-btn");
+    const changeBtn = document.querySelector(".change-btn");
+    const editBtns = document.querySelectorAll(".button-modifier-section .modifier-icon-btn:first-child"); // pencil icons
+    const cancelBtn = document.querySelector(".btn-cancel-address-form");
+    const saveBtn = document.querySelector(".btn-save-address-form");
+    const selectBtns = document.querySelectorAll(".select-address-btn"); // "Select" buttons
+    const backBtnSection = document.querySelector(".back-button-section");
+    const backBtn = backBtnSection.querySelector(".back-to-checkout-btn"); // "← Back" button
+    const deleteBtns = document.querySelectorAll(".button-modifier-section .modifier-icon-btn:last-child"); // trash icons
+
+
+    // Target elements in checkout card
+    const checkoutCard = document.querySelector(".checkout-address-card");
+    const checkoutName = checkoutCard.querySelector(".address-card-name");
+    const checkoutAddress = checkoutCard.querySelector(".address-card-address");
+    const checkoutEmail = checkoutCard.querySelector(".address-card-email");
+    const checkoutPhone = checkoutCard.querySelector(".address-card-phone");
+
+    // Default state → checkout page
+    formDiv.style.display = "none";
+    selectionDiv.style.display = "none";
+    checkoutDiv.style.display = "block";
+
+    // When user clicks CHANGE → show address selection
+    changeBtn.addEventListener("click", () => {
+        checkoutDiv.style.display = "none";
+        selectionDiv.style.display = "block";
+        formDiv.style.display = "none";
+    });
+
+    // ADD MORE ADDRESS → empty form
+    addMoreBtn.addEventListener("click", () => {
+        document.getElementById("fname").value = "";
+        document.getElementById("lname").value = "";
+        document.getElementById("house").value = "";
+        document.getElementById("street").value = "";
+        document.getElementById("landmark").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("phone").value = "";
+
+        selectionDiv.style.display = "none";
+        formDiv.style.display = "block";
+        checkoutDiv.style.display = "none";
+    });
+
+    // EDIT (pencil) → pre-fill form
+    editBtns.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const card = btn.closest(".address-card");
+
+            document.getElementById("fname").value = card.querySelector(".address-card-name").textContent.split(" ")[0] || "";
+            document.getElementById("lname").value = card.querySelector(".address-card-name").textContent.split(" ")[1] || "";
+            document.getElementById("house").value = card.querySelector(".address-card-address").textContent.split(",")[0] || "";
+            document.getElementById("street").value = card.querySelector(".address-card-address").textContent.split(",")[1] || "";
+            document.getElementById("landmark").value = card.querySelector(".address-card-landmark").textContent.replace("Landmark: ", "") || "";
+            document.getElementById("email").value = card.querySelector(".address-card-email").textContent || "";
+            document.getElementById("phone").value = card.querySelector(".address-card-phone").textContent || "";
+
+            selectionDiv.style.display = "none";
+            formDiv.style.display = "block";
+            checkoutDiv.style.display = "none";
+        });
+    });
+
+    // CANCEL in form → go back to selection
+    cancelBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        formDiv.style.display = "none";
+        selectionDiv.style.display = "block";
+        checkoutDiv.style.display = "none";
+    });
+
+    // SAVE → for now, just return to checkout
+    saveBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        formDiv.style.display = "none";
+        selectionDiv.style.display = "none";
+        checkoutDiv.style.display = "block";
+
+        // After saving, show/hide back button based on whether there are saved addresses
+        updateBackButtonVisibility();
+    });
+
+    // ✅ SELECT BUTTON → update checkout card with chosen address
+    selectBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const card = btn.closest(".address-card");
+
+        // Update checkout preview card
+        checkoutName.textContent = card.querySelector(".address-card-name").textContent;
+        checkoutAddress.textContent = card.querySelector(".address-card-address").textContent;
+        checkoutEmail.textContent = card.querySelector(".address-card-email").textContent;
+        checkoutPhone.textContent = card.querySelector(".address-card-phone").textContent;
+
+        // Store selected address ID in hidden input
+        let hiddenInput = document.getElementById("selectedAddressId");
+        if (!hiddenInput) {
+            hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "address_id";
+            hiddenInput.id = "selectedAddressId";
+            document.querySelector(".checkout-main form")?.appendChild(hiddenInput);
+        }
+        hiddenInput.value = btn.dataset.id;
+
+        // Switch views
+        selectionDiv.style.display = "none";
+        checkoutDiv.style.display = "block";
+        formDiv.style.display = "none";
+        });
+    });
+
+    // DELETE (trash) → remove address card
+    deleteBtns.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const card = btn.closest(".address-card");
+            card.remove(); // remove the address card from DOM
+
+            // After deletion, update back button visibility
+            updateBackButtonVisibility();
+        });
+    });
+
+
+    backBtn.addEventListener("click", () => {
+        selectionDiv.style.display = "none";
+        checkoutDiv.style.display = "block";
+    });
+
+    // Show/hide back button based on whether there are saved addresses
+    function updateBackButtonVisibility() {
+        const hasAddress = document.querySelector(".address-card");
+        if (hasAddress) {
+            backBtnSection.style.display = "none";
+        } else {
+            backBtnSection.style.display = "block";
+        }
+    }
+
+    updateBackButtonVisibility();
+
+    if (!document.querySelector(".address-card")) {
+        backBtnSection.style.display = "block";
+    }
+
+    document.querySelectorAll(".add-more-address-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+        // Reset form
+        document.getElementById("fname").value = "";
+        document.getElementById("lname").value = "";
+        document.getElementById("house").value = "";
+        document.getElementById("street").value = "";
+        document.getElementById("landmark").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("phone").value = "";
+
+        // Show form
+        selectionDiv.style.display = "none";
+        formDiv.style.display = "block";
+        checkoutDiv.style.display = "none";
+        });
+    });
+
+
+
+});
+</script>
+
+{% endblock %}

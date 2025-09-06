@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test, login_required
 from products.models import Product, Category
-from products.forms import ProductForm, CategoryForm
+from products.forms import ProductForm, CategoryForm, ProductEditForm
 from orders.models import Order
 from orders.models import OrderItem
+from orders.models import UserAddress
 from django.db.models import Sum, Count, F, FloatField, ExpressionWrapper
 from django.db.models.functions import TruncMonth
 import json
@@ -36,6 +37,7 @@ def dashboard(request):
     products = Product.objects.all()
     categories = Category.objects.all()
     orders = Order.objects.all().order_by('-created_at')[:10]  # Show latest 10 orders
+    addresses = UserAddress.objects.all()
     
     # Summary statistics
     total_sales = OrderItem.objects.aggregate(total=Sum(F('quantity') * F('price_at_purchase'), output_field=FloatField()))['total'] or 0
@@ -75,6 +77,7 @@ def dashboard(request):
         "categories": categories,
         "recent_orders": orders,
         "orders": orders,
+        "addresses": addresses,
         "total_sales": total_sales,
         "total_orders": total_orders,
         "pending_orders": pending_orders,
@@ -90,3 +93,18 @@ def delete_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     product.delete()
     return redirect('adminpanel:dashboard')
+
+def edit_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    if request.method == "POST":
+        print("🔹 Incoming POST:", request.POST)  # <-- Debug
+        form = ProductEditForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            print("✅ Product updated:", product.name, product.stock)
+            return redirect("adminpanel:dashboard")
+        else:
+            print("❌ Form errors:", form.errors)
+
+    return redirect("adminpanel:dashboard")

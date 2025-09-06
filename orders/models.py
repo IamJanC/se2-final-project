@@ -18,7 +18,7 @@ class Order(models.Model):
     phone = models.CharField(max_length=15)        # contact number
     email = models.EmailField(blank=True)          # optional, for receipts
     address = models.TextField()                   # delivery address
-
+    
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -28,7 +28,6 @@ class Order(models.Model):
     def total(self):
         return sum(item.quantity * item.price_at_purchase for item in self.items.all())
     
-
 
 
 class OrderItem(models.Model):
@@ -44,3 +43,18 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"{self.quantity} x {self.product.name} (Order {self.order.id})"
     
+    
+    
+class UserAddress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
+    full_name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
+    email = models.EmailField(blank=True)
+    house = models.CharField(max_length=100, blank=True)
+    street = models.CharField(max_length=100, blank=True)
+    landmark = models.CharField(max_length=100, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.full_name} - {self.house}, {self.street}"
+

@@ -29,13 +29,13 @@ def get_home_context():
         'products_by_category': dict(products_by_category)
     }
 
-
-
 def home(request):
     context = get_home_context()
     context['show_login_modal'] = request.GET.get('show_login') == '1'
-    return render(request, 'main/home.html', context)
 
+    # Add categories for footer
+    context['footer_categories'] = Category.objects.all()
+    return render(request, 'main/home.html', context)
     
 def product(request):
     return render(request, 'main/product.html')
