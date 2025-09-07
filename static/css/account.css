@@ -1,3 +1,4 @@
+
 /* === vvv GLOBAL CSS DO NOT TOUCH vvv === */
 /* Logo Font Temporary */
 @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
@@ -26,3 +27,514 @@ body {
 }
 /* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
 
+
+
+main {
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 auto;      /* Centers it */
+    padding: 0 2rem;     /* Adds spacing on the left & right */
+}
+
+.main-content{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; 
+}
+
+
+.order-history-right {
+    flex: 3; /* bigger portion */
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+/* === Left Side === */
+.user-tab-left {
+    flex: 1; /* small portion */
+    max-width: 500px; /* optional, to keep it from stretching too much */
+    padding: 1rem;
+    border-radius: 8px;
+    padding: 1.5rem;
+    font-family: "Lexend", sans-serif;
+    padding-top: 40px;
+}
+
+/* Profile section */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #5f862f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+
+    font-size: 1.2rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.username {
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.edit-profile {
+    color: #9a9b9a;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+
+    font-size: 0.9rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* Navigation links */
+.user-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: #f9f9f8;
+}
+
+.user-nav svg {
+    width: 25px;
+    height: 25px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #333;
+
+    padding-bottom: 0.3rem;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+
+    font-size: 1rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    background: none;   /* remove background */
+    outline: none;      /* remove focus outline */
+}
+
+.nav-link:hover {
+    color: #5f862f;
+}
+
+.nav-link.active {
+    border-left: 3px solid #5f862f;
+
+    font-size: 1rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    padding-left: 10px;
+}
+
+.nav-link:focus,
+.nav-link:active {
+    background: none;
+    outline: none;
+}
+
+/* === Right Side === */
+/* Tabs Navigation */
+.order-tabs {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid #d5d5d4;
+    margin-bottom: 10px;
+}
+
+.order-tabs .tab {
+    background: none;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease-in-out;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.order-tabs .tab:hover {
+    color: #5f862f; /* greenish accent */
+}
+
+.order-tabs .tab.active {
+    border-bottom: 3px solid #5f862f;
+    font-weight: 400;
+    color: #5f862f; 
+}
+
+
+.section{
+  border: 1px solid #d4d5d5;
+  border-radius: 15px;
+  padding: 24px;
+  margin-bottom: 25px;
+}
+
+.public-profile h2{
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  
+}
+
+
+.profile-picture-placeholder{
+  width: 100px;
+  height: 100px;
+  margin-left: 20px;
+}
+
+
+.profile-picture-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* crops nicely */
+}
+
+input[type="file"]::file-selector-button {
+  display: inline-flex;      /* shrink to fit content but still flexible */
+  justify-content: center;   /* center the text inside */
+  align-items: center;
+  padding: 10px 18px;        /* balanced padding */
+  background: #e0e0e0;   
+  color: #333;           /* dark text */
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 3px;
+  font-size: 0.95rem;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: #c0c0c0;
+}
+
+.upload-btn {
+  display: inline-flex;      /* shrink to fit content but still flexible */
+  justify-content: center;   /* center the text inside */
+  align-items: center;
+  padding: 10px 18px;        /* balanced padding */
+  background: #e0e0e0;   
+  color: #333;           /* dark text */
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 3px;
+  font-size: 0.95rem;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+}
+
+.upload-btn:hover{
+  background: #c0c0c0;
+}
+
+#file-name {
+  font-size: 14px;
+  color: #555;
+
+  margin-bottom: 0.3rem;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.file-requirements{
+  margin-top: 10px;
+}
+
+.file-requirements p{
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  color: #999898;
+}
+
+.gender-section{
+
+  margin-top: 25px;
+
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.gender-options{
+  margin-top: 10px;
+}
+
+#female, #other{
+  margin-left: 10px;
+}
+
+.gender-options input[type="radio"] {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  margin-right: 6px;
+}
+
+.date-of-birth-section{
+  margin-top: 25px;
+
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.date-dropdowns{
+  margin-top: 5px;
+}
+
+.date-dropdowns select {
+  padding: 8px 12px;       /* space inside dropdown */
+  border: 1px solid #ccc;  /* border color */
+  border-radius: 6px;      /* rounded corners */
+  margin-right: 8px;       /* space between dropdowns */
+  cursor: pointer;         /* pointer on hover */
+}
+
+.date-dropdowns select:focus {
+  border-color: #4CAF50;   /* highlight color when selected */
+  outline: none;
+}
+
+.date-dropdowns select,
+.date-dropdowns option {
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+
+.div-account-password h2{
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* Apply font to both labels and inputs */
+.div-account-password label,
+.div-account-password input {
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* Layout: labels and inputs side by side */
+.password-field {
+  display: flex;
+  align-items: center;   /* vertically align label + input */
+  margin-bottom: 15px;
+}
+
+/* Labels */
+.password-field label {
+  min-width: 180px;      /* keeps labels aligned in a column */
+  margin-right: 10px;
+}
+
+/* Inputs with fixed width */
+.password-field input {
+  width: 300px;          /* nice compact width */
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+/* Eye icon container */
+.password-input-container {
+  align-items: center;
+  position: relative;
+  display: inline-block;
+}
+
+.password-input-container input {
+  width: 300px;
+  padding: 8px 40px 8px 12px; /* add right padding so text doesn't overlap the icon */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 12px;   /* distance from right edge */
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+}
+
+
+.eye-icon:hover {
+  color: #000;   /* darker on hover */
+}
+
+
+.div-account-email h2{
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.account-email-label{
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  margin-bottom: 5px;
+}
+
+.current-email-text, .status-confirmed{
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  margin-bottom: 20px;
+}
+
+#divider1{
+  border-bottom: 1px solid #d5d5d4;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.change-email-section{
+  margin-top: 15px;
+}
+
+.change-email-section h3{
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* Apply font to both labels and inputs */
+.change-email-section label,
+.change-email-section input {
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* Layout: labels and inputs side by side */
+.email-field {
+  display: flex;
+  align-items: center;   /* vertically align label + input */
+  margin-bottom: 15px;
+}
+
+/* Labels */
+.email-field label {
+  min-width: 180px;      /* keeps labels aligned in a column */
+  margin-right: 10px;
+}
+
+/* Inputs with fixed width */
+.email-field input {
+  width: 300px;          /* nice compact width */
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.change-email-button{
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    background: #e0e0e0;   
+    color: #333;           /* dark text */
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+.change-email-button:hover{
+  background: #c0c0c0;
+}

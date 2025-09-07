@@ -11,10 +11,466 @@
 <main>
     
     <div class="main-content">
+        <div class="user-tab-left">
+            
+            <!-- Profile Section -->
+            <div class="user-profile">
+                <div class="profile-pic">
+                    <span>P</span> <!-- First letter of name -->
+                </div>
+                <div class="profile-info">
+                    <p class="username">Perceluna</p>
+                    <a href="#" class="edit-profile">
+                        <!-- Edit (pencil) SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M4 21v-3.586l12.293-12.293 
+                                    3.586 3.586L7.586 21H4zm14.707-11.707l-3-3 
+                                    1.586-1.586a1 1 0 011.414 0l1.586 
+                                    1.586a1 1 0 010 1.414L18.707 9.293z"/>
+                        </svg>
+                        Edit Profile
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="user-nav">
+                <a href="{% url 'account' %}" class="nav-link active">
+                    <!-- Account SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+                        fill="none" stroke="currentColor" stroke-width="2" 
+                        viewBox="0 0 24 24">
+                        <circle cx="12" cy="7" r="4"/>
+                        <path d="M5.5 21a8.38 8.38 0 0113 0"/>
+                    </svg>
+                    Account
+                </a>
+
+                <!-- Temp checkout design-->
+                <a href="{% url 'orders:orders_design' %}" class="nav-link">
+                    <!-- Orders SVG -->
+                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 5.00005C7.01165 5.00082 6.49359 5.01338 6.09202 5.21799C5.71569 5.40973 5.40973 5.71569 5.21799 6.09202C5 6.51984 5 7.07989 5 8.2V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.07989 21 8.2 21H15.8C16.9201 21 17.4802 21 17.908 20.782C18.2843 20.5903 18.5903 20.2843 18.782 19.908C19 19.4802 19 18.9201 19 17.8V8.2C19 7.07989 19 6.51984 18.782 6.09202C18.5903 5.71569 18.2843 5.40973 17.908 5.21799C17.5064 5.01338 16.9884 5.00082 16 5.00005M8 5.00005V7H16V5.00005M8 5.00005V4.70711C8 4.25435 8.17986 3.82014 8.5 3.5C8.82014 3.17986 9.25435 3 9.70711 3H14.2929C14.7456 3 15.1799 3.17986 15.5 3.5C15.8201 3.82014 16 4.25435 16 4.70711V5.00005M12 11H9M15 15H9" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    My Orders
+                </a>
+            </nav>
+        </div>
 
 
+        <!--Right Side-->
+        <div class="order-history-right">
+             <!-- Navigation Tabs -->
+            <div class="order-tabs">
+                <button class="tab active" data-tab="all">Account</button>
+                <button class="tab" data-tab="processing">Addresses</button>
+            </div>
+        
+           <!-- Public Profile Section -->
+            <div class="public-profile section">
+                <h2>Public Profile</h2>
+                
+                <div class="profile-picture-section">
+                    <div class="profile-picture-placeholder">
+                        <!-- Default/Placeholder Profile Picture -->
+                        <img src="/static/images/Profile.png" 
+                            alt="Default Profile Picture" 
+                            class="profile-picture">
+                    </div>
+                    
+                    <div class="image-upload">
+                        <!-- Hide the ugly input -->
+                        <input type="file" id="profile-image" accept=".jpeg,.jpg,.png" hidden>
+
+                        <!-- Custom upload button -->
+                        <label for="profile-image" class="upload-btn">Select Image</label>
+
+                        <!-- Show chosen filename -->
+                        <span id="file-name">No file chosen</span>
+
+                        <div class="file-requirements">
+                            <p>File size: maximum 1 MB</p>
+                            <p>File extension: .JPEG, .PNG</p>
+                        </div>
+                    </div>
+                </div>
+            
+                
+                <div class="gender-section">
+                    <label>Gender:</label>
+                    <div class="gender-options">
+                        <input type="radio" id="male" name="gender" value="male">
+                        <label for="male">Male</label>
+                        
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label for="female">Female</label>
+                        
+                        <input type="radio" id="other" name="gender" value="other">
+                        <label for="other">Other</label>
+                    </div>
+                </div>
+            
+                 
+                <div class="date-of-birth-section">
+                    <label>Date of Birth: </label>
+                    <div class="date-dropdowns">
+                        <select id="birth-date">
+                            <option value="">Date</option>
+                            <!-- Days 1-31 -->
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+                        
+                        <select id="birth-month">
+                            <option value="">Month</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                        
+                        <select id="birth-year">
+                            <option value="">Year</option>
+                            <!-- Years from 1920 to 2024 -->
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2018">2018</option>
+                            <option value="2017">2017</option>
+                            <option value="2016">2016</option>
+                            <option value="2015">2015</option>
+                            <option value="2014">2014</option>
+                            <option value="2013">2013</option>
+                            <option value="2012">2012</option>
+                            <option value="2011">2011</option>
+                            <option value="2010">2010</option>
+                            <option value="2009">2009</option>
+                            <option value="2008">2008</option>
+                            <option value="2007">2007</option>
+                            <option value="2006">2006</option>
+                            <option value="2005">2005</option>
+                            <option value="2004">2004</option>
+                            <option value="2003">2003</option>
+                            <option value="2002">2002</option>
+                            <option value="2001">2001</option>
+                            <option value="2000">2000</option>
+                            <option value="1999">1999</option>
+                            <option value="1998">1998</option>
+                            <option value="1997">1997</option>
+                            <option value="1996">1996</option>
+                            <option value="1995">1995</option>
+                            <option value="1994">1994</option>
+                            <option value="1993">1993</option>
+                            <option value="1992">1992</option>
+                            <option value="1991">1991</option>
+                            <option value="1990">1990</option>
+                            <option value="1989">1989</option>
+                            <option value="1988">1988</option>
+                            <option value="1987">1987</option>
+                            <option value="1986">1986</option>
+                            <option value="1985">1985</option>
+                            <option value="1984">1984</option>
+                            <option value="1983">1983</option>
+                            <option value="1982">1982</option>
+                            <option value="1981">1981</option>
+                            <option value="1980">1980</option>
+                            <option value="1979">1979</option>
+                            <option value="1978">1978</option>
+                            <option value="1977">1977</option>
+                            <option value="1976">1976</option>
+                            <option value="1975">1975</option>
+                            <option value="1974">1974</option>
+                            <option value="1973">1973</option>
+                            <option value="1972">1972</option>
+                            <option value="1971">1971</option>
+                            <option value="1970">1970</option>
+                            <option value="1969">1969</option>
+                            <option value="1968">1968</option>
+                            <option value="1967">1967</option>
+                            <option value="1966">1966</option>
+                            <option value="1965">1965</option>
+                            <option value="1964">1964</option>
+                            <option value="1963">1963</option>
+                            <option value="1962">1962</option>
+                            <option value="1961">1961</option>
+                            <option value="1960">1960</option>
+                            <option value="1959">1959</option>
+                            <option value="1958">1958</option>
+                            <option value="1957">1957</option>
+                            <option value="1956">1956</option>
+                            <option value="1955">1955</option>
+                            <option value="1954">1954</option>
+                            <option value="1953">1953</option>
+                            <option value="1952">1952</option>
+                            <option value="1951">1951</option>
+                            <option value="1950">1950</option>
+                            <option value="1949">1949</option>
+                            <option value="1948">1948</option>
+                            <option value="1947">1947</option>
+                            <option value="1946">1946</option>
+                            <option value="1945">1945</option>
+                            <option value="1944">1944</option>
+                            <option value="1943">1943</option>
+                            <option value="1942">1942</option>
+                            <option value="1941">1941</option>
+                            <option value="1940">1940</option>
+                            <option value="1939">1939</option>
+                            <option value="1938">1938</option>
+                            <option value="1937">1937</option>
+                            <option value="1936">1936</option>
+                            <option value="1935">1935</option>
+                            <option value="1934">1934</option>
+                            <option value="1933">1933</option>
+                            <option value="1932">1932</option>
+                            <option value="1931">1931</option>
+                            <option value="1930">1930</option>
+                            <option value="1929">1929</option>
+                            <option value="1928">1928</option>
+                            <option value="1927">1927</option>
+                            <option value="1926">1926</option>
+                            <option value="1925">1925</option>
+                            <option value="1924">1924</option>
+                            <option value="1923">1923</option>
+                            <option value="1922">1922</option>
+                            <option value="1921">1921</option>
+                            <option value="1920">1920</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <!-- === PASSWORD === -->
+            <div class="div-account-password section">
+                <h2>Password</h2>
+                
+                <div class="password-field">
+                    <label for="current-password">Current Password:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="current-password" name="current-password">
+
+                        <!-- Eye icons -->
+                        <span class="eye-icon" onclick="togglePassword('current-password', this)">
+                        <!-- Open eye -->
+                        <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+                            fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+
+                        <!-- Closed eye -->
+                        <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+                            fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.05 10.05 0 0112 19c-7 0-11-7-11-7
+                                    a20.3 20.3 0 014.48-5.94M9.88 9.88
+                                    A3 3 0 0012 15a3 3 0 002.12-5.12M1 1l22 22"/>
+                        </svg>
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="password-field">
+                    <label for="new-password">New Password:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="new-password" name="new-password">
+
+                        <!-- Eye icons -->
+                        <span class="eye-icon" onclick="togglePassword('new-password', this)">
+                        <!-- Open eye -->
+                        <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+                            fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+
+                        <!-- Closed eye -->
+                        <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+                            fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.05 10.05 0 0112 19c-7 0-11-7-11-7
+                                    a20.3 20.3 0 014.48-5.94M9.88 9.88
+                                    A3 3 0 0012 15a3 3 0 002.12-5.12M1 1l22 22"/>
+                        </svg>
+                        </span>
+                    </div>
+                </div>
+
+
+                
+               <div class="password-field">
+                    <label for="confirm-new-password">Confirm New Password:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="confirm-new-password" name="confirm-new-password">
+
+                        <!-- Eye icons -->
+                        <span class="eye-icon" onclick="togglePassword('confirm-new-password', this)">
+                        <!-- Open eye -->
+                        <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+                            fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+
+                        <!-- Closed eye -->
+                        <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+                            fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.05 10.05 0 0112 19c-7 0-11-7-11-7
+                                    a20.3 20.3 0 014.48-5.94M9.88 9.88
+                                    A3 3 0 0012 15a3 3 0 002.12-5.12M1 1l22 22"/>
+                        </svg>
+                        </span>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+            <!-- === EMAIL === -->
+            <div class="div-account-email section">
+                <h2>Email</h2>
+                
+                <div class="current-email-section">
+                    <h6 class="account-email-label">Current email</h6>
+                    <p class="current-email-text">user@example.com</p>
+                    <div class="email-status">
+                        <h6 class="account-email-label">Status</h6>
+                        <span class="status-confirmed">Confirmed</span>
+                    </div>
+                </div>
+
+                <div id="divider1">
+
+                </div>
+                
+                <div class="change-email-section">
+                    <h3>Change Your Email</h3>
+                    
+                    <div class="email-field">
+                        <label for="new-email">New Email: </label>
+                        <input type="email" id="new-email" name="new-email">
+                    </div>
+                    
+                    <div class="email-field">
+                        <label for="confirm-email">Confirm Email: </label>
+                        <input type="email" id="confirm-email" name="confirm-email">
+                    </div>
+                    
+                    <div class="email-field">
+                        <label for="agrihub-password">Your AgriHub Password:</label>
+                        <div class="password-input-container">
+                            <input type="password" id="agrihub-password" name="agrihub-password">
+
+                            <!-- Eye icons -->
+                            <span class="eye-icon" onclick="togglePassword('agrihub-password', this)">
+                            <!-- Open eye -->
+                            <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+                                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+
+                            <!-- Closed eye -->
+                            <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+                                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M17.94 17.94A10.05 10.05 0 0112 19c-7 0-11-7-11-7
+                                        a20.3 20.3 0 014.48-5.94M9.88 9.88
+                                        A3 3 0 0012 15a3 3 0 002.12-5.12M1 1l22 22"/>
+                            </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <button type="button" class="change-email-button">Change Email</button>
+                </div>
+            </div>
+
+
+
+
+
+            </div>
+        </div>
     </div>
+</div>
+
+    
 </main>
 
+    <script>
+
+        // For file name
+        // Show file name when chosen
+        document.getElementById("profile-image").addEventListener("change", function () {
+        const fileName = this.files.length > 0 ? this.files[0].name : "No file chosen";
+        document.getElementById("file-name").textContent = fileName;
+        });
+
+    </script>
+
+    <!--Toggling of password visibility-->
+    <script>
+        function togglePassword(inputId, iconElement) {
+        const input = document.getElementById(inputId);
+        const openEye = iconElement.querySelector(".eye-open");
+        const closedEye = iconElement.querySelector(".eye-closed");
+
+        if (input.type === "password") {
+            input.type = "text";
+            openEye.classList.add("hidden");
+            closedEye.classList.remove("hidden");
+        } else {
+            input.type = "password";
+            openEye.classList.remove("hidden");
+            closedEye.classList.add("hidden");
+        }
+        }
+
+    </script>
 
 {% endblock %}
