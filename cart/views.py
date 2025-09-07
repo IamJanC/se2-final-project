@@ -11,33 +11,20 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 
-def cart_view(request):
-    if not request.user.is_authenticated:
-        return redirect('/?show_login=1')
 
+@login_required
+def cart_view(request):
     cart_items = CartItem.objects.filter(cart__user=request.user)
 
-    total = 0
+    # Annotate each item with subtotal (for JS to read)
     for item in cart_items:
-        item.subtotal = item.product.price * item.quantity
-        total += item.subtotal
-
-    # Hardcoded for now
-    discount = 500
-    shipping_fee = 100
-
-    subtotal_after_discount = max(total - discount, 0)  # ensure not negative
-    final_total = subtotal_after_discount + shipping_fee
+        item.subtotal = item.product.price * item.quantity  # optional, can remove if JS reads from price/unit
 
     context = {
-        'cart_items': cart_items,
-        'total': total,
-        'discount': discount,
-        'shipping_fee': shipping_fee,
-        'subtotal_after_discount': subtotal_after_discount,
-        'final_total': final_total,
+        "cart_items": cart_items,
     }
-    return render(request, 'main/user_cart.html', context)
+    return render(request, "main/user_cart.html", context)
+
 
 
 
@@ -53,12 +40,13 @@ def add_to_cart(request, product_id):
     # Get or create a cart for the user
     cart, created = Cart.objects.get_or_create(user=request.user)
 
-    # Check if item already in cart
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-    if not created:
+    # Add or update cart item
+    cart_item = CartItem.objects.filter(cart=cart, product=product).first()
+    
+    if cart_item:
         cart_item.quantity += quantity
     else:
-        cart_item.quantity = quantity
+        cart_item = CartItem.objects.create(cart=cart, product=product, quantity=quantity)
 
     cart_item.save()
     messages.success(request, f"{product.name} added to cart.")
