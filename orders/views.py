@@ -26,9 +26,14 @@ def checkout_view(request):
     selected_items_ids = request.GET.get('items')
     if selected_items_ids:
         ids_list = [int(i) for i in selected_items_ids.split(',') if i.isdigit()]
-        cart_items = cart.items.filter(id__in=ids_list)
+        request.session['selected_items_ids'] = ids_list
     else:
-        cart_items = cart.items.none()
+        ids_list = request.session.get('selected_items_ids', [])
+        
+    
+    # ✅ Always define cart_items
+    cart_items = cart.items.filter(id__in=ids_list) if ids_list else cart.items.none()
+
 
     # Calculate total
     total = sum(item.product.price * item.quantity for item in cart_items)
@@ -42,38 +47,8 @@ def checkout_view(request):
         default_address = request.user.addresses.filter(id=selected_address_id).first()
 
     if request.method == "POST":
-        # 👉 Case 1: Save Address Only
-        if "save_address" in request.POST:
-            fname = request.POST.get("fname")
-            lname = request.POST.get("lname")
-            full_name = f"{fname} {lname}".strip()
 
-            phone = request.POST.get("phone")
-            email = request.POST.get("email")
-            house = request.POST.get("house")
-            street = request.POST.get("street")
-            landmark = request.POST.get("landmark")
-            label = request.POST.get("label", "Home")
-
-            if full_name and phone:
-                new_addr = request.user.addresses.create(
-                    full_name=full_name,
-                    phone=phone,
-                    email=email,
-                    house=house,
-                    street=street,
-                    landmark=landmark,
-                    label=label,
-                )
-                # auto-select the saved address
-                request.session["selected_address_id"] = new_addr.id
-                messages.success(request, "Address saved successfully.")
-            else:
-                messages.error(request, "Please provide name and phone.")
-
-            return redirect("orders:checkout")
-
-        # 👉 Case 2: Place Order
+        # Place Order
         if "place_order" in request.POST:
             selected_address_id = request.POST.get("address_id")
             if not selected_address_id:
@@ -124,6 +99,37 @@ def checkout_view(request):
     }
     return render(request, "main/user_checkout.html", context)
 
+@login_required
+def save_address(request):
+    if request.method == "POST":
+        fname = request.POST.get("fname")
+        lname = request.POST.get("lname")
+        full_name = f"{fname} {lname}".strip()
+
+        phone = request.POST.get("phone")
+        email = request.POST.get("email")
+        house = request.POST.get("house")
+        street = request.POST.get("street")
+        landmark = request.POST.get("landmark")
+        label = request.POST.get("label", "Home")
+
+        if full_name and phone:
+            new_addr = request.user.addresses.create(
+                full_name=full_name,
+                phone=phone,
+                email=email,
+                house=house,
+                street=street,
+                landmark=landmark,
+                label=label,
+            )
+            request.session["selected_address_id"] = new_addr.id
+            messages.success(request, "Address saved successfully.")
+        else:
+            messages.error(request, "Please provide name and phone.")
+
+        # redirect back to checkout with cart intact
+        return redirect(request.POST.get("next", "orders:checkout"))
 
 
 
