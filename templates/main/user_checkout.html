@@ -111,7 +111,7 @@
             {% if addresses %}
                 <form method="POST" action="{% url 'orders:checkout' %}" id="checkout-form">
                     {% csrf_token %}
-                    <input type="hidden" id="selectedAddressId" name="address_id" value="">
+                    <input type="hidden" id="selectedAddressId" name="address_id" value="{{ default_address.id }}">
                     <div class="address-selection">
                 
                         <div class="delivery-address">
@@ -248,9 +248,9 @@
                                 <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="product-img">
                                 <span class="product-name">{{ item.product.name }}</span>
                             </div>
-                            <div class="price-col">₱ {{ item.product.price|floatformat:2 }}</div>
+                            <div class="price-col">₱ {{ item.product.price|floatformat:2|intcomma }}</div>
                             <div class="qty-col">x{{ item.quantity }}</div>
-                            <div class="subtotal-col">₱ {{ item.subtotal|floatformat:2 }}</div>
+                            <div class="subtotal-col">₱ {{ item.subtotal|floatformat:2|intcomma }}</div>
                         </div>
                         {% empty %}
                         <p>No items selected.</p>
@@ -286,12 +286,12 @@
 
                     <div class="summary-row" id="items-total-group">
                         <span>Item(s) Total</span>
-                        <span>PHP 3,605.09</span>
+                        <span>PHP {{ items_total|floatformat:2|intcomma }}</span>
                     </div>
 
                     <div class="summary-row" id="shop-discount-group">
                         <span>Shop Discount</span>
-                        <span>PHP 823.66</span>
+                        <span>PHP {{ shop_discount|floatformat:2|intcomma }}</span>
                     </div>
                     
                     <div class="summary-row" class="divider" id="divider1">
@@ -300,11 +300,11 @@
 
                     <div class="summary-row" id="subtotal-group">
                         <span>Subtotal</span>
-                        <span>2,781.43</span> 
+                        <span>PHP {{ subtotal|floatformat:2|intcomma }}</span> 
                     </div>
                     <div class="summary-row" id="shipping-fee-group">
                         <span>Shipping Fee</span>
-                        <span>PHP 1,665.46</span>
+                        <span>PHP {{ shipping_fee|floatformat:2|intcomma }}</span>
                     </div>
 
                     <div class="summary-row" class="divider">
@@ -313,13 +313,13 @@
 
                     <div class="summary-row total" id="final-total-group">
                         <span>Total ({{ cart_items.count }} items)</span>
-                        <span><strong>PHP {{ total|floatformat:2 }}</strong></span>
+                        <span><strong>PHP {{ final_total|floatformat:2|intcomma }}</strong></span>
                     </div>
 
 
                     <!-- Checkout Button -->
                     <div class="checkout-btn-container">
-                        <button class="checkout-btn" {% if not default_address %}disabled{% endif %}>
+                        <button class="checkout-btn" name="place_order" value="1" {% if not default_address %}disabled{% endif %}>
                             Place Order
                         </button>
                     </div>

@@ -682,6 +682,7 @@ textarea::placeholder {
 }
 
 
+/* Added by CJ, pafix or paalis nalang if nakaka sira */
 
 .checkout-btn:disabled {
     background: #95a5a6;

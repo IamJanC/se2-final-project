@@ -15,7 +15,7 @@ class Order(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     full_name = models.CharField(max_length=100)   # customer's name
-    phone = models.CharField(max_length=15)        # contact number
+    phone = models.CharField(max_length=20)        # contact number
     email = models.EmailField(blank=True)          # optional, for receipts
     address = models.TextField()                   # delivery address
     

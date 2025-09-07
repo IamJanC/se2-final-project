@@ -120,31 +120,31 @@
 
             <div class="summary-row" id="items-total-group">
                 <span>Item(s) Total</span>
-                <span>PHP {{ total|floatformat:2|intcomma }}</span>
+                <span>PHP 0.00</span>
             </div>
 
             <div class="summary-row" id="shop-discount-group">
                 <span>Shop Discount</span>
-                <span>PHP {{ discount|floatformat:2|intcomma }}</span>
+                <span>PHP 0.00</span>
             </div>
 
             <div class="summary-row divider" id="divider1"></div>
 
             <div class="summary-row" id="subtotal-group">
                 <span>Subtotal</span>
-                <span>PHP {{ subtotal_after_discount|floatformat:2|intcomma }}</span>
+                <span>PHP 0.00</span>
             </div>
 
             <div class="summary-row" id="shipping-fee-group">
                 <span>Shipping Fee</span>
-                <span>PHP {{ shipping_fee|floatformat:2|intcomma }}</span>
+                <span>PHP 0.00</span>
             </div>
 
             <div class="summary-row divider"></div>
 
             <div class="summary-row total" id="final-total-group">
-                <span>Total (<span id="selected-count">0</span> items)</span>
-                <span><strong>PHP {{ final_total|floatformat:2|intcomma }}</strong></span>
+                <span>Total (<span id="selected-count">0</span>)</span>
+                <span><strong>PHP 0.00</strong></span>
             </div>
 
 
@@ -167,6 +167,9 @@
     const plusBtns = document.querySelectorAll('.qty-btn.plus');
     const minusBtns = document.querySelectorAll('.qty-btn.minus');
 
+    const DISCOUNT_RATE = 0.20;  // 20% discount like checkout
+    const SHIPPING_FEE = 100;     // flat shipping fee
+
     function recalcTotals() {
         let total = 0;
         let selectedCount = 0;
@@ -183,10 +186,11 @@
             }
         });
 
-        const discount = 500;
-        const shipping = 100;
+        const discount = total * DISCOUNT_RATE;
         const subtotal = Math.max(total - discount, 0);
+        const shipping = selectedCount > 0 ? SHIPPING_FEE : 0; // only charge shipping if items selected
         const finalTotal = subtotal + shipping;
+
 
         document.querySelector('#items-total-group span:last-child').textContent =
             `PHP ${total.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
