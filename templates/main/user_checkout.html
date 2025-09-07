@@ -31,29 +31,29 @@
                         <div class="name-form-section">
                             <div class="form-group">
                                 <label for="fname">First Name</label>
-                                <input type="text" id="fname" name="fname" placeholder="Your first name">
+                                <input type="text" id="fname" name="fname" placeholder="First name" maxlength="20" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="lname">Last Name</label>
-                                <input type="text" id="lname" name="lname" placeholder="Your last name">
+                                <input type="text" id="lname" name="lname" placeholder="Last name" maxlength="20" required>
                             </div>
                         </div>
 
                         <div class="address-form-section-fillable">
                             <div class="form-group">
                                 <label for="house">House No./Building/Unit:</label>
-                                <input type="text" id="house" name="house" placeholder="Blk 4 Lot 5/Unit 2B/Sunshine Bldg">
+                                <input type="text" id="house" name="house" placeholder="Blk 4 Lot 5/Unit 2B/Sunshine Bldg" maxlength="20" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="street">Street Name:</label>
-                                <input type="text" id="street" name="street" placeholder="Dahlia Street">
+                                <input type="text" id="street" name="street" placeholder="Dahlia Street" maxlength="20" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="label">Label</label>
-                                <input type="text" id="label" name="label" placeholder="Home/Workplace/Friend's House">
+                                <input type="text" id="label" name="label" placeholder="Home/Workplace/Friend's House" maxlength="20" required> 
                             </div>
                         </div>
 
@@ -83,19 +83,19 @@
                             <div class="form-group">
                                 <label for="landmark">Landmark:</label>
                                 <textarea id="landmark" name="landmark" 
-                                    placeholder="Nearby reference point to help locate your address (e.g. City Hall, Mall, Church)"></textarea>
+                                    placeholder="Nearby reference point to help locate your address (e.g. City Hall, Mall, Church)" maxlength="20"></textarea>
                             </div>
                         </div>
 
                         <div class="contact-form-section">
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="text" id="email" name="email" placeholder="Email Address">
+                                <input type="text" id="email" name="email" placeholder="Email Address" minlength="11" maxlength="50"> <!-- di ko muna sya nirequire since yung user ay meron ng email so dapat by default meron na to?-->
                             </div>
 
                             <div class="form-group">
                                 <label for="phone">Phone:</label>
-                                <input type="text" id="phone" name="phone" placeholder="Phone Number">
+                                <input type="text" id="phone" name="phone" placeholder="Phone Number: 09123456789" minlength="11" maxlength="11" required>
                             </div>
                         </div>
 

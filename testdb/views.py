@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 import re
 from main.views import get_home_context
+from django.contrib.auth.decorators import login_required
 
 User = get_user_model()
 
@@ -159,5 +160,10 @@ def home_view(request):
         context.update(request.session.pop("form_errors"))
         context.update(get_home_context())
         return render(request, "main/home.html", context)
+    
+
+@login_required
+def account_view(request):
+    return render(request, "main/account.html")
 
 

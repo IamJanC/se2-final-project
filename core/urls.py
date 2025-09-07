@@ -40,4 +40,5 @@ urlpatterns = [
     
     # existing paths...
     path("cart/design/", lambda request: render(request, "main/user_cart.html"), name="user_cart_design"),
+    path("testdb/", include("testdb.urls")),  # Or just "" if you want root-level URLs
 ]
