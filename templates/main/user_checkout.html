@@ -17,111 +17,108 @@
         <!-- === LEFT: Address Section === -->
         <div class="address-section-left">
 
-            {% if not addresses %}
-                <div class="alert alert-warning text-center mb-3">No saved address yet. Please add one below.</div>
-            {% endif %}
+                <form method="POST" action="{% url 'orders:checkout' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="editAddressId" name="edit_address_id" value="">
+                    <div class="address-forms" style="display: none;">
+                        
+                        <div class="address-forms-title">
+                            <h3>Billing Information</h3>
+                        </div>
+                        
 
-            <form method="POST" action="{% url 'orders:checkout' %}">
-                {% csrf_token %}
-                <input type="hidden" id="editAddressId" name="edit_address_id" value="">
-                <div class="address-forms">
-                    
-                    <div class="address-forms-title">
-                        <h3>Billing Information</h3>
+                        <div class="name-form-section">
+                            <div class="form-group">
+                                <label for="fname">First Name</label>
+                                <input type="text" id="fname" name="fname" placeholder="Your first name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lname">Last Name</label>
+                                <input type="text" id="lname" name="lname" placeholder="Your last name">
+                            </div>
+                        </div>
+
+                        <div class="address-form-section-fillable">
+                            <div class="form-group">
+                                <label for="house">House No./Building/Unit:</label>
+                                <input type="text" id="house" name="house" placeholder="Blk 4 Lot 5/Unit 2B/Sunshine Bldg">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="street">Street Name:</label>
+                                <input type="text" id="street" name="street" placeholder="Dahlia Street">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="label">Label</label>
+                                <input type="text" id="label" name="label" placeholder="Home/Workplace/Friend's House">
+                            </div>
+                        </div>
+
+                        <div class="address-form-section-unfillable">
+                            <div class="form-group">
+                                <label for="barangay">Barangay:</label>
+                                <input type="text" id="barangay" value="Dalig" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="city">City:</label>
+                                <input type="text" id="city" value="Antipolo" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="province">Province:</label>
+                                <input type="text" id="province" value="Rizal" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="zipcode">ZIP Code:</label>
+                                <input type="text" id="zipcode" value="1870" disabled>
+                            </div>
+                        </div>
+
+                        <div class="landmark-form-section">
+                            <div class="form-group">
+                                <label for="landmark">Landmark:</label>
+                                <textarea id="landmark" name="landmark" 
+                                    placeholder="Nearby reference point to help locate your address (e.g. City Hall, Mall, Church)"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="contact-form-section">
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="text" id="email" name="email" placeholder="Email Address">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">Phone:</label>
+                                <input type="text" id="phone" name="phone" placeholder="Phone Number">
+                            </div>
+                        </div>
+
+                        <div class="form-buttons">
+                            <input type="hidden" name="save_address" value="1">
+                            <button type="submit" class="btn-save-address-form">Save</button>
+                            <button type="button" class="btn-cancel-address-form">Cancel</button>
+                        </div>
                     </div>
-                    
+                </form>
 
-                    <div class="name-form-section">
-                        <div class="form-group">
-                            <label for="fname">First Name</label>
-                            <input type="text" id="fname" name="fname" placeholder="Your first name">
-                        </div>
 
-                        <div class="form-group">
-                            <label for="lname">Last Name</label>
-                            <input type="text" id="lname" name="lname" placeholder="Your last name">
-                        </div>
-                    </div>
+            {% if addresses %}
+                <form method="POST" action="{% url 'orders:checkout' %}" id="checkout-form">
+                    {% csrf_token %}
+                    <input type="hidden" id="selectedAddressId" name="address_id" value="">
+                    <div class="address-selection">
+                
+                        <div class="delivery-address">
 
-                    <div class="address-form-section-fillable">
-                        <div class="form-group">
-                            <label for="house">House No./Building/Unit:</label>
-                            <input type="text" id="house" name="house" placeholder="Blk 4 Lot 5/Unit 2B/Sunshine Bldg">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="street">Street Name:</label>
-                            <input type="text" id="street" name="street" placeholder="Dahlia Street">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="label">Label</label>
-                            <input type="text" id="label" name="label" placeholder="Home/Workplace/Friend's House">
-                        </div>
-                    </div>
-
-                    <div class="address-form-section-unfillable">
-                        <div class="form-group">
-                            <label for="barangay">Barangay:</label>
-                            <input type="text" id="barangay" value="Dalig" disabled>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="city">City:</label>
-                            <input type="text" id="city" value="Antipolo" disabled>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="province">Province:</label>
-                            <input type="text" id="province" value="Rizal" disabled>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="zipcode">ZIP Code:</label>
-                            <input type="text" id="zipcode" value="1870" disabled>
-                        </div>
-                    </div>
-
-                    <div class="landmark-form-section">
-                        <div class="form-group">
-                            <label for="landmark">Landmark:</label>
-                            <textarea id="landmark" name="landmark" 
-                                placeholder="Nearby reference point to help locate your address (e.g. City Hall, Mall, Church)"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="contact-form-section">
-                        <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="text" id="email" name="email" placeholder="Email Address">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="phone">Phone:</label>
-                            <input type="text" id="phone" name="phone" placeholder="Phone Number">
-                        </div>
-                    </div>
-
-                    <div class="form-buttons">
-                        <input type="hidden" name="save_address" value="1">
-                        <button type="submit" class="btn-save-address-form">Save</button>
-                        <button type="button" class="btn-cancel-address-form">Cancel</button>
-                    </div>
-                </div>
-            </form>
-
-            <form method="POST" action="{% url 'orders:checkout' %}" id="checkout-form">
-                {% csrf_token %}
-                <input type="hidden" id="selectedAddressId" name="address_id" value="">
-                <div class="address-selection">
-            
-                    <div class="delivery-address">
-
-                        <div class="address-selection-title">
-                            <svg version="1.0" class="location-icon-address-selection" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#5d8b24" d="M32,0C18.746,0,8,10.746,8,24c0,5.219,1.711,10.008,4.555,13.93c0.051,0.094,0.059,0.199,0.117,0.289l16,24 C29.414,63.332,30.664,64,32,64s2.586-0.668,3.328-1.781l16-24c0.059-0.09,0.066-0.195,0.117-0.289C54.289,34.008,56,29.219,56,24 C56,10.746,45.254,0,32,0z M32,32c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z"></path> </g></svg>
-                            <h3>Delivery Address</h3>
-                        </div>  
-                        {% if addresses %}
+                            <div class="address-selection-title">
+                                <svg version="1.0" class="location-icon-address-selection" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#5d8b24" d="M32,0C18.746,0,8,10.746,8,24c0,5.219,1.711,10.008,4.555,13.93c0.051,0.094,0.059,0.199,0.117,0.289l16,24 C29.414,63.332,30.664,64,32,64s2.586-0.668,3.328-1.781l16-24c0.059-0.09,0.066-0.195,0.117-0.289C54.289,34.008,56,29.219,56,24 C56,10.746,45.254,0,32,0z M32,32c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z"></path> </g></svg>
+                                <h3>Delivery Address</h3>
+                            </div>  
                             {% for addr in addresses%}
                             <div class="address-card">
 
@@ -132,7 +129,7 @@
                                     </div>
 
                                     <div class="button-modifier-section">
-                                        <button class="modifier-icon-btn" aria-label="Edit">
+                                        <button class="modifier-icon-btn" aria-label="Edit" data-id="{{ addr.id }}">
                                             <!-- Example: pencil/edit icon -->
                                             <svg xmlns="http://www.w3.org/2000/svg" 
                                                 width="20" height="20" viewBox="0 0 24 24" fill="none" 
@@ -140,11 +137,17 @@
                                                 <path d="M12 20h9" />
                                                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
                                             </svg>
+                                            <a class="edit-btn">Edit</a>
                                         </button>
 
                                         <button class="modifier-icon-btn" aria-label="Edit">
                                             <!-- Example: Trash Icon    -->
                                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.5001 6H3.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M9.5 11L10 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M14.5 11L14 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="#000000" stroke-width="1.5"></path> <path d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+                                            <a href="{% url 'orders:delete_address' addr.id %}" 
+                                            class="delete-btn"
+                                            onclick="return confirm('Are you sure you want to delete this address?');">
+                                            Delete
+                                            </a>
                                         </button>
                                     </div>
                                 </div>
@@ -169,15 +172,6 @@
                                     <p class="address-card-email">{{ addr.email }}</p>
                                     <p class="address-card-phone">{{ addr.phone }}</p>
                                 </div>
-
-                                <div class="address-actions">
-                                    <button type="button" class="edit-btn" data-id="{{ addr.id }}">Edit</button>
-                                    <a href="{% url 'orders:delete_address' addr.id %}" 
-                                    class="delete-btn"
-                                    onclick="return confirm('Are you sure you want to delete this address?');">
-                                    Delete
-                                    </a>
-                                </div>
                             
                                 <div class="select-address-buttons">
                                     <button type="button" class="select-address-btn" data-id="{{ addr.id }}">Select</button>
@@ -185,12 +179,8 @@
                             </div>
                             {% endfor %}
 
-                        {% else %}
-                            <p>No saved addresses yet. Please add a new address.</p>
-                        {% endif %}
-
                         <div class="add-more-address-section">
-                            <button class="add-more-address-btn">
+                            <button type="button" class="add-more-address-btn">
                                 <!-- SVG plus icon -->
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z" fill="#000000"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z" fill="#000000"></path> </g></svg>
                                 <span>Add more address</span>
@@ -202,20 +192,19 @@
                 <div class="checkout-main">
                     
                     <div class="checkout-main-address-section">
-                    <div class="checkout-address-selection-title">
+                        <div class="checkout-address-selection-title">
                             <svg version="1.0" class="location-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#5d8b24" d="M32,0C18.746,0,8,10.746,8,24c0,5.219,1.711,10.008,4.555,13.93c0.051,0.094,0.059,0.199,0.117,0.289l16,24 C29.414,63.332,30.664,64,32,64s2.586-0.668,3.328-1.781l16-24c0.059-0.09,0.066-0.195,0.117-0.289C54.289,34.008,56,29.219,56,24 C56,10.746,45.254,0,32,0z M32,32c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z"></path> </g></svg>
                             <h3>Delivery Address</h3>
                         </div>
 
                         <!-- Checkout Address Card -->
                         <div class="checkout-address-card">
-                            {% if default_address %}
                                 <div class="checkout-top-section">
                                     <div class="label-top">
                                         <span class="address-label">{{ default_address.label|default:"Address" }}</span>
                                     </div>
                                     <div class="change-address">
-                                        <button class="change-btn">Change</button>
+                                        <button type="button" class="change-btn">Change</button>
                                     </div>
                                 </div>
 
@@ -236,11 +225,8 @@
                                     <p class="address-card-email">{{ default_address.email }}</p>
                                     <p class="address-card-phone">{{ default_address.phone }}</p>
                                 </div>
-                            {% else %}
-                                <p>No registered address yet. Please add one.</p>
-                                <button class="add-more-address-btn">Add Address</button>
-                            {% endif %}
-                        </div>
+                            
+                    </div>
 
 
                     <!-- Product Summary Section -->
@@ -276,77 +262,81 @@
                         {% endif %}
                     </div>
 
-
-                
                 </div>
 
+
+                <!--  === RIGHT: Order Summary ===  -->
+                <div class="order-information-right">
+                    <!-- Payment Methods Section -->
+                    <div class="payment-method">
+                        <h3>Choose your payment method</h3>
+                        
+                        <label>
+                            <input type="radio" name="payment" value="cod" checked>
+                            Cash on Delivery
+                        </label>
+                        <br>
+            
+                        <label class="disabled-option">
+                            <input type="radio" name="payment" value="gcash" disabled>
+                            GCash (Unavailable)
+                        </label>
+                        <br>
+                        
+                        <label class="disabled-option">
+                            <input type="radio" name="payment" value="card" disabled>
+                            Credit/Debit Card (Unavailable)
+                        </label>
+                    </div>
+
+                    <div class="summary-row" id="items-total-group">
+                        <span>Item(s) Total</span>
+                        <span>PHP 3,605.09</span>
+                    </div>
+
+                    <div class="summary-row" id="shop-discount-group">
+                        <span>Shop Discount</span>
+                        <span>PHP 823.66</span>
+                    </div>
+                    
+                    <div class="summary-row" class="divider" id="divider1">
+
+                    </div>
+
+                    <div class="summary-row" id="subtotal-group">
+                        <span>Subtotal</span>
+                        <span>2,781.43</span> 
+                    </div>
+                    <div class="summary-row" id="shipping-fee-group">
+                        <span>Shipping Fee</span>
+                        <span>PHP 1,665.46</span>
+                    </div>
+
+                    <div class="summary-row" class="divider">
+                        
+                    </div>
+
+                    <div class="summary-row total" id="final-total-group">
+                        <span>Total ({{ cart_items.count }} items)</span>
+                        <span><strong>PHP {{ total|floatformat:2 }}</strong></span>
+                    </div>
+
+
+                    <!-- Checkout Button -->
+                    <div class="checkout-btn-container">
+                        <button class="checkout-btn" {% if not default_address %}disabled{% endif %}>
+                            Place Order
+                        </button>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <div class="address-empty-state">
+                    <p>No registered address yet. Please add one.</p>
+                    <button type="button" class="add-more-address-btn">Add Address</button>
             </div>
-
-            <!--  === RIGHT: Order Summary ===  -->
-            <div class="order-information-right">
-                <!-- Payment Methods Section -->
-                <div class="payment-method">
-                    <h3>Choose your payment method</h3>
-                    
-                    <label>
-                        <input type="radio" name="payment" value="cod" checked>
-                        Cash on Delivery
-                    </label>
-                    <br>
-        
-                    <label class="disabled-option">
-                        <input type="radio" name="payment" value="gcash" disabled>
-                        GCash (Unavailable)
-                    </label>
-                    <br>
-                    
-                    <label class="disabled-option">
-                        <input type="radio" name="payment" value="card" disabled>
-                        Credit/Debit Card (Unavailable)
-                    </label>
-                </div>
-
-                <div class="summary-row" id="items-total-group">
-                    <span>Item(s) Total</span>
-                    <span>PHP 3,605.09</span>
-                </div>
-
-                <div class="summary-row" id="shop-discount-group">
-                    <span>Shop Discount</span>
-                    <span>PHP 823.66</span>
-                </div>
-                
-                <div class="summary-row" class="divider" id="divider1">
-
-                </div>
-
-                <div class="summary-row" id="subtotal-group">
-                    <span>Subtotal</span>
-                    <span>2,781.43</span> 
-                </div>
-                <div class="summary-row" id="shipping-fee-group">
-                    <span>Shipping Fee</span>
-                    <span>PHP 1,665.46</span>
-                </div>
-
-                <div class="summary-row" class="divider">
-                    
-                </div>
-
-                <div class="summary-row total" id="final-total-group">
-                    <span>Total ({{ cart_items.count }} items)</span>
-                    <span><strong>PHP {{ total|floatformat:2 }}</strong></span>
-                </div>
-
-
-                <!-- Checkout Button -->
-                <div class="checkout-btn-container">
-                    <button class="checkout-btn" {% if not default_address %}disabled{% endif %}>
-                        Place Order
-                    </button>
-                </div>
-            </div>
-        </form>
+            {% endif %}
+        </div>
 
     </section>
 
@@ -365,6 +355,7 @@
     const cancelBtn = document.querySelector(".btn-cancel-address-form");
     const saveBtn = document.querySelector(".btn-save-address-form");
     const selectBtns = document.querySelectorAll(".select-address-btn");
+    const emptyState = document.querySelector(".address-empty-state");
 
     // Checkout card targets (guard for nulls)
     const checkoutCard = document.querySelector(".checkout-address-card");
@@ -399,15 +390,13 @@
     const hasDefault = !!document.querySelector(".checkout-address-card .address-card-name");
 
     if (hasAddress === 0) {
-        // No saved addresses → show form; right-side totals are already hidden by template when no addresses
-        showForm();
-    } else if (hasDefault) {
-        // Has default → go straight to checkout
-        showCheckout();
+        document.querySelector(".address-empty-state").style.display = "block";
     } else {
-        // Has addresses but no default → ask user to pick one
-        showSelection();
+        if (hasDefault) { showCheckout(); }
+        else { showSelection(); }
     }
+
+
 
     // CHANGE → open selection (only exists if default exists)
     if (changeBtn) {
@@ -430,6 +419,8 @@
 
         document.getElementById("editAddressId").value = "";
 
+        emptyState.style.display = "none";
+        
         showForm();
         });
     });
@@ -463,10 +454,11 @@
     if (cancelBtn) {
         cancelBtn.addEventListener("click", (e) => {
         e.preventDefault();
+        formDiv.style.display = "none";
         if (hasAddress > 0) {
             showSelection();
         } else {
-            showForm();
+            emptyState.style.display = "block";
         }
         });
     }

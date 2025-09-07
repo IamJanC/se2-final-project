@@ -691,7 +691,7 @@ textarea::placeholder {
 
 .delete-btn {
     display: inline-block;
-    padding: 5px 10px;
+    padding: 3px 5px;
     background-color: #dc3545;
     color: #fff;
     border-radius: 5px;
@@ -701,4 +701,18 @@ textarea::placeholder {
 
 .delete-btn:hover {
     background-color: #b02a37;
+}
+
+.edit-btn {
+    display: inline-block;
+    padding: 2px 7px;
+    background-color: #5c8b25; 
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.edit-btn:hover {
+    background-color: #325a00;
 }
