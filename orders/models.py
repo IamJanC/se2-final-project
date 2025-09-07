@@ -48,11 +48,12 @@ class OrderItem(models.Model):
 class UserAddress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
     full_name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=15)
+    phone = models.CharField(max_length=20)
     email = models.EmailField(blank=True)
     house = models.CharField(max_length=100, blank=True)
     street = models.CharField(max_length=100, blank=True)
     landmark = models.CharField(max_length=100, blank=True)
+    label = models.CharField(max_length=50, default="Home")  # e.g., Home, Work
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

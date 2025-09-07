@@ -12,6 +12,7 @@ urlpatterns = [
     path("checkout/design/", views.checkout_design_view, name="checkout_design"), #for designing user_checkout.html
     path("checkout/", views.checkout_view, name="checkout"), #final ^ temp ^
     
-    
     path("design/", views.orders_page, name="orders_design"), #for designing orders.html
+    
+    path("delete-address/<int:address_id>/", views.delete_address, name="delete_address"), # Deleting an address
 ]
