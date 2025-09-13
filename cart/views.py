@@ -44,8 +44,23 @@ def add_to_cart(request, product_id):
     cart_item = CartItem.objects.filter(cart=cart, product=product).first()
     
     if cart_item:
-        cart_item.quantity += quantity
+        new_quantity = cart_item.quantity + quantity
+
+        if cart_item.quantity >= product.stock:
+            messages.error(request, f"You already have the maximum stock ({product.stock}) of {product.name} in your cart.")
+            return redirect(request.POST.get('next') or 'products:product_detail', product_id=product.id)
+        
+        if new_quantity > product.stock:
+            messages.error(request, f"Only {product.stock} of {product.name} available.")
+            return redirect(request.POST.get('next') or 'products:product_detail', product_id=product.id)
+
+        cart_item.quantity = new_quantity
+
     else:
+        if quantity > product.stock:
+            messages.error(request, f"Only {product.stock} of {product.name} available.")
+            return redirect(request.POST.get('next') or 'products:product_detail', product_id=product.id)
+        
         cart_item = CartItem.objects.create(cart=cart, product=product, quantity=quantity)
 
     cart_item.save()

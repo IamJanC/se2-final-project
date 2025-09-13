@@ -7,6 +7,10 @@ from orders.models import OrderItem
 from orders.models import UserAddress
 from django.db.models import Sum, Count, F, FloatField, ExpressionWrapper
 from django.db.models.functions import TruncMonth
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from django.db.models import Sum, F, FloatField
 import json
 
 
@@ -108,3 +112,59 @@ def edit_product(request, pk):
             print("❌ Form errors:", form.errors)
 
     return redirect("adminpanel:dashboard")
+
+def export_pdf(request):
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="admin_report.pdf"'
+
+    p = canvas.Canvas(response, pagesize=letter)
+    width, height = letter
+
+    sales_per_month = (
+        OrderItem.objects
+        .annotate(month=TruncMonth('order__created_at'))
+        .values('month')
+        .annotate(
+            total=Sum(
+                ExpressionWrapper(
+                    F('quantity') * F('price_at_purchase'),
+                    output_field=FloatField()
+                )
+            )
+        )
+        .order_by('month')
+    )
+
+    total_orders = Order.objects.count()
+    pending_orders = Order.objects.filter(status="pending").count()
+    completed_orders = Order.objects.filter(status="completed").count()
+    total_customers = Order.objects.values('user').distinct().count()
+
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(100, height - 100, "Admin Dashboard Report")
+
+    p.setFont("Helvetica", 12)
+    p.drawString(100, height - 140, f"Total Orders: {total_orders}")
+    p.drawString(100, height - 160, f"Pending Orders: {pending_orders}")
+    p.drawString(100, height - 180, f"Completed Orders: {completed_orders}")
+    p.drawString(100, height - 200, f"Total Customers: {total_customers}")
+
+    y = height - 240
+    p.setFont("Helvetica-Bold", 14)
+    p.drawString(100, y, "Monthly Sales:")
+
+    p.setFont("Helvetica", 12)
+    y -= 20
+    for s in sales_per_month:
+        month_label = s['month'].strftime("%B %Y")
+        total = float(s['total'] or 0)
+        p.drawString(120, y, f"{month_label}: ${total:,.2f}")
+        y -= 20
+        if y < 100:
+            p.showPage()
+            y = height - 100
+            p.setFont("Helvetica", 12)
+
+    p.showPage()
+    p.save()
+    return response
