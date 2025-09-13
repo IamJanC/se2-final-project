@@ -9,5 +9,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='main:home'), name='logout'),
     path('delete/<int:pk>/', views.delete_product, name='delete_product'),
     path("edit/<int:pk>/", views.edit_product, name="edit_product"),
-    path("export-pdf/", views.export_pdf, name="export_pdf")
+    path("export-pdf/", views.export_pdf, name="export_pdf"),
+    path("custom-dashboard/", views.custom_admin_dashboard, name="custom_dashboard"),  # new one
 ]

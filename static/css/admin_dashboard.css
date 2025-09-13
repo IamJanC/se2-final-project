@@ -1,0 +1,170 @@
+/* === vvv GLOBAL CSS DO NOT TOUCH vvv === */
+/* Logo Font Temporary */
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+/* Search (Don't Touch) */
+@use postcss-color-function;
+@use postcss-nested;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+/* Reset Everything */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+    background: #f9fbfa;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    height: 100vh;
+}
+/* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
+.sidebar {
+    width: 260px;
+    background: #fefeff;
+    color: #7d828e;
+    padding: 20px 0;
+}
+
+.sidebar-logo {
+    margin-bottom: 25px;
+}
+
+.sidebar-logo img {
+    max-width: 70%;   /* keeps it smaller than sidebar width */
+    max-height: 80px; /* keeps it from being too tall */
+    height: auto;     /* maintain aspect ratio */
+    width: auto;      /* maintain aspect ratio */
+    display: block;
+    margin: 0 auto;
+    object-fit: contain; /* makes sure it fits nicely */
+}
+
+.links{
+    padding: 0px 20px;
+}
+
+.link-title {
+    color: #7d828e;
+    padding: 10px 0px 15px 0px;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* Reset the button */
+.link-item button {
+    all: unset;       /* strip browser styles */
+    width: 100%;      /* fill parent div */
+    height: 100%;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+/* Default icon is visible initially */
+.link-item .default-icon {
+    display: inline-block;
+}
+.link-item .active-icon {
+    display: none;
+}
+
+/* When active, switch icons */
+.link-item.active .default-icon {
+    display: none;
+}
+.link-item.active .active-icon {
+    display: inline-block;
+}
+
+.link-item .icon svg {
+    width: auto;   /* same as the font-size of parent */
+    height: 25px;  /* keeps it square */
+    flex-shrink: 0; /* prevents it from squishing */
+}
+
+
+/* Regular state (applied to parent div) */
+.link-item {
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    color: #6a717f;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Hover state */
+.link-item:hover {
+    background: #c0c0c0;
+    color: #6a717f;
+}
+
+/* Active state */
+.link-item.active {
+    background-color: #5f8431;
+    color: #fefeff;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* === Main Content === */
+
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #f9fbfa;
+}
+
+.headerbar {
+    background: #ecf0f1;
+    padding: 15px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+}
+
+.content-area {
+    flex: 1;
+    padding: 20px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}

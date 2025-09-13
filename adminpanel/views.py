@@ -168,3 +168,18 @@ def export_pdf(request):
     p.showPage()
     p.save()
     return response
+
+
+
+
+
+
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def custom_admin_dashboard(request):
+    # You can pass in the same context as `dashboard` if you want stats,
+    # or start with a minimal one
+    context = {
+        "title": "Custom Admin Dashboard",
+    }
+    return render(request, "main/admin_dashboard.html", context)
