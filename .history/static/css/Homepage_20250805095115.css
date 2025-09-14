@@ -1,0 +1,347 @@
+
+/* === vvv GLOBAL CSS DO NOT TOUCH vvv === */
+/* Logo Font Temporary */
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+/* Search (Don't Touch) */
+@use postcss-color-function;
+@use postcss-nested;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+/* Reset Everything */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+    background: #f8f8f8;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+
+/* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
+
+
+
+
+/* === MAIN === */
+/* ===== Utility Classes ===== */
+.container {
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 auto;      /* Centers it */
+    padding: 0 2rem;     /* Adds spacing on the left & right */
+}
+
+/* ===== Original Carousel Styles ===== */
+.carousel-container {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    height: 60vh;
+    min-height: 400px;
+    overflow: hidden;
+}
+
+.carousel-slides {
+    display: flex;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-slide {
+    flex: 0 0 100%;
+    height: 100%;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+}
+
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 10;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+#prevBtn { left: 20px; }
+#nextBtn { right: 20px; }
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+
+/* ===== Product Card Styles ===== */
+
+/* Section of Products */
+.category-product-list{
+    margin-top: 50px;
+    margin-bottom: 75px;
+}
+
+
+/* ===== Category Section Header ===== */
+.product-category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 1rem;
+}
+
+.product-category-header h3 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.product-category-header a {
+    font-size: 18px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    color: #2b2c2a;
+    text-decoration: none;
+}
+
+.product-category-header a:hover {
+    text-decoration: underline;
+}
+
+
+/* ===== Product Grid Layout ===== */
+.products-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+
+/* ===== Product Card ===== */
+.product {
+    height: 450px; /* or whatever looks best for you */
+    overflow: hidden;
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+
+.product-card-link {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  flex-grow: 1;
+  text-decoration: none;
+  color: inherit;
+}
+
+
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+/* ===== Image Container ===== */
+.product-img-wrap {
+    width: 100%;
+    height: 200px; /* or 220px, adjust as needed */
+    background: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 0.8rem;
+}
+
+.product-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    padding: 0; /* remove old padding */
+    background: none;
+    border-radius: 0;
+}
+
+
+
+/* ===== Product Title ===== */
+.product-title h3 {
+    font-size: 1rem;
+    color: #2b2c2a;
+    margin-bottom: 0.5rem;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.product-info-left {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* forces content to align left */
+    margin-bottom: 0.5rem;
+}
+
+
+
+/* ===== Price Styling ===== */
+.price {
+    font-weight: bold;
+    color: #659e08;
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+/* ===== Progress Bar ===== */
+progress {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    margin: 0.5rem 0;
+}
+
+progress::-webkit-progress-bar {
+    background: #ecf0f1;
+    border-radius: 3px;
+}
+
+progress::-webkit-progress-value {
+    background: #62a115;
+    border-radius: 3px;
+}
+
+
+/* ===== Stock ===== */
+.stock{
+    font-size: 16px;
+    margin-bottom: 0.3rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* ===== Add to Cart Button ===== */
+.add-to-cart-btn {
+    background: #5c8b25; 
+    color: white;
+    border: none;
+    padding: 0.6rem;
+    width: 100%;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.3s ease;
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.add-to-cart-btn:hover {
+    background: #325a00;
+}
+
+.add-to-cart-btn:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+}
+
+
+/* ===== Sold Out Tag ===== */
+.product:has(button:disabled)::after {
+    content: "SOLD OUT";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(231, 76, 60, 0.9);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+

@@ -1,0 +1,132 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/product.css' %}">
+
+<div class="product-container">
+  <div class="product-image">
+    <img src="{{ product.image_url }}" alt="{{ product.name }}">
+  </div>
+
+  <div class="product-details">
+    <h2 class="product-name">{{ product.name }}</h2>
+    <p class="product-price">₱ {{ product.price }}</p>
+    <p class="product-category">Category: {{ product.category }}</p>
+    <p class="product-stock {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+      {% if product.stock > 0 %}
+        In stock: {{ product.stock }}
+      {% else %}
+        Out of Stock
+      {% endif %}
+    </p>
+    <p class="product-description">{{ product.description }}</p>
+
+    {% if product.stock > 0 %}
+      <form method="post" action="{% url 'cart:add_to_cart' product.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+
+        <div class="quantity-container">
+          <p class="lexend-300">Quantity:</p>
+
+          <div class="quantity-selector">
+            <button type="button" class="qty-btn minus" {% if cart_full %}disabled{% endif %}>−</button>
+            <input 
+              type="number" 
+              name="quantity" 
+              class="quantity-input"
+              value="{% if cart_full %}{{ product.stock }}{% else %}1{% endif %}"
+              min="1" 
+              max="{{ product.stock }}"
+              {% if cart_full %}readonly{% endif %}>
+            <button type="button" class="qty-btn plus" {% if cart_full %}disabled{% endif %}>+</button>
+          </div>
+        </div>
+
+        <button 
+          type="submit" 
+          class="add-cart-btn require-login"
+          {% if cart_full %}disabled{% endif %}>
+          Add to Cart
+        </button> 
+      </form>
+    {% else %}
+      <button class="add-cart-btn" disabled>Out of Stock</button>
+    {% endif %}
+
+    <div id="quantity-error" class="alert alert-error mt-2 {% if not cart_full %}hidden{% endif %}">
+      {% if cart_full %}
+        ⚠️ You already have the maximum stock ({{ product.stock }}) in your cart.
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+  #quantity-error {
+    opacity: 1;
+    transition: opacity 0.4s ease;
+  }
+  #quantity-error.hidden {
+    opacity: 0;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const qtyInput = document.querySelector('.quantity-input');
+    const plusBtn = document.querySelector('.qty-btn.plus');
+    const minusBtn = document.querySelector('.qty-btn.minus');
+    const errorBox = document.querySelector("#quantity-error");
+    const addToCartBtn = document.querySelector('.add-cart-btn.require-login');
+
+    // Skip JS validation if cart is already full (locked server-side)
+    if (qtyInput && !qtyInput.hasAttribute("readonly")) {
+      function showError(message) {
+        errorBox.innerText = message;
+        errorBox.classList.remove("hidden");
+        addToCartBtn.disabled = true;
+      }
+
+      function hideError() {
+        errorBox.classList.add("hidden");
+        errorBox.addEventListener("transitionend", () => {
+          if (errorBox.classList.contains("hidden")) {
+            errorBox.innerText = "";
+          }
+        }, { once: true });
+        addToCartBtn.disabled = false;
+      }
+
+      function validateQuantity() {
+        let qty = parseInt(qtyInput.value) || 1;
+        const max = parseInt(qtyInput.getAttribute('max'), 10);
+
+        if (qty < 1) qty = 1;
+
+        if (max && qty > max) {
+          qty = max;
+          showError(`⚠️ You cannot add more than ${max} items.`);
+        } else {
+          hideError();
+        }
+
+        qtyInput.value = qty;
+      }
+
+      qtyInput.addEventListener('input', validateQuantity);
+      if (plusBtn) plusBtn.addEventListener('click', () => {
+        qtyInput.value = parseInt(qtyInput.value) + 1;
+        validateQuantity();
+      });
+      if (minusBtn) minusBtn.addEventListener('click', () => {
+        qtyInput.value = Math.max(parseInt(qtyInput.value) - 1, 1);
+        validateQuantity();
+      });
+
+      validateQuantity();
+    }
+  });
+</script>
+{% endblock %}

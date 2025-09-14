@@ -1,0 +1,863 @@
+<!-- templates/shared/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}AgriHub Philippines | Your Trusted Agriculture Marketplace{% endblock %}</title>
+    
+
+    {% load static %}
+
+    <!-- Shared styles for layout components -->
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'images/Favicon.png' %}">
+
+
+
+    <!-- External libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
+
+
+    <!-- Page-specific styles -->
+    {% block extra_head %}{% endblock %}
+</head> 
+
+<body>
+    <!-- === Header starts here === -->
+    <header>
+        <nav class="primary-navbar">
+            <div class="nav-container">
+
+                <!-- Logo Section -->
+                <div class="logo">
+                    <img src="/static/images/Temporaries/Logo 9.png" alt="AniHub Logo" id="logo-img">
+                </div>
+        
+               <!-- Search Bar -->
+                <form class="search-bar" autocomplete="off">
+                    <input 
+                        class="search__input" 
+                        type="text" 
+                        placeholder="Search..."
+                        maxlength="30" 
+                        id="searchInput"
+                    >
+                    <div class="search-suggestions" id="suggestionsBox"></div>
+                </form>
+
+        
+                <!-- Navigation Group (Wishlist, Cart, Profile) -->
+
+                
+                <div id="nav-shopping-cart-group">
+                    <a href="{% url 'cart:cart' %}" class="nav-btn require-login" id="myCartBtn" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                            <path d="M7.5 18C8.32843 18 9 18.6716 9 19.5C9 20.3284 8.32843 21 7.5 21C6.67157 21 6 20.3284 6 19.5C6 18.6716 6.67157 18 7.5 18Z" stroke="#000000" stroke-width="1.5"></path>
+                            <path d="M16.5 18.0001C17.3284 18.0001 18 18.6716 18 19.5001C18 20.3285 17.3284 21.0001 16.5 21.0001C15.6716 21.0001 15 20.3285 15 19.5001C15 18.6716 15.6716 18.0001 16.5 18.0001Z" stroke="#000000" stroke-width="1.5"></path>
+                            <path d="M2 3L2.26121 3.09184C3.5628 3.54945 4.2136 3.77826 4.58584 4.32298C4.95808 4.86771 4.95808 5.59126 4.95808 7.03836V9.76C4.95808 12.7016 5.02132 13.6723 5.88772 14.5862C6.75412 15.5 8.14857 15.5 10.9375 15.5H12M16.2404 15.5C17.8014 15.5 18.5819 15.5 19.1336 15.0504C19.6853 14.6008 19.8429 13.8364 20.158 12.3075L20.6578 9.88275C21.0049 8.14369 21.1784 7.27417 20.7345 6.69708C20.2906 6.12 18.7738 6.12 17.0888 6.12H11.0235M4.95808 6.12H7" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path>
+                            </g>
+                        </svg>
+                        <span>Shopping Cart</span>
+                    </a>
+
+                    <div id="nav-shopping-cart-text">
+                        <p>My Cart</p>
+                        <p><span id="nav-amount">&#x20B1;00.00</span></p>
+                    </div>
+                </div>
+
+                    <!-- Account -->
+                    <div id="nav-account">
+                        <div class="account-toggle">
+                            {% if user.is_authenticated %}
+                                <!-- ✅ Profile Section for Logged-In Users -->
+                                <div id="profileSection">
+                                    <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile Pic" />
+                                    <span class="username">{{ user.username }}</span>
+                                    <span class="dropdown-arrow">▼</span>
+
+                                    <div id="logoutDropdown" class="dropdown-menu">
+                                        <!-- ✅ My Orders Dropdown Menu -->
+                                        <form method="POST" action="{% url 'orders:my_orders' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="dropdown-btn">📦 My Orders</button>
+                                        </form>
+                                        
+                                        <!-- ✅ Logout Dropdown Menu -->
+                                        <form method="POST" action="{% url 'logout' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="dropdown-btn">🚪 Logout</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <!-- 🚪 Login/Signup Button -->
+                                <button class="nav-btn" id="signInBtn">
+                                    <h1>Login/Sign up</h1>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </nav>
+
+        <nav class="secondary-navbar">
+            <div class="secondary-nav-container">
+                <div class="secondary-navbar-navlist">
+                    <ul>
+                        <li><a href="{% url 'main:home' %}">Home</a></li>
+                        <li><a href="{% url 'main:shop' %}">Shop</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="secondary-navbar-contact">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17 12C19.7614 12 22 9.76142 22 7C22 4.23858 19.7614 2 17 2C14.2386 2 12 4.23858 12 7C12 7.79984 12.1878 8.55582 12.5217 9.22624C12.6105 9.4044 12.64 9.60803 12.5886 9.80031L12.2908 10.9133C12.1615 11.3965 12.6035 11.8385 13.0867 11.7092L14.1997 11.4114C14.392 11.36 14.5956 11.3895 14.7738 11.4783C15.4442 11.8122 16.2002 12 17 12Z" stroke="#000000" stroke-width="1.5"></path> <path d="M8.03759 7.31617L8.6866 8.4791C9.2723 9.52858 9.03718 10.9053 8.11471 11.8278C8.11471 11.8278 8.11471 11.8278 8.11471 11.8278C8.11459 11.8279 6.99588 12.9468 9.02451 14.9755C11.0525 17.0035 12.1714 15.8861 12.1722 15.8853C12.1722 15.8853 12.1722 15.8853 12.1722 15.8853C13.0947 14.9628 14.4714 14.7277 15.5209 15.3134L16.6838 15.9624C18.2686 16.8468 18.4557 19.0692 17.0628 20.4622C16.2258 21.2992 15.2004 21.9505 14.0669 21.9934C12.1588 22.0658 8.91828 21.5829 5.6677 18.3323C2.41713 15.0817 1.93421 11.8412 2.00655 9.93309C2.04952 8.7996 2.7008 7.77423 3.53781 6.93723C4.93076 5.54428 7.15317 5.73144 8.03759 7.31617Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+                    <p>(+63) 555-014</p>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- === Header ends here === -->
+
+    <!-- === Page-Specific Content === -->
+    <div class="container-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% block content %}
+        {% endblock %}
+ 
+    </div>
+    ok na hehe nap parse pa rin ng python ung comment pota kelangan # yung comment hindi "<!---->""
+    inayos ko lng yung mga pagabas ng log in modal
+    <!-- === Footer Starts Here === -->
+    <!-- First Footer -->
+    <footer>
+        <!--Them Tags-->
+        <div id="footer-secondary-tags">
+            <!--Acts as gutter space-->
+            <div class="footer-container">
+
+                <!--Tag 1-->
+                <div class="tag">
+                    <div class="tag-image">
+                        <img class="tag-icon" src="{% static 'images/Deal-Icon.png' %}" alt="deal icon">
+                    </div>
+
+                    <div class="tag-information">
+                        <div class="tag-title">
+                            <h1>Best Prices & Deals</h1>
+                        </div>
+
+                        <div class="tag-description">
+                            <p>Don't miss our daily amazing deals and prices</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Tag 2-->
+                <div class="tag">
+                    <div class="tag-image">
+                        <img class="tag-icon" src="{% static 'images/Refund-Icon.png' %}" alt="refund icon">
+                    </div>
+
+                    <div class="tag-information">
+                        <div class="tag-title">
+                            <h1>Refundable</h1>
+                        </div>
+
+                        <div class="tag-description">
+                            <p>If your items have damage we agree to refund it</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Tag 3-->
+                <div class="tag">
+                    <div class="tag-image">
+                        <img class="tag-icon" src="{% static 'images/Delivery-Icon.png' %}" alt="delivery icon">
+                    </div>
+
+                    <div class="tag-information">
+                        <div class="tag-title">
+                            <h1>Free Delivery</h1>
+                        </div>
+
+                        <div class="tag-description">
+                            <p>Delivery coverage is currently restricted but free to Dalig, Antipolo, Rizal.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!--Main Footer-->
+        <div id="primary-footer-links">
+            <div class="footer-container-primary">
+
+                <!--First Container (Info)-->
+                <div id="footer-anitubo-information">
+                    <div id="footer-agrihub-logo">
+                        <img src="{% static 'images/Temporaries/Logo 9.png' %}" alt="footer-logo" id="footer-logo">
+                    </div>
+
+                    <!--Address-->
+                    <div class="footer-information-content">
+                        <img class="footer-info-icon" src="{% static 'images/location.png' %}" alt="address icon">
+                        <h6>Address: </h6>
+                        <p>1762 Antipolo, Rizal</p>
+                    </div>
+
+                    <!--Call Us-->
+                    <div class="footer-information-content">
+                        <img class="footer-info-icon" src="{% static 'images/telephone.png' %}" alt="telephone icon">
+                        <h6>Call Us: </h6>
+                        <p>(+63) 555-014</p>
+                    </div>
+
+                    <!--Email-->
+                    <div class="footer-information-content">
+                        <img class="footer-info-icon" src="{% static 'images/email.png' %}" alt="email icon">
+                        <h6>Email: </h6>
+                        <p>anitubo@contact.com</p>
+                    </div>
+
+                    <!--Work hours: -->
+                    <div class="footer-information-content">
+                        <img class="footer-info-icon" src="{% static 'images/time.png' %}" alt="time icon">
+                        <h6>Work hours: </h6>
+                        <p>8AM - 10PM, Monday - Saturday</p>
+                    </div>
+                </div>
+
+                <!--Second Container (Account)-->
+                <div id="footer-account-links" class="footer-link">
+                    <div class="footer-link-title">
+                        <h5>My Account</h5>
+                    </div>
+
+                    <div class="footer-link-list">
+                        <ul>
+                            <li><a href="#">Wishlist</a></li>
+                            <li><a href="#">Cart</a></li>
+                            <li><a href="#">Track Order</a></li>
+                            <li><a href="#">Shipping Details</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!--Third Container (Help)-->
+                <div id="footer-help-links" class="footer-link">
+                    <div class="footer-link-title">
+                        <h5>Help</h5>
+                    </div>
+
+                    <div class="footer-link-list">
+                        <ul>
+                            <li><a href="#" class="require-login">Wishlist</a></li>
+                            <li><a href="#" class="require-login">Cart</a></li>
+                            <li><a href="#" class="require-login">Track Order</a></li>
+                            <li><a href="#" class="require-login">Shipping Details</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!--Fourth Container (Categories)-->
+                <div id="footer-useful-links" class="footer-link">
+                    <div class="footer-link-title">
+                        <h5>Categories</h5>
+                    </div>
+
+                    <div class="footer-link-list">
+                        <ul>
+{% for category in footer_categories %}
+<li>
+    <a href="{% url 'main:shop' %}?category={{ category.slug }}">
+        {{ category.name }}
+    </a>
+</li>
+{% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div id="final-footer-copyright">
+            <div class="footer-container-tertiary">
+                <div id="copyright">
+                    <h6>AgriHub eCommerce &copy; 2025, All Rights Reserved</h6>
+                </div>
+            </div>
+           
+        </div>
+    </footer>
+    <!-- === Footer Ends Here === -->
+
+
+
+
+
+    <!-- === Optional Modal (auth, etc) === -->
+    <!-- Chatbot -->
+    {% include 'shared/chatbot_widget.html' %}
+    <!-- === vvv MODALS (Hidden by default) vvv === -->
+    <!-- Authentication Modal -->
+    <div id="authModal" class="modal 
+    {% if identifier_error or password_error or show_login_modal %}
+        modal-visible
+    {% else %}
+        modal-hidden
+    {% endif %}
+    ">
+        <div class="modal-content">
+
+            <!-- Modal Title and Close Button Wrapper -->
+            <div class="auth-header-wrapper">
+                <h2 id="authTitle">Sign in</h2>
+                <button id="closeModal" class="close-btn" aria-label="Close Modal">&times;</button>
+            </div>
+
+            <!-- Generic login failure message -->
+            <div id="loginError" class="generic-login-error {% if login_error %} {% else %}hidden{% endif %}">
+                {{ login_error }}
+            </div>
+
+            <!-- Sign In Form -->
+            <div id="signInForm">
+                <form id="loginForm" action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+                    
+                    <!-- Username or Email Input -->
+                    <div id="identifierInputContainer" class="inputContainer">
+                        <label for="identifier">Username or Email</label>
+                        <input type="text" id="identifier" name="identifier" placeholder="Enter your username or email" minlength="3" maxlength="50" autocomplete="off" required />
+                        
+                        <!--Dynamic Error message here-->
+                        <p id="identifierError" class="error-message {% if identifier_error %} {% else %}hidden{% endif %}">
+                            {{ identifier_error }}
+                        </p>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div id="passwordInputContainer" class="inputContainer">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" minlength="8" maxlength="20" required />
+
+                        <!--Dynamic Error message here-->
+                        <p id="passwordError" class="error-message {% if password_error %} {% else %}hidden{% endif %}">
+                            {{ password_error }}
+                        </p>
+                    </div>
+
+                    
+
+
+                    <!-- Forgot Password -->
+                    <div id="forgotPasswordContainer">
+                        <a href="/forgot-password" id="forgotPassword">Forgot your password?</a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <div id="loginButtonContainer">
+                        <button type="submit">Log In</button>
+                    </div>
+
+                    <!-- Register Prompt -->
+                    <div id="registerButtonContainer">
+                        <p>Don't have an account?</p>
+                        <a href="#" id="switchToRegister">Sign up</a>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Sign Up Form (Initially hidden) -->
+            <div id="signUpForm" class="hidden">
+                <form id="registerForm" action="{% url 'register' %}" method="POST">
+                    {% csrf_token %}
+
+                    <!-- Username -->
+                    <div id="newUsernameInputContainer" class="inputContainer-2">
+                        <label for="newUsername">Username</label>
+                        <input type="text" id="newUsername" name="username" 
+                            placeholder="3–20 characters" 
+                            minlength="3" maxlength="20"
+                            value="{{ form_data.username|default:'' }}" required />
+                        <p id="newUsernameError" class="error-message {% if not username_error %}hidden{% endif %}">
+                            {{ username_error }}
+                        </p>
+                    </div>
+
+                    <!-- Email -->
+                    <div id="newEmailInputContainer" class="inputContainer-2">
+                        <label for="newEmail">Email</label>
+                        <input type="email" id="newEmail" name="email" 
+                            placeholder="Enter a valid email (e.g. john@example.com)"
+                            minlength="11" maxlength="50"
+                            value="{{ form_data.email|default:'' }}" required />
+                        <p id="newEmailError" class="error-message {% if not email_error %}hidden{% endif %}">
+                            {{ email_error }}
+                        </p>
+                    </div>
+
+                    <!-- Password -->
+                    <div id="newPasswordInputContainer" class="inputContainer-2">
+                        <label for="newPassword">Password</label>
+                        <input type="password" id="newPassword" name="password"
+                            placeholder="8–20 chars, include A-Z, a-z, 0-9" 
+                            minlength="8" maxlength="20"
+                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,20}$"
+                            title="8–20 characters, must include uppercase, lowercase, and a number"
+                            required />
+                        <p id="newPasswordError" class="error-message {% if not password_error %}hidden{% endif %}">
+                            {{ password_error }}
+                        </p>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div id="confirmPasswordInputContainer" class="inputContainer-2">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirm_password" 
+                            placeholder="Re-enter password" 
+                            minlength="8" maxlength="20"
+                            required />
+                        <p id="confirmPasswordError" class="error-message {% if not confirm_password_error %}hidden{% endif %}">
+                            {{ confirm_password_error }}
+                        </p>
+                    </div>
+
+                    <!-- Generic Registration Error (if any) -->
+                    {% if registration_error %}
+                        <p class="error-message">{{ registration_error }}</p>
+                    {% endif %}
+
+                    <!-- Register Button -->
+                    <div id="registerButtonContainer">
+                        <button type="submit">Sign Up</button>
+                    </div>
+
+                    <!-- Login Prompt -->
+                    <div id="loginButtonContainer2">
+                        <p>Already have an account?</p>
+                        <a href="#" id="switchToLogin">Log in</a>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+    <!-- === ^^^ MODALS (Hidden by default) ^^^ === -->
+
+
+
+
+    <!-- === Scripts === -->
+    <!-- Chatbot Script -->
+    <script src="{% static 'js/chatbot.js' %}"></script>
+    <script src="{% static 'js/search.js' %}"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+     -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const profileSection = document.getElementById('profileSection');
+            const logoutDropdown = document.getElementById('logoutDropdown');
+
+            if (profileSection && logoutDropdown) {
+                profileSection.addEventListener('click', function () {
+                    const isVisible = logoutDropdown.style.display === 'block';
+                    logoutDropdown.style.display = isVisible ? 'none' : 'block';
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (!profileSection.contains(e.target)) {
+                        logoutDropdown.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!--Temp should turn into js file (Toggle of modal)-->
+
+    <!--Refactor later, after failed error. Display the modal-->
+    {% if show_login_modal %}
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+            const authModal = document.getElementById("authModal");
+            const signInForm = document.getElementById("signInForm");
+            const signUpForm = document.getElementById("signUpForm");
+            const authTitle = document.getElementById("authTitle");
+
+            if (authModal) {
+                authModal.classList.remove("modal-hidden");
+                authModal.classList.add("modal-visible");
+            }
+
+            {% if register_mode %}
+                // Show sign-up tab
+                if (signInForm && signUpForm && authTitle) {
+                    signInForm.classList.add("hidden");
+                    signUpForm.classList.remove("hidden");
+                    authTitle.textContent = "Sign up";
+                }
+            {% else %}
+                // Default to login
+                if (signInForm && signUpForm && authTitle) {
+                    signUpForm.classList.add("hidden");
+                    signInForm.classList.remove("hidden");
+                    authTitle.textContent = "Sign in";
+                }
+            {% endif %}
+        });
+    </script>
+    {% endif %}
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Modal elements
+        const signInBtn = document.getElementById("signInBtn");
+        const authModal = document.getElementById("authModal");
+        const closeModalBtn = document.getElementById("closeModal");
+        
+        // Form elements
+        const loginForm = document.getElementById("loginForm");
+        const registerForm = document.getElementById("registerForm");
+        
+        // Error elements
+        const loginError = document.getElementById("loginError");
+        const identifierError = document.getElementById("identifierError");
+        const passwordError = document.getElementById("passwordError");
+        
+        // Form toggle elements
+        const switchToRegister = document.getElementById("switchToRegister");
+        const switchToLogin = document.getElementById("switchToLogin");
+        const authTitle = document.getElementById("authTitle");
+        const signInForm = document.getElementById("signInForm");
+        const signUpForm = document.getElementById("signUpForm");
+
+        // Open modal when sign in button is clicked
+        if (signInBtn && authModal) {
+            signInBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                showModal();
+            });
+        }
+
+        // Close modal
+        if (closeModalBtn && authModal) {
+            closeModalBtn.addEventListener("click", () => {
+                hideModal();
+            });
+        }
+
+        // Switch to register form
+        if (switchToRegister) {
+            switchToRegister.addEventListener("click", (e) => {
+                e.preventDefault();
+                switchToSignUp();
+            });
+        }
+
+        // Switch to login form
+        if (switchToLogin) {
+            switchToLogin.addEventListener("click", (e) => {
+                e.preventDefault();
+                switchToSignIn();
+            });
+        }
+
+        // Prevent register form submission and validate
+        if (registerForm) {
+            registerForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                validateRegisterForm();
+            });
+        }
+
+        // Helper functions
+        function showModal() {
+            authModal.classList.remove("modal-hidden");
+            authModal.classList.add("modal-visible");
+        }
+
+        function hideModal() {
+            authModal.classList.remove("modal-visible");
+            authModal.classList.add("modal-hidden");
+            
+            // Clear any visible errors
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            if (loginForm) loginForm.reset();
+        }
+
+        function switchToSignUp() {
+            signInForm.classList.add("hidden");
+            signUpForm.classList.remove("hidden");
+            authTitle.textContent = "Sign up";
+            
+            // Clear login form errors
+            document.querySelectorAll('#loginForm .error-message').forEach(el => {
+                el.classList.add('hidden');
+            });
+        }
+
+        function switchToSignIn() {
+            signUpForm.classList.add("hidden");
+            signInForm.classList.remove("hidden");
+            authTitle.textContent = "Sign in";
+            
+            // Clear registration form errors
+            document.querySelectorAll('#registerForm .error-message').forEach(el => {
+                el.classList.add('hidden');
+            });
+        }
+
+        function validateRegisterForm() {
+            const form = registerForm;
+            const username = form.elements['username'].value.trim();
+            const email = form.elements['email'].value.trim();
+            const password = form.elements['password'].value;
+            const confirmPassword = form.elements['confirm_password'].value;
+            let isValid = true;
+
+            // Clear previous errors
+            document.querySelectorAll('#registerForm .error-message').forEach(el => {
+                el.classList.add('hidden');
+            });
+
+            // Validate username
+            const usernameError = document.getElementById("newUsernameError"); 
+            if (!username) {
+                usernameError.textContent = 'Username is required';
+                usernameError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                usernameError.classList.add('hidden');
+            }
+
+            // Validate email
+            if (!email) {
+                document.getElementById("newEmailError").textContent = 'Email is required';
+                document.getElementById("newEmailError").classList.remove('hidden');
+                isValid = false;
+            } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+                document.getElementById("newEmailError").textContent = 'Enter a valid email';
+                document.getElementById("newEmailError").classList.remove('hidden');
+                isValid = false;
+            }
+
+            // Validate password
+            if (!password) {
+                document.getElementById("newPasswordError").textContent = 'Password is required';
+                document.getElementById("newPasswordError").classList.remove('hidden');
+                isValid = false;
+            } else if (password.length < 8) {
+                document.getElementById("newPasswordError").textContent = 'Password must be at least 8 characters';
+                document.getElementById("newPasswordError").classList.remove('hidden');
+                isValid = false;
+            }
+
+            // Validate confirm password
+            if (!confirmPassword) {
+                document.getElementById("confirmPasswordError").textContent = 'Please confirm your password';
+                document.getElementById("confirmPasswordError").classList.remove('hidden');
+                isValid = false;
+            } else if (password !== confirmPassword) {
+                document.getElementById("confirmPasswordError").textContent = 'Passwords do not match';
+                document.getElementById("confirmPasswordError").classList.remove('hidden');
+                isValid = false;
+            }
+
+            // If valid, submit the form
+            if (isValid) {
+                form.submit();
+            }
+        }
+
+        // Get form inputs
+        const usernameInput = document.getElementById("newUsername");
+        const emailInput = document.getElementById("newEmail");
+        const passwordInput = document.getElementById("newPassword");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+
+        // Real-time username availability check
+        if (usernameInput) {
+            let usernameTimeout;
+            let lastValidUsername = '';
+
+            usernameInput.addEventListener("input", function () {
+                clearTimeout(usernameTimeout);
+                const username = this.value.trim();
+                const errorElement = document.getElementById("newUsernameError");
+
+                // Reset error state if empty or same as last valid
+                if (!username || username === lastValidUsername) {
+                    errorElement.classList.add('hidden');
+                    return;
+                }
+
+                usernameTimeout = setTimeout(() => {
+                    // Basic validation
+                    if (username.length < 3) {
+                        errorElement.textContent = 'Username must be at least 3 characters';
+                        errorElement.classList.remove('hidden');
+                        return;
+                    }
+
+                    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                        errorElement.textContent = 'Only letters, numbers, and underscores allowed';
+                        errorElement.classList.remove('hidden');
+                        return;
+                    }
+
+                    // Passed validation
+                    errorElement.classList.add('hidden');
+                    lastValidUsername = username;
+                }, 500); // ← Add 500ms delay before validating
+            });
+        }
+
+        // Real-time email availability check
+        if (emailInput) {
+            let emailTimeout;
+            let lastValidEmail = '';
+            
+            emailInput.addEventListener("input", function() {
+                clearTimeout(emailTimeout);
+                const email = this.value.trim().toLowerCase();
+                const errorElement = document.getElementById("newEmailError");
+                
+                // Reset error state if empty or same as last valid
+                if (!email || email === lastValidEmail) {
+                    errorElement.classList.add('hidden');
+                    return;
+                }
+
+                emailTimeout = setTimeout(async () => {
+                    // Basic validation
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                        errorElement.textContent = 'Please enter a valid email address';
+                        errorElement.classList.remove('hidden');
+                        return;
+                    }
+                });
+            });
+        }
+        // Helper function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Password validation
+        if (passwordInput) {
+            passwordInput.addEventListener("input", validatePassword);
+            passwordInput.addEventListener("blur", validatePassword);
+        }
+
+        // Confirm password validation
+        if (confirmPasswordInput) {
+            confirmPasswordInput.addEventListener("input", validateConfirmPassword);
+            confirmPasswordInput.addEventListener("blur", validateConfirmPassword);
+        }
+
+        function validatePassword() {
+            const password = passwordInput.value;
+            const errorElement = document.getElementById("newPasswordError");
+            
+            if (!password) {
+                errorElement.textContent = 'Password is required';
+                errorElement.classList.remove('hidden');
+                return false;
+            } else if (password.length < 8) {
+                errorElement.textContent = 'Password must be at least 8 characters';
+                errorElement.classList.remove('hidden');
+                return false;
+            }
+            errorElement.classList.add('hidden');
+            return true;
+        }
+
+        function validateConfirmPassword() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const errorElement = document.getElementById("confirmPasswordError");
+            
+            if (!confirmPassword) {
+                errorElement.textContent = 'Please confirm your password';
+                errorElement.classList.remove('hidden');
+                return false;
+            } else if (password !== confirmPassword) {
+                errorElement.textContent = 'Passwords do not match';
+                errorElement.classList.remove('hidden');
+                return false;
+            }
+            errorElement.classList.add('hidden');
+            return true;
+        }
+    });
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        {% if not user.is_authenticated %}
+        const authModal = document.getElementById("authModal");
+        document.querySelectorAll(".require-login").forEach(function(el) {
+            el.addEventListener("click", function(e) {
+                e.preventDefault();
+                if (authModal) {
+                    authModal.classList.remove("modal-hidden");
+                    authModal.classList.add("modal-visible");
+                }
+            });
+        });
+        {% endif %}
+    });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/product.css' %}">
+
+<div class="product-container">
+  <div class="product-image">
+    <img src="{{ product.image_url }}" alt="{{ product.name }}">
+  </div>
+
+  <div class="product-details">
+    <h2 class="product-name">{{ product.name }}</h2>
+    <p class="product-price">₱ {{ product.price }}</p>
+    <p class="product-category">Category: {{ product.category }}</p>
+    <p class="product-stock {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+      {% if product.stock > 0 %}
+        In stock: {{ product.stock }}
+      {% else %}
+        Out of Stock
+      {% endif %}
+    </p>
+    <p class="product-description">{{ product.description }}</p>
+
+    <!-- Messages -->
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="message {{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if cart_item and cart_item.quantity >= product.stock %}
+        <button type="submit" class="add-cart-btn" disabled>
+            Max Stock Reached
+        </button>
+        <div class="alert alert-error mt-2">
+            You already have the maximum stock ({{ product.stock }}) in your cart.
+        </div>
+    {% else %}
+        <button type="submit" class="add-cart-btn">Add to Cart</button>
+    {% endif %}
+
+
+    {% if product.stock > 0 %}
+      <form method="post" action="{% url 'cart:add_to_cart' product.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+
+        <!-- Quantity Selector -->
+        <div class="quantity-container">
+          <p class="lexend-300">Quantity:</p>
+
+          <div class="quantity-selector">
+            <button type="button" class="qty-btn minus" aria-label="Decrease quantity" data-item-id="{{ product.id }}">−</button>
+            <input 
+              type="number" 
+              name="quantity" 
+              class="quantity-input" 
+              value="1" 
+              min="1" 
+              max="{{ product.stock }}" 
+              data-item-id="{{ product.id }}">
+            <button type="button" class="qty-btn plus" aria-label="Increase quantity" data-item-id="{{ product.id }}">+</button>
+          </div>
+        </div>
+        <button type="submit" class="add-cart-btn require-login">Add to Cart</button>
+      </form>
+    {% else %}
+      <button class="add-cart-btn" disabled>Out of Stock</button>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const qtyInputs = document.querySelectorAll('.quantity-input');
+    const plusBtns = document.querySelectorAll('.qty-btn.plus');
+    const minusBtns = document.querySelectorAll('.qty-btn.minus');
+
+    // Quantity input change
+    qtyInputs.forEach(input => {
+      input.addEventListener('input', e => {
+        let qty = parseInt(e.target.value) || 1;
+        const max = parseInt(e.target.getAttribute('max'), 10);
+        if (qty < 1) qty = 1;
+        if (max && qty > max) {
+          qty = max;
+          errorBox.innerText = "You cannot add more than the available stock."
+        } else {
+          errorBox.innerText =
+        }
+        e.target.value = qty;
+      });
+    });
+
+    // Plus button
+    plusBtns.forEach(btn => {
+      btn.addEventListener('click', e => {
+        const input = btn.parentElement.querySelector('.quantity-input');
+        const max = parseInt(input.getAttribute('max'), 10);
+        let qty = parseInt(input.value) + 1;
+        if (max && qty > max) qty = max;
+        input.value = qty;
+      });
+    });
+
+    // Minus button
+    minusBtns.forEach(btn => {
+      btn.addEventListener('click', e => {
+        const input = btn.parentElement.querySelector('.quantity-input');
+        const errorBox = document.querySelector("#quantity-error")
+        let qty = Math.max(parseInt(input.value) - 1, 1);
+        input.value = qty;
+        errorBox.innerText = ""
+      });
+    });
+
+    // Prevent Add to Cart form submission for guests and show login modal
+    const addToCartForm = document.querySelector('form[action*="add_to_cart"]');
+    if (addToCartForm) {
+      addToCartForm.addEventListener('submit', function(e) {
+        if (typeof isUserLoggedIn !== "undefined" && !isUserLoggedIn) {
+          e.preventDefault();
+          const authModal = document.getElementById("authModal");
+          if (authModal) {
+            authModal.classList.remove("modal-hidden");
+            authModal.classList.add("modal-visible");
+          }
+          return false;
+        }
+      });
+    }
+  });
+</script>
+
+{% endblock %}

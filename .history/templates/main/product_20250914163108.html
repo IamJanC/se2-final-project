@@ -1,0 +1,143 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/product.css' %}">
+
+<div class="product-container">
+  <div class="product-image">
+    <img src="{{ product.image_url }}" alt="{{ product.name }}">
+  </div>
+
+  <div class="product-details">
+    <h2 class="product-name">{{ product.name }}</h2>
+    <p class="product-price">₱ {{ product.price }}</p>
+    <p class="product-category">Category: {{ product.category }}</p>
+    <p class="product-stock {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+      {% if product.stock > 0 %}
+        In stock: {{ product.stock }}
+      {% else %}
+        Out of Stock
+      {% endif %}
+    </p>
+    <p class="product-description">{{ product.description }}</p>
+
+    <!-- Messages -->
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="message {{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if product.stock > 0 %}
+      <form method="post" action="{% url 'cart:add_to_cart' product.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+
+        <!-- Quantity Selector -->
+        <div class="quantity-container">
+          <p class="lexend-300">Quantity:</p>
+
+          <div class="quantity-selector">
+            <button type="button" class="qty-btn minus" aria-label="Decrease quantity" data-item-id="{{ product.id }}">−</button>
+            <input 
+              type="number" 
+              name="quantity" 
+              class="quantity-input" 
+              value="1" 
+              min="1" 
+              max="{{ product.stock }}" 
+              data-item-id="{{ product.id }}">
+            <button type="button" class="qty-btn plus" aria-label="Increase quantity" data-item-id="{{ product.id }}">+</button>
+          </div>
+        </div>
+
+        <div id="quantity-error" class="alert alert-error mt-2"></div>
+        <button 
+        type="submit" 
+        class="add-cart-btn require-login"
+        {% if cart_item and cart_item.quantity >= product.stock %}disabled{% endif %}>
+        {% if cart_item and cart_item.quantity >= product.stock %}
+          Add to Cart
+        {% else %}
+          Add to Cart
+        {% endif %}
+        </button> 
+      </form>
+    {% else %}
+      <button class="add-cart-btn" disabled>Out of Stock</button>
+    {% endif %}
+
+    {% if cart_item and cart_item.quantity >= product.stock %}
+      <div class="alert alert-error mt-2">
+        You already have the maximum stock ({{ product.stock }}) in your cart.
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  #quantity-error {
+    opacity: 1;
+    transition: opacity 0.4s ease;
+  }
+  #quantity-error.hidden {
+    opacity: 0;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const qtyInput = document.querySelector('.quantity-input');
+    const plusBtn = document.querySelector('.qty-btn.plus');
+    const minusBtn = document.querySelector('.qty-btn.minus');
+    const errorBox = document.querySelector("#quantity-error");
+    const addToCartBtn = document.querySelector('.add-cart-btn.require-login');
+
+    function showError(message) {
+      errorBox.innerText = message;
+      errorBox.classList.remove("hidden");
+    }
+
+    function hideError() {
+      errorBox.classList.add("hidden");
+      setTimeout(() => { errorBox.innerText = ""; }, 400);
+    }
+
+    function validateQuantity() {
+      let qty = parseInt(qtyInput.value) || 1;
+      const max = parseInt(qtyInput.getAttribute('max'), 10);
+
+      if (qty < 1) qty = 1;
+
+      if (max && qty > max) {
+        qty = max;
+        showError(`⚠️ You cannot add more than ${max} items.`);
+        addToCartBtn.disabled = true;
+      } else {
+        hideError();
+        addToCartBtn.disabled = false;
+      }
+
+      qtyInput.value = qty;
+    }
+
+    qtyInput.addEventListener('input', validateQuantity);
+    plusBtn.addEventListener('click', () => {
+      qtyInput.value = parseInt(qtyInput.value) + 1;
+      validateQuantity();
+    });
+    minusBtn.addEventListener('click', () => {
+      qtyInput.value = Math.max(parseInt(qtyInput.value) - 1, 1);
+      validateQuantity();
+    });
+
+    validateQuantity();
+  });
+</style>
+
+
+
+{% endblock %}

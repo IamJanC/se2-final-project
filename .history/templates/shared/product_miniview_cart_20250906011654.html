@@ -1,0 +1,173 @@
+<!-- Product Mini View Modal -->
+<div class="miniview-modal hidden">
+  <div class="miniview-modal-content">
+
+    
+
+    <!-- Left: Product Picture -->
+    <div id="product-picture-left">
+      <img src="https://i.imgur.com/1OAb9H6.png" alt="placeholder pic">
+    </div>
+
+    <!-- Right: Product Details -->
+    <div id="product-details-right">
+
+      <!-- Title & Stock -->
+      <div id="product-title">
+        <h2 class="lexend-500">Product Title</h2>
+      </div>
+
+      <!-- Price -->
+      <div id="product-price">
+        <p class="lexend-400">₱ 20.00</p>
+      </div>
+
+      <!-- Category -->
+      <div id="product-category">
+        <p>Category: Example</p>
+      </div>
+
+      <!-- Stock -->
+      <div id="product-stock">
+        <p class="stock-status lexend-400">In stock: number</p>
+      </div>
+
+      <!-- Description -->
+      <div id="product-description">
+        <p class="lexend-300">Short description of the product.</p>
+      </div>
+
+      <form id="add-to-cart-form" method="POST" action="">
+        {% csrf_token %}
+
+        <!-- Quantity -->
+        <div class="quantity-container">
+          <p class="lexend-300">Quantity:</p>
+
+          <div class="quantity-selector">
+            <button type="button" class="qty-btn minus" aria-label="Decrease quantity">−</button>
+            <input type="number" name="quantity" class="quantity-input" value="1" min="1" max="9999">
+            <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+
+        <!-- Add to Cart -->
+        <div id="add-to-cart-container">
+          <button type="button" class="cancel-add-to-cart-btn">Cancel</button>
+          <button type="submit" class="add-to-cart-btn">Add to cart</button>
+        </div>
+
+        <input type="hidden" id="next-url-input" name="next" value="{{ request.get_full_path }}">
+      </form>
+
+
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+  // modal elements
+  const modal = document.querySelector('.miniview-modal');
+  if (!modal) return;
+
+  const imgEl = modal.querySelector('#product-picture-left img');
+  const titleEl = modal.querySelector('#product-title h2');
+  const priceEl = modal.querySelector('#product-price p');
+  const categoryEl = modal.querySelector('#product-category p');
+  const stockEl = modal.querySelector('#product-stock .stock-status');
+  const descEl = modal.querySelector('#product-description p');
+  const qtyInput = modal.querySelector('.quantity-input');
+  const minusBtn = modal.querySelector('.minus');
+  const plusBtn = modal.querySelector('.plus');
+  const cancelBtn = modal.querySelectorAll('.cancel-add-to-cart-btn');
+  const form = modal.querySelector('#add-to-cart-form');
+
+  function openModal() {
+    modal.classList.remove('hidden');
+    modal.style.display = '';
+  }
+  function closeModal() {
+    modal.classList.add('hidden');
+    modal.style.display = '';
+  }
+
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.open-miniview-btn');
+    if (!btn) return;
+    e.preventDefault();
+    const productId = btn.dataset.productId;
+
+    fetch(`/api/products/${productId}/`)
+      .then(res => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      })
+      .then(product => {
+        modal.dataset.productId = product.id;
+        imgEl.src = product.image_url || '/static/images/placeholder.png';
+        titleEl.textContent = product.name;
+        priceEl.textContent = '₱ ' + (parseFloat(product.price) || 0).toFixed(2);
+        categoryEl.textContent = 'Category: ' + (product.category || '');
+        stockEl.textContent = product.stock > 0 ? 'In stock: ' + product.stock : 'Out of Stock';
+        descEl.textContent = product.description || '';
+        qtyInput.value = 1;
+        qtyInput.min = 1;
+        qtyInput.max = product.stock;
+
+        if ((product.stock || 0) <= 0) {
+          // Disable submit button if out of stock
+          form.querySelector('button[type="submit"]').disabled = true;
+          form.querySelector('button[type="submit"]').textContent = 'Out of stock';
+        } else {
+          form.querySelector('button[type="submit"]').disabled = false;
+          form.querySelector('button[type="submit"]').textContent = 'Add to cart';
+        }
+
+        // Set form action dynamically
+        form.action = `/cart/add/${productId}/`;
+        // Set the next input value to current page path + query string
+        form.querySelector('#next-url-input').value = window.location.pathname + window.location.search;
+
+        openModal();
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Could not load product data. Try again.');
+      });
+  });
+
+  // Quantity controls
+  minusBtn.addEventListener('click', () => {
+    let val = parseInt(qtyInput.value, 10) || 1;
+    val = Math.max(val - 1, 1); // never below 1
+    qtyInput.value = val;
+  });
+
+  plusBtn.addEventListener('click', () => {
+    let val = parseInt(qtyInput.value, 10) || 1;
+    const max = parseInt(qtyInput.max, 10);
+    val = Math.min(val + 1, max); // never above stock
+    qtyInput.value = val;
+  });
+
+  // Prevent manual entry below 1 or above stock
+  qtyInput.addEventListener('input', () => {
+    let val = parseInt(qtyInput.value, 10) || 1;
+    const max = parseInt(qtyInput.max || '9999', 10);
+    if (val < 1) val = 1;
+    if (val > max) val = max;
+    qtyInput.value = val;
+  });
+
+  // Cancel buttons
+  cancelBtn.forEach(b => b.addEventListener('click', closeModal));
+
+  // Close modal on clicking outside content
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+})();
+</script>
+
+
