@@ -30,7 +30,7 @@ body {
 
 
 .sidebar {
-    width: 260px;
+    width: 400px;
     background: #fefeff;
     color: #7d828e;
     padding: 20px 0;
@@ -329,8 +329,337 @@ main{
 
 /* === Admin Dashboard === */
 
-.number-cards-section{
-    background-color: red; /* for debug */
+.number-cards-section {
+    display: flex;
+    flex-wrap: wrap;          /* ✅ allows wrapping */
+    gap: 1rem;                /* space between cards */
+    justify-content: flex-start; /* align left, not stretched */
+}
+
+.number-cards {
+    flex: 1 1 calc(33.333% - 1rem); /* ✅ three per row, minus gap */
+    min-width: 360px;               /* don’t shrink too small */
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+}
+
+.number-cards-top {
+    display: flex;
+    justify-content: space-between; /* push h3 left, svg right */
+    align-items: center;            /* vertically align them */
+    margin-bottom: 5px;
+}
+
+.number-cards-top h3 {
+    font-size: 20px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin: 0;
+}
+
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.kebab-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0px); /* 10px below kebab */
+    right: -65px;             /* 5px inward from the right edge */
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 8px 8px;
+    min-width: 160px;
+    z-index: 100;
+
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    /* hide by default */
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-menu ul {
+  list-style: none;   /* removes bullets */
+  padding: 0;         /* remove default left padding */
+  margin: 0;          /* remove default top/bottom margin */
 }
 
 
+.dropdown-menu li {
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f5f5f5;
+}
+
+
+.number-cards-timeline {
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    color: #6b707f;
+    margin-bottom: 15px;
+}
+
+.number-cards-sales-current{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.number-cards-sales-current h1{
+    font-size: 32px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+#current-sales{
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.sales-current-group{
+    font-size: 14px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    display: flex;
+    gap: 10px;
+}
+
+.sales-current-group svg{
+    width: 14px;
+    height: 14px;
+}
+
+.sales-current-up-group{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sales-status-up{
+    color: #5c842d;
+}
+
+.sales-current-down-group{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sales-status-down{
+    color: #842d2d;
+}
+
+.number-cards-sales-previous{
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    color: #6b707f;
+    margin-bottom: 5px;
+}
+
+
+
+/* Total Orders */
+.number-cards-orders-current{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.number-cards-orders-current h1{
+    font-size: 32px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+#current-orders{
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.orders-current-group{
+    font-size: 14px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    display: flex;
+    gap: 10px;
+}
+
+.orders-current-group svg{
+    width: 14px;
+    height: 14px;
+}
+
+.orders-current-up-group{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.orders-status-up{
+    color: #5c842d;
+}
+
+.orders-current-down-group{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.orders-status-down{
+    color: #842d2d;
+}
+
+.number-cards-orders-previous{
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    color: #6b707f;
+    margin-bottom: 5px;
+}
+
+
+/* Pending & Cancelled */
+.pending-cancelled-section{
+    display: flex;
+    gap: 10px;
+}
+
+.vertical-divider {
+  width: 1px;
+  background-color: #ddd; /* or whatever neutral tone */
+  margin: 0 16px;         /* spacing between groups */
+}
+
+.current-pending-group h3, .current-cancelled-group h3{
+    margin-top: 5px;
+    font-size: 18px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.current-pending-group-numbers h1{
+    font-size: 32px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.current-pending-group-numbers{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+}
+
+.current-pending-group-numbers{
+    display: flex;
+}
+
+.current-pending-group-numbers-spans{
+    color: #5c842d;
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.current-cancelled-group-numbers h1{
+    font-size: 32px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.current-cancelled-group-numbers{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+}
+
+.current-cancelled-group-numbers-spans{
+    color: #842d2d;
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.cancelled-current-down-group{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cancelled-current-down-group svg{
+    width: 16px;
+    height: 16px;
+}
