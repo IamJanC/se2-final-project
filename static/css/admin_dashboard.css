@@ -733,15 +733,16 @@ main{
 }
 
 .status-badge {
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 400;
 }
 
-.status-badge.success { background: #e6f4ea; color: #2e7d32; }
-.status-badge.warning { background: #fff4e5; color: #ed6c02; }
-.status-badge.danger  { background: #fdecea; color: #d32f2f; }
+.status-badge.success { background: #5d872f; color: #ffffff; }
+.status-badge.warning { background: #dab928; color: #ffffff; }
+.status-badge.danger  { background: #c44a4a; color: #ffffff; }
+.status-badge.pending { background: #94949b; color: #ffffff; }
 
 
 
@@ -797,4 +798,126 @@ main{
     font-optical-sizing: auto;
     font-weight: 300;
     font-style: normal;
+}
+
+
+
+
+
+/* Recent Transactions */
+.recent-activity-dashboard-section {
+    display: flex;
+    gap: 1rem; /* space between sections */
+    margin-top: 1.5rem;
+}
+
+.recent-transaction-dashboard {
+    flex: 2; /* takes 2/3 width */
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    overflow-x: auto; /* just in case table is wide */
+}
+
+.recent-transaction-dashboard h3{
+    font-size: 20px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 10px;
+}
+
+.recent-transaction-dashboard table {
+    width: 100%;
+    border-collapse: separate;   /* keeps spacing */
+    border-spacing: 0 0.75rem;   /* adds bottom space between rows */
+    font-size: 0.95rem;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.recent-transaction-dashboard th {
+    text-align: left;
+    padding: 0.5rem 1rem;
+    color: #7c7c7c;
+    
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    
+    border-bottom: 1px solid #eee;
+}
+
+.recent-transaction-dashboard td {
+    background: #fafafa;         /* subtle background for rows */
+    padding: 0.75rem 1rem;
+}
+
+/* Make status look nicer (optional badges) */
+.status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+.status.completed { background: #e6f7ec; color: #1b7a33; }
+.status.pending { background: #fff4e6; color: #b65c00; }
+.status.cancelled { background: #fdecea; color: #b71c1c; }
+
+
+
+/* Recent Session */
+.recent-session-dashboard {
+    flex: 0 0 auto; /* shrink-to-fit content */
+    width: fit-content; /* matches content width */
+    max-width: 100%; /* safety for small screens */
+
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.recent-session-dashboard h3{
+    font-size: 20px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 25px;
+}
+
+.recent-session-dashboard ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.recent-session-dashboard li {
+    margin-bottom: 1rem;
+    
+
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+
+    color: #444;
 }
