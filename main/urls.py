@@ -11,6 +11,7 @@ urlpatterns = [
     path('shop/<int:product_id>/', views.product_detail, name='product_detail'),
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('product/', views.product, name='product'), # <- ?? check later
+    path("account/", views.account_view, name="account"), # <- to account
     
     #product and cart api
     path('api/products/<int:product_id>/', product_views.product_detail_json, name='api_product_detail'),

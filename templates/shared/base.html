@@ -81,9 +81,14 @@
                             {% if user.is_authenticated %}
                                 <!-- ✅ Profile Section for Logged-In Users -->
                                 <div id="profileSection">
-                                    <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile Pic" />
-                                    <span class="username">{{ user.username }}</span>
-                                    <span class="dropdown-arrow">▼</span>
+                                    <a href="{% url 'main:account' %}"
+                                        class="profile-link" 
+                                        style="display:flex; align-items:center; gap:0.5rem; text-decoration:none; color:inherit;">
+                                        <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile Pic" />
+                                        <span class="username">{{ user.username }}</span>
+                                    </a>
+                                    
+                                    <span id="dropdownToggle" class="dropdown-arrow">▼</span>
 
                                     <div id="logoutDropdown" class="dropdown-menu">
                                         <!-- ✅ My Orders Dropdown Menu -->
@@ -491,23 +496,27 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const profileSection = document.getElementById('profileSection');
+            const dropdownToggle = document.getElementById('dropdownToggle');
             const logoutDropdown = document.getElementById('logoutDropdown');
 
-            if (profileSection && logoutDropdown) {
-                profileSection.addEventListener('click', function () {
+            if (dropdownToggle && logoutDropdown) {
+                // Only toggle when clicking the arrow
+                dropdownToggle.addEventListener('click', function (e) {
+                    e.stopPropagation(); // prevent closing immediately
                     const isVisible = logoutDropdown.style.display === 'block';
                     logoutDropdown.style.display = isVisible ? 'none' : 'block';
                 });
 
+                // Close dropdown when clicking outside
                 document.addEventListener('click', function (e) {
-                    if (!profileSection.contains(e.target)) {
+                    if (!dropdownToggle.contains(e.target) && !logoutDropdown.contains(e.target)) {
                         logoutDropdown.style.display = 'none';
                     }
                 });
             }
         });
     </script>
+
 
     <!--Temp should turn into js file (Toggle of modal)-->
 

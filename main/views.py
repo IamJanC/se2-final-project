@@ -92,4 +92,8 @@ def admin_dashboard(request):
     return render(request, 'main/admin.html')
 
 
+# Account Page
+def account_view(request):
+    return render(request, "main/account.html")
+
 
