@@ -288,6 +288,15 @@ nav {
     font-size: 18px;
 }
 
+/* Added by ZJay, down below */
+.profile-picture {
+    width: 35px;          /* set size you want */
+    height: 35px;
+    object-fit: cover;     /* makes sure the image fills the box nicely */
+    border-radius: 50%;    /* makes it circular */
+    border: 2px solid #ddd; /* optional: adds a border */
+}
+
 .username {
     margin-left: 8px;
     font-weight: 500;

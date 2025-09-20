@@ -84,7 +84,16 @@
                                     <a href="{% url 'main:account' %}"
                                         class="profile-link" 
                                         style="display:flex; align-items:center; gap:0.5rem; text-decoration:none; color:inherit;">
-                                        <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile Pic" />
+                                        {% comment %} <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="Profile Pic" /> {% endcomment %}
+                                        {% if user.profile_pic %}
+                                            <img src="{{ user.profile_pic.url }}" 
+                                                alt="Profile Picture" 
+                                                class="profile-picture">
+                                        {% else %}
+                                            <img src="{% static 'images/Profile.png' %}" 
+                                                alt="Default Profile Picture" 
+                                                class="profile-picture">
+                                        {% endif %}
                                         <span class="username">{{ user.username }}</span>
                                     </a>
                                     

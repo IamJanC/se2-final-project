@@ -67,7 +67,32 @@ main {
     margin-bottom: 2rem;
 }
 
+/*Added by ZJay, down below */
+/* Container for profile picture */
 .profile-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;        /* makes sure img stays inside circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1abc9c; /* fallback if no img */
+    color: white;             /* fallback text color */
+    font-weight: bold;
+    font-size: 24px;
+}
+
+/* The uploaded image */
+.profile-pic img.profile-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 50%; /* extra safety */
+}
+
+/* .profile-pic {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -83,6 +108,15 @@ main {
     font-weight: 300;
     font-style: normal;
 }
+
+.profile-picture {
+    width: 80px;         
+    height: 80px;
+    object-fit: cover;     
+    border-radius: 50%;    
+    border: 2px solid #ddd; 
+} */
+
 
 .profile-info {
     display: flex;
@@ -221,7 +255,7 @@ main {
 }
 
 
-.profile-picture-placeholder{
+/* .profile-picture-placeholder{
   width: 100px;
   height: 100px;
   margin-left: 20px;
@@ -231,8 +265,35 @@ main {
 .profile-picture-placeholder img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* crops nicely */
+  object-fit: cover;
+} */
+
+/* Added by ZJay, down below  */
+/* Profile Picture Styling */
+.profile-picture-placeholder {
+  width: 120px;         /* make it a bit larger than the sidebar avatar */
+  height: 120px;
+  margin-bottom: 15px;
+  border-radius: 50%;   /* make the container circular */
+  overflow: hidden;     /* crop image inside */
+  border: 3px solid #d5d5d4; /* subtle border like your design language */
 }
+
+.profile-picture-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;    /* crop nicely */
+  display: block;       /* remove inline spacing issues */
+  border-radius: 50%;   /* ensures the img itself is also round */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-picture-placeholder img:hover {
+  transform: scale(1.05);  /* subtle zoom on hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* soft glow */
+}
+
+
 
 input[type="file"]::file-selector-button {
   display: inline-flex;      /* shrink to fit content but still flexible */

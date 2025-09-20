@@ -16,10 +16,19 @@
             <!-- Profile Section -->
             <div class="user-profile">
                 <div class="profile-pic">
-                    <span>P</span> <!-- First letter of name -->
+                    {% if user.profile_pic %}
+                        <img src="{{ user.profile_pic.url }}" 
+                            alt="Profile Picture" 
+                            class="profile-picture">
+                    {% else %}
+                        <span>{{ user.username|first|upper }}</span> <!-- First letter of name -->
+                        {% comment %} <img src="{% static 'images/Profile.png' %}" 
+                            alt="Default Profile Picture" 
+                            class="profile-picture"> {% endcomment %}
+                    {% endif %}
                 </div>
                 <div class="profile-info">
-                    <p class="username">Perceluna</p>
+                    <p class="username">{{ user.username }}</p>
                     <a href="#" class="edit-profile">
                         <!-- Edit (pencil) SVG -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
@@ -36,7 +45,7 @@
 
             <!-- Navigation Links -->
             <nav class="user-nav">
-                <a href="{% url 'account' %}" class="nav-link active">
+                <a href="{% url 'main:account' %}" class="nav-link active">
                     <!-- Account SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
                         fill="none" stroke="currentColor" stroke-width="2" 
@@ -69,30 +78,45 @@
             <div class="public-profile section">
                 <h2>Public Profile</h2>
                 
-                <div class="profile-picture-section">
-                    <div class="profile-picture-placeholder">
-                        <!-- Default/Placeholder Profile Picture -->
-                        <img src="/static/images/Profile.png" 
-                            alt="Default Profile Picture" 
-                            class="profile-picture">
-                    </div>
-                    
-                    <div class="image-upload">
-                        <!-- Hide the ugly input -->
-                        <input type="file" id="profile-image" accept=".jpeg,.jpg,.png" hidden>
+                <form method="POST" enctype="multipart/form-data" action="/account/">
+                    {% csrf_token %}
+                    <div class="profile-picture-section">
+                        <div class="profile-picture-placeholder">
+                            <label for="profile-image">
+                                {% if user.profile_pic %}
+                                    <img src="{{ user.profile_pic.url }}" 
+                                        alt="Profile Picture" 
+                                        class="profile-picture">
+                                {% else %}
+                                    <img src="{% static 'images/Profile.png' %}" 
+                                        alt="Default Profile Picture" 
+                                        class="profile-picture">
+                                {% endif %}
+                            </label>
+                        </div>
+                        
+                        <div class="image-upload">
+                            <!-- One single hidden input -->
+                            <input type="file" id="profile-image" name="profile_pic" accept=".jpeg,.jpg,.png" hidden>
 
-                        <!-- Custom upload button -->
-                        <label for="profile-image" class="upload-btn">Select Image</label>
+                            <!-- Custom upload button -->
+                            <label for="profile-image" class="upload-btn">Select Image</label>
 
-                        <!-- Show chosen filename -->
-                        <span id="file-name">No file chosen</span>
+                            <!-- Show chosen filename -->
+                            <span id="file-name">No file chosen</span>
 
-                        <div class="file-requirements">
-                            <p>File size: maximum 1 MB</p>
-                            <p>File extension: .JPEG, .PNG</p>
+                            <div class="file-requirements">
+                                <p>File size: maximum 1 MB</p>
+                                <p>File extension: .JPEG, .PNG</p>
+                            </div>
+                            
+                            <!-- Submit button -->
+                            <button type="submit" id="upload-btn" class="upload-btn" style="display:none;">Upload Image</button>
+                            <input type="hidden" name="debug" value="form-submitted">
                         </div>
                     </div>
-                </div>
+                </form>
+
             
                 
                 <div class="gender-section">
@@ -376,7 +400,7 @@
                 
                 <div class="current-email-section">
                     <h6 class="account-email-label">Current email</h6>
-                    <p class="current-email-text">user@example.com</p>
+                    <p class="current-email-text">{{ user.email }}</p>
                     <div class="email-status">
                         <h6 class="account-email-label">Status</h6>
                         <span class="status-confirmed">Confirmed</span>
@@ -471,6 +495,24 @@
         }
         }
 
+    </script>
+
+    <script>
+        document.getElementById("profile-image").addEventListener("change", function() {
+            const fileName = this.files.length > 0 ? this.files[0].name : "No file chosen";
+            document.getElementById("file-name").textContent = fileName;
+        });
+    </script>
+
+    <script>
+        document.getElementById('profile-image').addEventListener('change', function() {
+            const uploadBtn = document.getElementById('upload-btn');
+            if (this.files.length > 0) {
+                uploadBtn.style.display = "inline-block";
+            } else {
+                uploadBtn.style.display = "none";
+            }
+        });
     </script>
 
 {% endblock %}

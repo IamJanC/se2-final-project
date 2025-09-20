@@ -15,6 +15,9 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv # type: ignore
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Load the .env file
 load_dotenv()
@@ -58,7 +61,27 @@ INSTALLED_APPS = [
     'orders',       # orders app
     'cart',         #carts app
     'adminpanel',    # admin panel app
+    
+    # Third-party apps (CJ)
+    'cloudinary',  # Cloudinary for media management
+    'cloudinary_storage',  # Cloudinary storage backend
+    
 ]
+
+
+# Cloudinary configuration
+cloudinary.config( 
+  cloud_name = "dwug1zkhu", 
+  api_key = "348898674748577", 
+  api_secret = "vA1IMnetYPRMGocWDnNLnEQP6FM"
+)
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -17,7 +17,17 @@
             <!-- Profile Section -->
             <div class="user-profile">
                 <div class="profile-pic">
-                    <span>P</span> <!-- First letter of name -->
+                    {% if user.profile_pic %}
+                        <img src="{{ user.profile_pic.url }}" 
+                            alt="Profile Picture" 
+                            class="profile-picture">
+                    {% else %}
+                        <span>{{ user.username|first|upper }}</span> <!-- First letter of name -->
+                        {% comment %} <img src="{% static 'images/Profile.png' %}" 
+                            alt="Default Profile Picture" 
+                            class="profile-picture"> {% endcomment %}
+                    {% endif %}
+                    {% comment %} <span>P</span> <!-- First letter of name --> {% endcomment %}
                 </div>
                 <div class="profile-info">
                     <p class="username">Perceluna</p>
@@ -37,7 +47,7 @@
 
             <!-- Navigation Links -->
             <nav class="user-nav">
-                <a href="{% url 'account' %}" class="nav-link">
+                <a href="{% url 'main:account' %}" class="nav-link">
                     <!-- Account SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
                         fill="none" stroke="currentColor" stroke-width="2" 

@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 import re
 from main.views import get_home_context
 from django.contrib.auth.decorators import login_required
+from .forms import ProfileForm
+
+from django.views.decorators.csrf import csrf_exempt # to exempt CSRF for testing
 
 User = get_user_model()
 
@@ -162,8 +165,22 @@ def home_view(request):
         return render(request, "main/home.html", context)
     
 
+@csrf_exempt # to exempt CSRF for testing
 @login_required
 def account_view(request):
-    return render(request, "main/account.html")
+    print("🚀 account_view CALLED:", request.method)
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES, instance=request.user)
+        print("📤 POST data:", request.POST)
+        print("📸 FILES:", request.FILES)
 
+        if form.is_valid():
+            form.save()
+            print("✅ Saved to Cloudinary:", request.user.profile_pic.url)
+            return redirect("main:account")
+        else:
+            print("❌ Form errors:", form.errors)
+    else:
+        form = ProfileForm(instance=request.user)
 
+    return render(request, "main/account.html", {"form": form, "user": request.user})

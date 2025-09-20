@@ -2,8 +2,14 @@ from django.urls import path                    # type: ignore
 from . import views
 from products import views as product_views
 from main import views as main_views
+from testdb import views as testdb_views
+
+from django.http import HttpResponse
 
 app_name = 'main'  # ✅ Helps with reverse lookup la
+
+def debug_account(request):
+    return HttpResponse(f"DEBUG: {request.method}")
 
 urlpatterns = [
     path('', views.home, name='home'), # <- to home
@@ -11,8 +17,13 @@ urlpatterns = [
     path('shop/<int:product_id>/', views.product_detail, name='product_detail'),
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('product/', views.product, name='product'), # <- ?? check later
-    path("account/", views.account_view, name="account"), # <- to account
+   # path("account/", views.account_view, name="account"), # <- to account
     
     #product and cart api
     path('api/products/<int:product_id>/', product_views.product_detail_json, name='api_product_detail'),
+    
+    
+    path("account/", testdb_views.account_view, name="account"),  # ✅ to account
+    
+    path("account/", debug_account, name="account"), # DEBUGGING PURPOSES
 ]
