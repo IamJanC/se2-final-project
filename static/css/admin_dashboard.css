@@ -1050,7 +1050,35 @@ main {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*=== Products Section ===*/
+
+
 
 
 /* Category Section */
@@ -1108,13 +1136,6 @@ main {
     background: #325a00;
 }
 
-.btn-edit-categories-action {
-    background: #e0e0e0;   
-    color: #333;           /* dark text */
-}
-.btn-edit-categories-action:hover {
-    background: #c0c0c0;  
-}
 
 .category-list {
   margin-top: 15px;
@@ -1139,7 +1160,12 @@ main {
   font-weight: 400;
 }
 
-.delete-btn {
+.category-actions-icons {
+  display: flex;
+  gap: 15px; /* spacing between edit/delete icons */
+}
+
+.icon-btn {
   background: none;
   border: none;
   color: #555;
@@ -1147,11 +1173,44 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.delete-btn:hover {
-  color: #d32f2f; /* red on hover */
+.icon-btn svg {
+  width: auto;
+  height: 24px;
 }
+
+
+/* Hover styles */
+.edit-btn {
+  color: #555; /* default */
+}
+.edit-btn:hover {
+  color: #5f8431;; /* green on hover */
+}
+
+.delete-btn {
+  color: #555;
+}
+.delete-btn:hover {
+  color: #842d2d; /* red on hover */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* Product Display Section */
@@ -1207,18 +1266,128 @@ main {
 
 
 
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.4); /* backdrop effect */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+/* Show state */
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* The actual modal box */
+.modal-content {
+  background: #fefeff;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px; /* you can set width here */
+  max-width: 90%;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-30px) scale(0.95);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+/* Animate in when parent is shown */
+.modal.show .modal-content {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
 
 
 
+#category-modal h2{
+    font-size: 22px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 25px;
+}
 
 
+.form-group {
+  display: flex;
+  flex-direction: column; /* Stack label above input */
+  margin-bottom: 15px;   /* Space between fields */
+}
 
+label{
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 10px;
+}
 
+.form-group input {
+    height: 50px;
+    line-height: 40px;
+}
 
+.form-group input, .form-group textarea {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 8px 8px 8px 15px;
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    box-sizing: border-box;
+}
 
+.category-modal-action-buttons{
+    display: flex;
+    gap: 10px;
+}
 
+#close-category-modal, #save-category-modal{
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
 
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
 
+    margin-top: 10px;
+}
+
+#save-category-modal{
+    background: #5c8b25; 
+}
+
+#save-category-modal:hover{
+    background: #325a00;
+}
+
+#close-category-modal {
+    background: #e0e0e0;   
+    color: #333;           /* dark text */
+}
+#close-category-modal:hover {
+    background: #c0c0c0;  
+}
 
 
 
