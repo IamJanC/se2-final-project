@@ -39,6 +39,25 @@ main {
     gap: 20px; 
 }
 
+.checkout-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 25px;
+}
+
+.checkout-main {
+    flex: 1; /* takes more space */
+    min-width: 0; /* prevents flex overflow */
+}
+
+.order-information-right {
+    flex: 0 0 350px;   /* do not grow, fixed width 300px */
+    padding: 24px;
+    min-width: 350px;
+    margin-top: 40px;
+}
+
 
 /*LEFT COLUMN */
 .address-section-left{
@@ -550,6 +569,8 @@ textarea::placeholder {
     font-optical-sizing: auto;
     font-weight: 300;
     font-style: normal;
+
+    margin-bottom: 25px;
 }
 
 
@@ -586,7 +607,13 @@ textarea::placeholder {
     font-optical-sizing: auto;
     font-weight: 300;
     font-style: normal;
+    padding-left: 25px;
 }
+
+#product-column-name{
+    padding-left: 35px;
+}
+
 
 .product-name, .price-col, .qty-col, .subtotal-col{
     font-size: 16px;
@@ -687,6 +714,10 @@ textarea::placeholder {
 .checkout-btn:disabled {
     background: #95a5a6;
     cursor: not-allowed;
+}
+
+.checkout-btn:hover{
+    background: #325a00;
 }
 
 

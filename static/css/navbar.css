@@ -275,12 +275,13 @@ nav {
 }
 
 #profileSection img {
-    width: 26.4%;
-    height: 100%;
-    border-radius: 50%;
-    border-radius: 50%;
+    width: 50px;
+    height: 50px;            /* make it equal to width */
+    border-radius: 50%;      /* ensures circle shape */
+    object-fit: cover;       /* crops image instead of squishing */
     vertical-align: middle;
 }
+
 
 #profileSection span{
     font-family: "Kantumruy Pro", sans-serif;

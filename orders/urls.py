@@ -16,4 +16,7 @@ urlpatterns = [
     path("design/", views.orders_page, name="orders_design"), #for designing orders.html
     
     path("delete-address/<int:address_id>/", views.delete_address, name="delete_address"), # Deleting an address
+    
+    
+    path("order_monitoring/", views.order_monitoring, name="order_monitoring"), # to order_monitoring page
 ]

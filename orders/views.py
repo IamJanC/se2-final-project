@@ -185,6 +185,11 @@ def delete_address(request, address_id):
 
 
 
+def order_monitoring(request):
+    return render(request, "main/order_monitoring.html")
+
+
+
 
 
 
