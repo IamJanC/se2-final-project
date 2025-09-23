@@ -1238,6 +1238,65 @@ main {
     align-items: center;
 }
 
+.product-display-actions {
+    display: flex;
+    gap: 20px;
+}
+
+.product-display-actions svg {
+  display: inline-block;
+  width: 20px;  /* match your design */
+  height: 20px;
+  vertical-align: middle; /* aligns with button text */
+}
+
+
+.btn-filter {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  margin-right: 8px; /* spacing before "Add Products" button */
+}
+
+.btn-filter svg {
+  width: 24px; /* adjust size */
+  height: 24px;
+  fill: #000;  /* icon color */
+  transition: fill 0.2s;
+}
+
+.btn-filter:hover svg {
+  fill: #007bff; /* hover color */
+}
+
+.btn-sort{
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    margin-right: 8px; /* spacing before "Add Products" button */
+}
+
+.btn-sort svg{
+    width: 24px; /* adjust size */
+    height: 24px;
+    fill: #000;  /* icon color */
+    transition: fill 0.2s;
+}
+
+.btn-sort:hover svg {
+  fill: #007bff; /* hover color */
+}
+
+
+
+
+
 .btn-add-products-action{
     flex: 0 0 auto;            /* don’t stretch full width */
     padding: 12px 20px;
@@ -1263,6 +1322,136 @@ main {
 .btn-add-products-action:hover{
     background: #325a00;
 }
+
+
+.table-container {
+  overflow-x: auto; /* allows horizontal scroll if content is wider than container */
+  padding: 10px 0;
+}
+
+.admin-products-table {
+  border-collapse: separate; /* important for rounding */
+  border-spacing: 0;
+  border-radius: 10px;       /* round the whole table */
+  overflow: hidden;          /* clip the corners */
+  width: 100%;
+
+  margin-top: 25px;
+}
+
+.admin-products-table th,
+.admin-products-table td {
+
+  padding: 8px 12px;
+  text-align: left;
+
+}
+
+/* Header styling */
+.admin-products-table th {
+  background-color: #f5f5f5;
+  position: sticky;
+  top: 0;
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.admin-products-table {
+  border-collapse: separate; /* important for rounding */
+  border-spacing: 0;
+  border-radius: 10px;       /* round the whole table */
+  overflow: hidden;          /* clip the corners */
+  width: 100%;
+
+   border-spacing: 0px 15px; /* 10px horizontal, 15px vertical */
+}
+
+/* Header styling */
+.admin-products-table th {
+    background-color: #f5f5f5;
+    position: sticky;
+    top: 0;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+     padding: 20px 15px; /* vertical | horizontal */
+}
+
+/* Round only the top-left and top-right corners */
+.admin-products-table th:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.admin-products-table th:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Round only the bottom-left and bottom-right corners */
+.admin-products-table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.admin-products-table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+/* Body cell styling */
+.admin-products-table td {
+    padding: 10px 12px; /* default padding for body cells */
+    border-bottom: 1px solid #ddd;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+/* Image column */
+.admin-products-table td img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover; /* maintain aspect ratio & crop if needed */
+  border-radius: 4px; /* optional: small rounding for image */
+}
+
+/* Hover effect for table rows */
+.admin-products-table tbody tr:hover {
+    background-color: #f0f0f0; /* light gray on hover */
+    cursor: pointer;           /* pointer cursor to indicate interactivity */
+}
+
+/* Hover effect with rounded row corners */
+.admin-products-table tbody tr:hover td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.admin-products-table tbody tr:hover td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.admin-products-table tbody tr:hover {
+  background-color: #f0f0f0;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+
+
+
+
+
+
 
 
 
@@ -1388,8 +1577,6 @@ label{
 #close-category-modal:hover {
     background: #c0c0c0;  
 }
-
-
 
 
 
