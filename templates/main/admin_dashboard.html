@@ -875,13 +875,62 @@
                                                 min="0"
                                                 />
 
-                                                <!-- Two dates side-by-side, equal width -->
+                                                <!-- Two dates side-by-side with labels -->
                                                 <div class="date-range">
-                                                <input type="date" id="discount-start" name="discount-start" aria-label="Discount start date" />
-                                                <input type="date" id="discount-end" name="discount-end" aria-label="Discount end date" />
+                                                    <div class="date-field">
+                                                        <label for="discount-start">Start Date</label>
+                                                        <input
+                                                        type="date"
+                                                        id="discount-start"
+                                                        name="discount-start"
+                                                        aria-label="Discount start date"
+                                                        />
+                                                    </div>
+
+                                                    <div class="date-field">
+                                                        <label for="discount-end">End Date</label>
+                                                        <input
+                                                        type="date"
+                                                        id="discount-end"
+                                                        name="discount-end"
+                                                        aria-label="Discount end date"
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+
+
+                                    <!-- Change Inventory -->
+                                    <div class="form-group inventory-section">
+                                        <label>Inventory</label>
+
+                                        <div class="inventory-controls">
+                                            <!-- Stock Quantity -->
+                                            <div class="inventory-field">
+                                            <label for="stock-quantity">Stock Quantity:</label>
+                                            <input 
+                                                type="number" 
+                                                id="stock-quantity" 
+                                                name="stock-quantity" 
+                                                placeholder="Enter stock quantity" 
+                                                min="0"
+                                            />
+                                            </div>
+
+                                            <!-- Stock Status -->
+                                            <div class="inventory-field">
+                                                <label for="stock-status">Stock Status:</label>
+                                                <select id="stock-status" name="stock-status">
+                                                    <option value="in-stock">In Stock</option>
+                                                    <option value="out-of-stock">Low Stock</option>
+                                                    <option value="pre-order">Out of Stock</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                        
 
 
 

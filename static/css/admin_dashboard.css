@@ -1591,17 +1591,22 @@ label{
     line-height: 40px;
 }
 
-.form-group input, .form-group textarea {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 8px 8px 8px 15px;
-    font-size: 16px;
-    font-family: "Lexend", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-    box-sizing: border-box;
+.form-group input,
+.form-group textarea,
+.form-group select {
+  height: 50px;
+  line-height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 8px 8px 8px 15px;
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  box-sizing: border-box;
 }
+
 
 .category-modal-action-buttons{
     display: flex;
@@ -1793,6 +1798,8 @@ label{
     border-radius: 4px;
     box-sizing: border-box;
     -webkit-appearance: none; /* remove default spinner on some browsers if desired */
+
+    margin-bottom: 15px;
 }
 
 /* Date range row - two inputs side-by-side equally */
@@ -1800,6 +1807,23 @@ label{
   display: flex;
   gap: 0.75rem;
   margin-top: 10px; /* adjust as needed */
+}
+
+.date-field {
+  display: flex;
+  flex-direction: column; /* stacks label on top of input */
+  flex: 1; /* make both fields equal width */
+}
+
+.date-field label {
+    margin-bottom: 5px; /* small space between label and input */
+    margin-left: 5px;
+  
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
 }
 
 /* Make sure date inputs share the available width equally */
@@ -1826,6 +1850,35 @@ label{
   .date-range {
     flex-direction: column;
   }
+}
+
+/* Flexbox to place them side by side */
+.inventory-controls {
+  display: flex;
+  gap: 20px; /* space between the two fields */
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Each field takes up 50% of the available width */
+.inventory-controls .inventory-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* ensures label stays above input/select */
+}
+
+/* Make inputs/selects consistent */
+.inventory-controls input,
+.inventory-controls select {
+  width: 100%;
+}
+
+.inventory-controls select option {
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
 
 
