@@ -195,3 +195,4 @@ def account_view(request):
         "addresses": addresses,
         "default_address": default_address,
     })
+

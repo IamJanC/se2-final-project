@@ -1607,6 +1607,24 @@ label{
   box-sizing: border-box;
 }
 
+.error-message {
+    color: red;
+
+
+    font-size: 14px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin-top: 5px;
+}
+.save-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
 
 .category-modal-action-buttons{
     display: flex;
@@ -1666,6 +1684,8 @@ label{
 
 
 
+
+
 /* === Admin Products Modal === */
 
 .product-modal-content {
@@ -1693,7 +1713,6 @@ label{
     flex: 2; /* 40% */
     display: flex;
     flex-direction: column;
-    gap: 1rem;
     background: #fafafa; /* optional background to separate */
 }
 
@@ -1721,35 +1740,6 @@ label{
   min-height: 100px; /* ensures it's “fat” enough */
   box-sizing: border-box;
 }
-
-
-
-
-/* Right Section */
-
-.product-image-section {
-  padding: 1rem; /* spacing inside the right box */
-  border-radius: 8px;
-}
-
-.product-image-section h3 {
-    font-size: 20px;
-    font-family: "Lexend", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-    margin-bottom: 20px;
-}
-
-.product-image-section img {
-    width: 100%;         /* make it fill the container */
-    height: auto;        /* maintain aspect ratio */
-    display: block;      /* removes tiny bottom whitespace */
-    border-radius: 6px;  /* optional: rounded corners for nice look */
-    object-fit: cover;   /* optional: crops to container if needed */
-    margin-bottom: 10px;
-}
-
 
 
 /* Container - use full width inside the modal form */
@@ -1882,7 +1872,44 @@ label{
 }
 
 
+/* Right Section */
 
+.product-image-section {
+  padding: 1rem; /* spacing inside the right box */
+  border-radius: 8px;
+  padding-bottom: 0px;
+}
+
+.product-image-section h3 {
+    font-size: 20px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 20px;
+}
+
+.product-image-section img {
+    width: 100%;         /* make it fill the container */
+    height: auto;        /* maintain aspect ratio */
+    display: block;      /* removes tiny bottom whitespace */
+    border-radius: 6px;  /* optional: rounded corners for nice look */
+    object-fit: cover;   /* optional: crops to container if needed */
+    margin-bottom: 10px;
+}
+
+#select-cat{
+    padding: 1rem; /* spacing inside the right box */
+    padding-top: 0px;
+}
+
+/* Style ONLY the options inside #category-select */
+#category-select option {
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+  padding: 8px;
+}
 
 
 

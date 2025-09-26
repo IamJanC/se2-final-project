@@ -17,6 +17,11 @@ urlpatterns = [
     
     path("delete-address/<int:address_id>/", views.delete_address, name="delete_address"), # Deleting an address
     
+    path("orders/<int:order_id>/received/", views.order_received, name="order_received"), # Marking an order as received
+    path("orders/<int:order_id>/return/", views.request_return, name="request_return"), # Requesting a return for an order
+    path("orders/<int:order_id>/cancel/", views.cancel_order, name="cancel_order"), # Cancelling an order
+
+    
     
     path("order_monitoring/", views.order_monitoring, name="order_monitoring"), # to order_monitoring page
 ]

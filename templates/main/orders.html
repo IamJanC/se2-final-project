@@ -47,7 +47,7 @@
 
             <!-- Navigation Links -->
             <nav class="user-nav">
-                <a href="{% url 'main:account' %}" class="nav-link">
+                <a href="{% url 'main:account' %}" class="nav-link {% if request.resolver_match.url_name == 'account' %}active{% endif %}">
                     <!-- Account SVG -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
                         fill="none" stroke="currentColor" stroke-width="2" 
@@ -58,11 +58,14 @@
                     Account
                 </a>
                 <!-- Temp checkout design-->
-                <a href="{% url 'orders:orders_design' %}" class="nav-link active">
-                    <!-- Orders SVG -->
-                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 5.00005C7.01165 5.00082 6.49359 5.01338 6.09202 5.21799C5.71569 5.40973 5.40973 5.71569 5.21799 6.09202C5 6.51984 5 7.07989 5 8.2V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.07989 21 8.2 21H15.8C16.9201 21 17.4802 21 17.908 20.782C18.2843 20.5903 18.5903 20.2843 18.782 19.908C19 19.4802 19 18.9201 19 17.8V8.2C19 7.07989 19 6.51984 18.782 6.09202C18.5903 5.71569 18.2843 5.40973 17.908 5.21799C17.5064 5.01338 16.9884 5.00082 16 5.00005M8 5.00005V7H16V5.00005M8 5.00005V4.70711C8 4.25435 8.17986 3.82014 8.5 3.5C8.82014 3.17986 9.25435 3 9.70711 3H14.2929C14.7456 3 15.1799 3.17986 15.5 3.5C15.8201 3.82014 16 4.25435 16 4.70711V5.00005M12 11H9M15 15H9" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                    My Orders
-                </a>
+                <form method="POST" action="{% url 'orders:my_orders' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-link {% if request.resolver_match.url_name == 'my_orders' %}active{% endif %}">
+                        <!-- Orders SVG -->
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 5.00005C7.01165 5.00082 6.49359 5.01338 6.09202 5.21799C5.71569 5.40973 5.40973 5.71569 5.21799 6.09202C5 6.51984 5 7.07989 5 8.2V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.07989 21 8.2 21H15.8C16.9201 21 17.4802 21 17.908 20.782C18.2843 20.5903 18.5903 20.2843 18.782 19.908C19 19.4802 19 18.9201 19 17.8V8.2C19 7.07989 19 6.51984 18.782 6.09202C18.5903 5.71569 18.2843 5.40973 17.908 5.21799C17.5064 5.01338 16.9884 5.00082 16 5.00005M8 5.00005V7H16V5.00005M8 5.00005V4.70711C8 4.25435 8.17986 3.82014 8.5 3.5C8.82014 3.17986 9.25435 3 9.70711 3H14.2929C14.7456 3 15.1799 3.17986 15.5 3.5C15.8201 3.82014 16 4.25435 16 4.70711V5.00005M12 11H9M15 15H9" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                            My Orders
+                    </button>
+                </form>
             </nav>
 
 
@@ -72,12 +75,12 @@
         <div class="order-history-right">
              <!-- Navigation Tabs -->
             <div class="order-tabs">
-                <button class="tab active" data-tab="all">All (n)</button>
-                <button class="tab" data-tab="processing">Processing (n) </button>
-                <button class="tab" data-tab="to-ship">To Ship (n) </button>
-                <button class="tab" data-tab="to-receive">To Receive (n) </button>
-                <button class="tab" data-tab="completed">Completed (n) </button>
-                <button class="tab" data-tab="cancelled">Cancelled (n) </button>
+                <button class="tab active" data-tab="all">All ({{ counts.all }})</button>
+                <button class="tab" data-tab="processing">Processing ({{ counts.processing }})</button>
+                <button class="tab" data-tab="to-ship">To Ship ({{ counts.to_ship }})</button>
+                <button class="tab" data-tab="to-receive">To Receive ({{ counts.to_receive }})</button>
+                <button class="tab" data-tab="completed">Completed ({{ counts.completed }})</button>
+                <button class="tab" data-tab="cancelled">Cancelled ({{ counts.cancelled }})</button>
             </div>
 
             <!-- Orders Page Search -->
@@ -96,193 +99,70 @@
             <!-- Orders Content -->
             <div class="orders-container">
                 <div class="orders-list" id="all">
-                    
-                    <!--Cards (Same styling across containers)-->
+                    {% if orders %}
+                    {% for order in orders %}
                     <div class="order-card">
-                        <!-- Order details would go here (product info, status, etc.) -->
                         <div class="order-card-top-section">
-                            <h3>September 6, 2025 – 6:32 PM</h3>
-                            <span class="order-card-order-status">Processing</span>
+                            <h3>{{ order.created_at|date:"F j, Y – g:i A" }}</h3>
+                            <span class="order-card-order-status">
+                                {{ order.get_status_display }}
+                            </span>
                         </div>
 
                         <div class="order-card-middle-section">
-                            <h3>Transaction ID: TID0001</h3>
+                            <h3>Order ID: #{{ order.id }}</h3>
                         </div>
 
                         <div class="order-card-total-price">
-                            <p class="order-card-product-price">Total: PHP 810.00</p>
+                            <p class="order-card-product-price">Total: ₱{{ order.total|floatformat:2 }}</p>
                         </div>
 
                         <div class="order-card-item-list">
-
-                            <!-- Header row -->
-                            <div class="orders-product-header">
-                                <div class="product-col">Product</div>
-                                <div class="price-col">Price</div>
-                                <div class="qty-col">Quantity</div>
-                                <div class="subtotal-col">Subtotal</div>
-                            </div>
-
-                            <!--One item-->
-                             <div class="orders-product-row">
-                                 <div class="product-col product-info">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Chou-fleur_02.jpg/250px-Chou-fleur_02.jpg" alt="Product" class="product-img">
-                                    <span class="product-name">Cauliflower</span>
-                                 </div>
-
-                                <div class="price-col">₱90.00</div>
-                                <div class="qty-col">x3</div>
-                                <div class="subtotal-col">₱270.00</div>
-                             </div>
-
-                             <!--One item-->
-                             <div class="orders-product-row">
-                                 <div class="product-col product-info">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Chou-fleur_02.jpg/250px-Chou-fleur_02.jpg" alt="Product" class="product-img">
-                                    <span class="product-name">Cauliflower</span>
-                                 </div>
-
-                                <div class="price-col">₱90.00</div>
-                                <div class="qty-col">x3</div>
-                                <div class="subtotal-col">₱270.00</div>
-                             </div>
-
-                             <!--One item-->
-                             <div class="orders-product-row">
-                                 <div class="product-col product-info">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Chou-fleur_02.jpg/250px-Chou-fleur_02.jpg" alt="Product" class="product-img">
-                                    <span class="product-name">Cauliflower</span>
-                                 </div>
-
-                                <div class="price-col">₱90.00</div>
-                                <div class="qty-col">x3</div>
-                                <div class="subtotal-col">₱270.00</div>
-                             </div>
+                        <!-- Header row -->
+                        <div class="orders-product-header">
+                            <div class="product-col">Product</div>
+                            <div class="price-col">Price</div>
+                            <div class="qty-col">Quantity</div>
+                            <div class="subtotal-col">Subtotal</div>
                         </div>
 
-                        <!--Expand-->
-                        <div class="show-more-products-section">
-                            <button class="show-more-products-btn">
-                                <!-- SVG plus icon -->
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16 11L12 15L8 11M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                <span>Show more</span>
-                            </button>
+                        {% for item in order.items.all %}
+                        <div class="orders-product-row">
+                            <div class="product-col product-info">
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="product-img">
+                                <span class="product-name">{{ item.product.name }}</span>
+                            </div>
+                            <div class="price-col">₱{{ item.price_at_purchase|floatformat:2 }}</div>
+                            <div class="qty-col">x{{ item.quantity }}</div>
+                            <div class="subtotal-col">₱{{ item.subtotal|floatformat:2 }}</div>
+                        </div>
+                        {% endfor %}
                         </div>
 
                         <!-- Order Action Buttons -->
                         <div class="order-card-buttons">
-                            <button class="order-btn order-received">Order Received</button>
-                            <button class="order-btn cancel-order">Cancel Order</button>
-                            <button class="order-btn request-refund">Request Return/Refund</button>
+                            {% if order.status == "shipped" %}
+                                <a href="{% url 'orders:order_received' order.id %}" class="order-btn order-received">Order Received</a>
+                                <a href="{% url 'orders:request_return' order.id %}" class="order-btn request-return">Request Return/Refund</a>
+                            {% endif %}
+
+                            {% if order.status == "delivered" %}
+                                <a href="{% url 'orders:request_return' order.id %}" class="order-btn request-return">Request Return/Refund</a>
+                                <button class="order-btn rate-again">Rate Again</button>
+                            {% endif %}
+
+                            {% if order.status == "pending" %}
+                                <a href="{% url 'orders:cancel_order' order.id %}" class="order-btn cancel-order">Cancel Order</a>
+                            {% endif %}
+
                             <button class="order-btn buy-again">Buy Again</button>
                             <button class="order-btn show-details">Show Details</button>
-                            <button class="order-btn contact-seller">Contact Seller</button>
                         </div>
-
                     </div>
-
-
-
-                    <!-- TEMPORARY SECOND ONE-->
-                     <!--Cards (Same styling across containers)-->
-                    <div class="order-card">
-                        <!-- Order details would go here (product info, status, etc.) -->
-                        <div class="order-card-top-section">
-                            <h3>September 6, 2025 – 6:32 PM</h3>
-                            <span class="order-card-order-status">Delivered</span>
-                        </div>
-
-                        <div class="order-card-middle-section">
-                            <h3>Transaction ID: TID0001</h3>
-                        </div>
-
-                        <div class="order-card-total-price">
-                            <p class="order-card-product-price">Total: PHP 810.00</p>
-                        </div>
-
-                        <div class="order-card-item-list">
-
-                            <!-- Header row -->
-                            <div class="orders-product-header">
-                                <div class="product-col">Product</div>
-                                <div class="price-col">Price</div>
-                                <div class="qty-col">Quantity</div>
-                                <div class="subtotal-col">Subtotal</div>
-                            </div>
-
-                            <!--One item-->
-                             <div class="orders-product-row">
-                                 <div class="product-col product-info">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Chou-fleur_02.jpg/250px-Chou-fleur_02.jpg" alt="Product" class="product-img">
-                                    <span class="product-name">Cauliflower</span>
-                                 </div>
-
-                                <div class="price-col">₱90.00</div>
-                                <div class="qty-col">x3</div>
-                                <div class="subtotal-col">₱270.00</div>
-                             </div>
-
-                             <!--One item-->
-                             <div class="orders-product-row">
-                                 <div class="product-col product-info">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Chou-fleur_02.jpg/250px-Chou-fleur_02.jpg" alt="Product" class="product-img">
-                                    <span class="product-name">Cauliflower</span>
-                                 </div>
-
-                                <div class="price-col">₱90.00</div>
-                                <div class="qty-col">x3</div>
-                                <div class="subtotal-col">₱270.00</div>
-                             </div>
-                        </div>
-
-                        <!--Expand won't show since it's only two products-->
-                        <!--
-                        <div class="show-more-products-section">
-                            <button class="show-more-products-btn">
-                                
-                                <-- SVG plus icon --
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16 11L12 15L8 11M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                <span>Show more</span>
-                            </button>
-                        </div>
-                        -->
-                        
-                        <!-- Order Action Buttons -->
-                        <div class="order-card-buttons">
-                            <button class="order-btn order-received">Order Received</button>
-                            <button class="order-btn cancel-order">Cancel Order</button>
-                            <button class="order-btn request-refund">Request Return/Refund</button>
-                            <button class="order-btn buy-again">Buy Again</button>
-                            <button class="order-btn show-details">Show Details</button>
-                            <button class="order-btn contact-seller">Contact Seller</button>
-                        </div>
-
-                    </div>
-
-
-
-
-
-                </div>
-
-                <div class="orders-list hidden" id="processing">
-                    <p>Processing orders will show here.</p>
-                </div>
-
-                <div class="orders-list hidden" id="to-ship">
-                    <p>Orders to ship will show here.</p>
-                </div>
-
-                <div class="orders-list hidden" id="to-receive">
-                    <p>Orders to receive will show here.</p>
-                </div>
-
-                <div class="orders-list hidden" id="completed">
-                    <p>Completed orders will show here.</p>
-                </div>
-
-                <div class="orders-list hidden" id="cancelled">
-                    <p>Cancelled orders will show here.</p>
+                    {% endfor %}
+                    {% else %}
+                        <p>No orders yet.</p>
+                    {% endif %}
                 </div>
             </div>
 
@@ -300,20 +180,20 @@
 
 <!-- Script for Toggling Containers -->
 <script>
-document.querySelectorAll(".order-tabs .tab").forEach(tab => {
-    tab.addEventListener("click", () => {
-        // Remove active class from all tabs
-        document.querySelectorAll(".order-tabs .tab").forEach(t => t.classList.remove("active"));
-        tab.classList.add("active");
+    document.querySelectorAll(".order-tabs .tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+            // Remove active class from all tabs
+            document.querySelectorAll(".order-tabs .tab").forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
 
-        // Hide all order lists
-        document.querySelectorAll(".orders-list").forEach(list => list.classList.add("hidden"));
+            // Hide all order lists
+            document.querySelectorAll(".orders-list").forEach(list => list.classList.add("hidden"));
 
-        // Show selected list
-        const target = tab.getAttribute("data-tab");
-        document.getElementById(target).classList.remove("hidden");
+            // Show selected list
+            const target = tab.getAttribute("data-tab");
+            document.getElementById(target).classList.remove("hidden");
+        });
     });
-});
 </script>
 
 

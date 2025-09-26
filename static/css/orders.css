@@ -160,6 +160,14 @@ main {
     height: 25px;
 }
 
+button.nav-link {
+    border: none;      /* remove default button border */
+    background: none;  /* remove default background */
+    padding: 0;        /* reset padding */
+    font: inherit;     /* inherit font styles from parent */
+}
+
+
 .nav-link {
     display: flex;
     align-items: center;

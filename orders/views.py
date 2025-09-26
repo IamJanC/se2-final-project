@@ -13,7 +13,17 @@ from decimal import Decimal
 @login_required
 def my_orders(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at').prefetch_related('items__product')
-    return render(request, 'main/my_orders.html', {'orders': orders})
+    
+    counts = {
+        "all": orders.count(),
+        "processsing": orders.filter(status="pending").count(),
+        "to_ship": orders.filter(status="paid").count(),
+        "to_receive": orders.filter(status="shipped").count(),
+        "completed": orders.filter(status="delivered").count(),
+        "cancelled": orders.filter(status="cancelled").count(),
+    }
+    
+    return render(request, 'main/orders.html', {'orders': orders, 'counts': counts})
 
 @login_required
 def checkout_design_view(request):
@@ -183,6 +193,31 @@ def delete_address(request, address_id):
     return redirect("orders:checkout")
 
 
+
+# Order Actions Views
+@login_required
+def order_received(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    if order.status == "shipped":
+        order.status = "delivered"
+        order.save()
+    return redirect("my_orders")
+
+@login_required
+def request_return(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    if order.status in ["shipped", "delivered"]:
+        order.status = "return_requested"
+        order.save()
+    return redirect("my_orders")
+
+@login_required
+def cancel_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    if order.status == "pending":
+        order.status = "cancelled"
+        order.save()
+    return redirect("my_orders")
 
 
 def order_monitoring(request):

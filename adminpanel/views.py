@@ -12,6 +12,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from django.db.models import Sum, F, FloatField
 import json
+from django.http import JsonResponse
+from products.models import Category
 
 
 
@@ -174,12 +176,83 @@ def export_pdf(request):
 
 
 
+
+
+# ========================
+# New Admin Dashboard Logic
+# ========================
+
 @login_required
 @user_passes_test(staff_required, login_url='main:home')
 def custom_admin_dashboard(request):
-    # You can pass in the same context as `dashboard` if you want stats,
-    # or start with a minimal one
+    categories = get_categories()  # <-- call your new helper
     context = {
         "title": "Custom Admin Dashboard",
+        "categories": categories,
     }
     return render(request, "main/admin_dashboard.html", context)
+
+
+
+
+# === Add/Edit Category ===
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def create_category(request):
+    if request.method == "POST":
+        name = request.POST.get("category-name")
+        slug = request.POST.get("category-slug")
+        category_id = request.POST.get("category-id")  # hidden input
+
+        if name and slug:
+            if category_id:  # Edit mode
+                cat = Category.objects.get(id=category_id)
+                cat.name = name
+                cat.slug = slug
+                cat.save()
+            else:  # Add mode
+                Category.objects.create(name=name, slug=slug)
+
+        return redirect("adminpanel:custom_dashboard")  # ✅ back to dashboard
+
+    return redirect("adminpanel:custom_dashboard")
+
+
+
+# === Validate when adding/editing ===#
+def validate_category(request):
+    name = request.GET.get("name", "").strip()
+    slug = request.GET.get("slug", "").strip()
+    category_id = request.GET.get("id")  # new
+
+    errors = {}
+
+    qs_name = Category.objects.filter(name__iexact=name)
+    qs_slug = Category.objects.filter(slug__iexact=slug)
+
+    if category_id:
+        qs_name = qs_name.exclude(id=category_id)
+        qs_slug = qs_slug.exclude(id=category_id)
+
+    if name and qs_name.exists():
+        errors["name"] = "Category name is already taken."
+
+    if slug and qs_slug.exists():
+        errors["slug"] = "Category slug is already taken."
+
+    return JsonResponse({"errors": errors})
+
+
+# === Helper for fetching categories ===
+def get_categories():
+    """Fetch all categories with product counts."""
+    return (
+        Category.objects
+        .annotate(product_count=Count("product"))
+        .order_by("name")
+    )
+
+
+
+
+

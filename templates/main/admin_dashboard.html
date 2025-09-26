@@ -684,54 +684,66 @@
 
                         
                         <div class="category-list">
-
-                            <!--Sample Item-->
-                            <div class="category-item">
-                                <span>Fruits (16 items)</span>
+                            {% for cat in categories %}
+                            <div class="category-item" data-id="{{ cat.id }}" data-slug="{{ cat.slug }}">
+                                <span>{{ cat.name }} ({{ cat.product_count }} items)</span>
                                 <div class="category-actions-icons">
-
-                                    <!-- Edit Icon -->
-                                    <button class="icon-btn edit-btn" aria-label="Edit Fruits">
+                                    <!-- Edit -->
+                                    <button class="icon-btn edit-btn" aria-label="Edit {{ cat.name }}">
                                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 20H20.5M18 10L21 7L17 3L14 6M18 10L8 20H4V16L14 6M18 10L14 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                                     </button>
-
-
-                                    <!-- Delete Icon -->    
-                                    <button class="icon-btn delete-btn" aria-label="Delete Fruits">
+                                    <!-- Delete -->
+                                    <button class="icon-btn delete-btn" aria-label="Delete {{ cat.name }}">
                                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path> <path d="M9.5 11L10 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path> <path d="M14.5 11L14 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="currentColor" stroke-width="1.5"></path> <path d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
                                     </button>
-
                                 </div>
-                            </div>     
+                            </div>
+                            {% empty %}
+                            <p>No categories available yet.</p>
+                            {% endfor %}
                         </div>
+
+
                         
 
                         <!-- Category Modal -->
                         <div id="category-modal" class="modal hidden">
                             <div class="modal-content">
-                                <h2>Add/Edit Category</h2>
+                                <h2>Add Category</h2>
 
-                                 <!-- Change Category Name -->
-                                <div class="form-group">
-                                    <label for="category-name">Category Name: </label>
-                                    <input type="text" id="category-name" name="category-name" placeholder="Enter Category Name">
-                                </div>
+                                <form method="POST" id="category-form" action="{% url 'adminpanel:create_category' %}">
+                                    {% csrf_token %}
+                                    
+                                    <!-- Hidden input for editing -->
+                                    <input type="hidden" id="category-id" name="category-id">
 
-                                <!-- Change Category Slug Name -->
-                                <div class="form-group">
-                                    <label for="category-slug">Category Slug: </label>
-                                    <input type="text" id="category-slug" name="category-slug" placeholder="Enter Category Slug">
-                                </div>
+                                    <!-- Change Category Name -->
+                                    <div class="form-group">
+                                        <label for="category-name">Category Name: </label>
+                                        <input type="text" id="category-name" name="category-name" placeholder="Enter Category Name" autocomplete="off">
+                                        <small id="name-error" class="error-message"></small>
+                                    </div>
 
+                                    <!-- Change Category Slug Name -->
+                                    <div class="form-group">
+                                        <label for="category-slug">Category Slug: </label>
+                                        <input type="text" id="category-slug" name="category-slug" placeholder="Enter Category Slug" autocomplete="off">
+                                        <small id="slug-error" class="error-message"></small>
+                                    </div>
 
-                                <div class="category-modal-action-buttons">
-                                    <button id="save-category-modal" class="save-btn">Save</button>
-                                    <button id="close-category-modal" class="close-btn">Cancel</button>
-                                </div>
-
-
+                                    <div class="category-modal-action-buttons">
+                                        <button type="submit" id="save-category-modal" class="save-btn">Save</button>
+                                        <button type="button" id="close-category-modal" class="close-btn">Cancel</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
+
+
+
+
+                        <!--Confirmation of Deletion Modal-->
+                        
 
 
 
@@ -953,13 +965,27 @@
                                             <h3>Product Image</h3>
                                             <img src="https://cdn.britannica.com/16/187216-050-CB57A09B/tomatoes-tomato-plant-Fruit-vegetable.jpg" alt="Product Picture">
                                         
-                                            <!-- Change Category Slug Name -->
+                                            <!-- Change Image URL -->
                                             <div class="form-group">
                                                 <label for="image-url">Image Url: </label>
                                                 <input type="text" id="image-url" name="image-url" placeholder="Image URL">
                                             </div>
                                         
-                                        </div>            
+                                        </div>    
+                                        
+                                        <!-- Change Category -->
+                                        <div class="form-group" id="select-cat">
+                                            <label for="category-select">Category:</label>
+                                            <select id="category-select" name="-select">
+                                                <option value="">-- Select a Category --</option>
+                                                <option value="fruits">Fruits</option>
+                                                <option value="vegetables">Vegetables</option>
+                                                <option value="beverages">Beverages</option>
+                                                <option value="snacks">Snacks</option>
+                                                <option value="dairy">Dairy</option>
+                                            </select>
+                                        </div>
+
                                     
 
                                     </div>
@@ -1117,24 +1143,114 @@
     </script>
 
     <!-- Script for Toggling the Category Modal in Products Section -->
-     <script>
+    <script>
         const categoryModal = document.getElementById("category-modal");
         const closeCategoryModalBtn = document.getElementById("close-category-modal");
         const editCategoryBtns = document.querySelectorAll(".edit-btn");
         const addCategoryBtns = document.querySelectorAll(".btn-add-categories-action");
+        const modalTitle = categoryModal.querySelector("h2");
 
-        // Open modal on edit/add
-        [...editCategoryBtns, ...addCategoryBtns].forEach(btn => {
+        // Inputs for editing
+        const nameInput = document.getElementById("category-name");
+        const slugInput = document.getElementById("category-slug");
+        const categoryIdInput = document.getElementById("category-id");
+
+        // --- Open modal on Add Category ---
+        addCategoryBtns.forEach(btn => {
             btn.addEventListener("click", () => {
-            categoryModal.classList.add("show");
+                modalTitle.textContent = "Add Category"; // 🔹 Update title
+                categoryIdInput.value = ""; // clear hidden input
+                nameInput.value = "";
+                slugInput.value = "";
+                categoryModal.classList.add("show");
             });
         });
 
-        // Close modal via button
+        // --- Open modal on Edit Category ---
+        editCategoryBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                modalTitle.textContent = "Edit Category"; // 🔹 Update title
+
+                // Find category item
+                const categoryItem = btn.closest(".category-item");
+                const categoryName = categoryItem.querySelector("span").textContent.split(" (")[0];
+                const categorySlug = categoryItem.dataset.slug;
+                const categoryId = categoryItem.dataset.id;
+
+                // Populate modal inputs
+                nameInput.value = categoryName;
+                slugInput.value = categorySlug;
+                categoryIdInput.value = categoryId;
+
+                categoryModal.classList.add("show");
+
+                // Trigger validation immediately (calls validate function in next script)
+                const event = new Event('input');
+                nameInput.dispatchEvent(event);
+                slugInput.dispatchEvent(event);
+            });
+        });
+
+        // --- Close modal via button ---
         closeCategoryModalBtn.addEventListener("click", () => {
             categoryModal.classList.remove("show");
         });
     </script>
+
+
+
+    <!-- Script for Category Names & Slug Validation -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const nameInput = document.getElementById("category-name");
+            const slugInput = document.getElementById("category-slug");
+            const categoryIdInput = document.getElementById("category-id"); // hidden input
+            const nameError = document.getElementById("name-error");
+            const slugError = document.getElementById("slug-error");
+            const saveBtn = document.getElementById("save-category-modal");
+
+            function validate() {
+                const name = nameInput.value.trim();
+                const slug = slugInput.value.trim();
+                const categoryId = categoryIdInput.value; // get current category id (empty if adding)
+
+                // Build query string
+                let url = `/adminpanel/categories/validate/?name=${encodeURIComponent(name)}&slug=${encodeURIComponent(slug)}`;
+                if (categoryId) {
+                    url += `&id=${categoryId}`;
+                }
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const errors = data.errors;
+
+                        // Reset
+                        nameError.textContent = "";
+                        slugError.textContent = "";
+                        saveBtn.disabled = false;
+
+                        // Name error
+                        if (errors.name) {
+                            nameError.textContent = errors.name;
+                            saveBtn.disabled = true;
+                        }
+
+                        // Slug error
+                        if (errors.slug) {
+                            slugError.textContent = errors.slug;
+                            saveBtn.disabled = true;
+                        }
+                    });
+            }
+
+            nameInput.addEventListener("input", validate);
+            slugInput.addEventListener("input", validate);
+        });
+    </script>
+
+
+
 
 
     <!--Script for Toggling the Products Modal in Products Section-->
