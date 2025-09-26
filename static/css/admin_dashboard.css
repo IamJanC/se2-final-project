@@ -1241,6 +1241,9 @@ main {
 .product-display-actions {
     display: flex;
     gap: 20px;
+    align-items: center; /* ✅ add this */
+    max-width: 750px;
+    width: 100%px;
 }
 
 .product-display-actions svg {
@@ -1294,6 +1297,64 @@ main {
 }
 
 
+/* Search Bar */
+.admin-product-search-bar {
+    width: 100%; /* Makes the form wider */
+    max-width: none; /* Limits width on large screens */
+    margin: 1rem 0; /* Spacing above/below */
+    flex-grow: 1; /* Allows it to take space */
+}
+
+.admin-product-search__input {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 24px 12px 60px; /* top, right, bottom, left */
+    font-size: 14px;
+    line-height: 18px;
+    color: #575756;
+    background-color: transparent;
+
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 25px center;
+
+    border-radius: 0px;
+    border: 1px solid #575756;
+    transition: all 250ms ease-in-out;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.admin-product-search__input::placeholder {
+    color: rgba(87, 87, 86, 0.8);
+    letter-spacing: 1.5px;
+
+
+    font-size: 14px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.admin-product-search__input:hover,
+.admin-product-search__input:focus {
+    padding: 12px 14px 12px 40px; /* top, right, bottom, left */
+    outline: 0;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #575756;
+    border-radius: 0;
+    background-position: 13px center;
+}
+
+
 
 
 
@@ -1305,6 +1366,7 @@ main {
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease;
+    width: 150px;
 
     border-radius: 3px;
     font-size: 0.95rem;
@@ -1486,6 +1548,9 @@ main {
   transform: translateY(-30px) scale(0.95);
   opacity: 0;
   transition: all 0.3s ease;
+
+    max-height: 90vh;   /* don’t let modal exceed 90% of viewport height */
+    overflow-y: auto;   /* vertical scrollbar if needed */
 }
 
 /* Animate in when parent is shown */
@@ -1596,4 +1661,218 @@ label{
 
 
 
-/* === Admin Products === */
+/* === Admin Products Modal === */
+
+.product-modal-content {
+  width: 1200px;     /* your chosen modal width */
+  max-width: 95%;    /* keep responsive */
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.left-right-content{
+    display: flex;
+    gap: 2rem;         /* space between left/right */
+}
+
+.product-left-modal {
+    flex: 3; /* 60% */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: #fafafa; /* optional background to separate */
+    padding: 1rem;
+}
+
+.product-right-modal {
+    flex: 2; /* 40% */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: #fafafa; /* optional background to separate */
+}
+
+
+
+#product-display-modal h2{
+    font-size: 22px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 10px;
+}
+
+
+/* Left Section */
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical; /* let user resize vertically but not horizontally */
+  min-height: 100px; /* ensures it's “fat” enough */
+  box-sizing: border-box;
+}
+
+
+
+
+/* Right Section */
+
+.product-image-section {
+  padding: 1rem; /* spacing inside the right box */
+  border-radius: 8px;
+}
+
+.product-image-section h3 {
+    font-size: 20px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 20px;
+}
+
+.product-image-section img {
+    width: 100%;         /* make it fill the container */
+    height: auto;        /* maintain aspect ratio */
+    display: block;      /* removes tiny bottom whitespace */
+    border-radius: 6px;  /* optional: rounded corners for nice look */
+    object-fit: cover;   /* optional: crops to container if needed */
+    margin-bottom: 10px;
+}
+
+
+
+/* Container - use full width inside the modal form */
+.discount-period {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+/* Optional: if you want to match your other form labels */
+.discount-period > label {
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+
+     margin-bottom: 0;
+}
+
+.discount-period::placeholder
+
+/* Controls wrapper to stack the inputs vertically */
+.discount-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Discount price input - full width */
+.discount-controls input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+  
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    -webkit-appearance: none; /* remove default spinner on some browsers if desired */
+}
+
+/* Date range row - two inputs side-by-side equally */
+.date-range {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 10px; /* adjust as needed */
+}
+
+/* Make sure date inputs share the available width equally */
+.date-range input[type="date"] {
+    flex: 1;         /* equal share */
+    min-width: 0;    /* allow proper shrinking in flexbox */
+    padding: 10px 12px;
+
+    font-size: 14px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Small-screen: stack the two dates */
+@media (max-width: 520px) {
+  .date-range {
+    flex-direction: column;
+  }
+}
+
+
+
+
+
+
+
+
+
+.product-modal-action-buttons{
+    display: flex;
+    gap: 10px;
+    padding-left: 16px;
+}
+
+#edit-product-modal, #save-product-modal, #close-product-modal{
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin-top: 10px;
+}
+
+#save-product-modal, #edit-product-modal{
+    background: #5c8b25; 
+}
+#save-product-modal:hover, #edit-product-modal:hover{
+    background: #325a00;
+}
+#close-product-modal {
+    background: #e0e0e0;   
+    color: #333;           /* dark text */
+}
+#close-product-modal:hover {
+    background: #c0c0c0;  
+}
+
+

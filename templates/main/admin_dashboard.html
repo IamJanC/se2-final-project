@@ -751,7 +751,7 @@
                             <div class="product-display-actions">
 
 
-                                <!-- Orders Page Search -->
+                                <!-- Product Page Table Search -->
                                 <form class="admin-product-search-bar" autocomplete="off">
                                     <input 
                                         class="admin-product-search__input" 
@@ -824,6 +824,119 @@
 
                         
                     
+                        <!-- Product Modal -->
+                        <div id="product-display-modal" class="modal hidden">
+                            <div class="modal-content product-modal-content">
+                                <h2>Add/Edit Products</h2>
+                                
+
+                                <!-- Main Content -->
+
+                                <div class="left-right-content">
+
+                                    <!--LEFT-->
+                                    <div class="product-left-modal">
+                                        <h3>Basic Details</h3>
+
+                                        <!-- Change Product Name -->
+                                        <div class="form-group">
+                                            <label for="product-name">Product Name: </label>
+                                            <input type="text" id="product-name" name="product-name" placeholder="Product Name">
+                                        </div>
+
+                                        <!-- Change Product Description -->
+                                        <div class="form-group">
+                                            <label for="product-description">Product Description: </label>
+                                            <textarea 
+                                                id="product-description" 
+                                                name="product-description" 
+                                                placeholder="Enter product description"
+                                                rows="4"></textarea>
+                                        </div>
+
+                                        <!-- Change Product Price -->
+                                        <div class="form-group">
+                                            <label for="product-price">Product Price: </label>
+                                            <input type="text" id="product-price" name="product-price" placeholder="Product Price">
+                                        </div>
+
+                                        <!-- Discount (all in one div) -->
+                                        <div class="form-group discount-period">
+                                            <label for="discount-price">Discount:</label>
+
+                                            <div class="discount-controls">
+                                                <!-- Discount price (full width) -->
+                                                <input
+                                                type="number"
+                                                id="discount-price"
+                                                name="discount-price"
+                                                placeholder="Discount price (e.g. 149.99)"
+                                                step="0.01"
+                                                min="0"
+                                                />
+
+                                                <!-- Two dates side-by-side, equal width -->
+                                                <div class="date-range">
+                                                <input type="date" id="discount-start" name="discount-start" aria-label="Discount start date" />
+                                                <input type="date" id="discount-end" name="discount-end" aria-label="Discount end date" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    </div>
+
+                                    <!--RIGHT-->
+                                    <div class="product-right-modal">
+                                    
+                                        <div class="product-image-section">
+                                            <h3>Product Image</h3>
+                                            <img src="https://cdn.britannica.com/16/187216-050-CB57A09B/tomatoes-tomato-plant-Fruit-vegetable.jpg" alt="Product Picture">
+                                        
+                                            <!-- Change Category Slug Name -->
+                                            <div class="form-group">
+                                                <label for="image-url">Image Url: </label>
+                                                <input type="text" id="image-url" name="image-url" placeholder="Image URL">
+                                            </div>
+                                        
+                                        </div>            
+                                    
+
+                                    </div>
+
+                                    
+                                </div>
+                                
+
+
+
+                               
+
+                                <div class="product-modal-action-buttons">
+                                    <button id="edit-product-modal" class="save-btn">Edit</button>
+                                    <button id="save-product-modal" class="save-btn">Save</button>
+                                    <button id="close-product-modal" class="close-btn">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
                     
                     
                     
@@ -973,6 +1086,27 @@
             categoryModal.classList.remove("show");
         });
     </script>
+
+
+    <!--Script for Toggling the Products Modal in Products Section-->
+    <script>
+    // Product modal elements
+    const productModal = document.getElementById("product-display-modal");
+    const addProductBtn = document.querySelector(".btn-add-products-action");
+    const closeProductModalBtn = document.getElementById("close-product-modal");
+
+    // Open product modal
+    addProductBtn.addEventListener("click", () => {
+        productModal.classList.add("show");
+        productModal.classList.remove("hidden");
+    });
+
+    // Close product modal
+    closeProductModalBtn.addEventListener("click", () => {
+        productModal.classList.remove("show");
+        productModal.classList.add("hidden");
+    });
+</script>
 
 
 

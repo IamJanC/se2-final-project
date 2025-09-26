@@ -7,6 +7,7 @@ import re
 from main.views import get_home_context
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm
+from orders.models import UserAddress
 
 from django.views.decorators.csrf import csrf_exempt # to exempt CSRF for testing
 
@@ -169,6 +170,7 @@ def home_view(request):
 @login_required
 def account_view(request):
     print("🚀 account_view CALLED:", request.method)
+    
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
         print("📤 POST data:", request.POST)
@@ -182,5 +184,14 @@ def account_view(request):
             print("❌ Form errors:", form.errors)
     else:
         form = ProfileForm(instance=request.user)
+        
+    # 🔑 Get same addresses as checkout
+    addresses = UserAddress.objects.filter(user=request.user).order_by('created_at')
+    default_address = addresses.first() if addresses.exists() else None
 
-    return render(request, "main/account.html", {"form": form, "user": request.user})
+    return render(request, "main/account.html", {
+        "form": form, 
+        "user": request.user,
+        "addresses": addresses,
+        "default_address": default_address,
+    })
