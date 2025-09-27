@@ -522,3 +522,16 @@ button.nav-link {
     background: #c0c0c0;  
 }
 
+
+
+
+
+.hidden {
+    display: none;
+}
+#noOrdersMessage {
+    text-align: center;
+    margin-top: 1rem;
+    color: #666;
+    font-style: italic;
+}

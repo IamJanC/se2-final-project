@@ -30,7 +30,7 @@
                     {% comment %} <span>P</span> <!-- First letter of name --> {% endcomment %}
                 </div>
                 <div class="profile-info">
-                    <p class="username">Perceluna</p>
+                    <p class="username">{{ user.username }}</p>
                     <a href="#" class="edit-profile">
                         <!-- Edit (pencil) SVG -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
@@ -99,14 +99,11 @@
             <!-- Orders Content -->
             <div class="orders-container">
                 <div class="orders-list" id="all">
-                    {% if orders %}
                     {% for order in orders %}
-                    <div class="order-card">
+                    <div class="order-card" data-status="{{ order.status }}">
                         <div class="order-card-top-section">
                             <h3>{{ order.created_at|date:"F j, Y – g:i A" }}</h3>
-                            <span class="order-card-order-status">
-                                {{ order.get_status_display }}
-                            </span>
+                            <span class="order-card-order-status">{{ order.get_status_display }}</span>
                         </div>
 
                         <div class="order-card-middle-section">
@@ -118,53 +115,48 @@
                         </div>
 
                         <div class="order-card-item-list">
-                        <!-- Header row -->
-                        <div class="orders-product-header">
-                            <div class="product-col">Product</div>
-                            <div class="price-col">Price</div>
-                            <div class="qty-col">Quantity</div>
-                            <div class="subtotal-col">Subtotal</div>
-                        </div>
-
-                        {% for item in order.items.all %}
-                        <div class="orders-product-row">
-                            <div class="product-col product-info">
-                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="product-img">
-                                <span class="product-name">{{ item.product.name }}</span>
+                            <div class="orders-product-header">
+                                <div class="product-col">Product</div>
+                                <div class="price-col">Price</div>
+                                <div class="qty-col">Quantity</div>
+                                <div class="subtotal-col">Subtotal</div>
                             </div>
-                            <div class="price-col">₱{{ item.price_at_purchase|floatformat:2 }}</div>
-                            <div class="qty-col">x{{ item.quantity }}</div>
-                            <div class="subtotal-col">₱{{ item.subtotal|floatformat:2 }}</div>
-                        </div>
-                        {% endfor %}
+                            {% for item in order.items.all %}
+                            <div class="orders-product-row">
+                                <div class="product-col product-info">
+                                    <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="product-img">
+                                    <span class="product-name">{{ item.product.name }}</span>
+                                </div>
+                                <div class="price-col">₱{{ item.price_at_purchase|floatformat:2 }}</div>
+                                <div class="qty-col">x{{ item.quantity }}</div>
+                                <div class="subtotal-col">₱{{ item.subtotal|floatformat:2 }}</div>
+                            </div>
+                            {% endfor %}
                         </div>
 
-                        <!-- Order Action Buttons -->
+                        <!-- Buttons -->
                         <div class="order-card-buttons">
                             {% if order.status == "shipped" %}
                                 <a href="{% url 'orders:order_received' order.id %}" class="order-btn order-received">Order Received</a>
                                 <a href="{% url 'orders:request_return' order.id %}" class="order-btn request-return">Request Return/Refund</a>
                             {% endif %}
-
                             {% if order.status == "delivered" %}
                                 <a href="{% url 'orders:request_return' order.id %}" class="order-btn request-return">Request Return/Refund</a>
                                 <button class="order-btn rate-again">Rate Again</button>
                             {% endif %}
-
                             {% if order.status == "pending" %}
                                 <a href="{% url 'orders:cancel_order' order.id %}" class="order-btn cancel-order">Cancel Order</a>
                             {% endif %}
-
                             <button class="order-btn buy-again">Buy Again</button>
-                            <button class="order-btn show-details">Show Details</button>
+                            <a href="{% url 'orders:order_monitoring' order.id %}" class="order-btn show-details">Show Details</a>
                         </div>
                     </div>
                     {% endfor %}
-                    {% else %}
-                        <p>No orders yet.</p>
-                    {% endif %}
                 </div>
+
+                <p id="noOrdersMessage" class="hidden">No matching orders found.</p>
             </div>
+
 
 
 
@@ -180,20 +172,101 @@
 
 <!-- Script for Toggling Containers -->
 <script>
+    const statusMap = {
+        pending: "processing",
+        shipped: "to-ship",
+        delivered: "to-receive",
+        completed: "completed",
+        cancelled: "cancelled"
+    };
+
+    // === Get initial tab from URL (if any) ===
+    const urlParams = new URLSearchParams(window.location.search);
+    let activeTab = urlParams.get("tab") || "all";
+
+    // === Tab Filtering ===
     document.querySelectorAll(".order-tabs .tab").forEach(tab => {
         tab.addEventListener("click", () => {
-            // Remove active class from all tabs
+            // switch active tab
             document.querySelectorAll(".order-tabs .tab").forEach(t => t.classList.remove("active"));
             tab.classList.add("active");
+            activeTab = tab.getAttribute("data-tab");
 
-            // Hide all order lists
-            document.querySelectorAll(".orders-list").forEach(list => list.classList.add("hidden"));
-
-            // Show selected list
-            const target = tab.getAttribute("data-tab");
-            document.getElementById(target).classList.remove("hidden");
+            applyFilters();
         });
     });
+
+    // === Search Filtering ===
+    const searchInput = document.getElementById("ordersSearchInput");
+    searchInput.addEventListener("input", () => {
+        applyFilters();
+    });
+
+    // === Combined Filter Function ===
+    function applyFilters() {
+        const query = searchInput.value.toLowerCase();
+        const cards = document.querySelectorAll(".order-card");
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const rawStatus = card.getAttribute("data-status");
+            const status = statusMap[rawStatus] || rawStatus;
+
+            // searchable fields
+            const orderId = card.querySelector(".order-card-middle-section h3")?.textContent.toLowerCase() || "";
+            const orderDate = card.querySelector(".order-card-top-section h3")?.textContent.toLowerCase() || "";
+            const productNames = Array.from(card.querySelectorAll(".product-name"))
+                                    .map(el => el.textContent.toLowerCase())
+                                    .join(" ");
+
+            const matchesSearch = orderId.includes(query) || orderDate.includes(query) || productNames.includes(query);
+            const matchesTab = (activeTab === "all" || status === activeTab);
+
+            if (matchesSearch && matchesTab) {
+                card.style.display = "block";
+                visibleCount++;
+            } else {
+                card.style.display = "none";
+            }
+        });
+
+        // === Toggle "No matching orders" message ===
+        const noOrdersMsg = document.getElementById("noOrdersMessage");
+        if (visibleCount === 0) {
+            let tabLabel;
+            switch (activeTab) {
+                case "processing": tabLabel = "Processing"; break;
+                case "to-ship": tabLabel = "To Ship"; break;
+                case "to-receive": tabLabel = "To Receive"; break;
+                case "completed": tabLabel = "Completed"; break;
+                case "cancelled": tabLabel = "Cancelled"; break;
+                default: tabLabel = ""; // covers "all"
+            }
+
+            if (query) {
+                noOrdersMsg.textContent = `No ${tabLabel} Orders match your search.`;
+            } else {
+                noOrdersMsg.textContent = `No ${tabLabel} Orders found.`;
+            }
+
+            noOrdersMsg.classList.remove("hidden");
+        } else {
+            noOrdersMsg.classList.add("hidden");
+        }
+    }
+
+    // === Activate correct tab on page load ===
+    document.querySelectorAll(".order-tabs .tab").forEach(tab => {
+        if (tab.getAttribute("data-tab") === activeTab) {
+            tab.classList.add("active");
+        } else {
+            tab.classList.remove("active");
+        }
+    });
+
+    // Run filter once on load
+    applyFilters();
+
 </script>
 
 

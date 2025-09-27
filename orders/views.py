@@ -16,7 +16,7 @@ def my_orders(request):
     
     counts = {
         "all": orders.count(),
-        "processsing": orders.filter(status="pending").count(),
+        "processing": orders.filter(status="pending").count(),
         "to_ship": orders.filter(status="paid").count(),
         "to_receive": orders.filter(status="shipped").count(),
         "completed": orders.filter(status="delivered").count(),
@@ -201,7 +201,7 @@ def order_received(request, order_id):
     if order.status == "shipped":
         order.status = "delivered"
         order.save()
-    return redirect("my_orders")
+    return redirect("orders:my_orders")
 
 @login_required
 def request_return(request, order_id):
@@ -209,7 +209,7 @@ def request_return(request, order_id):
     if order.status in ["shipped", "delivered"]:
         order.status = "return_requested"
         order.save()
-    return redirect("my_orders")
+    return redirect("orders:my_orders")
 
 @login_required
 def cancel_order(request, order_id):
@@ -217,11 +217,51 @@ def cancel_order(request, order_id):
     if order.status == "pending":
         order.status = "cancelled"
         order.save()
-    return redirect("my_orders")
+    return redirect("orders:my_orders")
 
 
-def order_monitoring(request):
-    return render(request, "main/order_monitoring.html")
+def order_monitoring(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    status_map = {
+    "pending": "processing",
+    "shipped": "to-ship",
+    "delivered": "to-receive",
+    "completed": "completed",
+    "cancelled": "cancelled",
+    }
+    
+    # 👇 ordered list for progress bar
+    statuses = ["pending", "shipped", "delivered", "completed", "cancelled"]
+    
+    # get the index of the current status
+    try:
+        current_index = statuses.index(order.status)
+    except ValueError:
+        current_index = -1  # fallback if status not found
+        
+    # calculate totals
+    items_total = sum(item.price_at_purchase * item.quantity for item in order.items.all())
+    shop_discount = items_total * Decimal("0.20")
+    subtotal = items_total - shop_discount
+    shipping_fee = Decimal("100.00") if order.items.exists() else Decimal("0.00")
+    final_total = subtotal + shipping_fee
+
+    mapped_status = status_map.get(order.status, "all")
+    return render(request, "main/order_monitoring.html", {
+        "order": order, 
+        "mapped_status": mapped_status, 
+        "statuses": statuses,
+        "current_index": current_index,
+        "items_total": items_total,
+        "shop_discount": shop_discount,
+        "subtotal": subtotal,
+        "shipping_fee": shipping_fee,
+        "final_total": final_total,
+    })
+
+# def order_monitoring(request):
+#     return render(request, "orders:order_monitoring.html")
+
 
 
 

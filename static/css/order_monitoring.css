@@ -281,10 +281,14 @@ main {
     background-color: #5c8630;
     color: #fff;
     border: 2px solid #5c8630;
+
+    box-shadow: 0 0 10px #5c8630; /* glow */
 }
 
 .bar.completed {
     background-color: #5c8630;
+
+    box-shadow: 0 0 6px #5c8630; /* glow */
 }
 
 /* Pending State */

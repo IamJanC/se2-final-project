@@ -16,10 +16,11 @@
         <div class="cart-title">
             <div class="order-info">
                 <h3>Order Details</h3>
-                <h4>&middot; April 24, 2021 &middot; 3 Products</h4>
+                <h4>&middot; {{ order.created_at|date:"F j, Y" }} &middot; {{ order.items.count }} Products</h4>
             </div>
 
-            <a href="http://127.0.0.1:8000/orders/design/" class="back-link">
+
+            <a href="{% url 'orders:my_orders' %}?tab={{ mapped_status }}" class="back-link">
                 Back to Orders
             </a>
         </div>
@@ -31,33 +32,32 @@
 
             <!-- Orders Address Card (Left) -->
             <div class="orders-address-card">
-
                 <div class="address-card-title">
                     <h3>Address Information</h3>
                 </div>
 
                 <div class="orders-top-section">
                     <div class="label-top">
-                        <span class="address-label">Home</span>
+                        <span class="address-label">{{ order.label|default:"Address" }}</span>
                     </div>
                 </div>
 
                 <div class="upper-address-label-section">
-                    <p class="address-card-name">Juan Dela Cruz</p>
+                    <p class="address-card-name">{{ order.full_name }}</p>
                 </div>
 
                 <div class="middle-address-section">
                     <p class="address-card-address">
-                        123 Sample Street, Dalig, Antipolo, Rizal 1870
+                        {{ order.house }}, {{ order.street }}, Dalig, Antipolo, Rizal 1870
                     </p>
                     <p class="address-card-landmark">
-                        Landmark: Near Antipolo Cathedral
+                        Landmark: {{ order.landmark }}
                     </p>
                 </div>
 
                 <div class="lower-address-contact-section">
-                    <p class="address-card-email">juan.delacruz@email.com</p>
-                    <p class="address-card-phone">0917 123 4567</p>
+                    <p class="address-card-email">{{ order.email }}</p>
+                    <p class="address-card-phone">{{ order.phone }}</p>
                 </div>
             </div>
 
@@ -66,12 +66,9 @@
             <div class="payment-information">
 
                 <div class="order-information-right">
-
-
-
                     <div class="summary-row">
                         <span>Order ID:</span>
-                        <span>0001</span>
+                        <span>{{ order.id }}</span>
                     </div>
 
                     <div class="summary-row">
@@ -79,36 +76,35 @@
                         <span>Cash on Delivery</span>
                     </div>
 
-                    <div class="summary-row divider" id="divider1"></div>
-
+                    <div class="summary-row divider"></div>
 
                     <div class="summary-row" id="items-total-group">
                         <span>Item(s) Total</span>
-                        <span>PHP 1,500.00</span>
+                        <span>PHP {{ items_total|floatformat:2|intcomma }}</span>
                     </div>
 
                     <div class="summary-row" id="shop-discount-group">
                         <span>Shop Discount</span>
-                        <span>PHP 200.00</span>
+                        <span>PHP {{ shop_discount|floatformat:2|intcomma }}</span>
                     </div>
-                    
-                    <div class="summary-row divider" id="divider1"></div>
+
+                    <div class="summary-row divider"></div>
 
                     <div class="summary-row" id="subtotal-group">
                         <span>Subtotal</span>
-                        <span>PHP 1,300.00</span> 
+                        <span>PHP {{ subtotal|floatformat:2|intcomma }}</span> 
                     </div>
 
                     <div class="summary-row" id="shipping-fee-group">
                         <span>Shipping Fee</span>
-                        <span>PHP 100.00</span>
+                        <span>PHP {{ shipping_fee|floatformat:2|intcomma }}</span>
                     </div>
 
                     <div class="summary-row divider"></div>
 
                     <div class="summary-row total" id="final-total-group">
-                        <span>Total (3 items)</span>
-                        <span><strong>PHP 1,400.00</strong></span>
+                        <span>Total ({{ order.items.count }} items)</span>
+                        <span><strong>PHP {{ final_total|floatformat:2|intcomma }}</strong></span>
                     </div>
                 </div>
 
@@ -121,6 +117,25 @@
 
          <!-- Order Progress Bar -->
         <div class="order-progress">
+            {% for s in statuses %}
+                <div class="step {% if forloop.counter0 <= current_index %}completed{% else %}pending{% endif %}">
+                    <div class="circle">{{ forloop.counter|stringformat:"02d" }}</div>
+                    <span class="label">
+                        {% if s == "pending" %}Order Placed
+                        {% elif s == "shipped" %}Processing
+                        {% elif s == "delivered" %}On the Way
+                        {% elif s == "completed" %}Order Received
+                        {% elif s == "cancelled" %}Cancelled
+                        {% endif %}
+                    </span>
+                </div>
+
+                {% if not forloop.last %}
+                    <div class="bar {% if forloop.counter0 < current_index %}completed{% endif %}"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% comment %} <div class="order-progress">
 
             <!-- Step 1 -->
             <div class="step completed">
@@ -155,12 +170,12 @@
                 <span class="label">Order Received</span>
             </div>
 
-        </div>
+        </div> {% endcomment %}
+
 
 
         <!-- Product Summary Section -->
         <div class="orders-main-product-section">
-            <!-- Header row -->
             <div class="orders-product-header">
                 <div class="product-col" id="product-column-name">Product</div>
                 <div class="price-col">Price</div>
@@ -168,38 +183,17 @@
                 <div class="subtotal-col">Subtotal</div>
             </div>
 
-            <!-- Product row 1 -->
+            {% for item in order.items.all %}
             <div class="orders-product-row">
                 <div class="product-col product-info">
-                    <img src="https://i.imgur.com/EgXjPGB.png" alt="Product A" class="product-img">
-                    <span class="product-name">Durian (350g)</span>
+                    <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="product-img">
+                    <span class="product-name">{{ item.product.name }}</span>
                 </div>
-                <div class="price-col">₱380.00</div>
-                <div class="qty-col">x2</div>
-                <div class="subtotal-col">₱760.00</div>
+                <div class="price-col">₱ {{ item.product.price|floatformat:2|intcomma }}</div>
+                <div class="qty-col">x{{ item.quantity }}</div>
+                <div class="subtotal-col">₱ {{ item.subtotal|floatformat:2|intcomma }}</div>
             </div>
-
-            <!-- Product row 1 -->
-            <div class="orders-product-row">
-                <div class="product-col product-info">
-                    <img src="https://i.imgur.com/EgXjPGB.png" alt="Product A" class="product-img">
-                    <span class="product-name">Durian (350g)</span>
-                </div>
-                <div class="price-col">₱380.00</div>
-                <div class="qty-col">x2</div>
-                <div class="subtotal-col">₱760.00</div>
-            </div>
-
-            <!-- Product row 1 -->
-            <div class="orders-product-row">
-                <div class="product-col product-info">
-                    <img src="https://i.imgur.com/EgXjPGB.png" alt="Product A" class="product-img">
-                    <span class="product-name">Durian (350g)</span>
-                </div>
-                <div class="price-col">₱380.00</div>
-                <div class="qty-col">x2</div>
-                <div class="subtotal-col">₱760.00</div>
-            </div>
+            {% endfor %}
         </div>
 
 
