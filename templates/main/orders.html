@@ -111,7 +111,7 @@
                         </div>
 
                         <div class="order-card-total-price">
-                            <p class="order-card-product-price">Total: ₱{{ order.total|floatformat:2 }}</p>
+                            <p class="order-card-product-price">Total: ₱{{ order.total|floatformat:2|intcomma }}</p>
                         </div>
 
                         <div class="order-card-item-list">
@@ -127,9 +127,9 @@
                                     <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="product-img">
                                     <span class="product-name">{{ item.product.name }}</span>
                                 </div>
-                                <div class="price-col">₱{{ item.price_at_purchase|floatformat:2 }}</div>
+                                <div class="price-col">₱{{ item.price_at_purchase|floatformat:2|intcomma }}</div>
                                 <div class="qty-col">x{{ item.quantity }}</div>
-                                <div class="subtotal-col">₱{{ item.subtotal|floatformat:2 }}</div>
+                                <div class="subtotal-col">₱{{ item.subtotal|floatformat:2|intcomma }}</div>
                             </div>
                             {% endfor %}
                         </div>

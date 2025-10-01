@@ -199,6 +199,15 @@ nav {
     font-weight: 400;
 }
 
+.cart-badge {
+    background: #4e9a06;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 8px;
+    font-size: 0.8em;
+    margin-left: 4px;
+    vertical-align: top;
+}
 
 #nav-amount {
     color: #325a00;

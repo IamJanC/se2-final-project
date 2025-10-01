@@ -1675,6 +1675,85 @@ label{
 
 
 
+/* === Category Admin Products Modal Confirm of Deletion === */
+
+
+/* Confirmation modal specific tweaks */
+.delete-modal {
+  text-align: center;
+}
+
+.delete-message {
+    margin-bottom: 1.5rem;
+    color: #333;
+
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+}
+
+/* Actions container */
+.delete-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Confirm button (green) */
+.btn-confirm {
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin-top: 10px;
+
+    background: #5c8b25; 
+
+}
+
+.btn-confirm:hover {
+  background: #325a00;
+}
+
+/* Cancel button (gray) */
+.btn-cancel {
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin-top: 10px;
+
+    background: #e0e0e0;   
+    color: #333;           /* dark text */
+}
+
+.btn-cancel:hover {
+  background: #c0c0c0;
+}
 
 
 

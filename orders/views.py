@@ -142,7 +142,6 @@ def save_address(request):
         
         label = request.POST.get("label", "Home")
         
-
         if full_name and phone:
             if edit_id:  # 🟢 update existing
                 address = get_object_or_404(UserAddress, id=edit_id, user=request.user)
@@ -157,7 +156,8 @@ def save_address(request):
                 request.session["selected_address_id"] = address.id
                 messages.success(request, "Address updated successfully.")
             else:  # 🆕 create new
-                new_addr = request.user.addresses.create(
+                # Duplicate check
+                exists = request.user.addresses.filter(
                     full_name=full_name,
                     phone=phone,
                     email=email,
@@ -165,15 +165,25 @@ def save_address(request):
                     street=street,
                     landmark=landmark,
                     label=label,
-                )
-                request.session["selected_address_id"] = new_addr.id
-                messages.success(request, "Address saved successfully.")
+                ).exists()
+                if exists:
+                    messages.info(request, "This address already exists.")
+                else:
+                    new_addr = request.user.addresses.create(
+                        full_name=full_name,
+                        phone=phone,
+                        email=email,
+                        house=house,
+                        street=street,
+                        landmark=landmark,
+                        label=label,
+                    )
+                    request.session["selected_address_id"] = new_addr.id
+                    messages.success(request, "Address saved successfully.")
         else:
             messages.error(request, "Please provide name and phone.")
 
         return redirect(request.POST.get("next", "orders:checkout"))
-
-
 
 
 

@@ -661,9 +661,6 @@
 
 
 
-                </div>
-
-
                 <!-- === PRODUCTS === -->
                 <div id="products" class="tab-content">
 
@@ -685,7 +682,13 @@
                         
                         <div class="category-list">
                             {% for cat in categories %}
-                            <div class="category-item" data-id="{{ cat.id }}" data-slug="{{ cat.slug }}">
+                            <div 
+                                class="category-item" 
+                                data-id="{{ cat.id }}" 
+                                data-slug="{{ cat.slug }}" 
+                                data-name="{{ cat.name }}" 
+                                data-count="{{ cat.product_count }}"
+                            >
                                 <span>{{ cat.name }} ({{ cat.product_count }} items)</span>
                                 <div class="category-actions-icons">
                                     <!-- Edit -->
@@ -742,8 +745,24 @@
 
 
 
-                        <!--Confirmation of Deletion Modal-->
-                        
+                        <!-- Confirmation of Deletion Modal -->
+                        <div class="modal" id="deleteModal">
+                            <div class="modal-content delete-modal">
+                                <p class="delete-message" id="delete-message">
+                                Are you sure you want to delete this category?
+                                </p>
+                                <div class="delete-actions">
+                                <form id="delete-form" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-confirm">Yes</button>
+                                    <button type="button" class="btn-cancel">Cancel</button>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+
 
 
 
@@ -1249,29 +1268,64 @@
         });
     </script>
 
+    <!--Script for Toggling of Deletion Confirmation Modal in Admin Product-->
+    <script>
+        
+        const deleteModal = document.getElementById("deleteModal");
+        const deleteForm = document.getElementById("delete-form");
+        const cancelDeleteBtn = deleteModal.querySelector(".btn-cancel");
+        const deleteMessage = document.getElementById("delete-message");
+
+        document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const categoryItem = btn.closest(".category-item");
+            const categoryId = categoryItem.dataset.id;
+            const categoryName = categoryItem.dataset.name;
+            const categoryCount = categoryItem.dataset.count;
+
+            // Update form action
+            deleteForm.action = `/adminpanel/categories/delete/${categoryId}/`;
+
+            // Update modal message
+            deleteMessage.textContent = `Are you sure you want to delete "${categoryName}" (${categoryCount} items)?`;
+
+            // Show modal
+            deleteModal.classList.add("show");
+        });
+        });
+
+        // Cancel button closes modal
+        cancelDeleteBtn.addEventListener("click", () => {
+        deleteModal.classList.remove("show");
+        });
+
+
+    </script>
+
 
 
 
 
     <!--Script for Toggling the Products Modal in Products Section-->
     <script>
-    // Product modal elements
-    const productModal = document.getElementById("product-display-modal");
-    const addProductBtn = document.querySelector(".btn-add-products-action");
-    const closeProductModalBtn = document.getElementById("close-product-modal");
+        // Product modal elements
+        const productModal = document.getElementById("product-display-modal");
+        const addProductBtn = document.querySelector(".btn-add-products-action");
+        const closeProductModalBtn = document.getElementById("close-product-modal");
 
-    // Open product modal
-    addProductBtn.addEventListener("click", () => {
-        productModal.classList.add("show");
-        productModal.classList.remove("hidden");
-    });
+        // Open product modal
+        addProductBtn.addEventListener("click", () => {
+            productModal.classList.add("show");
+            productModal.classList.remove("hidden");
+        });
 
-    // Close product modal
-    closeProductModalBtn.addEventListener("click", () => {
-        productModal.classList.remove("show");
-        productModal.classList.add("hidden");
-    });
-</script>
+        // Close product modal
+        closeProductModalBtn.addEventListener("click", () => {
+            productModal.classList.remove("show");
+            productModal.classList.add("hidden");
+        });
+    </script>
+    
 
 
 

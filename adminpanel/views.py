@@ -251,6 +251,20 @@ def get_categories():
         .annotate(product_count=Count("product"))
         .order_by("name")
     )
+    
+
+# === Delete Category ===
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def delete_category(request, pk):
+    if request.method == "POST":  # safety: only allow POST
+        try:
+            cat = Category.objects.get(pk=pk)
+            cat.delete()
+        except Category.DoesNotExist:
+            pass  # or handle with a message
+    return redirect("adminpanel:custom_dashboard")
+
 
 
 
