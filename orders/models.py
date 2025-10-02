@@ -20,6 +20,12 @@ class Order(models.Model):
     email = models.EmailField(blank=True)          # optional, for receipts
     address = models.TextField()                   # delivery address
     
+    # Snapshot of address at checkout
+    house = models.CharField(max_length=100, blank=True)
+    street = models.CharField(max_length=100, blank=True)
+    landmark = models.CharField(max_length=100, blank=True)
+    label = models.CharField(max_length=50, default="Home")
+    
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     

@@ -87,7 +87,15 @@ def checkout_view(request):
                 full_name=address_obj.full_name,
                 phone=address_obj.phone,
                 email=address_obj.email,
-                address=f"{address_obj.house}, {address_obj.street}, Dalig, Antipolo, Rizal 1870, {address_obj.landmark}",
+                
+                # snapshot fields
+                house=address_obj.house,
+                street=address_obj.street,
+                landmark=address_obj.landmark,
+                label=address_obj.label,
+                
+                #address=f"{address_obj.house}, {address_obj.street}, Dalig, Antipolo, Rizal 1870, {address_obj.landmark}",
+                
                 status="pending",
             )
 
@@ -161,8 +169,8 @@ def save_address(request):
                     full_name=full_name,
                     phone=phone,
                     email=email,
-                    house=house,
-                    street=street,
+                    house = (request.POST.get("house") or "").strip().lower(),
+                    street = (request.POST.get("street") or "").strip().lower(),
                     landmark=landmark,
                     label=label,
                 ).exists()

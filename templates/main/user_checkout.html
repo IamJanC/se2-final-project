@@ -373,22 +373,26 @@
     // Main form (for hidden input)
     const mainForm = document.getElementById("checkout-form");
     const addressIdHidden = document.getElementById("selectedAddressId");
+    const orderRight = document.querySelector(".order-information-right");
 
     // Helper: show/hide sections
     const showForm = () => {
         formDiv.style.display = "block";
         selectionDiv.style.display = "none";
         checkoutDiv.style.display = "none";
+        if (orderRight) orderRight.style.display = "none";
     };
     const showSelection = () => {
         formDiv.style.display = "none";
         selectionDiv.style.display = "block";
         checkoutDiv.style.display = "none";
+        if (orderRight) orderRight.style.display = "none";
     };
     const showCheckout = () => {
         formDiv.style.display = "none";
         selectionDiv.style.display = "none";
         checkoutDiv.style.display = "block";
+        if (orderRight) orderRight.style.display = "block";
     };
 
     // Initial state
@@ -573,6 +577,10 @@
             if (addressIdHidden) addressIdHidden.value = btn.dataset.id || "";
 
             showCheckout();
+
+            if (mainForm) {
+                mainForm.submit();   // 🔴 will actually POST to save_address
+            }
         });
     });
 });

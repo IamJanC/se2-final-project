@@ -148,3 +148,18 @@ def update_cart_item(request):
         })
     except CartItem.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Cart item not found'}, status=404)
+    
+@require_POST
+def delete_cart_item(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'message': 'Authentication required.'}, status=403)
+    try:
+        data = json.loads(request.body)
+        item_id = data.get('item_id')
+        cart_item = CartItem.objects.get(id=item_id, cart__user=request.user)
+        cart_item.delete()
+        return JsonResponse({'success': True})
+    except CartItem.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Item not found.'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
