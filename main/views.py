@@ -7,7 +7,7 @@ from products.views import get_all_products  # import logic layer for product ga
 from collections import defaultdict
 from django.db.models import Min, Max, Count
 from cart.models import CartItem
-
+from django.core.paginator import Paginator
 
 
 import json
@@ -64,7 +64,12 @@ def shop(request):
     if price_max:
         products = products.filter(price__lte=price_max)
 
-    
+    # --- PAGINATION LOGIC ---
+    paginator = Paginator(products, 9)  # Show 12 products per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    # ------------------------
+
     categories = Category.objects.annotate(product_count=Count('product'))
     price_range = Product.objects.aggregate(
         min_price=Min('price'),
@@ -72,7 +77,8 @@ def shop(request):
     )
 
     return render(request, 'main/gallery.html', {
-        'products': products,
+        'products': page_obj.object_list,  # Only products for this page
+        'page_obj': page_obj,              # Pass the page object for pagination controls
         'categories': categories,
         'min_price': price_range['min_price'],
         'max_price': price_range['max_price'],

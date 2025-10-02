@@ -192,6 +192,7 @@ def save_address(request):
             messages.error(request, "Please provide name and phone.")
 
         return redirect(request.POST.get("next", "orders:checkout"))
+    return redirect("orders:checkout")
 
 
 
@@ -208,7 +209,8 @@ def delete_address(request, address_id):
     address = get_object_or_404(UserAddress, id=address_id, user=request.user)
     address.delete()
     messages.success(request, "Address deleted successfully.")
-    return redirect("orders:checkout")
+    next_url = request.GET.get("next", "orders:checkout")
+    return redirect(next_url)
 
 
 

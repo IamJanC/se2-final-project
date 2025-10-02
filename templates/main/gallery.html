@@ -14,7 +14,7 @@
 {% block content %}
 <div class="gallery-layout">
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar fixed-sidebar">
     <div class="sidebar-section"> 
       <h3>All Categories</h3>
       <form method="get" id="categoryForm">
@@ -61,17 +61,26 @@
   </aside>
 
   <!-- Main Product Grid -->
-  <main class="product-gallery">
+  <main class="product-gallery scrollable-gallery">
 
-    <div class="gallery-controls">
-      <select id="sortDropdown">
-        <option>Sort by: Latest</option>
-        <option>Price: Low to High</option>
-        <option>Price: High to Low</option>
-        <option>Rating: High to Low</option>
+  <div class="gallery-controls">
+    <form id="sortForm" method="get">
+      <!-- Preserve other filters as hidden fields if needed -->
+      {% if request.GET.category %}
+        <input type="hidden" name="category" value="{{ request.GET.category }}">
+      {% endif %}
+      {% if request.GET.price_max %}
+        <input type="hidden" name="price_max" value="{{ request.GET.price_max }}">
+      {% endif %}
+      <select id="sortDropdown" name="sort" onchange="document.getElementById('sortForm').submit();">
+        <option value="" {% if not request.GET.sort %}selected{% endif %}>Sort by: Latest</option>
+        <option value="price_low" {% if request.GET.sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+        <option value="price_high" {% if request.GET.sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+        <option value="rating" {% if request.GET.sort == 'rating' %}selected{% endif %}>Rating: High to Low</option>
       </select>
-      <span class="results-count">32 results found</span>
-    </div>
+    </form>
+    <span class="results-count">{{ page_obj.paginator.count }} results found</span>
+  </div>
 
 
     <div class="product-grid">
@@ -116,12 +125,31 @@
     </div>
 
     <div class="pagination">
-      <button>&laquo;</button>
-      <button class="active">1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>4</button>
-      <button>&raquo;</button>
+      {% if page_obj.has_previous %}
+        <a href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.price_max %}price_max={{ request.GET.price_max }}&{% endif %}page={{ page_obj.previous_page_number }}">
+          <button>&laquo;</button>
+        </a>
+      {% else %}
+        <button disabled>&laquo;</button>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <button class="active">{{ num }}</button>
+        {% else %}
+          <a href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.price_max %}price_max={{ request.GET.price_max }}&{% endif %}page={{ num }}">
+            <button>{{ num }}</button>
+          </a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.price_max %}price_max={{ request.GET.price_max }}&{% endif %}page={{ page_obj.next_page_number }}">
+          <button>&raquo;</button>
+        </a>
+      {% else %}
+        <button disabled>&raquo;</button>
+      {% endif %}
     </div>
   </main>
 </div>

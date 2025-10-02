@@ -316,103 +316,60 @@
             </div>
 
             <!-- === ADDRESSES === -->
-            <div class="addresses-section section" data-tab-content="processing" style="display:none;">
-                <h2>Your Addresses</h2>
+            <div class="user-tab-content" id="addresses-section">
+                <h2>My Addresses</h2>
 
-                {% if addresses %}
-                    <div class="delivery-address">
-                        <div class="address-selection">
-                            {% for address in addresses %}
-                                <div class="address-card">
-                                    <div class="address-card-content">
-                                        <p class="address-card-name">{{ address.full_name }}</p>
-                                        <p class="address-card-address">
-                                            {{ address.street }}, {{ address.city }}, {{ address.state }} {{ address.zipcode }}
-                                        </p>
-                                        <p class="address-card-phone">{{ address.phone }}</p>
-                                    </div>
-                                    <div class="address-card-actions">
-                                        <button class="edit-address-btn">Edit</button>
-                                        <button class="delete-address-btn">Delete</button>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% else %}
-                    <p>You don’t have any saved addresses yet.</p>
-                {% endif %}
+                <div class="address-list">
+                    {% for address in user.addresses.all %}
+                        <div class="address-card">
+                            <p><strong>{{ address.full_name }}</strong></p>
+                            <p>{{ address.phone }}</p>
+                            <p>{{ address.house }} {{ address.street }}</p>
+                            <p>{{ address.landmark }}</p>
+                            <p>{{ address.label }}</p>
 
-                <!-- Add/Edit Address Form -->
-                <div class="address-forms" style="display: none;">
-                    <div class="address-forms-title">
-                        <h3 id="form-title">Add New Address</h3>
-                    </div>
+                            <div class="form-buttons">
+                                <!-- Edit button -->
+                                <form method="post" action="{% url 'orders:save_address' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ address.id }}">
+                                    <input type="hidden" name="next" value="{% url 'account:profile' %}">
+                                    <button type="submit">Edit</button>
+                                </form>
 
-                    <!-- Name Section -->
-                    <div class="name-form-section">
-                        <div class="form-group">
-                            <label for="fname">First Name</label>
-                            <input type="text" id="fname" name="fname" placeholder="Enter first name">
+                                <!-- Delete button -->
+                                <form method="post" action="{% url 'orders:delete_address' address.id %}?next={% url 'orders:checkout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="delete-btn">Delete</button>
+                                </form>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="lname">Last Name</label>
-                            <input type="text" id="lname" name="lname" placeholder="Enter last name">
-                        </div>
-                    </div>
-
-                    <!-- Address Fillable -->
-                    <div class="address-form-section-fillable">
-                        <div class="form-group">
-                            <label for="street">Street</label>
-                            <input type="text" id="street" name="street" placeholder="Street">
-                        </div>
-                        <div class="form-group">
-                            <label for="city">City</label>
-                            <input type="text" id="city" name="city" placeholder="City">
-                        </div>
-                        <div class="form-group">
-                            <label for="state">State</label>
-                            <input type="text" id="state" name="state" placeholder="State">
-                        </div>
-                        <div class="form-group">
-                            <label for="zipcode">Zip Code</label>
-                            <input type="text" id="zipcode" name="zipcode" placeholder="Zip Code">
-                        </div>
-                    </div>
-
-                    <!-- Landmark -->
-                    <div class="landmark-form-section">
-                        <div class="form-group">
-                            <label for="landmark">Landmark</label>
-                            <textarea id="landmark" name="landmark" placeholder="Additional directions (optional)"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Contact -->
-                    <div class="contact-form-section">
-                        <div class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="text" id="phone" name="phone" placeholder="Phone number">
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="Email">
-                        </div>
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="form-buttons">
-                        <button class="btn-save-address-form">Save</button>
-                        <button class="btn-cancel-address-form">Cancel</button>
-                    </div>
+                    {% empty %}
+                        <p>No addresses saved yet.</p>
+                    {% endfor %}
                 </div>
 
-                <!-- Trigger -->
-                <div class="add-more-address-section">
-                    <button class="add-more-address-btn">+ Add New Address</button>
+                <!-- Add new address form -->
+                <div class="address-form">
+                    <form method="post" action="{% url 'orders:save_address' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{% url 'orders:checkout' %}">
+
+                        <input type="text" name="full_name" placeholder="Full Name" required>
+                        <input type="text" name="phone" placeholder="Phone" required>
+                        <input type="email" name="email" placeholder="Email">
+                        <input type="text" name="house" placeholder="House">
+                        <input type="text" name="street" placeholder="Street">
+                        <input type="text" name="landmark" placeholder="Landmark">
+                        <input type="text" name="label" placeholder="Label (Home, Work, etc.)">
+
+                        <div class="form-buttons">
+                            <button type="submit">Save Address</button>
+                        </div>
+                    </form>
                 </div>
             </div>
+
 
         </div>
     </div>

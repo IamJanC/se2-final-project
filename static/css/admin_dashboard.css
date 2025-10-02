@@ -1254,48 +1254,39 @@ main {
 }
 
 
-.btn-filter {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 4px;
-  margin-right: 8px; /* spacing before "Add Products" button */
-}
-
-.btn-filter svg {
-  width: 24px; /* adjust size */
-  height: 24px;
-  fill: #000;  /* icon color */
-  transition: fill 0.2s;
-}
-
-.btn-filter:hover svg {
-  fill: #007bff; /* hover color */
-}
-
-.btn-sort{
-    background: none;
-    border: none;
-    cursor: pointer;
+/* Product Section Action Buttons - reuse */
+.product-display-actions {
     display: flex;
     align-items: center;
-    padding: 4px;
-    margin-right: 8px; /* spacing before "Add Products" button */
+    gap: 12px;              /* spacing between elements */
+    flex-wrap: nowrap;      /* prevent wrapping */
+    width: 100%;            /* fill available space */
 }
 
-.btn-sort svg{
-    width: 24px; /* adjust size */
-    height: 24px;
-    fill: #000;  /* icon color */
-    transition: fill 0.2s;
+.btn-products-icon {
+    flex: 0 0 auto;         /* don’t stretch */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.btn-sort:hover svg {
-  fill: #007bff; /* hover color */
+.btn-products-icon svg {
+    width: 20px;
+    height: 20px;
 }
 
+.btn-products-icon:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+}
 
 /* Search Bar */
 .admin-product-search-bar {
@@ -2094,13 +2085,21 @@ label{
   border-radius: 4px;
   font-size: 14px;
   transition: background 0.2s, border-color 0.2s;
+
+
+  font-size: 15.2px ;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+
 }
 
 .btn-order-filter.active,
 .btn-order-filter:hover {
   background: #5c8b25;
   color: #fff;
-  border-color: #5c8b25;
+  transition: background-color 0.3s ease;
 }
 
 .order-display-actions {
@@ -2140,8 +2139,13 @@ label{
   background: #f5f5f5;
   padding: 12px;
   text-align: left;
-  font-size: 14px;
-  font-weight: 500;
+
+
+  font-size: 16px ;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
 
 .admin-orders-table td {
@@ -2149,12 +2153,21 @@ label{
   padding: 12px;
   border-bottom: 1px solid #eee;
   vertical-align: top;
-  font-size: 14px;
+  
+  font-size: 16px ;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
 
 .order-products-list span {
   display: block;
-  font-size: 13px;
+   font-size: 14px ;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
   color: #333;
 }
 
@@ -2162,16 +2175,25 @@ label{
 .status {
   padding: 4px 10px;
   border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
+
+
+   /* your requested font */
+  font-size: 14px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+
+    display: inline-block;
+
 }
 
-.status.completed {
+.status.completed, .status.delivered {
   background: #d4edda;
   color: #155724;
 }
 
-.status.pending {
+.status.pending, .status.processing, .status.shipped {
   background: #fff3cd;
   color: #856404;
 }
@@ -2182,9 +2204,62 @@ label{
 }
 
 
+
+/* Dropdown container */
+.status-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.status-dropdown button {
+  border: none;
+  outline: none;        /* remove default focus outline */
+  background: none;     /* so it only shows your .status styles */
+  cursor: pointer;
+}
+
+
+/* Hide the options by default */
+.status-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  z-index: 10;
+}
+
+/* Each option */
+.status-options li {
+  padding: 8px 12px;
+  cursor: pointer;
+
+  font-size: 14px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.status-options li:hover {
+  background: #f5f5f5;
+}
+
+/* Show dropdown when active */
+.status-dropdown.open .status-options {
+  display: block;
+}
+
+
+
 /* === Orders Search Bar === */
 .admin-order-search-bar {
-    width: 100%; /* Makes the form wider */
+    width: 400px; /* Makes the form wider */
     max-width: none; /* Limits width on large screens */
     margin: 1rem 0; /* Spacing above/below */
     flex-grow: 1; /* Allows it to take space */
@@ -2236,4 +2311,29 @@ label{
     border-bottom: 1px solid #575756;
     border-radius: 0;
     background-position: 13px center;
+}
+
+/* === Order Action Icon Buttons (Filter & Sort) === */
+.btn-order-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;   /* subtle rounded corners */
+    width: 40px;          /* square */
+    height: 40px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    padding: 0;           /* keep it tight around SVG */
+}
+
+.btn-order-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-order-icon:hover {
+    background-color: #f9fafb; 
+    border-color: #9ca3af;
 }

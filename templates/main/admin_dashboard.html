@@ -814,13 +814,21 @@
                                 </form>
 
 
-                                <!-- Filter button -->
-                                <button type="button" class="btn-filter">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 5H5L12 13.4L19 5Z" fill="#000000"></path> <path d="M12 13.4L19 5H5L12 13.4ZM12 13.4V19" stroke="#000000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                <!-- Filter Button -->
+                                <button type="button" class="btn-products-icon" aria-label="Filter Products">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 7H20" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path d="M7 12L17 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path d="M11 17H13" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
                                 </button>
 
-                                <button type="button" class="btn-sort">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M11.1924 5.65685C11.5829 5.26633 11.5829 4.63316 11.1924 4.24264L8.36397 1.41421C8.30576 1.356 8.24485 1.30212 8.18165 1.25259C7.50286 0.720577 6.55947 0.689024 5.84929 1.15793C5.73839 1.23115 5.63317 1.31658 5.53554 1.41421L2.70711 4.24264C2.31658 4.63316 2.31658 5.26633 2.70711 5.65685C3.09763 6.04738 3.7308 6.04738 4.12132 5.65685L6.00003 3.77814V18C6.00003 18.5523 6.44775 19 7.00003 19C7.55232 19 8.00003 18.5523 8.00003 18V3.8787L9.77818 5.65685C10.1687 6.04737 10.8019 6.04737 11.1924 5.65685Z" fill="#000000"></path> <path d="M12.7071 18.3432C12.3166 18.7337 12.3166 19.3668 12.7071 19.7574L15.5355 22.5858C15.6332 22.6834 15.7384 22.7689 15.8493 22.8421C16.6256 23.3546 17.6805 23.2692 18.364 22.5858L21.1924 19.7574C21.5829 19.3668 21.5829 18.7337 21.1924 18.3432C20.8019 17.9526 20.1687 17.9526 19.7782 18.3432L18 20.1213L18 6C18 5.44771 17.5523 5 17 5C16.4477 5 16 5.44771 16 6L16 20.2218L14.1213 18.3432C13.7308 17.9526 13.0976 17.9526 12.7071 18.3432Z" fill="#000000"></path> </g></svg>
+                                <!-- Sort Button -->
+                                <button type="button" class="btn-products-icon" aria-label="Sort Products">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11.1924 5.65685C11.5829 5.26633 11.5829 4.63316 11.1924 4.24264L8.36397 1.41421C8.30576 1.356 8.24485 1.30212 8.18165 1.25259C7.50286 0.720577 6.55947 0.689024 5.84929 1.15793C5.73839 1.23115 5.63317 1.31658 5.53554 1.41421L2.70711 4.24264C2.31658 4.63316 2.31658 5.26633 2.70711 5.65685C3.09763 6.04738 3.7308 6.04738 4.12132 5.65685L6.00003 3.77814V18C6.00003 18.5523 6.44775 19 7.00003 19C7.55232 19 8.00003 18.5523 8.00003 18V3.8787L9.77818 5.65685C10.1687 6.04737 10.8019 6.04737 11.1924 5.65685Z" fill="#0F0F0F"></path> 
+                                        <path d="M12.7071 18.3432C12.3166 18.7337 12.3166 19.3668 12.7071 19.7574L15.5355 22.5858C15.6332 22.6834 15.7384 22.7689 15.8493 22.8421C16.6256 23.3546 17.6805 23.2692 18.364 22.5858L21.1924 19.7574C21.5829 19.3668 21.5829 18.7337 21.1924 18.3432C20.8019 17.9526 20.1687 17.9526 19.7782 18.3432L18 20.1213L18 6C18 5.44771 17.5523 5 17 5C16.4477 5 16 5.44771 16 6L16 20.2218L14.1213 18.3432C13.7308 17.9526 13.0976 17.9526 12.7071 18.3432Z" fill="#0F0F0F"></path> 
+                                    </svg>
                                 </button>
 
                                 <!-- Add Products button -->
@@ -1244,64 +1252,162 @@
                             </div>
 
 
-                            <div class="order-display-actions">
+                           <div class="order-display-actions">
 
                                 <!-- Orders Table Search -->
                                 <form class="admin-order-search-bar" autocomplete="off"> 
                                     <input class="admin-order-search__input" type="text" placeholder="Search orders" maxlength="30" id="adminOrderSearchInput"> 
                                 </form>
 
+                                <!-- Order Filter Button -->
+                                <button class="btn-order-icon" aria-label="Filter Orders">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 7H20" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path d="M7 12L17 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path d="M11 17H13" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </button>
 
-                                <button class="btn-order-sort">Sort</button>
-                    
+                                <!-- Order Sort Button -->
+                                <button class="btn-order-icon" aria-label="Sort Orders">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11.1924 5.65685C11.5829 5.26633 11.5829 4.63316 11.1924 4.24264L8.36397 1.41421C8.30576 1.356 8.24485 1.30212 8.18165 1.25259C7.50286 0.720577 6.55947 0.689024 5.84929 1.15793C5.73839 1.23115 5.63317 1.31658 5.53554 1.41421L2.70711 4.24264C2.31658 4.63316 2.31658 5.26633 2.70711 5.65685C3.09763 6.04738 3.7308 6.04738 4.12132 5.65685L6.00003 3.77814V18C6.00003 18.5523 6.44775 19 7.00003 19C7.55232 19 8.00003 18.5523 8.00003 18V3.8787L9.77818 5.65685C10.1687 6.04737 10.8019 6.04737 11.1924 5.65685Z" fill="#0F0F0F"></path> 
+                                        <path d="M12.7071 18.3432C12.3166 18.7337 12.3166 19.3668 12.7071 19.7574L15.5355 22.5858C15.6332 22.6834 15.7384 22.7689 15.8493 22.8421C16.6256 23.3546 17.6805 23.2692 18.364 22.5858L21.1924 19.7574C21.5829 19.3668 21.5829 18.7337 21.1924 18.3432C20.8019 17.9526 20.1687 17.9526 19.7782 18.3432L18 20.1213L18 6C18 5.44771 17.5523 5 17 5C16.4477 5 16 5.44771 16 6L16 20.2218L14.1213 18.3432C13.7308 17.9526 13.0976 17.9526 12.7071 18.3432Z" fill="#0F0F0F"></path> 
+                                    </svg>
+                                </button>
                             </div>
+
                         </div>
 
                         <!-- Orders Table -->
                         <div class="table-container">
                             <table class="admin-orders-table">
-                            <thead>
+                                <thead>
                                 <tr>
-                                <th>Order ID</th>
-                                <th>Products</th>
-                                <th>Date</th>
-                                <th>Price</th>
-                                <th>Payment</th>
-                                <th>Status</th>
+                                    <th>Order ID</th>
+                                    <th>Products</th>
+                                    <th>Date</th>
+                                    <th>Price</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Example order row -->
+                                </thead>
+                                <tbody>
+                                <!-- Example order row: Completed (locked) -->
                                 <tr>
-                                <td>#ORD-1001</td>
-                                <td>
+                                    <td>#ORD-1001</td>
+                                    <td>
                                     <div class="order-products-list">
-                                    <span>Tomatoes (2kg)</span><br>
-                                    <span>Onions (1kg)</span><br>
-                                    <span>Cabbage (1pc)</span>
+                                        <span>Tomatoes (2kg)</span><br>
+                                        <span>Onions (1kg)</span><br>
+                                        <span>Cabbage (1pc)</span>
                                     </div>
-                                </td>
-                                <td>2025-10-02</td>
-                                <td>$45.00</td>
-                                <td>Credit Card</td>
-                                <td><span class="status completed">Completed</span></td>
+                                    </td>
+                                    <td>2025-10-02</td>
+                                    <td>$45.00</td>
+                                    <td>Credit Card</td>
+                                    <td><span class="status completed">Completed</span></td>
                                 </tr>
 
+                                <!-- Example order row: Pending -->
                                 <tr>
-                                <td>#ORD-1002</td>
-                                <td>
+                                    <td>#ORD-1002</td>
+                                    <td>
                                     <div class="order-products-list">
-                                    <span>Bananas (12pcs)</span>
+                                        <span>Bananas (12pcs)</span>
                                     </div>
-                                </td>
-                                <td>2025-10-01</td>
-                                <td>$12.50</td>
-                                <td>Cash</td>
-                                <td><span class="status pending">Pending</span></td>
+                                    </td>
+                                    <td>2025-10-01</td>
+                                    <td>$12.50</td>
+                                    <td>Cash</td>
+                                    <td>
+                                    <div class="status-dropdown">
+                                        <button class="status pending">Pending</button>
+                                        <ul class="status-options">
+                                        <li data-action="processing">Processing</li>
+                                        </ul>
+                                    </div>
+                                    </td>
                                 </tr>
-                            </tbody>
+
+                                <!-- Example order row: Processing -->
+                                <tr>
+                                    <td>#ORD-1003</td>
+                                    <td>
+                                    <div class="order-products-list">
+                                        <span>Mangoes (3kg)</span>
+                                    </div>
+                                    </td>
+                                    <td>2025-10-02</td>
+                                    <td>$30.00</td>
+                                    <td>Cash</td>
+                                    <td>
+                                    <div class="status-dropdown">
+                                        <button class="status processing">Processing</button>
+                                        <ul class="status-options">
+                                        <li data-action="shipped">Shipped</li>
+                                        </ul>
+                                    </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Example order row: Shipped -->
+                                <tr>
+                                    <td>#ORD-1004</td>
+                                    <td>
+                                    <div class="order-products-list">
+                                        <span>Apples (5kg)</span>
+                                    </div>
+                                    </td>
+                                    <td>2025-10-01</td>
+                                    <td>$25.00</td>
+                                    <td>Credit Card</td>
+                                    <td>
+                                    <div class="status-dropdown">
+                                        <button class="status shipped">Shipped</button>
+                                        <ul class="status-options">
+                                        <li data-action="delivered">Delivered</li>
+                                        </ul>
+                                    </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Example order row: Delivered (locked for admin) -->
+                                <tr>
+                                    <td>#ORD-1005</td>
+                                    <td>
+                                    <div class="order-products-list">
+                                        <span>Carrots (2kg)</span>
+                                    </div>
+                                    </td>
+                                    <td>2025-09-30</td>
+                                    <td>$15.00</td>
+                                    <td>Cash</td>
+                                    <td><span class="status delivered">Delivered</span></td>
+                                </tr>
+
+                                <!-- Example order row: Cancelled (locked) -->
+                                <tr>
+                                    <td>#ORD-1006</td>
+                                    <td>
+                                    <div class="order-products-list">
+                                        <span>Grapes (1kg)</span>
+                                    </div>
+                                    </td>
+                                    <td>2025-09-29</td>
+                                    <td>$8.00</td>
+                                    <td>Credit Card</td>
+                                    <td><span class="status cancelled">Cancelled</span></td>
+                                </tr>
+                                </tbody>
                             </table>
                         </div>
+
+
+
+
+
+                        
                     </div>
 
 
@@ -1581,7 +1687,48 @@
     </script>
     
 
+    <!--Script for Orders Table Status-->
+    <script>
+        document.addEventListener("click", function (e) {
+        // Toggle dropdown on button click
+        if (e.target.closest(".status-dropdown button")) {
+            const dropdown = e.target.closest(".status-dropdown");
+            dropdown.classList.toggle("open");
+        }
 
+        // Handle status option click
+        if (e.target.closest(".status-options li")) {
+            const option = e.target;
+            const newStatus = option.dataset.action;
+            const dropdown = option.closest(".status-dropdown");
+            const button = dropdown.querySelector("button.status");
+
+            // Update button text + class
+            button.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1) + " ▼";
+            button.className = "status " + newStatus;
+
+            // Update next possible transition
+            const optionsList = dropdown.querySelector(".status-options");
+            optionsList.innerHTML = ""; // clear old options
+
+            if (newStatus === "processing") {
+            optionsList.innerHTML = `<li data-action="shipped">Shipped</li>`;
+            } else if (newStatus === "shipped") {
+            optionsList.innerHTML = `<li data-action="delivered">Delivered</li>`;
+            } else if (newStatus === "delivered") {
+            // Lock it (replace dropdown with static span)
+            dropdown.outerHTML = `<span class="status delivered">Delivered</span>`;
+            }
+
+            // Close dropdown
+            dropdown.classList.remove("open");
+
+            // Debug log (simulate backend update)
+            const orderId = option.closest("tr").querySelector("td").innerText;
+            console.log(`Order ${orderId} → ${newStatus}`);
+        }
+        });
+    </script>
 
 
 

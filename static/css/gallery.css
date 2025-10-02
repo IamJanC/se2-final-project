@@ -462,3 +462,19 @@ progress::-webkit-progress-value {
     gap: 1rem;
   }
 }
+
+.fixed-sidebar {
+  position: sticky;
+  top: 2rem;
+  height: calc(100vh - 4rem);
+  overflow-y: auto;
+  z-index: 2;
+}
+.scrollable-gallery {
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+  width: 100%;
+}
+.gallery-layout {
+  align-items: flex-start;
+}
