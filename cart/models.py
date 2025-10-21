@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings  
 from products.models import Product
+from django.utils import timezone
 
 class Cart(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -14,6 +15,9 @@ class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     
+    # Timestamp for when this reservation was (last) created/renewed
+    reserved_at = models.DateTimeField(default=timezone.now)
+
     class Meta:
         unique_together = ('cart', 'product')
 

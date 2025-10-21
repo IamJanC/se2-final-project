@@ -168,6 +168,22 @@
     </section>
 </main>
 
+<!-- Stock/Error Modal -->
+<div id="stock-modal" class="stock-modal" aria-hidden="true">
+    <div class="stock-modal-backdrop" data-modal-close></div>
+    <div class="stock-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="stock-modal-title">
+        <header class="stock-modal-header">
+            <h3 id="stock-modal-title">Notice</h3>
+        </header>
+        <div class="stock-modal-body">
+            <p class="modal-message"></p>
+        </div>
+        <footer class="stock-modal-footer">
+            <button type="button" class="modal-close">OK</button>
+        </footer>
+    </div>
+</div>
+
 <!-- Quantity, Select and Calculation Logic -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -230,21 +246,22 @@
         recalcTotals();
     }
 
-    function sendQuantityUpdate(itemId, quantity) {
-        fetch("{% url 'cart:update_cart_item' %}", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            body: JSON.stringify({ 'item_id': itemId, 'quantity': quantity })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (!data.success) alert(data.message || 'Error updating cart');
-        })
-        .catch(() => alert('Failed to update cart.'));
-    }
+        function sendQuantityUpdate(itemId, quantity) {
+            fetch("{% url 'cart:update_cart_item' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ 'item_id': itemId, 'quantity': quantity })
+            })
+            .then(res => res.json())
+            .then(data => {
+                // If update fails, show modal and refresh so stock numbers sync
+                if (!data.success) showModal(data.message || 'Error updating cart', true);
+            })
+            .catch(() => showModal('Failed to update cart.', true));
+        }
 
     // Quantity events
     qtyInputs.forEach(input => {
@@ -309,25 +326,97 @@
 
 <!-- Checkout Button -->
 <script>
+// showModal(message, reloadAfter = false)
+// - displays a modal with the message
+// - if reloadAfter is true, page reloads when modal closed
+function showModal(message, reloadAfter = false) {
+    let modal = document.getElementById('stock-modal');
+    if (!modal) {
+        // Safety: fallback to alert if modal not present
+        alert(message);
+        if (reloadAfter) window.location.reload();
+        return;
+    }
+    modal.querySelector('.modal-message').textContent = message;
+    modal.classList.add('visible');
+    modal.setAttribute('aria-hidden', 'false');
+
+    const closeBtn = modal.querySelector('.modal-close');
+    const backdrop = modal.querySelector('[data-modal-close]');
+
+    function doClose() {
+        modal.classList.remove('visible');
+        modal.setAttribute('aria-hidden', 'true');
+        closeBtn.removeEventListener('click', doClose);
+        backdrop.removeEventListener('click', doClose);
+        if (reloadAfter) {
+            // short delay so user sees the modal close
+            setTimeout(() => window.location.reload(), 200);
+        }
+    }
+
+    closeBtn.addEventListener('click', doClose);
+    backdrop.addEventListener('click', doClose);
+}
 document.addEventListener('DOMContentLoaded', () => {
     const checkoutBtn = document.getElementById('checkout-btn');
-    checkoutBtn.addEventListener('click', (e) => {
+    checkoutBtn.addEventListener('click', async (e) => {
         e.preventDefault();
-        const selectedIds = Array.from(document.querySelectorAll('.select-product'))
-            .filter(cb => cb.checked)
-            .map(cb => cb.dataset.itemId);
-        if (selectedIds.length === 0) {
+
+        const selectedCheckboxes = Array.from(document.querySelectorAll('.select-product'))
+            .filter(cb => cb.checked);
+
+        if (selectedCheckboxes.length === 0) {
             alert('No items selected. Please select at least one item to proceed.');
             return;
         }
 
-        // Redirect to checkout page with selected IDs in query params
-        const url = new URL("{% url 'orders:checkout' %}", window.location.origin);
-        url.searchParams.append('items', selectedIds.join(','));
-        window.location.href = url.toString();
+        // Gather item IDs and quantities
+        const selectedItems = selectedCheckboxes.map(cb => {
+            const itemId = cb.dataset.itemId;
+            const qtyInput = document.querySelector(`.quantity-input[data-item-id="${itemId}"]`);
+            return { id: itemId, quantity: parseInt(qtyInput.value, 10) || 1 };
+        });
+
+        try {
+            const res = await fetch("{% url 'cart:check_stock' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ items: selectedItems })
+            });
+            const data = await res.json();
+
+            if (!data.success) {
+                console.log('Stock check response:', data);
+                // Show modal and refresh the page so stock numbers update for the user
+                showModal(data.message || 'Some items are out of stock. Please review your cart.', true);
+                return;
+            }
+
+            // If all good → redirect to checkout
+            const selectedIds = selectedItems.map(i => i.id);
+            const url = new URL("{% url 'orders:checkout' %}", window.location.origin);
+            url.searchParams.append('items', selectedIds.join(','));
+            window.location.href = url.toString();
+        } catch (err) {
+            alert('Error verifying stock. Please try again.');
+        }
     });
 });
+document.addEventListener('DOMContentLoaded', function () {
+  const stockModal = document.getElementById('stock-modal');
+  if (stockModal) {
+    stockModal.classList.remove('visible');
+    stockModal.setAttribute('aria-hidden', 'true');
+    // ensure CSS hides it (doesn't override display)
+    stockModal.style.display = '';
+  }
+});
 </script>
+
 
 
 <script>
@@ -346,13 +435,13 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(res => res.json())
         .then(data => {
-          if (data.success) {
+        if (data.success) {
             this.closest('.cart-item').remove();
-          } else {
-            alert(data.message || 'Failed to delete item.');
-          }
+        } else {
+            showModal(data.message || 'Failed to delete item.');
+        }
         })
-        .catch(() => alert('Error deleting item.'));
+        .catch(() => showModal('Error deleting item.'));
       }
     });
   });

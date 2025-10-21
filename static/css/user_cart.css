@@ -567,5 +567,14 @@ main {
     cursor: not-allowed;
 }
 
-
+/* stock modal styles (add to user_cart.css) */
+.stock-modal { display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; }
+.stock-modal.visible { display: flex; }
+.stock-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
+.stock-modal-dialog { position: relative; background: #fff; padding: 1rem; max-width: 420px; width: 90%; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.2); z-index: 2; }
+.stock-modal-header h3 { margin: 0 0 0.5rem 0; font-size: 1.05rem; }
+.stock-modal-body { margin-bottom: 0.75rem; color: #222; }
+.stock-modal-footer { text-align: right; }
+.stock-modal .modal-close { background: #2b7cff; color: #fff; border: none; padding: 0.5rem 0.9rem; border-radius: 6px; cursor: pointer; }
+.stock-modal .modal-close:hover { opacity: 0.95; }
 

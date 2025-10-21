@@ -853,31 +853,40 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                    <td>1</td>
-                                    <td>Apple</td>
-                                    <td>₱50.00</td>
-                                    <td>50</td>
-                                    <td><img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg" alt="Apple Image"></td>
-                                    <td>Fruits</td>
+                                    {% for product in products %}
+                                    <tr class="product-row"
+                                        data-id="{{ product.id }}"
+                                        data-name="{{ product.name }}"
+                                        data-description="{{ product.description }}"
+                                        data-price="{{ product.price }}"
+                                        data-discount="{{ product.discount_price }}"
+                                        data-discount-start="{{ product.discount_start|date:'Y-m-d' }}"
+                                        data-discount-end="{{ product.discount_end|date:'Y-m-d' }}"
+                                        data-stock="{{ product.stock }}"
+                                        data-stock-status="{{ product.stock_status }}"
+                                        data-image="{{ product.image_url }}"
+                                        data-category="{{ product.category.name }}">
+
+                                        <td>{{ product.custom_id|default:product.id }}</td>
+                                        <td>{{ product.name }}</td>
+                                        <td>₱{{ product.price }}</td>
+                                        <td>{{ product.stock }}</td>
+                                        <td>
+                                            {% if product.image_url %}
+                                                <img src="{{ product.image_url }}" alt="{{ product.name }} Image">
+                                            {% else %}
+                                                <span>No image</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ product.category.name }}</td>
                                     </tr>
+                                    {% empty %}
                                     <tr>
-                                    <td>2</td>
-                                    <td>Banana</td>
-                                    <td>₱50.00</td>
-                                    <td>100</td>
-                                    <td><img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg" alt="Banana Image"></td>
-                                    <td>Fruits</td>
+                                        <td colspan="6" style="text-align:center;">No products available</td>
                                     </tr>
-                                    <tr>
-                                    <td>3</td>
-                                    <td>Carrot</td>
-                                    <td>₱50.00</td>
-                                    <td>200</td>
-                                    <td><img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg" alt="Carrot Image"></td>
-                                    <td>Vegetables</td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
+
                             </table>
                         </div>
 
@@ -958,6 +967,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    
 
 
                                     <!-- Change Inventory -->
@@ -988,6 +998,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    </div>
 
                                         
 
@@ -1002,8 +1013,6 @@
 
 
 
-
-                                    </div>
 
                                     <!--RIGHT-->
                                     <div class="product-right-modal">
@@ -1054,15 +1063,12 @@
                         </div>
 
 
-
-
-
-
-
-                    
-                    
-                    
                     </div>
+
+
+
+
+                    
 
 
 
@@ -1666,25 +1672,90 @@
 
 
 
-    <!--Script for Toggling the Products Modal in Products Section-->
     <script>
-        // Product modal elements
-        const productModal = document.getElementById("product-display-modal");
-        const addProductBtn = document.querySelector(".btn-add-products-action");
-        const closeProductModalBtn = document.getElementById("close-product-modal");
+        document.addEventListener("DOMContentLoaded", () => {
+            const modal = document.getElementById("product-display-modal");
+            const addProductBtn = document.querySelector(".btn-add-products-action");
+            const closeBtn = document.getElementById("close-product-modal");
+            const editBtn = document.getElementById("edit-product-modal");
+            const saveBtn = document.getElementById("save-product-modal");
+            const productRows = document.querySelectorAll(".product-row");
 
-        // Open product modal
-        addProductBtn.addEventListener("click", () => {
-            productModal.classList.add("show");
-            productModal.classList.remove("hidden");
-        });
+            // Input fields
+            const nameInput = document.getElementById("product-name");
+            const descriptionInput = document.getElementById("product-description");
+            const priceInput = document.getElementById("product-price");
+            const discountInput = document.getElementById("discount-price");
+            const discountStart = document.getElementById("discount-start");
+            const discountEnd = document.getElementById("discount-end");
+            const stockInput = document.getElementById("stock-quantity");
+            const stockStatus = document.getElementById("stock-status");
+            const imageInput = document.getElementById("image-url");
+            const categorySelect = document.getElementById("category-select");
 
-        // Close product modal
-        closeProductModalBtn.addEventListener("click", () => {
-            productModal.classList.remove("show");
-            productModal.classList.add("hidden");
+            // === 1️⃣ Open modal for adding a new product ===
+            addProductBtn.addEventListener("click", () => {
+                modal.classList.add("show");
+                modal.classList.remove("hidden");
+                clearForm();
+                setFormDisabled(false);
+            });
+
+            // === 2️⃣ Open modal when clicking on an existing product row ===
+            productRows.forEach(row => {
+                row.addEventListener("click", () => {
+                    modal.classList.add("show");
+                    modal.classList.remove("hidden");
+
+                    // Fill modal with data from the row
+                    nameInput.value = row.dataset.name || "";
+                    descriptionInput.value = row.dataset.description || "";
+                    priceInput.value = row.dataset.price || "";
+                    discountInput.value = row.dataset.discount || "";
+                    discountStart.value = row.dataset.discountStart || "";
+                    discountEnd.value = row.dataset.discountEnd || "";
+                    stockInput.value = row.dataset.stock || "";
+                    stockStatus.value = row.dataset.stockStatus || "in-stock";
+                    imageInput.value = row.dataset.image || "";
+                    categorySelect.value = row.dataset.category?.toLowerCase() || "";
+
+                    // Disable editing by default
+                    setFormDisabled(true);
+                });
+            });
+
+            // === 3️⃣ Enable editing when "Edit" clicked ===
+            editBtn.addEventListener("click", () => {
+                setFormDisabled(false);
+            });
+
+            // === 4️⃣ Save (optional backend integration later) ===
+            saveBtn.addEventListener("click", () => {
+                modal.classList.remove("show");
+                modal.classList.add("hidden");
+            });
+
+            // === 5️⃣ Close modal ===
+            closeBtn.addEventListener("click", () => {
+                modal.classList.remove("show");
+                modal.classList.add("hidden");
+            });
+
+            // === Helper: Clear all inputs ===
+            function clearForm() {
+                modal.querySelectorAll("input, textarea, select").forEach(el => el.value = "");
+            }
+
+            // === Helper: Disable/enable form fields ===
+            function setFormDisabled(disabled) {
+                const inputs = modal.querySelectorAll("input, textarea, select");
+                inputs.forEach(input => input.disabled = disabled);
+                editBtn.disabled = !disabled; // disable edit button when editing is active
+            }
         });
     </script>
+
+
     
 
     <!--Script for Orders Table Status-->
@@ -1729,6 +1800,10 @@
         }
         });
     </script>
+
+
+    
+
 
 
 

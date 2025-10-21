@@ -9,4 +9,5 @@ urlpatterns = [
     path('add/', views.add_to_cart_api, name='api_add_to_cart'),
     path('update-item/', views.update_cart_item, name='update_cart_item'),  # <-- new
     path('delete/', views.delete_cart_item, name='delete_cart_item'),
+    path('check-stock/', views.check_stock, name='check_stock'),
 ]

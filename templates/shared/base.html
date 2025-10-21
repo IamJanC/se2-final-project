@@ -149,14 +149,68 @@
     <!-- === Header ends here === -->
 
 
+    <!-- Server-side messages: render into a modal so they are visible across redirects -->
     <div class="container-3">
+    <!-- Server message modal (hidden by default) -->
+    <div id="server-message-modal" aria-hidden="true" style="display:none;">
+        <div class="server-message-backdrop" data-modal-close
+            style="position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9998;"></div>
+
+        <div class="server-message-dialog"
+            role="dialog" aria-modal="true" aria-labelledby="server-message-title"
+            style="position:fixed;left:50%;top:40%;transform:translate(-50%,-40%);z-index:9999;background:#fff;padding:1rem;border-radius:8px;max-width:480px;width:90%;box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+        <header><h3 id="server-message-title" style="margin:0 0 .5rem 0;font-size:1.05rem;">Notice</h3></header>
+        <div class="server-message-body" style="margin-bottom:.75rem;color:#222;">
+            <p class="server-modal-message" style="margin:0"></p>
+        </div>
+        <footer style="text-align:right;">
+            <button type="button" class="server-modal-close"
+                    style="background:#2b7cff;color:#fff;border:none;padding:.5rem .9rem;border-radius:6px;cursor:pointer;">
+            OK
+            </button>
+        </footer>
+        </div>
+    </div>
+
+    <script>
+        // siteShowMessage(message, reloadAfter=false)
+        function siteShowMessage(message, reloadAfter = false) {
+        const modal = document.getElementById('server-message-modal');
+        if (!modal) {
+            alert(message);
+            if (reloadAfter) window.location.reload();
+            return;
+        }
+        modal.querySelector('.server-modal-message').textContent = message;
+        modal.style.display = 'block';
+        modal.setAttribute('aria-hidden', 'false');
+
+        const closeBtn = modal.querySelector('.server-modal-close');
+        const backdrop = modal.querySelector('[data-modal-close]');
+
+        function doClose() {
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            closeBtn.removeEventListener('click', doClose);
+            backdrop.removeEventListener('click', doClose);
+            if (reloadAfter) setTimeout(() => window.location.reload(), 150);
+        }
+
+        closeBtn.addEventListener('click', doClose);
+        backdrop.addEventListener('click', doClose);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+        // If there are Django messages, show the first one in the modal and reload after dismissal.
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
+            {% if forloop.first %}
+                siteShowMessage("{{ message|escapejs }}", true);
+            {% endif %}
             {% endfor %}
         {% endif %}
+        });
+    </script>
     </div>
 
     <!-- === Page-Specific Content === -->

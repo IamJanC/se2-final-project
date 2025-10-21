@@ -185,12 +185,16 @@ def export_pdf(request):
 @login_required
 @user_passes_test(staff_required, login_url='main:home')
 def custom_admin_dashboard(request):
-    categories = get_categories()  # <-- call your new helper
+    categories = get_categories()
+    products = Product.objects.select_related("category").all().order_by("id")  # ✅ Fetch products
+
     context = {
         "title": "Custom Admin Dashboard",
         "categories": categories,
+        "products": products,  # ✅ Add products to context
     }
     return render(request, "main/admin_dashboard.html", context)
+
 
 
 
