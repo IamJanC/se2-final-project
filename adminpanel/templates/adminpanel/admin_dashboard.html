@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>AgriHub | Admin Dashboard</title>
-    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'adminpanel/css/admin_dashboard.css' %}">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{% static 'images/Favicon.png' %}">
@@ -187,9 +187,19 @@
 
 
                     <!-- Profile Button -->
-                    <button class="profile-btn">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Sarah_Discaya_Senate_hearing.jpg/250px-Sarah_Discaya_Senate_hearing.jpg" alt="Profile" class="profile-pic">
-                    </button>
+                    <div class="profile-container">
+                        <button class="profile-btn" id="profileToggle">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Sarah_Discaya_Senate_hearing.jpg/250px-Sarah_Discaya_Senate_hearing.jpg" alt="Profile" class="profile-pic">
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div class="profile-dropdown" id="profileDropdown">
+                            <form method="POST" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="logout-btn">Logout</button>
+                            </form>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -1408,33 +1418,8 @@
                                 </tbody>
                             </table>
                         </div>
-
-
-
-
-
-                        
+    
                     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                     <!---->
                 </div>
@@ -1681,6 +1666,7 @@
             const saveBtn = document.getElementById("save-product-modal");
             const productRows = document.querySelectorAll(".product-row");
 
+
             // Input fields
             const nameInput = document.getElementById("product-name");
             const descriptionInput = document.getElementById("product-description");
@@ -1692,20 +1678,25 @@
             const stockStatus = document.getElementById("stock-status");
             const imageInput = document.getElementById("image-url");
             const categorySelect = document.getElementById("category-select");
+            const imgPreview = modal.querySelector(".product-image-section img");
 
             // === 1️⃣ Open modal for adding a new product ===
-            addProductBtn.addEventListener("click", () => {
-                modal.classList.add("show");
-                modal.classList.remove("hidden");
-                clearForm();
-                setFormDisabled(false);
-            });
+            if (addProductBtn) {
+                addProductBtn.addEventListener("click", () => {
+                    modal.classList.add("show");
+                    modal.classList.remove("hidden");
+                    clearForm();
+                    setFormDisabled(false);
+                });
+            }
 
             // === 2️⃣ Open modal when clicking on an existing product row ===
             productRows.forEach(row => {
                 row.addEventListener("click", () => {
                     modal.classList.add("show");
                     modal.classList.remove("hidden");
+
+                    modal.dataset.productId = row.dataset.id; // store ID
 
                     // Fill modal with data from the row
                     nameInput.value = row.dataset.name || "";
@@ -1718,6 +1709,7 @@
                     stockStatus.value = row.dataset.stockStatus || "in-stock";
                     imageInput.value = row.dataset.image || "";
                     categorySelect.value = row.dataset.category?.toLowerCase() || "";
+                    imgPreview.src = row.dataset.image || "https://via.placeholder.com/150";
 
                     // Disable editing by default
                     setFormDisabled(true);
@@ -1729,13 +1721,59 @@
                 setFormDisabled(false);
             });
 
-            // === 4️⃣ Save (optional backend integration later) ===
+            // === 4️⃣ Save changes when "Save" clicked ===
             saveBtn.addEventListener("click", () => {
-                modal.classList.remove("show");
-                modal.classList.add("hidden");
+
+                const productId = modal.dataset.productId;
+                const url = `/adminpanel/edit/${productId}/`;
+                
+                const productData = {
+                    name: nameInput.value,
+                    description: descriptionInput.value,
+                    price: priceInput.value,
+                    discount: discountInput.value,
+                    discount_start: discountStart.value,
+                    discount_end: discountEnd.value,
+                    stock: stockInput.value,
+                    stock_status: stockStatus.value,
+                    image: imageInput.value,
+                    category: categorySelect.value,
+                };
+
+                // send as FormData so Django can read request.POST
+                const formData = new FormData();
+                for (let key in productData) {
+                    formData.append(key, productData[key]);
+                }
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": getCookie("csrftoken"),
+                    },
+                    body: formData,
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("✅ Product updated successfully!");
+                        location.reload();
+                    } else {
+                        console.error("Form errors:", data.errors);
+                        alert("⚠️ Failed to update product. Check console for details.");
+                    }
+                })
+                .catch(err => {
+                    console.error("Error saving product:", err);
+                    alert("⚠️ An unexpected error occurred.");
+                });
             });
 
-            // === 5️⃣ Close modal ===
+            // === 5️⃣ Live image preview ===
+            imageInput.addEventListener("input", () => {
+                imgPreview.src = imageInput.value || "https://via.placeholder.com/150";
+            });
+
+            // === 6️⃣ Close modal ===
             closeBtn.addEventListener("click", () => {
                 modal.classList.remove("show");
                 modal.classList.add("hidden");
@@ -1744,16 +1782,35 @@
             // === Helper: Clear all inputs ===
             function clearForm() {
                 modal.querySelectorAll("input, textarea, select").forEach(el => el.value = "");
+                imgPreview.src = "https://via.placeholder.com/150";
             }
 
             // === Helper: Disable/enable form fields ===
             function setFormDisabled(disabled) {
                 const inputs = modal.querySelectorAll("input, textarea, select");
                 inputs.forEach(input => input.disabled = disabled);
-                editBtn.disabled = !disabled; // disable edit button when editing is active
+                editBtn.disabled = !disabled; // disable edit button while editing
+            }
+
+            // === Helper: Get CSRF token ===
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== "") {
+                    const cookies = document.cookie.split(";");
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === name + "=") {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
             }
         });
     </script>
+
+
 
 
     
@@ -1801,6 +1858,23 @@
         });
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileToggle = document.getElementById('profileToggle');
+            const dropdown = document.getElementById('profileDropdown');
+
+            profileToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!profileToggle.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        });
+    </script>
 
     
 

@@ -10,7 +10,14 @@ class ProductForm(forms.ModelForm):
 class ProductEditForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'price', 'description', 'stock', 'category']
+        fields = [
+            "name",
+            "description",
+            "price",
+            "stock",
+            "image_url",
+            "category",
+        ]
         
 class CategoryForm(forms.ModelForm):
     class Meta:

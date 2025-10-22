@@ -12,6 +12,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from django.db.models import Sum, F, FloatField
 import json
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from products.models import Category
 
@@ -93,27 +94,31 @@ def dashboard(request):
         "sales_values": json.dumps(sales_values),
     }
 
-    return render(request, "adminpanel/admin.html", context)
+    return render(request, "adminpanel/admin_dashboard.html", context)
 
 def delete_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     product.delete()
     return redirect('adminpanel:dashboard')
 
+@csrf_exempt  # Optional if you handle CSRF in fetch headers
 def edit_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
 
     if request.method == "POST":
-        print("🔹 Incoming POST:", request.POST)  # <-- Debug
-        form = ProductEditForm(request.POST, instance=product)
+        print("🔹 Incoming POST:", request.POST)
+        print("🔹 Incoming FILES:", request.FILES)
+
+        form = ProductEditForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
-            print("✅ Product updated:", product.name, product.stock)
-            return redirect("adminpanel:dashboard")
+            print("✅ Product updated:", product.name)
+            return JsonResponse({"success": True})
         else:
             print("❌ Form errors:", form.errors)
+            return JsonResponse({"success": False, "errors": form.errors}, status=400)
 
-    return redirect("adminpanel:dashboard")
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 def export_pdf(request):
     response = HttpResponse(content_type="application/pdf")
@@ -193,7 +198,7 @@ def custom_admin_dashboard(request):
         "categories": categories,
         "products": products,  # ✅ Add products to context
     }
-    return render(request, "main/admin_dashboard.html", context)
+    return render(request, "adminpanel/admin_dashboard.html", context)
 
 
 

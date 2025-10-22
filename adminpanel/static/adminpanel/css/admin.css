@@ -1,6 +1,6 @@
-body {
+/* body {
     display: block;
-    overflow-x: hidden; /* Prevents horizontal scroll bar */
+    overflow-x: hidden;
 }
 
 .sidebar {
@@ -36,4 +36,4 @@ body {
 .logout-button:hover {
     color: #495057;
     transform:scale();
-}
+} */
