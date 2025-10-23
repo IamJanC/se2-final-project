@@ -22,9 +22,11 @@ def cart_view(request):
     # Annotate each item with subtotal (for JS to read)
     for item in cart_items:
         item.subtotal = item.product.price * item.quantity  # optional, can remove if JS reads from price/unit
+        item.expires_at = item.reserved_at + timedelta(hours=24)
 
     context = {
         "cart_items": cart_items,
+        "now": timezone.now(),
     }
     return render(request, "main/user_cart.html", context)
 

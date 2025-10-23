@@ -78,6 +78,12 @@
                                 </div>
                             </div>
 
+                            <div class="reservation-timer" 
+                                data-expiry="{{ item.expires_at|date:'c' }}">
+                                Expires in: <span class="countdown">--:--:--</span>
+                            </div>
+
+
                             <div class="quantity-selector">
                                 <button type="button" class="qty-btn minus" aria-label="Decrease quantity" data-item-id="{{ item.id }}">−</button>
                                 <input type="number" name="quantity" class="quantity-input" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" data-item-id="{{ item.id }}">
@@ -166,6 +172,33 @@
             </div>
         </div>
     </section>
+
+
+    <!-- Checkout Agreement Modal -->
+    <div id="checkout-agreement-modal" class="checkout-modal" aria-hidden="true">
+    <div class="checkout-modal-backdrop" data-modal-close></div>
+    <div class="checkout-modal-dialog" role="dialog" aria-modal="true">
+        <header class="checkout-modal-header">
+        <h3>Before You Proceed</h3>
+        </header>
+        <div class="checkout-modal-body">
+        <p>
+            Our products are <strong>perishable goods</strong>. Please ensure that
+            <strong>someone will be available to receive your order</strong> at the
+            delivery address.
+        </p>
+        <p>
+            By proceeding, you also confirm that you agree to pay via
+            <strong>Cash on Delivery (COD)</strong> as our only available payment method at this time.
+        </p>
+        </div>
+        <footer class="checkout-modal-footer">
+        <button type="button" class="modal-btn cancel-btn" data-modal-close>Cancel</button>
+        <button type="button" class="modal-btn agree-btn" id="agree-and-continue-btn">Agree & Continue</button>
+        </footer>
+    </div>
+    </div>
+
 </main>
 
 <!-- Stock/Error Modal -->
@@ -391,16 +424,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!data.success) {
                 console.log('Stock check response:', data);
-                // Show modal and refresh the page so stock numbers update for the user
                 showModal(data.message || 'Some items are out of stock. Please review your cart.', true);
                 return;
             }
 
-            // If all good → redirect to checkout
-            const selectedIds = selectedItems.map(i => i.id);
-            const url = new URL("{% url 'orders:checkout' %}", window.location.origin);
-            url.searchParams.append('items', selectedIds.join(','));
-            window.location.href = url.toString();
+            // ✅ Show checkout agreement modal
+            const agreementModal = document.getElementById('checkout-agreement-modal');
+            agreementModal.classList.add('visible');
+            agreementModal.setAttribute('aria-hidden', 'false');
+
+            const agreeBtn = document.getElementById('agree-and-continue-btn');
+            const modalCloseBtns = agreementModal.querySelectorAll('[data-modal-close]');
+
+            // when agree → proceed to checkout
+            agreeBtn.onclick = () => {
+                agreementModal.classList.remove('visible');
+                agreementModal.setAttribute('aria-hidden', 'true');
+                
+                const selectedIds = selectedItems.map(i => i.id);
+                const url = new URL("{% url 'orders:checkout' %}", window.location.origin);
+                url.searchParams.append('items', selectedIds.join(','));
+                window.location.href = url.toString();
+            };
+
+            // close on cancel or backdrop click
+            modalCloseBtns.forEach(btn => {
+                btn.onclick = () => {
+                    agreementModal.classList.remove('visible');
+                    agreementModal.setAttribute('aria-hidden', 'true');
+                };
+            });
+
         } catch (err) {
             alert('Error verifying stock. Please try again.');
         }
@@ -447,5 +501,43 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    function startCountdown(element, expiryTime) {
+        const countdownSpan = element.querySelector('.countdown');
+        function update() {
+        const now = new Date().getTime();
+        const diff = expiryTime - now;
+
+        if (diff <= 0) {
+            countdownSpan.textContent = "Expired";
+            countdownSpan.classList.add('expired');
+            clearInterval(interval);
+            return;
+        }
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        countdownSpan.textContent = 
+            `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        update(); // initial display
+        const interval = setInterval(update, 1000);
+    }
+
+    document.querySelectorAll('.reservation-timer').forEach(timer => {
+        const expiryISO = timer.dataset.expiry;
+        if (expiryISO) {
+        const expiryTime = new Date(expiryISO).getTime();
+        startCountdown(timer, expiryTime);
+        }
+    });
+    });
+</script>
+
 
 {% endblock %}
