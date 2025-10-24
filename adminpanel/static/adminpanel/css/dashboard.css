@@ -28,114 +28,690 @@ body {
 }
 /* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
 
-
-.sidebar {
-    width: 325px;
-    height: 100vh;   /* full viewport height */
-    background: #fefeff;
-    color: #7d828e;
-    padding: 20px 0;
-
-   position: fixed;
-
-
-    /* subtle shadow on the right */
-    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08);
-    border-right: 1px solid #f6f6f6;
-    z-index: 10;
+/* === Main Content === */
+.dashboard-container {
+  width: 100%;
 }
 
 
-.sidebar-logo {
-    margin-bottom: 25px;
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #f9fbfa;
+
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 25px;      /* Centers it */
+    padding: 0 1rem;     /* Adds spacing on the left & right */
 }
 
-.sidebar-logo img {
-    max-width: 70%;   /* keeps it smaller than sidebar width */
-    max-height: 80px; /* keeps it from being too tall */
-    height: auto;     /* maintain aspect ratio */
-    width: auto;      /* maintain aspect ratio */
-    display: block;
-    margin: 0 auto;
-    object-fit: contain; /* makes sure it fits nicely */
+/* === Admin Dashboard === */
+
+.number-cards-section {
+    display: flex;
+    flex-wrap: wrap;          /* ✅ allows wrapping */
+    gap: 1rem;                /* space between cards */
+    justify-content: flex-start; /* align left, not stretched */
 }
 
-.links{
-    padding: 0px 20px;
+.number-cards {
+    flex: 1 1 calc(33.333% - 1rem); /* ✅ three per row, minus gap */
+    min-width: 360px;               /* don’t shrink too small */
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.01);
 }
 
-.link-title {
-    color: #7d828e;
-    padding: 10px 0px 15px 0px;
+.number-cards-top {
+    display: flex;
+    justify-content: space-between; /* push h3 left, svg right */
+    align-items: center;            /* vertically align them */
+    margin-bottom: 5px;
+}
 
-    font-size: 16px;
+.number-cards-top h3 {
+    font-size: 20px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin: 0;
+}
+
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.kebab-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0px); /* 10px below kebab */
+    right: -65px;             /* 5px inward from the right edge */
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 8px 8px;
+    min-width: 160px;
+    z-index: 9999;
+
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    /* hide by default */
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-menu ul {
+  list-style: none;   /* removes bullets */
+  padding: 0;         /* remove default left padding */
+  margin: 0;          /* remove default top/bottom margin */
+}
+
+
+.dropdown-menu li {
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f5f5f5;
+}
+
+
+.number-cards-timeline {
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    color: #6b707f;
+    margin-bottom: 15px;
+}
+
+.number-cards-sales-current{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.number-cards-sales-current h1{
+    font-size: 32px; 
     font-family: "Lexend", sans-serif;
     font-optical-sizing: auto;
     font-weight: 300;
     font-style: normal;
 }
 
-/* Reset the button */
-.link-item button {
-    all: unset;       /* strip browser styles */
-    width: 100%;      /* fill parent div */
-    height: 100%;
-    text-align: left;
-    font-size: 16px;
-    cursor: pointer;
+#current-sales{
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
 
-    font-size: 16px;
+.sales-current-group{
+    font-size: 14px; 
     font-family: "Lexend", sans-serif;
     font-optical-sizing: auto;
     font-weight: 300;
     font-style: normal;
 
     display: flex;
+    gap: 10px;
+}
+
+.sales-current-group svg{
+    width: 14px;
+    height: 14px;
+}
+
+.sales-current-up-group{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sales-status-up{
+    color: #5c842d;
+}
+
+.sales-current-down-group{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sales-status-down{
+    color: #842d2d;
+}
+
+.number-cards-sales-previous{
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    color: #6b707f;
+    margin-bottom: 5px;
+}
+
+
+
+/* Total Orders */
+.number-cards-orders-current{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.number-cards-orders-current h1{
+    font-size: 32px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+#current-orders{
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.orders-current-group{
+    font-size: 14px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    display: flex;
+    gap: 10px;
+}
+
+.orders-current-group svg{
+    width: 14px;
+    height: 14px;
+}
+
+.orders-current-up-group{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.orders-status-up{
+    color: #5c842d;
+}
+
+.orders-current-down-group{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.orders-status-down{
+    color: #842d2d;
+}
+
+.number-cards-orders-previous{
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    color: #6b707f;
+    margin-bottom: 5px;
+}
+
+
+/* Pending & Cancelled */
+.pending-cancelled-section{
+    display: flex;
+    gap: 10px;
+}
+
+.vertical-divider {
+  width: 1px;
+  background-color: #ddd; /* or whatever neutral tone */
+  margin: 0 16px;         /* spacing between groups */
+}
+
+.current-pending-group h3, .current-cancelled-group h3{
+    margin-top: 5px;
+    font-size: 18px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.current-pending-group-numbers h1{
+    font-size: 32px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.current-pending-group-numbers{
+    display: flex;
     align-items: center;
     gap: 10px;
-    cursor: pointer;
+    
 }
 
-/* Default icon is visible initially */
-.link-item .default-icon {
-    display: inline-block;
-}
-.link-item .active-icon {
-    display: none;
+.current-pending-group-numbers{
+    display: flex;
 }
 
-/* When active, switch icons */
-.link-item.active .default-icon {
-    display: none;
-}
-.link-item.active .active-icon {
-    display: inline-block;
-}
-
-.link-item .icon svg {
-    width: auto;   /* same as the font-size of parent */
-    height: 25px;  /* keeps it square */
-    flex-shrink: 0; /* prevents it from squishing */
+.current-pending-group-numbers-spans{
+    color: #5c842d;
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
 }
 
+.current-cancelled-group-numbers h1{
+    font-size: 32px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
 
-/* Regular state (applied to parent div) */
-.link-item {
-    padding: 12px 20px;
+.current-cancelled-group-numbers{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+}
+
+.current-cancelled-group-numbers-spans{
+    color: #842d2d;
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.cancelled-current-down-group{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cancelled-current-down-group svg{
+    width: 16px;
+    height: 16px;
+}
+
+
+/* Moving Products */
+.moving-products {
+    display: flex;
+    gap: 10px;              /* space between the two sections */
+    flex-wrap: wrap;        /* allows wrapping on smaller screens */
+}
+
+.moving-products > div {
+    flex: 1;                /* makes them share space equally */
+    min-width: 600px;       /* prevents them from shrinking too much */
+}
+
+
+
+/* Fast Moving Products */
+.fast-moving-products-section {
+    margin-top: 20px;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.fast-moving-product-top{
+    display: flex;
+    justify-content: space-between; /* push h3 left, svg right */
+    align-items: center;            /* vertically align them */
     margin-bottom: 10px;
-    color: #6a717f;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
-/* Hover state */
-.link-item:hover {
-    background: #c0c0c0;
-    color: #6a717f;
+.fast-moving-product-top h3{
+    font-size: 20px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
 }
 
-/* Active state */
-.link-item.active {
-    background-color: #5f8431;
-    color: #fefeff;
+.fast-moving-product-header,
+.fast-moving-product-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr; /* adjust column ratios */
+  align-items: center;
+  padding: 10px 16px;
+}
+
+.fast-moving-product-header {
+    background: #f5f5f5;
+
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    border-radius: 10px;
+}
+
+.fast-moving-product-row {
+    border-bottom: 1px solid #eee;
+
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.product-col {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.status-badge.success { background: #5d872f; color: #ffffff; }
+.status-badge.warning { background: #dab928; color: #ffffff; }
+.status-badge.danger  { background: #c44a4a; color: #ffffff; }
+.status-badge.pending { background: #94949b; color: #ffffff; }
+
+
+/* Slow Moving Products */
+.slow-moving-products-section{
+    margin-top: 20px;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.slow-moving-product-top{
+    display: flex;
+    justify-content: space-between; /* push h3 left, svg right */
+    align-items: center;            /* vertically align them */
+    margin-bottom: 10px;
+}
+
+.slow-moving-product-top h3{
+    font-size: 20px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.slow-moving-product-header,
+.slow-moving-product-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr; /* adjust column ratios */
+  align-items: center;
+  padding: 10px 16px;
+}
+
+.slow-moving-product-header {
+    background: #f5f5f5;
+
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    border-radius: 10px;
+}
+
+.slow-moving-product-row {
+    border-bottom: 1px solid #eee;
+
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+/* Low Stock Alerts */
+.low-stock-alerts-section {
+    margin-top: 20px;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.low-stock-alerts-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.low-stock-alerts-top h3 {
+    font-size: 20px;
+    font-family: "Lexend", sans-serif;
+    font-weight: 300;
+}
+
+.low-stock-alerts-header,
+.low-stock-alerts-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr; /* 3 columns: Product | Price | Stock */
+    align-items: center;
+    padding: 10px 16px;
+}
+
+
+
+.low-stock-alerts-header {
+    background: #f5f5f5;
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-weight: 300;
+    border-radius: 10px;
+}
+
+.low-stock-alerts-row {
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-weight: 300;
+}
+
+/* Product image & name */
+.low-stock-alerts-row .product-col {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.low-stock-alerts-row .product-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 6px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+
+
+
+
+/* Recent Transactions */
+.recent-activity-dashboard-section {
+    display: flex;
+    gap: 1rem; /* space between sections */
+    margin-top: 1.5rem;
+}
+
+.recent-transaction-dashboard {
+    flex: 2; /* takes 2/3 width */
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    overflow-x: auto; /* just in case table is wide */
+}
+
+.recent-transaction-dashboard h3{
+    font-size: 20px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 10px;
+}
+
+.recent-transaction-dashboard table {
+    width: 100%;
+    border-collapse: separate;   /* keeps spacing */
+    border-spacing: 0 0.75rem;   /* adds bottom space between rows */
+    font-size: 0.95rem;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.recent-transaction-dashboard th {
+    text-align: left;
+    padding: 0.5rem 1rem;
+    color: #7c7c7c;
+    
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    
+    border-bottom: 1px solid #eee;
+}
+
+.recent-transaction-dashboard td {
+    background: #f5f5f5;         /* subtle background for rows */
+    padding: 0.75rem 1rem;
+}
+
+/* Make status look nicer (optional badges) */
+.status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+.status.completed { background: #e6f7ec; color: #1b7a33; }
+.status.pending { background: #fff4e6; color: #b65c00; }
+.status.cancelled { background: #fdecea; color: #b71c1c; }
+
+
+
+/* Recent Session */
+.recent-session-dashboard {
+    flex: 0 0 auto; /* shrink-to-fit content */
+    width: fit-content; /* matches content width */
+    max-width: 100%; /* safety for small screens */
+
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.recent-session-dashboard h3{
+    font-size: 20px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 25px;
+}
+
+.recent-session-dashboard ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.recent-session-dashboard li {
+    margin-bottom: 1rem;
+    
+
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+
+    color: #444;
 }

@@ -1,0 +1,997 @@
+/* === vvv GLOBAL CSS DO NOT TOUCH vvv === */
+/* Logo Font Temporary */
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+/* Search (Don't Touch) */
+@use postcss-color-function;
+@use postcss-nested;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+/* Reset Everything */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+    background: #f9fbfa;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    height: 100vh;
+}
+/* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
+
+/* === Main Content === */
+.dashboard-container {
+  width: 100%;
+}
+
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #f9fbfa;
+
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 25px;      /* Centers it */
+    padding: 0 1rem;     /* Adds spacing on the left & right */
+}
+
+
+/*=== Products Section ===*/
+
+
+
+
+/* Category Section */
+.admin-products-category-section{
+    margin-top: 20px;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+
+.admin-products-category-section h3{
+    font-size: 20px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 10px;
+}
+
+.category-section-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-actions {
+  display: flex;
+  gap: 0.5rem; /* space between buttons */
+}
+
+.btn-edit-categories-action, .btn-add-categories-action{
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.btn-add-categories-action{
+    background: #5c8b25; 
+}
+
+.btn-add-categories-action:hover{
+    background: #325a00;
+}
+
+
+.category-list {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* space between categories */
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f5f5f5;
+  padding: 25px 15px;
+  border-radius: 6px;
+  font-family: "Lexend", sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+
+.category-item span {
+  font-weight: 400;
+}
+
+.category-actions-icons {
+  display: flex;
+  gap: 15px; /* spacing between edit/delete icons */
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.icon-btn svg {
+  width: auto;
+  height: 24px;
+}
+
+
+/* Hover styles */
+.edit-btn {
+  color: #555; /* default */
+}
+.edit-btn:hover {
+  color: #5f8431;; /* green on hover */
+}
+
+.delete-btn {
+  color: #555;
+}
+.delete-btn:hover {
+  color: #842d2d; /* red on hover */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Product Display Section */
+.admin-products-display-section{
+    margin-top: 20px;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.admin-products-display-section h3{
+    font-size: 20px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 10px;
+}
+
+
+.product-display-section-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-display-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center; /* ✅ add this */
+    max-width: 750px;
+    width: 100%px;
+}
+
+.product-display-actions svg {
+  display: inline-block;
+  width: 20px;  /* match your design */
+  height: 20px;
+  vertical-align: middle; /* aligns with button text */
+}
+
+
+/* Product Section Action Buttons - reuse */
+.product-display-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;              /* spacing between elements */
+    flex-wrap: nowrap;      /* prevent wrapping */
+    width: 100%;            /* fill available space */
+}
+
+.btn-products-icon {
+    flex: 0 0 auto;         /* don’t stretch */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-products-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-products-icon:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+}
+
+/* Search Bar */
+.admin-product-search-bar {
+    width: 100%; /* Makes the form wider */
+    max-width: none; /* Limits width on large screens */
+    margin: 1rem 0; /* Spacing above/below */
+    flex-grow: 1; /* Allows it to take space */
+}
+
+.admin-product-search__input {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 24px 12px 60px; /* top, right, bottom, left */
+    font-size: 14px;
+    line-height: 18px;
+    color: #575756;
+    background-color: transparent;
+
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 25px center;
+
+    border-radius: 0px;
+    border: 1px solid #575756;
+    transition: all 250ms ease-in-out;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.admin-product-search__input::placeholder {
+    color: rgba(87, 87, 86, 0.8);
+    letter-spacing: 1.5px;
+
+
+    font-size: 14px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.admin-product-search__input:hover,
+.admin-product-search__input:focus {
+    padding: 12px 14px 12px 40px; /* top, right, bottom, left */
+    outline: 0;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #575756;
+    border-radius: 0;
+    background-position: 13px center;
+}
+
+
+
+
+
+.btn-add-products-action{
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    width: 150px;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+.btn-add-products-action{
+    background: #5c8b25; 
+}
+
+.btn-add-products-action:hover{
+    background: #325a00;
+}
+
+
+.table-container {
+  overflow-x: auto; /* allows horizontal scroll if content is wider than container */
+  padding: 10px 0;
+}
+
+.admin-products-table {
+  border-collapse: separate; /* important for rounding */
+  border-spacing: 0;
+  border-radius: 10px;       /* round the whole table */
+  overflow: hidden;          /* clip the corners */
+  width: 100%;
+
+  margin-top: 25px;
+}
+
+.admin-products-table th,
+.admin-products-table td {
+
+  padding: 8px 12px;
+  text-align: left;
+
+}
+
+/* Header styling */
+.admin-products-table th {
+  background-color: #f5f5f5;
+  position: sticky;
+  top: 0;
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.admin-products-table {
+  border-collapse: separate; /* important for rounding */
+  border-spacing: 0;
+  border-radius: 10px;       /* round the whole table */
+  overflow: hidden;          /* clip the corners */
+  width: 100%;
+
+   border-spacing: 0px 15px; /* 10px horizontal, 15px vertical */
+}
+
+/* Header styling */
+.admin-products-table th {
+    background-color: #f5f5f5;
+    position: sticky;
+    top: 0;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+     padding: 20px 15px; /* vertical | horizontal */
+}
+
+/* Round only the top-left and top-right corners */
+.admin-products-table th:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.admin-products-table th:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Round only the bottom-left and bottom-right corners */
+.admin-products-table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.admin-products-table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+/* Body cell styling */
+.admin-products-table td {
+    padding: 10px 12px; /* default padding for body cells */
+    border-bottom: 1px solid #ddd;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+/* Image column */
+.admin-products-table td img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover; /* maintain aspect ratio & crop if needed */
+  border-radius: 4px; /* optional: small rounding for image */
+}
+
+/* Hover effect for table rows */
+.admin-products-table tbody tr:hover {
+    background-color: #f0f0f0; /* light gray on hover */
+    cursor: pointer;           /* pointer cursor to indicate interactivity */
+}
+
+/* Hover effect with rounded row corners */
+.admin-products-table tbody tr:hover td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.admin-products-table tbody tr:hover td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.admin-products-table tbody tr:hover {
+  background-color: #f0f0f0;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+
+
+
+
+
+
+
+
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.4); /* backdrop effect */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+/* Show state */
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* The actual modal box */
+.modal-content {
+  background: #fefeff;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px; /* you can set width here */
+  max-width: 90%;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-30px) scale(0.95);
+  opacity: 0;
+  transition: all 0.3s ease;
+
+    max-height: 90vh;   /* don’t let modal exceed 90% of viewport height */
+    overflow-y: auto;   /* vertical scrollbar if needed */
+}
+
+/* Animate in when parent is shown */
+.modal.show .modal-content {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+
+
+#category-modal h2{
+    font-size: 22px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 25px;
+}
+
+
+.form-group {
+  display: flex;
+  flex-direction: column; /* Stack label above input */
+  margin-bottom: 15px;   /* Space between fields */
+}
+
+label{
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 10px;
+}
+
+.form-group input {
+    height: 50px;
+    line-height: 40px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  height: 50px;
+  line-height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 8px 8px 8px 15px;
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  box-sizing: border-box;
+}
+
+.error-message {
+    color: red;
+
+
+    font-size: 14px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin-top: 5px;
+}
+.save-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
+
+.category-modal-action-buttons{
+    display: flex;
+    gap: 10px;
+}
+
+#close-category-modal, #save-category-modal{
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin-top: 10px;
+}
+
+#save-category-modal{
+    background: #5c8b25; 
+}
+
+#save-category-modal:hover{
+    background: #325a00;
+}
+
+#close-category-modal {
+    background: #e0e0e0;   
+    color: #333;           /* dark text */
+}
+#close-category-modal:hover {
+    background: #c0c0c0;  
+}
+
+
+
+
+
+
+
+
+
+
+/* === Category Admin Products Modal Confirm of Deletion === */
+
+
+/* Confirmation modal specific tweaks */
+.delete-modal {
+  text-align: center;
+}
+
+.delete-message {
+    margin-bottom: 1.5rem;
+    color: #333;
+
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+}
+
+/* Actions container */
+.delete-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Confirm button (green) */
+.btn-confirm {
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin-top: 10px;
+
+    background: #5c8b25; 
+
+}
+
+.btn-confirm:hover {
+  background: #325a00;
+}
+
+/* Cancel button (gray) */
+.btn-cancel {
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin-top: 10px;
+
+    background: #e0e0e0;   
+    color: #333;           /* dark text */
+}
+
+.btn-cancel:hover {
+  background: #c0c0c0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* === Admin Products Modal === */
+
+.product-modal-content {
+  width: 1200px;     /* your chosen modal width */
+  max-width: 95%;    /* keep responsive */
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.left-right-content{
+    display: flex;
+    gap: 2rem;         /* space between left/right */
+}
+
+.product-left-modal {
+    flex: 3; /* 60% */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: #fafafa; /* optional background to separate */
+    padding: 1rem;
+}
+
+.product-right-modal {
+    flex: 2; /* 40% */
+    display: flex;
+    flex-direction: column;
+    background: #fafafa; /* optional background to separate */
+}
+
+
+
+#product-display-modal h2{
+    font-size: 22px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 10px;
+}
+
+
+/* Left Section */
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical; /* let user resize vertically but not horizontally */
+  min-height: 100px; /* ensures it's “fat” enough */
+  box-sizing: border-box;
+}
+
+
+/* Container - use full width inside the modal form */
+.discount-period {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+/* Optional: if you want to match your other form labels */
+.discount-period > label {
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+
+     margin-bottom: 0;
+}
+
+.discount-period::placeholder
+
+/* Controls wrapper to stack the inputs vertically */
+.discount-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Discount price input - full width */
+.discount-controls input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+  
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    -webkit-appearance: none; /* remove default spinner on some browsers if desired */
+
+    margin-bottom: 15px;
+}
+
+/* Date range row - two inputs side-by-side equally */
+.date-range {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 10px; /* adjust as needed */
+}
+
+.date-field {
+  display: flex;
+  flex-direction: column; /* stacks label on top of input */
+  flex: 1; /* make both fields equal width */
+}
+
+.date-field label {
+    margin-bottom: 5px; /* small space between label and input */
+    margin-left: 5px;
+  
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+/* Make sure date inputs share the available width equally */
+.date-range input[type="date"] {
+    flex: 1;         /* equal share */
+    min-width: 0;    /* allow proper shrinking in flexbox */
+    padding: 10px 12px;
+
+    font-size: 14px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Small-screen: stack the two dates */
+@media (max-width: 520px) {
+  .date-range {
+    flex-direction: column;
+  }
+}
+
+/* Flexbox to place them side by side */
+.inventory-controls {
+  display: flex;
+  gap: 20px; /* space between the two fields */
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Each field takes up 50% of the available width */
+.inventory-controls .inventory-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* ensures label stays above input/select */
+}
+
+/* Make inputs/selects consistent */
+.inventory-controls input,
+.inventory-controls select {
+  width: 100%;
+}
+
+.inventory-controls select option {
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+
+/* Right Section */
+
+.product-image-section {
+  padding: 1rem; /* spacing inside the right box */
+  border-radius: 8px;
+  padding-bottom: 0px;
+}
+
+.product-image-section h3 {
+    font-size: 20px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 20px;
+}
+
+.product-image-section img {
+    width: 100%;         /* make it fill the container */
+    height: auto;        /* maintain aspect ratio */
+    display: block;      /* removes tiny bottom whitespace */
+    border-radius: 6px;  /* optional: rounded corners for nice look */
+    object-fit: cover;   /* optional: crops to container if needed */
+    margin-bottom: 10px;
+}
+
+#select-cat{
+    padding: 1rem; /* spacing inside the right box */
+    padding-top: 0px;
+}
+
+/* Style ONLY the options inside #category-select */
+#category-select option {
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+  padding: 8px;
+}
+
+
+
+
+
+
+.product-modal-action-buttons{
+    display: flex;
+    gap: 10px;
+    padding-left: 16px;
+}
+
+#edit-product-modal, #save-product-modal, #close-product-modal{
+    flex: 0 0 auto;            /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin-top: 10px;
+}
+
+#save-product-modal, #edit-product-modal{
+    background: #5c8b25; 
+}
+#save-product-modal:hover, #edit-product-modal:hover{
+    background: #325a00;
+}
+#close-product-modal {
+    background: #e0e0e0;   
+    color: #333;           /* dark text */
+}
+#close-product-modal:hover {
+    background: #c0c0c0;  
+}
+/*=== End of Products Section ===*/

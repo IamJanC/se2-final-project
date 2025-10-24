@@ -1,0 +1,552 @@
+/* === vvv GLOBAL CSS DO NOT TOUCH vvv === */
+/* Logo Font Temporary */
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+/* Search (Don't Touch) */
+@use postcss-color-function;
+@use postcss-nested;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+/* Reset Everything */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+    background: #f9fbfa;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    height: 100vh;
+}
+/* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
+
+/* === Main Content === */
+.dashboard-container {
+  width: 100%;
+}
+
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #f9fbfa;
+
+    max-width: 80vw;  /* 80% of the viewport width */
+    margin: 0 25px;      /* Centers it */
+    padding: 0 1rem;     /* Adds spacing on the left & right */
+}
+
+/* === Orders  === */
+
+
+/* === Orders Cards === */
+.order-cards-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+}
+
+.order-cards-section .number-cards {
+    flex: 1 1 calc(25% - 1rem); /* ✅ 4 per row */
+    min-width: 250px;           /* smaller min so 4 can fit */
+}
+
+.order-cards-section .number-cards {
+    flex: 1 1 calc(25% - 1rem); /* 4 per row */
+    min-width: 250px;
+
+    background: #fff;               /* card background */
+    border: 1px solid #e0e0e0;     /* subtle border */
+    border-radius: 12px;            /* rounded corners */
+    padding: 25px;                  /* inner spacing */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.01); /* subtle shadow */
+}
+
+.number-cards-top {
+    display: flex;
+    justify-content: space-between; /* push h3 left, svg right */
+    align-items: center;            /* vertically align them */
+    margin-bottom: 5px;
+}
+
+.number-cards-top h3 {
+    font-size: 20px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin: 0;
+}
+
+.dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.kebab-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0px);
+    right: -65px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    list-style: none;
+    padding: 8px;
+    min-width: 160px;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.dropdown-menu li {
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.dropdown-menu li:hover {
+    background-color: #f5f5f5;
+}
+
+.number-cards-timeline {
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    color: #6b707f;
+    margin-bottom: 15px;
+}
+
+.number-cards-sales-current{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.number-cards-sales-current h1{
+    font-size: 32px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+#current-sales{
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.sales-current-group{
+    font-size: 14px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    display: flex;
+    gap: 10px;
+}
+
+.sales-current-up-group, .sales-current-down-group {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.sales-current-group svg{
+    width: 14px;
+    height: 14px;
+}
+
+.sales-current-up-group{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sales-status-up{
+    color: #5c842d;
+}
+
+.sales-current-down-group{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sales-status-down{
+    color: #842d2d;
+}
+
+.number-cards-sales-previous{
+    font-size: 16px; 
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    color: #6b707f;
+    margin-bottom: 5px;
+}
+
+
+/* Orders Display Section */
+.admin-orders-display-section {
+  margin-top: 20px;
+  padding: 25px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+/* Top controls */
+.order-display-section-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-display-filters {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-order-filter {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: background 0.2s, border-color 0.2s;
+
+
+  font-size: 15.2px ;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+
+}
+
+.btn-order-filter.active,
+.btn-order-filter:hover {
+  background: #5c8b25;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.order-display-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.btn-order-sort {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 6px 12px;
+}
+
+.admin-order-search-bar {
+  width: 250px;
+}
+
+.admin-order-search__input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #575756;
+  border-radius: 4px;
+}
+
+/* Orders Table */
+.admin-orders-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+.admin-orders-table th {
+  background: #f5f5f5;
+  padding: 12px;
+  text-align: left;
+
+
+  font-size: 16px ;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.admin-orders-table td {
+  background: #fff;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+  
+  font-size: 16px ;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.order-products-list span {
+  display: block;
+   font-size: 14px ;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  color: #333;
+}
+
+/* Status badges */
+.status {
+  padding: 4px 10px;
+  border-radius: 12px;
+
+
+   /* your requested font */
+  font-size: 14px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+
+    display: inline-block;
+
+}
+
+.status.completed, .status.delivered {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.pending, .status.processing, .status.shipped {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+
+
+/* Dropdown container */
+.status-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.status-dropdown button {
+  border: none;
+  outline: none;        /* remove default focus outline */
+  background: none;     /* so it only shows your .status styles */
+  cursor: pointer;
+}
+
+
+/* Hide the options by default */
+.status-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  z-index: 10;
+}
+
+/* Each option */
+.status-options li {
+  padding: 8px 12px;
+  cursor: pointer;
+
+  font-size: 14px;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.status-options li:hover {
+  background: #f5f5f5;
+}
+
+/* Show dropdown when active */
+.status-dropdown.open .status-options {
+  display: block;
+}
+
+
+
+/* === Orders Search Bar === */
+.admin-order-search-bar {
+    width: 400px; /* Makes the form wider */
+    max-width: none; /* Limits width on large screens */
+    margin: 1rem 0; /* Spacing above/below */
+    flex-grow: 1; /* Allows it to take space */
+}
+
+.admin-order-search__input {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 24px 12px 60px; /* top, right, bottom, left */
+    font-size: 14px;
+    line-height: 18px;
+    color: #575756;
+    background-color: transparent;
+
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 25px center;
+
+    border-radius: 0px;
+    border: 1px solid #575756;
+    transition: all 250ms ease-in-out;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.admin-order-search__input::placeholder {
+    color: rgba(87, 87, 86, 0.8);
+    letter-spacing: 1.5px;
+
+    font-size: 14px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.admin-order-search__input:hover,
+.admin-order-search__input:focus {
+    padding: 12px 14px 12px 40px; /* top, right, bottom, left */
+    outline: 0;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #575756;
+    border-radius: 0;
+    background-position: 13px center;
+}
+
+/* === Order Action Icon Buttons (Filter & Sort) === */
+.btn-order-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;   /* subtle rounded corners */
+    width: 40px;          /* square */
+    height: 40px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    padding: 0;           /* keep it tight around SVG */
+}
+
+.btn-order-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-order-icon:hover {
+    background-color: #f9fafb; 
+    border-color: #9ca3af;
+}
+
+
+/* === Profile Dropdown === */
+.profile-container {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 45px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    min-width: 160px;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.profile-dropdown a,
+.profile-dropdown .logout-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    text-align: left;
+    text-decoration: none;
+    color: #333;
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.profile-dropdown a:hover,
+.profile-dropdown .logout-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.profile-pic {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+}

@@ -1,0 +1,781 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{% static 'adminpanel/css/headerbar.css' %}">
+    <link rel="stylesheet" href="{% static 'adminpanel/css/sidebar.css' %}">
+
+    <!-- Page-specific CSS -->
+    {% block extra_css %}{% endblock %}
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'images/Favicon.png' %}">
+
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .right-side {
+            display: flex;
+            flex-direction: column; /* stack headerbar above main-content */
+            flex: 1; /* take remaining width */
+            padding-left: 325px;
+        }
+
+    </style>
+</head>
+
+<body>
+    {% include 'adminpanel/shared/sidebar.html' %}
+
+    <div class="right-side">
+        {% include 'adminpanel/shared/headerbar.html' %}
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    
+
+    <!-- JS for switching tabs -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const linkItems = document.querySelectorAll(".link-item");
+            const tabContents = document.querySelectorAll(".tab-content");
+
+            function showTab(tabId, title) {
+                // Remove active from all
+                linkItems.forEach(item => item.classList.remove("active"));
+                tabContents.forEach(tab => tab.classList.remove("active"));
+
+                // Add active to selected
+                const selectedLink = document.querySelector(`.link-item[data-tab="${tabId}"]`);
+                const selectedTab = document.getElementById(tabId);
+                if(selectedLink) selectedLink.classList.add("active");
+                if(selectedTab) selectedTab.classList.add("active");
+
+                // Update header if you have one
+                const header = document.querySelector("#header-text h3");
+                if(header) header.innerText = title;
+
+                // Save to localStorage
+                localStorage.setItem("activeTab", tabId);
+                localStorage.setItem("activeTitle", title);
+            }
+
+            // Click events
+            linkItems.forEach(item => {
+                item.addEventListener("click", (e) => {
+                    const tabId = item.getAttribute("data-tab");
+                    const title = item.querySelector(".text").innerText;
+                    showTab(tabId, title);
+                });
+            });
+
+            // Restore saved tab
+            const savedTab = localStorage.getItem("activeTab");
+            const savedTitle = localStorage.getItem("activeTitle");
+            if(savedTab && savedTitle){
+                showTab(savedTab, savedTitle);
+            } else {
+                // Default
+                showTab("dashboard", "Dashboard");
+            }
+        });
+    </script>
+
+    <!-- Script for Toggling dropdown in Kebab Icons -->
+     <script>
+        document.querySelectorAll('.kebab-icon').forEach(icon => {
+            icon.addEventListener('click', function (e) {
+                const menu = this.nextElementSibling;
+                menu.classList.toggle('show');
+                e.stopPropagation();
+            });
+        });
+
+        // close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        });
+    </script>
+
+    <!-- Script for Toggling the Category Modal in Products Section -->
+    <script>
+        const categoryModal = document.getElementById("category-modal");
+        const closeCategoryModalBtn = document.getElementById("close-category-modal");
+        const editCategoryBtns = document.querySelectorAll(".edit-btn");
+        const addCategoryBtns = document.querySelectorAll(".btn-add-categories-action");
+        const modalTitle = categoryModal.querySelector("h2");
+
+        // Inputs for editing
+        const nameInput = document.getElementById("category-name");
+        const slugInput = document.getElementById("category-slug");
+        const categoryIdInput = document.getElementById("category-id");
+
+        // --- Open modal on Add Category ---
+        addCategoryBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                modalTitle.textContent = "Add Category"; // 🔹 Update title
+                categoryIdInput.value = ""; // clear hidden input
+                nameInput.value = "";
+                slugInput.value = "";
+                categoryModal.classList.add("show");
+            });
+        });
+
+        // --- Open modal on Edit Category ---
+        editCategoryBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                modalTitle.textContent = "Edit Category"; // 🔹 Update title
+
+                // Find category item
+                const categoryItem = btn.closest(".category-item");
+                const categoryName = categoryItem.querySelector("span").textContent.split(" (")[0];
+                const categorySlug = categoryItem.dataset.slug;
+                const categoryId = categoryItem.dataset.id;
+
+                // Populate modal inputs
+                nameInput.value = categoryName;
+                slugInput.value = categorySlug;
+                categoryIdInput.value = categoryId;
+
+                categoryModal.classList.add("show");
+
+                // Trigger validation immediately (calls validate function in next script)
+                const event = new Event('input');
+                nameInput.dispatchEvent(event);
+                slugInput.dispatchEvent(event);
+            });
+        });
+
+        // --- Close modal via button ---
+        closeCategoryModalBtn.addEventListener("click", () => {
+            categoryModal.classList.remove("show");
+        });
+    </script>
+
+
+
+    <!-- Script for Category Names & Slug Validation -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const nameInput = document.getElementById("category-name");
+            const slugInput = document.getElementById("category-slug");
+            const categoryIdInput = document.getElementById("category-id"); // hidden input
+            const nameError = document.getElementById("name-error");
+            const slugError = document.getElementById("slug-error");
+            const saveBtn = document.getElementById("save-category-modal");
+
+            function validate() {
+                const name = nameInput.value.trim();
+                const slug = slugInput.value.trim();
+                const categoryId = categoryIdInput.value; // get current category id (empty if adding)
+
+                // Build query string
+                let url = `/adminpanel/categories/validate/?name=${encodeURIComponent(name)}&slug=${encodeURIComponent(slug)}`;
+                if (categoryId) {
+                    url += `&id=${categoryId}`;
+                }
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const errors = data.errors;
+
+                        // Reset
+                        nameError.textContent = "";
+                        slugError.textContent = "";
+                        saveBtn.disabled = false;
+
+                        // Name error
+                        if (errors.name) {
+                            nameError.textContent = errors.name;
+                            saveBtn.disabled = true;
+                        }
+
+                        // Slug error
+                        if (errors.slug) {
+                            slugError.textContent = errors.slug;
+                            saveBtn.disabled = true;
+                        }
+                    });
+            }
+
+            nameInput.addEventListener("input", validate);
+            slugInput.addEventListener("input", validate);
+        });
+    </script>
+
+    <!--Script for Toggling of Deletion Confirmation Modal in Admin Product-->
+    <script>
+        
+        const deleteModal = document.getElementById("deleteModal");
+        const deleteForm = document.getElementById("delete-form");
+        const cancelDeleteBtn = deleteModal.querySelector(".btn-cancel");
+        const deleteMessage = document.getElementById("delete-message");
+
+        document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const categoryItem = btn.closest(".category-item");
+            const categoryId = categoryItem.dataset.id;
+            const categoryName = categoryItem.dataset.name;
+            const categoryCount = categoryItem.dataset.count;
+
+            // Update form action
+            deleteForm.action = `/adminpanel/categories/delete/${categoryId}/`;
+
+            // Update modal message
+            deleteMessage.textContent = `Are you sure you want to delete "${categoryName}" (${categoryCount} items)?`;
+
+            // Show modal
+            deleteModal.classList.add("show");
+        });
+        });
+
+        // Cancel button closes modal
+        cancelDeleteBtn.addEventListener("click", () => {
+        deleteModal.classList.remove("show");
+        });
+
+
+    </script>
+
+
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const modal = document.getElementById("product-display-modal");
+            const addProductBtn = document.querySelector(".btn-add-products-action");
+            const closeBtn = document.getElementById("close-product-modal");
+            const editBtn = document.getElementById("edit-product-modal");
+            const saveBtn = document.getElementById("save-product-modal");
+            const productRows = document.querySelectorAll(".product-row");
+
+
+            // Input fields
+            const nameInput = document.getElementById("product-name");
+            const descriptionInput = document.getElementById("product-description");
+            const priceInput = document.getElementById("product-price");
+            const discountInput = document.getElementById("discount-price");
+            const discountStart = document.getElementById("discount-start");
+            const discountEnd = document.getElementById("discount-end");
+            const stockInput = document.getElementById("stock-quantity");
+            const stockStatus = document.getElementById("stock-status");
+            const imageInput = document.getElementById("image-url");
+            const categorySelect = document.getElementById("category-select");
+            const imgPreview = modal.querySelector(".product-image-section img");
+
+            // === 1️⃣ Open modal for adding a new product ===
+            if (addProductBtn) {
+                addProductBtn.addEventListener("click", () => {
+                    modal.classList.add("show");
+                    modal.classList.remove("hidden");
+                    clearForm();
+                    setFormDisabled(false);
+                });
+            }
+
+            // === 2️⃣ Open modal when clicking on an existing product row ===
+            productRows.forEach(row => {
+                row.addEventListener("click", () => {
+                    modal.classList.add("show");
+                    modal.classList.remove("hidden");
+
+                    modal.dataset.productId = row.dataset.id; // store ID
+
+                    // Fill modal with data from the row
+                    nameInput.value = row.dataset.name || "";
+                    descriptionInput.value = row.dataset.description || "";
+                    priceInput.value = row.dataset.price || "";
+                    discountInput.value = row.dataset.discount || "";
+                    discountStart.value = row.dataset.discountStart || "";
+                    discountEnd.value = row.dataset.discountEnd || "";
+                    stockInput.value = row.dataset.stock || "";
+                    stockStatus.value = row.dataset.stockStatus || "in-stock";
+                    imageInput.value = row.dataset.image || "";
+                    categorySelect.value = row.dataset.category?.toLowerCase() || "";
+                    imgPreview.src = row.dataset.image || "https://via.placeholder.com/150";
+
+                    // Disable editing by default
+                    setFormDisabled(true);
+                });
+            });
+
+            // === 3️⃣ Enable editing when "Edit" clicked ===
+            editBtn.addEventListener("click", () => {
+                setFormDisabled(false);
+            });
+
+            // === 4️⃣ Save changes when "Save" clicked ===
+            saveBtn.addEventListener("click", () => {
+
+                const productId = modal.dataset.productId;
+                const url = `/adminpanel/edit/${productId}/`;
+                
+                const productData = {
+                    name: nameInput.value,
+                    description: descriptionInput.value,
+                    price: priceInput.value,
+                    discount: discountInput.value,
+                    discount_start: discountStart.value,
+                    discount_end: discountEnd.value,
+                    stock: stockInput.value,
+                    stock_status: stockStatus.value,
+                    image: imageInput.value,
+                    category: categorySelect.value,
+                };
+
+                // send as FormData so Django can read request.POST
+                const formData = new FormData();
+                for (let key in productData) {
+                    formData.append(key, productData[key]);
+                }
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": getCookie("csrftoken"),
+                    },
+                    body: formData,
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("✅ Product updated successfully!");
+                        location.reload();
+                    } else {
+                        console.error("Form errors:", data.errors);
+                        alert("⚠️ Failed to update product. Check console for details.");
+                    }
+                })
+                .catch(err => {
+                    console.error("Error saving product:", err);
+                    alert("⚠️ An unexpected error occurred.");
+                });
+            });
+
+            // === 5️⃣ Live image preview ===
+            imageInput.addEventListener("input", () => {
+                imgPreview.src = imageInput.value || "https://via.placeholder.com/150";
+            });
+
+            // === 6️⃣ Close modal ===
+            closeBtn.addEventListener("click", () => {
+                modal.classList.remove("show");
+                modal.classList.add("hidden");
+            });
+
+            // === Helper: Clear all inputs ===
+            function clearForm() {
+                modal.querySelectorAll("input, textarea, select").forEach(el => el.value = "");
+                imgPreview.src = "https://via.placeholder.com/150";
+            }
+
+            // === Helper: Disable/enable form fields ===
+            function setFormDisabled(disabled) {
+                const inputs = modal.querySelectorAll("input, textarea, select");
+                inputs.forEach(input => input.disabled = disabled);
+                editBtn.disabled = !disabled; // disable edit button while editing
+            }
+
+            // === Helper: Get CSRF token ===
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== "") {
+                    const cookies = document.cookie.split(";");
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === name + "=") {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+    </script>
+
+
+    <!--Script for Orders Table Status-->
+    <script>
+        document.addEventListener("click", function (e) {
+        // Toggle dropdown on button click
+        if (e.target.closest(".status-dropdown button")) {
+            const dropdown = e.target.closest(".status-dropdown");
+            dropdown.classList.toggle("open");
+        }
+
+        // Handle status option click
+        if (e.target.closest(".status-options li")) {
+            const option = e.target;
+            const newStatus = option.dataset.action;
+            const dropdown = option.closest(".status-dropdown");
+            const button = dropdown.querySelector("button.status");
+
+            // Update button text + class
+            button.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1) + " ▼";
+            button.className = "status " + newStatus;
+
+            // Update next possible transition
+            const optionsList = dropdown.querySelector(".status-options");
+            optionsList.innerHTML = ""; // clear old options
+
+            if (newStatus === "processing") {
+            optionsList.innerHTML = `<li data-action="shipped">Shipped</li>`;
+            } else if (newStatus === "shipped") {
+            optionsList.innerHTML = `<li data-action="delivered">Delivered</li>`;
+            } else if (newStatus === "delivered") {
+            // Lock it (replace dropdown with static span)
+            dropdown.outerHTML = `<span class="status delivered">Delivered</span>`;
+            }
+
+            // Close dropdown
+            dropdown.classList.remove("open");
+
+            // Debug log (simulate backend update)
+            const orderId = option.closest("tr").querySelector("td").innerText;
+            console.log(`Order ${orderId} → ${newStatus}`);
+        }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileToggle = document.getElementById('profileToggle');
+            const dropdown = document.getElementById('profileDropdown');
+
+            profileToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!profileToggle.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+    <script>
+    /* --- Admin Dashboard: product search/filter/sort script ---
+    PLACEMENT: Put this <script> before the closing </body> in
+    adminpanel/templates/adminpanel/admin_dashboard.html
+    WHAT: Implements client-side search (by id/name/category/description),
+    Filter (stock and category), and Sort (id/name/price/stock).
+    Uses rows with class "product-row" and their data-* attributes.
+    */
+
+    /* Utility: create a small popup menu element (used for filter + sort) */
+    function createPopupMenu() {
+    const menu = document.createElement('div');
+    menu.className = 'adb-popup-menu';
+    // Minimal inline styles so no CSS file change required
+    menu.style.position = 'absolute';
+    menu.style.background = '#fff';
+    menu.style.border = '1px solid rgba(0,0,0,0.12)';
+    menu.style.boxShadow = '0 6px 18px rgba(0,0,0,0.08)';
+    menu.style.padding = '6px';
+    menu.style.zIndex = 9999;
+    menu.style.minWidth = '180px';
+    menu.style.fontSize = '14px';
+    menu.style.borderRadius = '6px';
+    menu.style.display = 'none';
+    menu.style.maxHeight = '240px';
+    menu.style.overflow = 'auto';
+    return menu;
+    }
+
+    /* Normalize string for case-insensitive compares */
+    function norm(text) {
+    return ('' + (text || '')).toLowerCase();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+    // Core DOM elements used by the feature
+    const searchInput = document.getElementById('adminProductSearchInput');
+    const productRows = () => Array.from(document.querySelectorAll('tr.product-row'));
+    const productsTBody = document.querySelector('table.admin-products-table tbody');
+
+    // Buttons by aria-label (matches template icons)
+    const filterButton = document.querySelector('button[aria-label="Filter Products"]');
+    const sortButton = document.querySelector('button[aria-label="Sort Products"]');
+
+    // Popup menus (persistent DOM nodes)
+    const filterMenu = createPopupMenu();
+    const sortMenu = createPopupMenu();
+    document.body.appendChild(filterMenu);
+    document.body.appendChild(sortMenu);
+
+    // Active state
+    let activeFilter = { type: 'all', value: '' }; // 'all' | 'stock' | 'category'
+    let activeSort = { key: null, dir: 1 }; // key: 'id'|'name'|'price'|'stock'
+
+    /* ---------- Search handler ----------
+        Listens to #adminProductSearchInput and re-applies filtering.
+    */
+    if (searchInput) {
+        searchInput.addEventListener('input', function (ev) {
+        const q = norm(ev.target.value.trim());
+        applyFiltersAndSearch(q);
+        });
+        searchInput.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape') {
+            searchInput.value = '';
+            applyFiltersAndSearch('');
+        }
+        });
+    }
+
+    /* ---------- Filter menu builder ----------
+        Dynamically builds options:
+        - Show all
+        - Stock status options (In Stock, Low Stock, Out of Stock, Pre-order)
+        - Categories discovered from product rows
+    */
+    function buildFilterMenu() {
+        filterMenu.innerHTML = '';
+
+        // All products entry
+        const allBtn = document.createElement('div');
+        allBtn.textContent = 'Show all products';
+        allBtn.style.padding = '8px';
+        allBtn.style.cursor = 'pointer';
+        allBtn.dataset.filterType = 'all';
+        allBtn.addEventListener('click', () => {
+        activeFilter = { type: 'all', value: '' };
+        filterMenu.style.display = 'none';
+        applyFiltersAndSearch(searchInput ? norm(searchInput.value) : '');
+        });
+        filterMenu.appendChild(allBtn);
+
+        filterMenu.appendChild(Object.assign(document.createElement('hr'), { style: 'margin:6px 0' }));
+
+        // Stock statuses
+        const stockHeader = document.createElement('div');
+        stockHeader.textContent = 'Stock status';
+        stockHeader.style.fontWeight = '600';
+        stockHeader.style.margin = '6px 0 4px';
+        filterMenu.appendChild(stockHeader);
+
+        const stockOptions = ['In Stock', 'Low Stock', 'Out of Stock', 'Pre-order'];
+        stockOptions.forEach(opt => {
+        const d = document.createElement('div');
+        d.textContent = opt;
+        d.style.padding = '6px';
+        d.style.cursor = 'pointer';
+        d.dataset.filterType = 'stock';
+        d.dataset.filterValue = opt;
+        d.addEventListener('click', () => {
+            activeFilter = { type: 'stock', value: opt };
+            filterMenu.style.display = 'none';
+            applyFiltersAndSearch(searchInput ? norm(searchInput.value) : '');
+        });
+        filterMenu.appendChild(d);
+        });
+
+        filterMenu.appendChild(Object.assign(document.createElement('hr'), { style: 'margin:6px 0' }));
+
+        // Categories discovered from rows
+        const catHeader = document.createElement('div');
+        catHeader.textContent = 'Category';
+        catHeader.style.fontWeight = '600';
+        catHeader.style.margin = '6px 0 4px';
+        filterMenu.appendChild(catHeader);
+
+        const cats = new Set();
+        productRows().forEach(r => {
+        const cat = (r.dataset.category || '').trim();
+        if (cat) cats.add(cat);
+        });
+
+        if (cats.size === 0) {
+        const none = document.createElement('div');
+        none.textContent = 'No categories';
+        none.style.padding = '6px';
+        none.style.color = '#666';
+        filterMenu.appendChild(none);
+        } else {
+        Array.from(cats).sort().forEach(cat => {
+            const d = document.createElement('div');
+            d.textContent = cat;
+            d.style.padding = '6px';
+            d.style.cursor = 'pointer';
+            d.dataset.filterType = 'category';
+            d.dataset.filterValue = cat;
+            d.addEventListener('click', () => {
+            activeFilter = { type: 'category', value: cat };
+            filterMenu.style.display = 'none';
+            applyFiltersAndSearch(searchInput ? norm(searchInput.value) : '');
+            });
+            filterMenu.appendChild(d);
+        });
+        }
+    }
+
+    /* ---------- Sort menu builder ----------
+        Options include ID, Name, Price, Stock (asc/desc).
+    */
+    function buildSortMenu() {
+        sortMenu.innerHTML = '';
+
+        const opts = [
+        { label: 'ID ↑', key: 'id', dir: 1 },
+        { label: 'ID ↓', key: 'id', dir: -1 },
+        { label: 'Name A→Z', key: 'name', dir: 1 },
+        { label: 'Name Z→A', key: 'name', dir: -1 },
+        { label: 'Price ↑', key: 'price', dir: 1 },
+        { label: 'Price ↓', key: 'price', dir: -1 },
+        { label: 'Stock ↑', key: 'stock', dir: 1 },
+        { label: 'Stock ↓', key: 'stock', dir: -1 }
+        ];
+
+        opts.forEach(o => {
+        const d = document.createElement('div');
+        d.textContent = o.label;
+        d.style.padding = '6px';
+        d.style.cursor = 'pointer';
+        d.addEventListener('click', () => {
+            activeSort = { key: o.key, dir: o.dir };
+            sortMenu.style.display = 'none';
+            applySort();
+        });
+        sortMenu.appendChild(d);
+        });
+    }
+
+    /* ---------- Apply filters & search ----------
+        Hides rows that do not match the search and filter criteria.
+        Search fields: id, name, category, description.
+    */
+    function applyFiltersAndSearch(query) {
+        const q = norm(query || '');
+        productRows().forEach(row => {
+        const id = norm(row.dataset.id || row.querySelector('td')?.textContent || '');
+        const name = norm(row.dataset.name || '');
+        const cat = norm(row.dataset.category || '');
+        const desc = norm(row.dataset.description || '');
+        const stockStatus = norm(row.dataset.stockStatus || row.dataset.stockstatus || row.dataset['stockStatus'] || row.dataset.stock || '');
+
+        const matchesSearch = (!q) || id.includes(q) || name.includes(q) || cat.includes(q) || desc.includes(q);
+
+        let matchesFilter = true;
+        if (activeFilter.type === 'stock') {
+            matchesFilter = stockStatus.includes(norm(activeFilter.value)) || norm(activeFilter.value).includes(stockStatus);
+        } else if (activeFilter.type === 'category') {
+            matchesFilter = cat === norm(activeFilter.value);
+        }
+
+        row.style.display = (matchesSearch && matchesFilter) ? '' : 'none';
+        });
+
+        // keep sorting after filtering
+        applySort();
+    }
+
+    /* ---------- Sorting implementation ----------
+        Sorts visible rows by the selected key.
+    */
+    function applySort() {
+        if (!activeSort.key) return;
+        const rows = productRows().filter(r => r.style.display !== 'none');
+
+        function valueFor(row, key) {
+        if (key === 'id') {
+            const raw = row.dataset.id || '';
+            const numeric = parseFloat((raw + '').replace(/[^\d.-]+/g, ''));
+            return isFinite(numeric) ? numeric : norm(raw);
+        }
+        if (key === 'name') return norm(row.dataset.name || row.querySelector('td:nth-child(2)')?.textContent || '');
+        if (key === 'price') {
+            const p = row.dataset.price;
+            const n = parseFloat((p || '').toString().replace(/[^0-9.-]+/g, ''));
+            return isFinite(n) ? n : 0;
+        }
+        if (key === 'stock') {
+            const s = row.dataset.stock;
+            const n = parseFloat((s || '').toString().replace(/[^0-9.-]+/g, ''));
+            return isFinite(n) ? n : 0;
+        }
+        return norm(row.dataset[key] || '');
+        }
+
+        rows.sort((a, b) => {
+        const va = valueFor(a, activeSort.key);
+        const vb = valueFor(b, activeSort.key);
+        if (typeof va === 'number' && typeof vb === 'number') return (va - vb) * activeSort.dir;
+        return String(va).localeCompare(String(vb)) * activeSort.dir;
+        });
+
+        // Re-append sorted rows to the tbody (this moves them to the new order).
+        rows.forEach(r => productsTBody.appendChild(r));
+    }
+
+    /* ---------- Popup positioning helper ---------- */
+    function positionMenuRelativeToButton(menu, button) {
+        const rect = button.getBoundingClientRect();
+        menu.style.left = (window.scrollX + rect.left) + 'px';
+        menu.style.top = (window.scrollY + rect.bottom + 6) + 'px';
+        menu.style.display = 'block';
+    }
+
+    /* ---------- Wire up button clicks ---------- */
+    if (filterButton) {
+        buildFilterMenu();
+        filterButton.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if (filterMenu.style.display === 'block') {
+            filterMenu.style.display = 'none';
+        } else {
+            buildFilterMenu();
+            positionMenuRelativeToButton(filterMenu, filterButton);
+        }
+        sortMenu.style.display = 'none';
+        });
+    }
+
+    if (sortButton) {
+        buildSortMenu();
+        sortButton.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if (sortMenu.style.display === 'block') {
+            sortMenu.style.display = 'none';
+        } else {
+            buildSortMenu();
+            positionMenuRelativeToButton(sortMenu, sortButton);
+        }
+        filterMenu.style.display = 'none';
+        });
+    }
+
+    // Close menus when clicking outside
+    document.addEventListener('click', () => {
+        filterMenu.style.display = 'none';
+        sortMenu.style.display = 'none';
+    });
+    filterMenu.addEventListener('click', (e) => e.stopPropagation());
+    sortMenu.addEventListener('click', (e) => e.stopPropagation());
+
+    // Initial apply (in case there's a value in the search input already)
+    applyFiltersAndSearch(searchInput ? norm(searchInput.value) : '');
+    });
+    </script>
+
+
+
+
+</body>
+</html>

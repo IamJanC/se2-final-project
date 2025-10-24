@@ -1,12 +1,21 @@
-{% extends 'shared/base.html' %}
+{% extends 'adminpanel/shared/admin_base.html' %}
 
-{% block title %}orders{% endblock %}
-{% block header_title %}orders{% endblock %}
+
+{% block title %}Orders{% endblock %}
+{% block header_title %}Orders{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'adminpanel/css/orders.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="orders-container">
     
-    <!-- === ORDERS === -->
+    
+
+                <!-- === ORDERS === -->
                 <div id="orders" class="tab-content">
 
                     <!-- Order Cards -->
@@ -277,37 +286,8 @@
                     <div id="product-display-modal" class="modal hidden">
 
 
-                        
-                    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     
                 </div>
-
-
 
 
 

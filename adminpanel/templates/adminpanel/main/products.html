@@ -1,7 +1,16 @@
-{% extends 'shared/base.html' %}
+{% extends 'adminpanel/shared/admin_base.html' %}
+
 
 {% block title %}Products{% endblock %}
 {% block header_title %}Products{% endblock %}
+
+{% load static %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'adminpanel/css/products.css' %}">
+{% endblock %}
+
 
 {% block content %}
 <div class="product-container">

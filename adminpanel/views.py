@@ -190,7 +190,6 @@ def export_pdf(request):
 # ========================
 
 
-
 # ========================
 # Dashboard View
 # ========================
@@ -211,7 +210,7 @@ def dashboard_view(request):
         "low_stock_products": low_stock_products,
     }
 
-    return render(request, "main/dashboard.html", context)
+    return render(request, "adminpanel/main/dashboard.html", context)
 
 
 
@@ -234,7 +233,7 @@ def products_view(request):
         "products": products,
     }
 
-    return render(request, "main/products.html", context)
+    return render(request, "adminpanel/main/products.html", context)
 
 
 # ========================
@@ -341,6 +340,7 @@ def admin_orders(request):
     }
 
     # Render the new template under templates/main/
-    return render(request, "main/orders.html", context)
+    return render(request, "adminpanel/main/orders.html", context)
+
 
 
