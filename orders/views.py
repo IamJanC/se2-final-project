@@ -5,6 +5,8 @@ from .models import Order
 from .models import UserAddress
 from cart.models import Cart  # adjust if your cart app has a different path
 from decimal import Decimal
+from django.http import JsonResponse
+import json
 
 
 
@@ -282,8 +284,26 @@ def order_monitoring(request, order_id):
 # def order_monitoring(request):
 #     return render(request, "orders:order_monitoring.html")
 
+# Ajax View to set selected address
+@login_required
+def set_selected_address(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        address_id = data.get("address_id")
+        if address_id and request.user.addresses.filter(id=address_id).exists():
+            request.session["selected_address_id"] = address_id
+            return JsonResponse({"status": "ok"})
+    return JsonResponse({"status": "error"}, status=400)
 
 
+# View to set default address
+@login_required
+def set_default_address(request, address_id):
+    user = request.user
+    user.addresses.update(is_default=False)
+    user.addresses.filter(id=address_id).update(is_default=True)
+    request.session["selected_address_id"] = address_id  # sync session too
+    return redirect('main:account')
 
 
 

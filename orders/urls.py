@@ -22,6 +22,9 @@ urlpatterns = [
     path("orders/<int:order_id>/cancel/", views.cancel_order, name="cancel_order"), # Cancelling an order
     path('orders/<int:order_id>/', views.order_monitoring, name='order_monitoring'),
     
+    path("set_selected_address/", views.set_selected_address, name="set_selected_address"),
+    path('set-default/<int:address_id>/', views.set_default_address, name='set_default_address'),  # Set default address
+    
     
     # path("order_monitoring/", views.order_monitoring, name="order_monitoring"), # to order_monitoring page
 ]

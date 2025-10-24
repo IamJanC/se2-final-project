@@ -1,0 +1,504 @@
+{% extends 'shared/admin_base.html' %}
+
+
+
+{% block title %}Dashboard{% endblock %}
+{% block header_title %}Dashboard{% endblock %}
+
+{% load static %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'adminpanel/css/dashboard.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="dashboard-container">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- === DASHBOARD === -->
+    <div id="dashboard" class="tab-content active">
+        
+        <!-- Number Cards -->
+        <div class="number-cards-section">
+
+
+            <!-- Total Sales -->
+            <div class="number-cards" id="sales-card">
+
+                <div class="number-cards-top">
+                    <h3>Total Sales</h3>
+                    
+                    <div class="dropdown-wrapper">
+                        <!-- kebab icon -->
+                        <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="6" r="2" fill="#000000"></circle>
+                            <circle cx="12" cy="12" r="2" fill="#000000"></circle>
+                            <circle cx="12" cy="18" r="2" fill="#000000"></circle>
+                        </svg>
+
+                        <!-- hidden dropdown -->
+                        <ul class="dropdown-menu">
+                            <li>Last 7 days</li>
+                            <li>Last 30 days</li>
+                            <li>This Month</li>
+                            <li>Custom Range…</li>
+                        </ul>
+                    </div>
+
+
+                </div>
+
+                <div class="number-cards-timeline">
+                    <span>Last 7 days</span>
+                </div>
+
+                <div class="number-cards-sales-current">
+                    <h1>₱00.00</h1>
+                    <span id="current-sales">Sales</span>
+
+                    <div class="sales-current-group">
+
+                        <div class="sales-current-up-group">
+                            <!-- Up case -->
+                            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione-monotone" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M32 2C15.432 2 2 15.432 2 32s13.432 30 30 30s30-13.432 30-30S48.568 2 32 2zm5.143 28.305V49H26.857V30.305H16L32 15l16 15.305H37.143z" fill="#5c842d"></path></g></svg>
+                            <span class="sales-status-up">10.4%</span>
+                        </div>
+                        
+                        <div class="sales-current-down-group">
+                            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione-monotone" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M32 2C15.432 2 2 15.432 2 32s13.432 30 30 30s30-13.432 30-30S48.568 2 32 2zm0 47L16 33.695h10.857V15h10.285v18.695H48L32 49z" fill="#842d2d"></path></g></svg>
+                            <span class="sales-status-down">3.2%</span>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="number-cards-sales-previous">
+                    <span>Previous 7 days (₱00.00)</span>
+                </div>
+            </div>
+
+            <!-- Total Orders -->
+            <div class="number-cards" id="orders-card">
+
+                <div class="number-cards-top">
+                    <h3>Total Orders</h3>
+                    
+                    <div class="dropdown-wrapper">
+                        <!-- kebab icon -->
+                        <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="6" r="2" fill="#000000"></circle>
+                            <circle cx="12" cy="12" r="2" fill="#000000"></circle>
+                            <circle cx="12" cy="18" r="2" fill="#000000"></circle>
+                        </svg>
+
+                        <!-- hidden dropdown -->
+                        <ul class="dropdown-menu">
+                            <li>Last 7 days</li>
+                            <li>Last 30 days</li>
+                            <li>This Month</li>
+                            <li>Custom Range…</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="number-cards-timeline">
+                    <span>Last 7 days</span>
+                </div>
+
+                <div class="number-cards-orders-current">
+                    <h1>0</h1>
+                    <span id="current-orders">Orders</span>
+
+                    <div class="orders-current-group">
+
+                        <div class="orders-current-up-group">
+                            <!-- Up case -->
+                            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione-monotone" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M32 2C15.432 2 2 15.432 2 32s13.432 30 30 30s30-13.432 30-30S48.568 2 32 2zm5.143 28.305V49H26.857V30.305H16L32 15l16 15.305H37.143z" fill="#5c842d"></path></g></svg>
+                            <span class="orders-status-up">10.4%</span>
+                        </div>
+                        
+                        <div class="orders-current-down-group">
+                            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione-monotone" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M32 2C15.432 2 2 15.432 2 32s13.432 30 30 30s30-13.432 30-30S48.568 2 32 2zm0 47L16 33.695h10.857V15h10.285v18.695H48L32 49z" fill="#842d2d"></path></g></svg>
+                            <span class="orders-status-down">3.2%</span>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="number-cards-orders-previous">
+                    <span>Previous 7 days (0)</span>
+                </div>
+                
+            </div>
+
+            <!-- Total Pending Orders & Cancelled Orders -->
+            <div class="number-cards" id="pending-card">
+                <div class="number-cards-top">
+                    <h3>Pending & Cancelled Orders</h3>
+                    
+                    <div class="dropdown-wrapper">
+                        <!-- kebab icon -->
+                        <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="6" r="2" fill="#000000"></circle>
+                            <circle cx="12" cy="12" r="2" fill="#000000"></circle>
+                            <circle cx="12" cy="18" r="2" fill="#000000"></circle>
+                        </svg>
+
+                        <!-- hidden dropdown -->
+                        <ul class="dropdown-menu">
+                            <li>Last 7 days</li>
+                            <li>Last 30 days</li>
+                            <li>This Month</li>
+                            <li>Custom Range…</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="number-cards-timeline">
+                    <span>Last 7 days</span>
+                </div>
+                
+
+                <div class="pending-cancelled-section">
+                    
+
+                    <div class="current-pending-group">
+                        <h3>Pending</h3>
+                        <div class="current-pending-group-numbers">
+                            <h1>509</h1>
+                            <div class="current-pending-group-numbers-spans">
+                                <span class="pending-orders-label">Users</span>
+                                <span class="pending-orders-num">204</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vertical-divider">
+
+                    </div>
+
+                    <div class="current-cancelled-group">
+                        <h3>Cancelled</h3>
+                        <div class="current-cancelled-group-numbers">
+                            <h1>94</h1>
+                            <div class="current-cancelled-group-numbers-spans">
+                                
+                                <div class="cancelled-current-down-group">
+                                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione-monotone" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M32 2C15.432 2 2 15.432 2 32s13.432 30 30 30s30-13.432 30-30S48.568 2 32 2zm0 47L16 33.695h10.857V15h10.285v18.695H48L32 49z" fill="#842d2d"></path></g></svg>
+                                    <span class="orders-status-down">3.2%</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Product Statistics -->
+        <div class="product-dashboard-section">
+            <div class="moving-products">
+
+                <!-- Fast Moving Product -->
+                <div class="fast-moving-products-section">
+
+                    <!-- Table Title -->
+                    
+                    <div class="fast-moving-product-top">
+                        <h3>Fast Moving Products</h3>
+
+                        <div class="dropdown-wrapper">
+                                <!-- kebab icon -->
+                                <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="6" r="2" fill="#000000"></circle>
+                                    <circle cx="12" cy="12" r="2" fill="#000000"></circle>
+                                    <circle cx="12" cy="18" r="2" fill="#000000"></circle>
+                                </svg>
+
+                                <!-- hidden dropdown -->
+                                <ul class="dropdown-menu">
+                                    <li>Last 7 days</li>
+                                    <li>Last 30 days</li>
+                                    <li>This Month</li>
+                                    <li>Custom Range…</li>
+                                </ul>
+                            </div>
+                    </div>
+
+                    <div class="number-cards-timeline">
+                        <span>Last 7 days</span>
+                    </div>
+
+                    <!-- Header row -->
+                    <div class="fast-moving-product-header">
+                        <div class="product-col">Product</div>
+                        <div class="price-col">Price</div>
+                        <div class="qty-col">Total Order</div>
+                        <div class="subtotal-col">Total Sales</div>
+                        <div class="subtotal-col">Status</div>
+                    </div>
+
+
+                    <!-- In Stock -->
+                    <div class="fast-moving-product-row">
+                        <div class="product-col">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg" alt="Product 1" class="product-img">
+                            <span class="product-name">Tomatoes</span>
+                        </div>
+                        <div class="price-col">₱50.00</div>
+                        <div class="qty-col">120</div>
+                        <div class="subtotal-col">₱6,000.00</div>
+                        <div class="status-col"><span class="status-badge success">In Stock</span></div>
+                    </div>
+
+                        <!-- Low Stock -->
+                    <div class="fast-moving-product-row">
+                        <div class="product-col">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg" alt="Product 1" class="product-img">
+                            <span class="product-name">Tomatoes</span>
+                        </div>
+                        <div class="price-col">₱50.00</div>
+                        <div class="qty-col">120</div>
+                        <div class="subtotal-col">₱6,000.00</div>
+                        <div class="status-col"><span class="status-badge warning">Low Stock</span></div>
+                    </div>
+
+                        <!-- Out of Sotck -->
+                    <div class="fast-moving-product-row">
+                        <div class="product-col">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg" alt="Product 1" class="product-img">
+                            <span class="product-name">Tomatoes</span>
+                        </div>
+                        <div class="price-col">₱50.00</div>
+                        <div class="qty-col">120</div>
+                        <div class="subtotal-col">₱6,000.00</div>
+                        <div class="status-col"><span class="status-badge danger">Out of Stock</span></div>
+                    </div>
+
+                </div>
+
+
+                <!-- Slow Moving Products -->
+                <div class="slow-moving-products-section">
+
+                    <!-- Table Title -->
+                    
+                    <div class="slow-moving-product-top">
+                        <h3>Slow Moving Products</h3>
+
+                        <div class="dropdown-wrapper">
+                                <!-- kebab icon -->
+                                <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="6" r="2" fill="#000000"></circle>
+                                    <circle cx="12" cy="12" r="2" fill="#000000"></circle>
+                                    <circle cx="12" cy="18" r="2" fill="#000000"></circle>
+                                </svg>
+
+                                <!-- hidden dropdown -->
+                                <ul class="dropdown-menu">
+                                    <li>Last 7 days</li>
+                                    <li>Last 30 days</li>
+                                    <li>This Month</li>
+                                    <li>Custom Range…</li>
+                                </ul>
+                            </div>
+                    </div>
+
+                    <div class="number-cards-timeline">
+                        <span>Last 7 days</span>
+                    </div>
+
+                    <!-- Header row -->
+                    <div class="slow-moving-product-header">
+                        <div class="product-col">Product</div>
+                        <div class="price-col">Price</div>
+                        <div class="qty-col">Total Order</div>
+                        <div class="subtotal-col">Total Sales</div>
+                        <div class="subtotal-col">Status</div>
+                    </div>
+
+
+                    <!-- One Item -->
+                    <div class="slow-moving-product-row">
+                        <div class="product-col">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg" alt="Product 1" class="product-img">
+                            <span class="product-name">Tomatoes</span>
+                        </div>
+                        <div class="price-col">₱50.00</div>
+                        <div class="qty-col">120</div>
+                        <div class="subtotal-col">₱6,000.00</div>
+                        <div class="status-col"><span class="status-badge success">In Stock</span></div>
+                    </div>
+
+                    <!-- One Item -->
+                    <div class="slow-moving-product-row">
+                        <div class="product-col">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg" alt="Product 1" class="product-img">
+                            <span class="product-name">Tomatoes</span>
+                        </div>
+                        <div class="price-col">₱50.00</div>
+                        <div class="qty-col">120</div>
+                        <div class="subtotal-col">₱6,000.00</div>
+                        <div class="status-col"><span class="status-badge success">In Stock</span></div>
+                    </div>
+
+                    <!-- One Item -->
+                    <div class="slow-moving-product-row">
+                        <div class="product-col">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg" alt="Product 1" class="product-img">
+                            <span class="product-name">Tomatoes</span>
+                        </div>
+                        <div class="price-col">₱50.00</div>
+                        <div class="qty-col">120</div>
+                        <div class="subtotal-col">₱6,000.00</div>
+                        <div class="status-col"><span class="status-badge success">In Stock</span></div>
+                    </div>
+
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Low Stock Alerts -->
+        <div class="low-stock-alerts-section">
+            <div class="low-stock-alerts-top">
+                <h3>Low Stock Alerts</h3>
+
+                <div class="dropdown-wrapper">
+                    <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="6" r="2" fill="#000000"></circle>
+                        <circle cx="12" cy="12" r="2" fill="#000000"></circle>
+                        <circle cx="12" cy="18" r="2" fill="#000000"></circle>
+                    </svg>
+                    <ul class="dropdown-menu">
+                        <li>Last 7 days</li>
+                        <li>Last 30 days</li>
+                        <li>This Month</li>
+                        <li>Custom Range…</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="number-cards-timeline">
+                <span>Last 7 days</span>
+            </div>
+
+            <div class="low-stock-alerts-header">
+                <div class="product-col">Product</div>
+                <div class="price-col">Price</div>
+                <div class="stock-col">Stock Left</div>
+            </div>
+
+            {% if low_stock_products %}
+                {% for product in low_stock_products %}
+                <div class="low-stock-alerts-row">
+                    <div class="product-col">
+                        <img src="{{ product.image_url }}" alt="{{ product.name }}" class="product-img">
+                        <span class="product-name">{{ product.name }}</span>
+                    </div>
+                    <div class="price-col">₱{{ product.price }}</div>
+                    <div class="stock-col">{{ product.stock }}</div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="low-stock-alerts-row" style="text-align:center; padding:1rem;">
+                    <em>No low-stock items</em>
+                </div>
+            {% endif %}
+        </div>
+
+
+        <!-- Recent Activity -->
+        <div class="recent-activity-dashboard-section">
+
+            <!-- Recent Transactions -->
+            <div class="recent-transaction-dashboard">
+                <h3>Recent Transactions</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer ID</th>
+                            <th>Order Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CUST-001</td>
+                            <td>2025-09-10</td>
+                            <td>14:32</td>
+                            <td><span class="status-badge success">Completed</span></td>
+                            <td>₱1,250.00</td>
+                        </tr>
+                        <tr>
+                            <td>CUST-002</td>
+                            <td>2025-09-11</td>
+                            <td>10:15</td>
+                            <td><span class="status-badge pending">Pending</span></td>
+                            <td>₱980.00</td>
+                        </tr>
+                        <tr>
+                            <td>CUST-003</td>
+                            <td>2025-09-12</td>
+                            <td>09:45</td>
+                            <td><span class="status-badge danger">Cancelled</span></td>
+                            <td>₱0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Recent Sessions -->
+            <div class="recent-session-dashboard">
+                <h3>Recent Session Logs</h3>
+                <ul>
+                    <li>User-101 logged in at 08:45</li>
+                    <li>User-203 logged in at 09:12</li>
+                    <li>User-117 logged in at 10:01</li>
+                    <li>User-305 logged in at 11:25</li>
+                </ul>
+            </div>
+
+        </div>
+
+
+
+        
+    </div>
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+{% endblock %}

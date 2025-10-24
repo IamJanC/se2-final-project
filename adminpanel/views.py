@@ -15,6 +15,8 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from products.models import Category
+from django.utils import timezone
+from datetime import timedelta
 
 
 
@@ -187,27 +189,61 @@ def export_pdf(request):
 # New Admin Dashboard Logic
 # ========================
 
+
+
+# ========================
+# Dashboard View
+# ========================
 @login_required
 @user_passes_test(staff_required, login_url='main:home')
-def custom_admin_dashboard(request):
+def dashboard_view(request):
+    """Displays the main admin dashboard with categories and products."""
     categories = get_categories()
-    products = Product.objects.select_related("category").all().order_by("id")  # ✅ Fetch products
+    products = Product.objects.select_related("category").all().order_by("id")
+
+    # ✅ Low stock = any product with less than 20 units in stock
+    low_stock_products = products.filter(stock__lt=20).order_by("stock")
 
     context = {
-        "title": "Custom Admin Dashboard",
+        "title": "Dashboard",
         "categories": categories,
-        "products": products,  # ✅ Add products to context
+        "products": products,
+        "low_stock_products": low_stock_products,
     }
-    return render(request, "adminpanel/admin_dashboard.html", context)
+
+    return render(request, "main/dashboard.html", context)
 
 
 
 
 
-# === Add/Edit Category ===
+
+# ========================
+# PRODUCTS PAGE VIEW
+# ========================
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def products_view(request):
+    """Displays all products and their categories in the Products tab."""
+    categories = get_categories()
+    products = Product.objects.select_related("category").all().order_by("id")
+
+    context = {
+        "title": "Products",
+        "categories": categories,
+        "products": products,
+    }
+
+    return render(request, "main/products.html", context)
+
+
+# ========================
+# CATEGORY MANAGEMENT
+# ========================
 @login_required
 @user_passes_test(staff_required, login_url='main:home')
 def create_category(request):
+    """Handles both adding and editing categories."""
     if request.method == "POST":
         name = request.POST.get("category-name")
         slug = request.POST.get("category-slug")
@@ -222,17 +258,30 @@ def create_category(request):
             else:  # Add mode
                 Category.objects.create(name=name, slug=slug)
 
-        return redirect("adminpanel:custom_dashboard")  # ✅ back to dashboard
+        # ✅ After adding or editing, go back to Products page
+        return redirect("adminpanel:products")
 
-    return redirect("adminpanel:custom_dashboard")
+    return redirect("adminpanel:products")
 
 
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def delete_category(request, pk):
+    """Deletes a category safely."""
+    if request.method == "POST":
+        try:
+            cat = Category.objects.get(pk=pk)
+            cat.delete()
+        except Category.DoesNotExist:
+            pass
+    return redirect("adminpanel:products")
 
-# === Validate when adding/editing ===#
+
 def validate_category(request):
+    """AJAX validation for unique category name/slug."""
     name = request.GET.get("name", "").strip()
     slug = request.GET.get("slug", "").strip()
-    category_id = request.GET.get("id")  # new
+    category_id = request.GET.get("id")
 
     errors = {}
 
@@ -245,14 +294,15 @@ def validate_category(request):
 
     if name and qs_name.exists():
         errors["name"] = "Category name is already taken."
-
     if slug and qs_slug.exists():
         errors["slug"] = "Category slug is already taken."
 
     return JsonResponse({"errors": errors})
 
 
-# === Helper for fetching categories ===
+# ========================
+# Helper Function
+# ========================
 def get_categories():
     """Fetch all categories with product counts."""
     return (
@@ -260,22 +310,37 @@ def get_categories():
         .annotate(product_count=Count("product"))
         .order_by("name")
     )
-    
 
-# === Delete Category ===
+
+
+
+# ========================
+# Admin Orders Section
+# ========================
 @login_required
 @user_passes_test(staff_required, login_url='main:home')
-def delete_category(request, pk):
-    if request.method == "POST":  # safety: only allow POST
-        try:
-            cat = Category.objects.get(pk=pk)
-            cat.delete()
-        except Category.DoesNotExist:
-            pass  # or handle with a message
-    return redirect("adminpanel:custom_dashboard")
+def admin_orders(request):
+    """Displays all orders inside the Admin Dashboard (Orders page)."""
+    orders = (
+        Order.objects
+        .select_related("user")
+        .prefetch_related("items__product")
+        .annotate(
+            total_amount=Sum(
+                ExpressionWrapper(
+                    F("items__price_at_purchase") * F("items__quantity"),
+                    output_field=FloatField()
+                )
+            )
+        )
+        .order_by("-created_at")
+    )
 
+    context = {
+        "orders": orders,
+    }
 
-
-
+    # Render the new template under templates/main/
+    return render(request, "main/orders.html", context)
 
 

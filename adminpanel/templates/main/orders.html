@@ -1,0 +1,325 @@
+{% extends 'shared/base.html' %}
+
+{% block title %}orders{% endblock %}
+{% block header_title %}orders{% endblock %}
+
+{% block content %}
+<div class="orders-container">
+    
+    <!-- === ORDERS === -->
+                <div id="orders" class="tab-content">
+
+                    <!-- Order Cards -->
+                    <div class="order-cards-section number-cards-section">
+
+                        <!-- Total Orders -->
+                        <div class="number-cards" id="total-orders-card">
+                            <div class="number-cards-top">
+                                <h3>Total Orders</h3>
+                                <div class="dropdown-wrapper">
+                                    <svg class="kebab-icon" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="6" r="2"></circle>
+                                        <circle cx="12" cy="12" r="2"></circle>
+                                        <circle cx="12" cy="18" r="2"></circle>
+                                    </svg>
+                                    <ul class="dropdown-menu">
+                                        <li>Last 7 days</li>
+                                        <li>Last 30 days</li>
+                                        <li>This Month</li>
+                                        <li>Custom Range…</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="number-cards-timeline">
+                                <span>Last 7 days</span>
+                            </div>
+
+                            <div class="number-cards-sales-current">
+                                <h1>1,240</h1>
+                                <span id="current-total-orders">Orders</span>
+
+                                <div class="sales-current-group">
+                                    <div class="sales-current-up-group">
+                                        <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm5.1 28.3V49H26.9V30.3H16L32 15l16 15.3H37.1z" fill="#5c842d"></path></svg>
+                                        <span class="sales-status-up">+12%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="number-cards-sales-previous">
+                                <span>Previous 7 days (0)</span>
+                            </div>
+                        </div>
+
+                        <!-- New Orders -->
+                        <div class="number-cards" id="new-orders-card">
+                            <div class="number-cards-top">
+                                <h3>New Orders</h3>
+                                <div class="dropdown-wrapper">
+                                    <svg class="kebab-icon" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="6" r="2"></circle>
+                                        <circle cx="12" cy="12" r="2"></circle>
+                                        <circle cx="12" cy="18" r="2"></circle>
+                                    </svg>
+                                    <ul class="dropdown-menu">
+                                        <li>Last 7 days</li>
+                                        <li>Last 30 days</li>
+                                        <li>This Month</li>
+                                        <li>Custom Range…</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="number-cards-timeline">
+                                <span>Last 7 days</span>
+                            </div>
+
+                            <div class="number-cards-sales-current">
+                                <h1>240</h1>
+                                <span id="current-new-orders">Orders</span>
+                                <div class="sales-current-group">
+                                    <div class="sales-current-up-group">
+                                        <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm5.1 28.3V49H26.9V30.3H16L32 15l16 15.3H37.1z" fill="#5c842d"></path></svg>
+                                        <span class="sales-status-up">+5%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="number-cards-sales-previous">
+                                <span>Previous 7 days (0)</span>
+                            </div>
+                        </div>
+
+                        <!-- Completed Orders -->
+                        <div class="number-cards" id="completed-orders-card">
+                            <div class="number-cards-top">
+                                <h3>Completed Orders</h3>
+                                <div class="dropdown-wrapper">
+                                    <svg class="kebab-icon" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="6" r="2"></circle>
+                                        <circle cx="12" cy="12" r="2"></circle>
+                                        <circle cx="12" cy="18" r="2"></circle>
+                                    </svg>
+                                    <ul class="dropdown-menu">
+                                        <li>Last 7 days</li>
+                                        <li>Last 30 days</li>
+                                        <li>This Month</li>
+                                        <li>Custom Range…</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="number-cards-timeline">
+                                <span>Last 7 days</span>
+                            </div>
+
+                            <div class="number-cards-sales-current">
+                                <h1>960</h1>
+                                <span id="current-completed-orders">Orders</span>
+                                <div class="sales-current-group">
+                                    <div class="sales-current-up-group">
+                                        <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm5.1 28.3V49H26.9V30.3H16L32 15l16 15.3H37.1z" fill="#5c842d"></path></svg>
+                                        <span class="sales-status-up">+8%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="number-cards-sales-previous">
+                                <span>Previous 7 days (0)</span>
+                            </div>
+                        </div>
+
+                        <!-- Cancelled Orders -->
+                        <div class="number-cards" id="cancelled-orders-card">
+                            <div class="number-cards-top">
+                                <h3>Cancelled Orders</h3>
+                                <div class="dropdown-wrapper">
+                                    <svg class="kebab-icon" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="6" r="2"></circle>
+                                        <circle cx="12" cy="12" r="2"></circle>
+                                        <circle cx="12" cy="18" r="2"></circle>
+                                    </svg>
+                                    <ul class="dropdown-menu">
+                                        <li>Last 7 days</li>
+                                        <li>Last 30 days</li>
+                                        <li>This Month</li>
+                                        <li>Custom Range…</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="number-cards-timeline">
+                                <span>Last 7 days</span>
+                            </div>
+
+                            <div class="number-cards-sales-current">
+                                <h1>87</h1>
+                                <span id="current-cancelled-orders">Orders</span>
+                                <div class="sales-current-group">
+                                    <div class="sales-current-down-group">
+                                        <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm0 47L16 33.7h10.9V15h10.3v18.7H48L32 49z" fill="#842d2d"></path></svg>
+                                        <span class="sales-status-down">-2%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="number-cards-sales-previous">
+                                <span>Previous 7 days (0)</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Orders Table -->
+                     
+                    <div class="admin-orders-display-section">
+
+                        <!-- Top Controls -->
+                        <div class="order-display-section-top">
+                            <div class="order-display-filters">
+                                <button class="btn-order-filter active" data-filter="all">All Orders</button>
+                                <button class="btn-order-filter" data-filter="completed">Completed</button>
+                                <button class="btn-order-filter" data-filter="pending">Pending</button>
+                                <button class="btn-order-filter" data-filter="cancelled">Cancelled</button>
+                            </div>
+
+
+                           <div class="order-display-actions">
+
+                                <!-- Orders Table Search -->
+                                <form class="admin-order-search-bar" autocomplete="off"> 
+                                    <input class="admin-order-search__input" type="text" placeholder="Search orders" maxlength="30" id="adminOrderSearchInput"> 
+                                </form>
+
+                                <!-- Order Filter Button -->
+                                <button class="btn-order-icon" aria-label="Filter Orders">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 7H20" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path d="M7 12L17 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path d="M11 17H13" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </button>
+
+                                <!-- Order Sort Button -->
+                                <button class="btn-order-icon" aria-label="Sort Orders">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11.1924 5.65685C11.5829 5.26633 11.5829 4.63316 11.1924 4.24264L8.36397 1.41421C8.30576 1.356 8.24485 1.30212 8.18165 1.25259C7.50286 0.720577 6.55947 0.689024 5.84929 1.15793C5.73839 1.23115 5.63317 1.31658 5.53554 1.41421L2.70711 4.24264C2.31658 4.63316 2.31658 5.26633 2.70711 5.65685C3.09763 6.04738 3.7308 6.04738 4.12132 5.65685L6.00003 3.77814V18C6.00003 18.5523 6.44775 19 7.00003 19C7.55232 19 8.00003 18.5523 8.00003 18V3.8787L9.77818 5.65685C10.1687 6.04737 10.8019 6.04737 11.1924 5.65685Z" fill="#0F0F0F"></path> 
+                                        <path d="M12.7071 18.3432C12.3166 18.7337 12.3166 19.3668 12.7071 19.7574L15.5355 22.5858C15.6332 22.6834 15.7384 22.7689 15.8493 22.8421C16.6256 23.3546 17.6805 23.2692 18.364 22.5858L21.1924 19.7574C21.5829 19.3668 21.5829 18.7337 21.1924 18.3432C20.8019 17.9526 20.1687 17.9526 19.7782 18.3432L18 20.1213L18 6C18 5.44771 17.5523 5 17 5C16.4477 5 16 5.44771 16 6L16 20.2218L14.1213 18.3432C13.7308 17.9526 13.0976 17.9526 12.7071 18.3432Z" fill="#0F0F0F"></path> 
+                                    </svg>
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <!-- Orders Table -->
+                        <div class="table-container">
+                            <table class="admin-orders-table">
+                                <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Products</th>
+                                    <th>Date</th>
+                                    <th>Price</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in orders %}
+                                    <tr>
+                                        <td>#ORD-{{ order.id }}</td>
+                                        <td>
+                                            <div class="order-products-list">
+                                                {% for item in order.items.all %}
+                                                    <span>{{ item.product.name }} ({{ item.quantity }})</span><br>
+                                                {% empty %}
+                                                    <span>No products</span>
+                                                {% endfor %}
+                                            </div>
+                                        </td>
+                                        <td>{{ order.created_at|date:"Y-m-d" }}</td>
+                                        <td>₱{{ order.total_amount|floatformat:2 }}</td>
+                                        <td>{{ order.payment_method|title }}</td>
+                                        <td>
+                                            {% if order.status in "completed,delivered,cancelled" %}
+                                                <span class="status {{ order.status }}">{{ order.status|title }}</span>
+                                            {% else %}
+                                                <div class="status-dropdown">
+                                                    <button class="status {{ order.status }}">{{ order.status|title }}</button>
+                                                    <ul class="status-options">
+                                                        {% if order.status == "pending" %}
+                                                            <li data-action="processing">Processing</li>
+                                                            <li data-action="cancelled">Cancel</li>
+                                                        {% elif order.status == "processing" %}
+                                                            <li data-action="shipped">Shipped</li>
+                                                        {% elif order.status == "shipped" %}
+                                                            <li data-action="delivered">Delivered</li>
+                                                        {% endif %}
+                                                    </ul>
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="no-orders">No orders found.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </div>
+    
+                    </div>
+
+                    <!--Orders Modal-->
+                    <div id="product-display-modal" class="modal hidden">
+
+
+                        
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+{% endblock %}

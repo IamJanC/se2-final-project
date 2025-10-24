@@ -828,32 +828,70 @@
             });
         }
 
-        // Real-time email availability check
+        // Real-time email validation + availability check
         if (emailInput) {
-            let emailTimeout;
+            let emailTimeout = null;
             let lastValidEmail = '';
-            
-            emailInput.addEventListener("input", function() {
-                clearTimeout(emailTimeout);
-                const email = this.value.trim().toLowerCase();
+
+            emailInput.addEventListener("input", function () {
+                const raw = this.value || '';
+                const email = raw.trim().toLowerCase();
                 const errorElement = document.getElementById("newEmailError");
-                
-                // Reset error state if empty or same as last valid
-                if (!email || email === lastValidEmail) {
-                    errorElement.classList.add('hidden');
+
+                // If empty, hide error and reset lastValidEmail
+                if (!email) {
+                    if (errorElement) errorElement.classList.add('hidden');
+                    lastValidEmail = '';
+                    clearTimeout(emailTimeout);
                     return;
                 }
 
+                // If same as last known valid value, do nothing
+                if (email === lastValidEmail) {
+                    if (errorElement) errorElement.classList.add('hidden');
+                    return;
+                }
+
+                // Debounce the validation + optional availability check (500ms)
+                clearTimeout(emailTimeout);
                 emailTimeout = setTimeout(async () => {
-                    // Basic validation
-                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                        errorElement.textContent = 'Please enter a valid email address';
-                        errorElement.classList.remove('hidden');
+                    // Basic email format check
+                    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                    if (!emailOk) {
+                        if (errorElement) {
+                            errorElement.textContent = 'Please enter a valid email address';
+                            errorElement.classList.remove('hidden');
+                        }
                         return;
                     }
-                });
+
+                    // Format is valid — hide format error
+                    if (errorElement) errorElement.classList.add('hidden');
+
+                    // Save as last valid so repeated events don't re-check
+                    lastValidEmail = email;
+
+                    // OPTIONAL: check availability via AJAX endpoint if you have one
+                    try {
+                        const resp = await fetch('/testdb/check_email/?email=' + encodeURIComponent(email));
+                        if (!resp.ok) return;
+                        const data = await resp.json();
+                        if (data && data.available === false) {
+                            if (errorElement) {
+                                errorElement.textContent = 'This email is already registered';
+                                errorElement.classList.remove('hidden');
+                            }
+                        } else {
+                            if (errorElement) errorElement.classList.add('hidden');
+                        }
+                    } catch (err) {
+                        // ignore network errors silently
+                        console.warn('Email availability check failed', err);
+                    }
+                }, 500);
             });
         }
+
         // Helper function to get CSRF token
         function getCookie(name) {
             let cookieValue = null;

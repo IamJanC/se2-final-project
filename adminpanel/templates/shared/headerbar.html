@@ -1,0 +1,37 @@
+<!-- shared/headerbar.html -->
+<nav class="navigation-headbar">
+    <div class="headerbar" id="header-title">
+        <div id="header-text" class="left-nav">
+            <h3>{% block header_title %}Dashboard{% endblock %}</h3>
+        </div>
+
+        <div class="right-nav">
+            <!-- Search bar -->
+            <form class="search-bar" autocomplete="off">
+                <input class="search__input" type="text" placeholder="Search data, users, or reports" maxlength="30" id="searchInput">
+            </form>
+
+            <!-- Notifications -->
+            <button class="notification-btn">
+                <svg class="icon" viewBox="0 0 24 24" fill="none">
+                    <path d="..." stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                </svg>
+            </button>
+
+            <!-- Profile Button -->
+            <div class="profile-container">
+                <button class="profile-btn" id="profileToggle">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Sarah_Discaya_Senate_hearing.jpg/250px-Sarah_Discaya_Senate_hearing.jpg" alt="Profile" class="profile-pic">
+                </button>
+
+                <!-- Dropdown -->
+                <div class="profile-dropdown" id="profileDropdown">
+                    <form method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

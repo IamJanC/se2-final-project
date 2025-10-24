@@ -533,6 +533,7 @@
     selectBtns.forEach((btn) => {
         btn.addEventListener("click", () => {
             const card = btn.closest(".address-card");
+            const addressId = btn.dataset.id;
 
             // Extract values
             const label = card.querySelector(".address-label")?.textContent || "Address";
@@ -578,9 +579,22 @@
 
             showCheckout();
 
-            if (mainForm) {
-                mainForm.submit();   // 🔴 will actually POST to save_address
-            }
+            // Store selected address in session via AJAX
+            fetch("{% url 'orders:set_selected_address' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ address_id: addressId }),
+            })
+            .then((res) => {
+                if (res.ok) {
+                // Update UI instantly
+                showCheckout();
+                location.reload(); // optional if you want it to refresh
+                }
+            });
         });
     });
 });

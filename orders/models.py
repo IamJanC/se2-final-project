@@ -62,6 +62,7 @@ class UserAddress(models.Model):
     landmark = models.CharField(max_length=100, blank=True)
     label = models.CharField(max_length=50, default="Home")  # e.g., Home, Work
     created_at = models.DateTimeField(auto_now_add=True)
+    is_default = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.full_name} - {self.house}, {self.street}"

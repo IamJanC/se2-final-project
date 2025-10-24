@@ -560,22 +560,17 @@
                         </div>
                     </div>
 
-                    <!--Low Stock Alerts-->
+                    <!-- Low Stock Alerts -->
                     <div class="low-stock-alerts-section">
-
-                        <!-- Table Title -->
                         <div class="low-stock-alerts-top">
                             <h3>Low Stock Alerts</h3>
 
                             <div class="dropdown-wrapper">
-                                <!-- kebab icon -->
                                 <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="12" cy="6" r="2" fill="#000000"></circle>
                                     <circle cx="12" cy="12" r="2" fill="#000000"></circle>
                                     <circle cx="12" cy="18" r="2" fill="#000000"></circle>
                                 </svg>
-
-                                <!-- hidden dropdown -->
                                 <ul class="dropdown-menu">
                                     <li>Last 7 days</li>
                                     <li>Last 30 days</li>
@@ -589,35 +584,28 @@
                             <span>Last 7 days</span>
                         </div>
 
-                        <!-- Header row -->
                         <div class="low-stock-alerts-header">
                             <div class="product-col">Product</div>
                             <div class="price-col">Price</div>
                             <div class="stock-col">Stock Left</div>
-                            <div class="reorder-col">Reorder Level</div>
                         </div>
 
-                        <!-- Example Row -->
-                        <div class="low-stock-alerts-row">
-                            <div class="product-col">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg" alt="Product 1" class="product-img">
-                                <span class="product-name">Tomatoes</span>
+                        {% if low_stock_products %}
+                            {% for product in low_stock_products %}
+                            <div class="low-stock-alerts-row">
+                                <div class="product-col">
+                                    <img src="{{ product.image_url }}" alt="{{ product.name }}" class="product-img">
+                                    <span class="product-name">{{ product.name }}</span>
+                                </div>
+                                <div class="price-col">₱{{ product.price }}</div>
+                                <div class="stock-col">{{ product.stock }}</div>
                             </div>
-                            <div class="price-col">₱50.00</div>
-                            <div class="stock-col">8</div>
-                            <div class="reorder-col">15</div>
-                        </div>
-
-                        <div class="low-stock-alerts-row">
-                            <div class="product-col">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg" alt="Product 2" class="product-img">
-                                <span class="product-name">Tomatoes</span>
+                            {% endfor %}
+                        {% else %}
+                            <div class="low-stock-alerts-row" style="text-align:center; padding:1rem;">
+                                <em>No low-stock items</em>
                             </div>
-                            <div class="price-col">₱40.00</div>
-                            <div class="stock-col">2</div>
-                            <div class="reorder-col">10</div>
-                        </div>
-
+                        {% endif %}
                     </div>
 
 
@@ -1309,119 +1297,85 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!-- Example order row: Completed (locked) -->
-                                <tr>
-                                    <td>#ORD-1001</td>
-                                    <td>
-                                    <div class="order-products-list">
-                                        <span>Tomatoes (2kg)</span><br>
-                                        <span>Onions (1kg)</span><br>
-                                        <span>Cabbage (1pc)</span>
-                                    </div>
-                                    </td>
-                                    <td>2025-10-02</td>
-                                    <td>$45.00</td>
-                                    <td>Credit Card</td>
-                                    <td><span class="status completed">Completed</span></td>
-                                </tr>
-
-                                <!-- Example order row: Pending -->
-                                <tr>
-                                    <td>#ORD-1002</td>
-                                    <td>
-                                    <div class="order-products-list">
-                                        <span>Bananas (12pcs)</span>
-                                    </div>
-                                    </td>
-                                    <td>2025-10-01</td>
-                                    <td>$12.50</td>
-                                    <td>Cash</td>
-                                    <td>
-                                    <div class="status-dropdown">
-                                        <button class="status pending">Pending</button>
-                                        <ul class="status-options">
-                                        <li data-action="processing">Processing</li>
-                                        </ul>
-                                    </div>
-                                    </td>
-                                </tr>
-
-                                <!-- Example order row: Processing -->
-                                <tr>
-                                    <td>#ORD-1003</td>
-                                    <td>
-                                    <div class="order-products-list">
-                                        <span>Mangoes (3kg)</span>
-                                    </div>
-                                    </td>
-                                    <td>2025-10-02</td>
-                                    <td>$30.00</td>
-                                    <td>Cash</td>
-                                    <td>
-                                    <div class="status-dropdown">
-                                        <button class="status processing">Processing</button>
-                                        <ul class="status-options">
-                                        <li data-action="shipped">Shipped</li>
-                                        </ul>
-                                    </div>
-                                    </td>
-                                </tr>
-
-                                <!-- Example order row: Shipped -->
-                                <tr>
-                                    <td>#ORD-1004</td>
-                                    <td>
-                                    <div class="order-products-list">
-                                        <span>Apples (5kg)</span>
-                                    </div>
-                                    </td>
-                                    <td>2025-10-01</td>
-                                    <td>$25.00</td>
-                                    <td>Credit Card</td>
-                                    <td>
-                                    <div class="status-dropdown">
-                                        <button class="status shipped">Shipped</button>
-                                        <ul class="status-options">
-                                        <li data-action="delivered">Delivered</li>
-                                        </ul>
-                                    </div>
-                                    </td>
-                                </tr>
-
-                                <!-- Example order row: Delivered (locked for admin) -->
-                                <tr>
-                                    <td>#ORD-1005</td>
-                                    <td>
-                                    <div class="order-products-list">
-                                        <span>Carrots (2kg)</span>
-                                    </div>
-                                    </td>
-                                    <td>2025-09-30</td>
-                                    <td>$15.00</td>
-                                    <td>Cash</td>
-                                    <td><span class="status delivered">Delivered</span></td>
-                                </tr>
-
-                                <!-- Example order row: Cancelled (locked) -->
-                                <tr>
-                                    <td>#ORD-1006</td>
-                                    <td>
-                                    <div class="order-products-list">
-                                        <span>Grapes (1kg)</span>
-                                    </div>
-                                    </td>
-                                    <td>2025-09-29</td>
-                                    <td>$8.00</td>
-                                    <td>Credit Card</td>
-                                    <td><span class="status cancelled">Cancelled</span></td>
-                                </tr>
+                                    {% for order in orders %}
+                                    <tr>
+                                        <td>#ORD-{{ order.id }}</td>
+                                        <td>
+                                            <div class="order-products-list">
+                                                {% for item in order.items.all %}
+                                                    <span>{{ item.product.name }} ({{ item.quantity }})</span><br>
+                                                {% empty %}
+                                                    <span>No products</span>
+                                                {% endfor %}
+                                            </div>
+                                        </td>
+                                        <td>{{ order.created_at|date:"Y-m-d" }}</td>
+                                        <td>₱{{ order.total_amount|floatformat:2 }}</td>
+                                        <td>{{ order.payment_method|title }}</td>
+                                        <td>
+                                            {% if order.status in "completed,delivered,cancelled" %}
+                                                <span class="status {{ order.status }}">{{ order.status|title }}</span>
+                                            {% else %}
+                                                <div class="status-dropdown">
+                                                    <button class="status {{ order.status }}">{{ order.status|title }}</button>
+                                                    <ul class="status-options">
+                                                        {% if order.status == "pending" %}
+                                                            <li data-action="processing">Processing</li>
+                                                            <li data-action="cancelled">Cancel</li>
+                                                        {% elif order.status == "processing" %}
+                                                            <li data-action="shipped">Shipped</li>
+                                                        {% elif order.status == "shipped" %}
+                                                            <li data-action="delivered">Delivered</li>
+                                                        {% endif %}
+                                                    </ul>
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="no-orders">No orders found.</td>
+                                    </tr>
+                                    {% endfor %}
                                 </tbody>
+
                             </table>
                         </div>
     
                     </div>
 
-                    <!---->
+                    <!--Orders Modal-->
+                    <div id="product-display-modal" class="modal hidden">
+
+
+                        
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    
                 </div>
 
 
@@ -1876,13 +1830,310 @@
         });
     </script>
 
-    
+        <script>
+    <!--Filtering Products-->/* --- Admin Dashboard: product search/filter/sort script ---
+    PLACEMENT: Put this <script> before the closing </body> in
+    adminpanel/templates/adminpanel/admin_dashboard.html
+    WHAT: Implements client-side search (by id/name/category/description),
+    Filter (stock and category), and Sort (id/name/price/stock).
+    Uses rows with class "product-row" and their data-* attributes.
+    */
+
+    /* Utility: create a small popup menu element (used for filter + sort) */
+    function createPopupMenu() {
+    const menu = document.createElement('div');
+    menu.className = 'adb-popup-menu';
+    // Minimal inline styles so no CSS file change required
+    menu.style.position = 'absolute';
+    menu.style.background = '#fff';
+    menu.style.border = '1px solid rgba(0,0,0,0.12)';
+    menu.style.boxShadow = '0 6px 18px rgba(0,0,0,0.08)';
+    menu.style.padding = '6px';
+    menu.style.zIndex = 9999;
+    menu.style.minWidth = '180px';
+    menu.style.fontSize = '14px';
+    menu.style.borderRadius = '6px';
+    menu.style.display = 'none';
+    menu.style.maxHeight = '240px';
+    menu.style.overflow = 'auto';
+    return menu;
+    }
+
+    /* Normalize string for case-insensitive compares */
+    function norm(text) {
+    return ('' + (text || '')).toLowerCase();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+    // Core DOM elements used by the feature
+    const searchInput = document.getElementById('adminProductSearchInput');
+    const productRows = () => Array.from(document.querySelectorAll('tr.product-row'));
+    const productsTBody = document.querySelector('table.admin-products-table tbody');
+
+    // Buttons by aria-label (matches template icons)
+    const filterButton = document.querySelector('button[aria-label="Filter Products"]');
+    const sortButton = document.querySelector('button[aria-label="Sort Products"]');
+
+    // Popup menus (persistent DOM nodes)
+    const filterMenu = createPopupMenu();
+    const sortMenu = createPopupMenu();
+    document.body.appendChild(filterMenu);
+    document.body.appendChild(sortMenu);
+
+    // Active state
+    let activeFilter = { type: 'all', value: '' }; // 'all' | 'stock' | 'category'
+    let activeSort = { key: null, dir: 1 }; // key: 'id'|'name'|'price'|'stock'
+
+    /* ---------- Search handler ----------
+        Listens to #adminProductSearchInput and re-applies filtering.
+    */
+    if (searchInput) {
+        searchInput.addEventListener('input', function (ev) {
+        const q = norm(ev.target.value.trim());
+        applyFiltersAndSearch(q);
+        });
+        searchInput.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape') {
+            searchInput.value = '';
+            applyFiltersAndSearch('');
+        }
+        });
+    }
+
+    /* ---------- Filter menu builder ----------
+        Dynamically builds options:
+        - Show all
+        - Stock status options (In Stock, Low Stock, Out of Stock, Pre-order)
+        - Categories discovered from product rows
+    */
+    function buildFilterMenu() {
+        filterMenu.innerHTML = '';
+
+        // All products entry
+        const allBtn = document.createElement('div');
+        allBtn.textContent = 'Show all products';
+        allBtn.style.padding = '8px';
+        allBtn.style.cursor = 'pointer';
+        allBtn.dataset.filterType = 'all';
+        allBtn.addEventListener('click', () => {
+        activeFilter = { type: 'all', value: '' };
+        filterMenu.style.display = 'none';
+        applyFiltersAndSearch(searchInput ? norm(searchInput.value) : '');
+        });
+        filterMenu.appendChild(allBtn);
+
+        filterMenu.appendChild(Object.assign(document.createElement('hr'), { style: 'margin:6px 0' }));
+
+        // Stock statuses
+        const stockHeader = document.createElement('div');
+        stockHeader.textContent = 'Stock status';
+        stockHeader.style.fontWeight = '600';
+        stockHeader.style.margin = '6px 0 4px';
+        filterMenu.appendChild(stockHeader);
+
+        const stockOptions = ['In Stock', 'Low Stock', 'Out of Stock', 'Pre-order'];
+        stockOptions.forEach(opt => {
+        const d = document.createElement('div');
+        d.textContent = opt;
+        d.style.padding = '6px';
+        d.style.cursor = 'pointer';
+        d.dataset.filterType = 'stock';
+        d.dataset.filterValue = opt;
+        d.addEventListener('click', () => {
+            activeFilter = { type: 'stock', value: opt };
+            filterMenu.style.display = 'none';
+            applyFiltersAndSearch(searchInput ? norm(searchInput.value) : '');
+        });
+        filterMenu.appendChild(d);
+        });
+
+        filterMenu.appendChild(Object.assign(document.createElement('hr'), { style: 'margin:6px 0' }));
+
+        // Categories discovered from rows
+        const catHeader = document.createElement('div');
+        catHeader.textContent = 'Category';
+        catHeader.style.fontWeight = '600';
+        catHeader.style.margin = '6px 0 4px';
+        filterMenu.appendChild(catHeader);
+
+        const cats = new Set();
+        productRows().forEach(r => {
+        const cat = (r.dataset.category || '').trim();
+        if (cat) cats.add(cat);
+        });
+
+        if (cats.size === 0) {
+        const none = document.createElement('div');
+        none.textContent = 'No categories';
+        none.style.padding = '6px';
+        none.style.color = '#666';
+        filterMenu.appendChild(none);
+        } else {
+        Array.from(cats).sort().forEach(cat => {
+            const d = document.createElement('div');
+            d.textContent = cat;
+            d.style.padding = '6px';
+            d.style.cursor = 'pointer';
+            d.dataset.filterType = 'category';
+            d.dataset.filterValue = cat;
+            d.addEventListener('click', () => {
+            activeFilter = { type: 'category', value: cat };
+            filterMenu.style.display = 'none';
+            applyFiltersAndSearch(searchInput ? norm(searchInput.value) : '');
+            });
+            filterMenu.appendChild(d);
+        });
+        }
+    }
+
+    /* ---------- Sort menu builder ----------
+        Options include ID, Name, Price, Stock (asc/desc).
+    */
+    function buildSortMenu() {
+        sortMenu.innerHTML = '';
+
+        const opts = [
+        { label: 'ID ↑', key: 'id', dir: 1 },
+        { label: 'ID ↓', key: 'id', dir: -1 },
+        { label: 'Name A→Z', key: 'name', dir: 1 },
+        { label: 'Name Z→A', key: 'name', dir: -1 },
+        { label: 'Price ↑', key: 'price', dir: 1 },
+        { label: 'Price ↓', key: 'price', dir: -1 },
+        { label: 'Stock ↑', key: 'stock', dir: 1 },
+        { label: 'Stock ↓', key: 'stock', dir: -1 }
+        ];
+
+        opts.forEach(o => {
+        const d = document.createElement('div');
+        d.textContent = o.label;
+        d.style.padding = '6px';
+        d.style.cursor = 'pointer';
+        d.addEventListener('click', () => {
+            activeSort = { key: o.key, dir: o.dir };
+            sortMenu.style.display = 'none';
+            applySort();
+        });
+        sortMenu.appendChild(d);
+        });
+    }
+
+    /* ---------- Apply filters & search ----------
+        Hides rows that do not match the search and filter criteria.
+        Search fields: id, name, category, description.
+    */
+    function applyFiltersAndSearch(query) {
+        const q = norm(query || '');
+        productRows().forEach(row => {
+        const id = norm(row.dataset.id || row.querySelector('td')?.textContent || '');
+        const name = norm(row.dataset.name || '');
+        const cat = norm(row.dataset.category || '');
+        const desc = norm(row.dataset.description || '');
+        const stockStatus = norm(row.dataset.stockStatus || row.dataset.stockstatus || row.dataset['stockStatus'] || row.dataset.stock || '');
+
+        const matchesSearch = (!q) || id.includes(q) || name.includes(q) || cat.includes(q) || desc.includes(q);
+
+        let matchesFilter = true;
+        if (activeFilter.type === 'stock') {
+            matchesFilter = stockStatus.includes(norm(activeFilter.value)) || norm(activeFilter.value).includes(stockStatus);
+        } else if (activeFilter.type === 'category') {
+            matchesFilter = cat === norm(activeFilter.value);
+        }
+
+        row.style.display = (matchesSearch && matchesFilter) ? '' : 'none';
+        });
+
+        // keep sorting after filtering
+        applySort();
+    }
+
+    /* ---------- Sorting implementation ----------
+        Sorts visible rows by the selected key.
+    */
+    function applySort() {
+        if (!activeSort.key) return;
+        const rows = productRows().filter(r => r.style.display !== 'none');
+
+        function valueFor(row, key) {
+        if (key === 'id') {
+            const raw = row.dataset.id || '';
+            const numeric = parseFloat((raw + '').replace(/[^\d.-]+/g, ''));
+            return isFinite(numeric) ? numeric : norm(raw);
+        }
+        if (key === 'name') return norm(row.dataset.name || row.querySelector('td:nth-child(2)')?.textContent || '');
+        if (key === 'price') {
+            const p = row.dataset.price;
+            const n = parseFloat((p || '').toString().replace(/[^0-9.-]+/g, ''));
+            return isFinite(n) ? n : 0;
+        }
+        if (key === 'stock') {
+            const s = row.dataset.stock;
+            const n = parseFloat((s || '').toString().replace(/[^0-9.-]+/g, ''));
+            return isFinite(n) ? n : 0;
+        }
+        return norm(row.dataset[key] || '');
+        }
+
+        rows.sort((a, b) => {
+        const va = valueFor(a, activeSort.key);
+        const vb = valueFor(b, activeSort.key);
+        if (typeof va === 'number' && typeof vb === 'number') return (va - vb) * activeSort.dir;
+        return String(va).localeCompare(String(vb)) * activeSort.dir;
+        });
+
+        // Re-append sorted rows to the tbody (this moves them to the new order).
+        rows.forEach(r => productsTBody.appendChild(r));
+    }
+
+    /* ---------- Popup positioning helper ---------- */
+    function positionMenuRelativeToButton(menu, button) {
+        const rect = button.getBoundingClientRect();
+        menu.style.left = (window.scrollX + rect.left) + 'px';
+        menu.style.top = (window.scrollY + rect.bottom + 6) + 'px';
+        menu.style.display = 'block';
+    }
+
+    /* ---------- Wire up button clicks ---------- */
+    if (filterButton) {
+        buildFilterMenu();
+        filterButton.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if (filterMenu.style.display === 'block') {
+            filterMenu.style.display = 'none';
+        } else {
+            buildFilterMenu();
+            positionMenuRelativeToButton(filterMenu, filterButton);
+        }
+        sortMenu.style.display = 'none';
+        });
+    }
+
+    if (sortButton) {
+        buildSortMenu();
+        sortButton.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if (sortMenu.style.display === 'block') {
+            sortMenu.style.display = 'none';
+        } else {
+            buildSortMenu();
+            positionMenuRelativeToButton(sortMenu, sortButton);
+        }
+        filterMenu.style.display = 'none';
+        });
+    }
+
+    // Close menus when clicking outside
+    document.addEventListener('click', () => {
+        filterMenu.style.display = 'none';
+        sortMenu.style.display = 'none';
+    });
+    filterMenu.addEventListener('click', (e) => e.stopPropagation());
+    sortMenu.addEventListener('click', (e) => e.stopPropagation());
+
+    // Initial apply (in case there's a value in the search input already)
+    applyFiltersAndSearch(searchInput ? norm(searchInput.value) : '');
+    });
+    </script>
 
 
-
-
-
-
-
-</body>
-</html>
+    </body>
+    </html>
