@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="number-cards-timeline">
-                    <span>Last 7 days</span>
+                    <span>Last 30 days</span>
                 </div>
 
                 <div class="number-cards-sales-current">
@@ -105,31 +105,41 @@
                 </div>
 
                 <div class="number-cards-timeline">
-                    <span>Last 7 days</span>
+                    <span>Last 30 days</span>
                 </div>
 
                 <div class="number-cards-orders-current">
-                    <h1>0</h1>
+                    <h1>{{ current_orders_count }}</h1>
                     <span id="current-orders">Orders</span>
 
                     <div class="orders-current-group">
-
-                        <div class="orders-current-up-group">
-                            <!-- Up case -->
-                            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione-monotone" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M32 2C15.432 2 2 15.432 2 32s13.432 30 30 30s30-13.432 30-30S48.568 2 32 2zm5.143 28.305V49H26.857V30.305H16L32 15l16 15.305H37.143z" fill="#5c842d"></path></g></svg>
-                            <span class="orders-status-up">10.4%</span>
-                        </div>
-                        
-                        <div class="orders-current-down-group">
-                            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione-monotone" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M32 2C15.432 2 2 15.432 2 32s13.432 30 30 30s30-13.432 30-30S48.568 2 32 2zm0 47L16 33.695h10.857V15h10.285v18.695H48L32 49z" fill="#842d2d"></path></g></svg>
-                            <span class="orders-status-down">3.2%</span>
-                        </div>
-                        
+                        {% if orders_change_percent_raw > 0 %}
+                            <!-- Show UP group only when percentage is positive -->
+                            <div class="orders-current-up-group">
+                                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet" fill="#000000">
+                                    <path d="M32 2C15.432 2 2 15.432 2 32s13.432 30 30 30 30-13.432 30-30S48.568 2 32 2zm5.143 28.305V49H26.857V30.305H16L32 15l16 15.305H37.143z" fill="#5c842d"></path>
+                                </svg>
+                                <span class="orders-status-up">{{ orders_change_percent_up }}%</span>
+                            </div>
+                        {% elif orders_change_percent_raw < 0 %}
+                            <!-- Show DOWN group only when percentage is negative -->
+                            <div class="orders-current-down-group">
+                                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet" fill="#000000">
+                                    <path d="M32 2C15.432 2 2 15.432 2 32s13.432 30 30 30 30-13.432 30-30S48.568 2 32 2zm0 47L16 33.695h10.857V15h10.285v18.695H48L32 49z" fill="#842d2d"></path>
+                                </svg>
+                                <span class="orders-status-down">{{ orders_change_percent_down }}%</span>
+                            </div>
+                        {% else %}
+                            <!-- Show when no change (0%) -->
+                            <div class="orders-current-neutral-group">
+                                <span class="orders-status-neutral">0%</span>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 
                 <div class="number-cards-orders-previous">
-                    <span>Previous 7 days (0)</span>
+                    <span>Previous 30 days ({{ previous_orders_count }})</span>
                 </div>
                 
             </div>
@@ -159,7 +169,7 @@
                 </div>
 
                 <div class="number-cards-timeline">
-                    <span>Last 7 days</span>
+                    <span>Last 30 days</span>
                 </div>
                 
 
@@ -169,30 +179,29 @@
                     <div class="current-pending-group">
                         <h3>Pending</h3>
                         <div class="current-pending-group-numbers">
-                            <h1>509</h1>
+                            <h1>{{ pending_orders_count }}</h1>
                             <div class="current-pending-group-numbers-spans">
                                 <span class="pending-orders-label">Users</span>
-                                <span class="pending-orders-num">204</span>
+                                <span class="pending-orders-num">{{ pending_orders_users_count }}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="vertical-divider">
-
-                    </div>
+                    <div class="vertical-divider"></div>
 
                     <div class="current-cancelled-group">
                         <h3>Cancelled</h3>
                         <div class="current-cancelled-group-numbers">
-                            <h1>94</h1>
+                            <h1>{{ cancelled_orders_count }}</h1>
                             <div class="current-cancelled-group-numbers-spans">
-                                
+
                                 <div class="cancelled-current-down-group">
-                                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione-monotone" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M32 2C15.432 2 2 15.432 2 32s13.432 30 30 30s30-13.432 30-30S48.568 2 32 2zm0 47L16 33.695h10.857V15h10.285v18.695H48L32 49z" fill="#842d2d"></path></g></svg>
-                                    <span class="orders-status-down">3.2%</span>
+                                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" class="iconify iconify--emojione-monotone" preserveAspectRatio="xMidYMid meet" fill="#000000">
+                                        <path d="M32 2C15.432 2 2 15.432 2 32s13.432 30 30 30s30-13.432 30-30S48.568 2 32 2zm0 47L16 33.695h10.857V15h10.285v18.695H48L32 49z" fill="#842d2d"></path>
+                                    </svg>
+                                    <span class="orders-status-down">{{ cancelled_change_percent_down }}%</span>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 

@@ -196,23 +196,104 @@ def export_pdf(request):
 @login_required
 @user_passes_test(staff_required, login_url='main:home')
 def dashboard_view(request):
-    """Displays the main admin dashboard with categories and products."""
-    categories = get_categories()
+    """Displays the main admin dashboard with categories, products, and order stats."""
+
+    # -----------------------------
+    # Categories & Products
+    # -----------------------------
+    categories = Category.objects.all()
     products = Product.objects.select_related("category").all().order_by("id")
 
-    # ✅ Low stock = any product with less than 20 units in stock
+    # Low stock products
     low_stock_products = products.filter(stock__lt=20).order_by("stock")
 
+    # -----------------------------
+    # Pending & Cancelled Orders (Last 30 days)
+    # -----------------------------
+    now = timezone.now()
+    thirty_days_ago = now - timedelta(days=30)
+    sixty_days_ago = now - timedelta(days=60)
+
+    # Pending orders (last 30 days)
+    pending_orders_count = Order.objects.filter(status="pending", created_at__gte=thirty_days_ago).count()
+    pending_orders_users_count = Order.objects.filter(status="pending", created_at__gte=thirty_days_ago).values("user").distinct().count()
+    
+    # Cancelled orders (last 30 days vs previous 30 days)
+    current_cancelled_orders_count = Order.objects.filter(status="cancelled", created_at__gte=thirty_days_ago).count()
+    previous_cancelled_orders_count = Order.objects.filter(
+        status="cancelled",
+        created_at__gte=sixty_days_ago,
+        created_at__lt=thirty_days_ago
+    ).count()
+
+    # Calculate cancelled orders % change - FIXED LOGIC
+    cancelled_change_percent = 0
+    if previous_cancelled_orders_count > 0:
+        cancelled_change_percent = round(
+            ((current_cancelled_orders_count - previous_cancelled_orders_count) / previous_cancelled_orders_count) * 100, 1
+        )
+    elif current_cancelled_orders_count > 0:
+        cancelled_change_percent = 100.0
+
+    # FIXED: Always show the actual percentage value (positive or negative)
+    cancelled_change_percent_up = cancelled_change_percent if cancelled_change_percent > 0 else 0
+    cancelled_change_percent_down = abs(cancelled_change_percent) if cancelled_change_percent < 0 else 0
+
+    # -----------------------------
+    # Total Orders (Last 30 days vs Previous 30 days) - FIXED
+    # -----------------------------
+    # Current 30-day period
+    current_orders_count = Order.objects.filter(created_at__gte=thirty_days_ago).count()
+
+    # Previous 30-day period
+    previous_orders_count = Order.objects.filter(
+        created_at__gte=sixty_days_ago,
+        created_at__lt=thirty_days_ago
+    ).count()
+
+    # Calculate % change - FIXED: Handle case when both are 0
+    orders_change_percent = 0
+    if previous_orders_count > 0:
+        orders_change_percent = round(
+            ((current_orders_count - previous_orders_count) / previous_orders_count) * 100, 1
+        )
+    elif current_orders_count > 0:
+        orders_change_percent = 100.0  # new orders this period
+    # If both are 0, orders_change_percent remains 0
+
+    # FIXED: Show actual values - if percentage is positive, show in up; if negative, show in down
+    orders_change_percent_up = orders_change_percent if orders_change_percent > 0 else 0
+    orders_change_percent_down = abs(orders_change_percent) if orders_change_percent < 0 else 0
+
+    # -----------------------------
+    # Context
+    # -----------------------------
     context = {
         "title": "Dashboard",
         "categories": categories,
         "products": products,
         "low_stock_products": low_stock_products,
+
+        # Pending & Cancelled Orders (last 30 days)
+        "pending_orders_count": pending_orders_count,
+        "pending_orders_users_count": pending_orders_users_count,
+        "cancelled_orders_count": current_cancelled_orders_count,
+        
+        # Cancelled orders change
+        "cancelled_change_percent_up": cancelled_change_percent_up,
+        "cancelled_change_percent_down": cancelled_change_percent_down,
+
+        # Total Orders
+        "current_orders_count": current_orders_count,
+        "previous_orders_count": previous_orders_count,
+        "orders_change_percent_up": orders_change_percent_up,
+        "orders_change_percent_down": orders_change_percent_down,
+        
+        # DEBUG: Add the raw percentage for troubleshooting
+        "orders_change_percent_raw": orders_change_percent,
     }
 
     return render(request, "adminpanel/main/dashboard.html", context)
-
-
 
 
 
