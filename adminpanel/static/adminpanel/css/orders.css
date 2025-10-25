@@ -562,53 +562,350 @@ body {
 
 
 /* === Orders Detail Modal === */
-/* Modal */
+.order-header {
+    display: flex;
+    flex-direction: column; /* stacks the spans vertically */
+    gap: 8px; /* space between each span */
+    margin-bottom: 15px; /* optional: adds space below the whole section */
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    margin-bottom: 25px;
+}
+
+
+.order-customer-information {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* spacing between info items */
+    margin-bottom: 20px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    margin-top: 30px;
+}
+
+.order-customer-information h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column; /* stack label and value */
+    gap: 4px; /* space between label and value */
+    font-size: 16px;
+    max-width: 350px; /* limit how wide each info item can go */
+    word-wrap: break-word; /* break long words if needed */
+    overflow-wrap: break-word; /* ensures wrapping for modern browsers */
+    white-space: normal; /* allows text to wrap naturally */
+}
+
+.info-item label {
+    font-weight: 500;
+    color: #333;
+}
+
+.info-item span {
+    font-weight: 300;
+    color: #555;
+    line-height: 1.4; /* improves readability for multi-line text */
+}
+
+
+
+/* === Base Modal Styling (Reusable for all modals) === */
+
+.hidden {
+  display: none;
+}
+
 .modal {
   position: fixed;
-  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.4); /* backdrop effect */
+  background: rgba(0,0,0,0.4);
   opacity: 0;
+  visibility: hidden;
   transition: opacity 0.3s ease;
   z-index: 1000;
 }
 
-/* Show state */
 .modal.show {
   opacity: 1;
   visibility: visible;
 }
 
-/* The actual modal box */
 .modal-content {
   background: #fefeff;
   padding: 2rem;
   border-radius: 10px;
-  width: 400px; /* you can set width here */
+  width: 400px;
   max-width: 90%;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
   transform: translateY(-30px) scale(0.95);
   opacity: 0;
   transition: all 0.3s ease;
-
-    max-height: 90vh;   /* don’t let modal exceed 90% of viewport height */
-    overflow-y: auto;   /* vertical scrollbar if needed */
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-/* Animate in when parent is shown */
 .modal.show .modal-content {
   transform: translateY(0) scale(1);
   opacity: 1;
 }
 
-
 .order-detail-modal-content {
-  width: 1200px;     /* your chosen modal width */
-  max-width: 95%;    /* keep responsive */
+  width: 800px;
+  max-width: 95%;
   padding: 2rem;
   box-sizing: border-box;
 }
 
+#orders-detail-modal h2 {
+  font-size: 22px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+  margin-bottom: 25px;
+}
 
+/* Hover effect for table rows */
+.admin-orders-table tbody tr.order-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+
+.admin-orders-table tbody tr td {
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.admin-orders-table tbody tr:hover td {
+  background-color: #f0f0f0 !important;
+}
+
+
+
+/* ======================
+   ORDERS TABLE STYLING
+====================== */
+
+.order-table-products{
+  margin-bottom: 25px;
+}
+
+.table-container {
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.admin-products-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Header */
+.admin-products-table th {
+  background-color: #f5f5f5;
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  padding: 15px;
+  text-align: left;
+}
+
+/* Body */
+.admin-products-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+}
+
+/* Rounded header corners */
+.admin-products-table th:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.admin-products-table th:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Rounded last row corners */
+.admin-products-table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+.admin-products-table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+/* Hover effect */
+.admin-products-table tbody tr:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+
+.order-summary-section{
+  margin-bottom: 25px;
+}
+
+
+.summary-row{
+    display: flex;
+    justify-content: space-between;
+    margin: 0.4rem 0;
+    padding: 6px 0px 0px;
+
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+#divider1{
+    border-bottom: 1px solid #d5d5d4;
+    margin-bottom: 10px;
+}
+
+.payment-method {
+    margin-bottom: 20px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.payment-method h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: rgb(51, 51, 51)
+}
+
+.payment-method #payment-method-info {
+    display: block; /* ensures it appears below the h3 */
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    color: #333;
+    margin-top: 4px; /* optional spacing between h3 and span */
+}
+
+.order-status-section {
+    display: flex;
+    flex-direction: row; /* side by side */
+    align-items: center; /* vertically center label and dropdown */
+    gap: 12px; /* space between label and select */
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: 16px;
+    font-weight: 300;
+    margin-top: 20px;
+}
+
+.order-status-section label {
+    font-weight: 500; /* label slightly bolder */
+    color: rgb(51, 51, 51);
+    white-space: nowrap; /* prevents label from wrapping */
+}
+
+.order-status-section select {
+    width: 200px; /* fixed width */
+    padding: 6px 10px;
+    font-family: "Lexend", sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    cursor: pointer;
+    appearance: none;
+}
+
+.order-status-section select:focus {
+    outline: none;
+    border-color: #666;
+    box-shadow: 0 0 3px rgba(0,0,0,0.2);
+}
+
+
+.order-status-section select:focus {
+    outline: none;
+    border-color: #666;
+    box-shadow: 0 0 3px rgba(0,0,0,0.2);
+}
+
+#order-status-select {
+    font-family: "Lexend", sans-serif;
+    font-weight: 300; /* affects selected value */
+    font-size: 16px;
+}
+#order-status-select option {
+    font-family: "Lexend", sans-serif;
+    font-weight: 300; /* may work in some browsers, but not guaranteed */
+}
+
+.order-modal-action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+#edit-order-modal,
+#save-order-modal,
+#close-order-modal {
+    flex: 0 0 auto; /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin-top: 10px;
+}
+
+/* Edit and Save buttons */
+#edit-order-modal,
+#save-order-modal {
+    background: #5c8b25; 
+}
+#edit-order-modal:hover,
+#save-order-modal:hover {
+    background: #325a00;
+}
+
+/* Close button */
+#close-order-modal {
+    background: #e0e0e0;   
+    color: #333;           /* dark text */
+}
+#close-order-modal:hover {
+    background: #c0c0c0;  
+}

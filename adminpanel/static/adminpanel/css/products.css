@@ -478,6 +478,7 @@ body {
 
 
 
+
 /* Modal */
 .modal {
   position: fixed;
@@ -952,10 +953,6 @@ label{
 }
 
 
-
-
-
-
 .product-modal-action-buttons{
     display: flex;
     gap: 10px;
@@ -1005,3 +1002,4 @@ label{
 }
 
 /*=== End of Products Section ===*/
+

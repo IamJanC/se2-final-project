@@ -279,24 +279,137 @@
     
                     </div>
 
-    
+
+                    <!--Orders Modal-->
+                    <div id="orders-detail-modal" class="modal hidden">
+                        <div class="modal-content order-detail-modal-content">
+                            <h2>Order Details</h2>
+                            
+                            <div class="order-header">
+                                <span id="modal-order-id">Order ID: #ORD-12345</span>
+                                <span id="modal-order-date">Date: 2024-01-01</span>
+                            </div>
+
+                            <div class="order-status-section">
+                                <label for="order-status-select">Order Status</label>
+                                <select id="order-status-select">
+                                    <option value="pending">Pending</option>
+                                    <option value="processing">Processing</option>
+                                    <option value="shipped">Shipped</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+
+                            <div class="order-customer-information">
+
+                                <div class="info-item">
+                                    <label>Customer Name</label>
+                                    <span>Jan Cruzado</span>
+                                </div>
+
+                                <div class="info-item">
+                                    <label>Customer Email</label>
+                                    <span>randomemail@email.com</span>
+                                </div>
+
+                                <div class="info-item">
+                                    <label>Customer Contact</label>
+                                    <span>09123456789</span>
+                                </div>
+
+                                <div class="info-item">
+                                    <label>Order Address</label>
+                                    <span>175, Dahlia Street, Dalig, Antipolo, Rizal 1870 Near intersection road</span>
+                                </div>
+                            </div>
+
+                            <div class="payment-method">
+                                <h3>Payment Method</h3>
+                                <span id="payment-method-info">Cash on Delivery</span>
+                            </div>
 
 
+                            <div class="order-table-products">
+                                <div class="table-container">
+                                    <table class="admin-products-table">
+                                    <thead>
+                                        <tr>
+                                        <th>Product Name</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Price</th>
+                                        <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                        <td>Organic Fertilizer</td>
+                                        <td>5</td>
+                                        <td>₱200</td>
+                                        <td>₱1,000</td>
+                                        </tr>
+                                        <tr>
+                                        <td>Hybrid Rice Seeds</td>
+                                        <td>3</td>
+                                        <td>₱350</td>
+                                        <td>₱1,050</td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            
+                            <div class="order-summary-section">
+
+                                <div class="order-summary">
+                                    <div class="summary-row">
+                                        <span>Item(s) Total</span>
+                                        <span>PHP 1,200.00</span>
+                                    </div>
+
+                                    <div class="summary-row">
+                                        <span>Shop Discount</span>
+                                        <span>PHP 100.00</span>
+                                    </div>
+
+                                     <div class="summary-row" class="divider" id="divider1"></div>
+
+                                    <div class="summary-row">
+                                        <span>Subtotal</span>
+                                        <span>PHP 1,100.00</span>
+                                    </div>
+
+                                    <div class="summary-row">
+                                        <span>Shipping Fee</span>
+                                        <span>PHP 80.00</span>
+                                    </div>
+
+                                    <div class="divider"></div>
+
+                                    <div class="summary-row total">
+                                        <span>Total (2 items)</span>
+                                        <span><strong>PHP 1,180.00</strong></span>
+                                    </div>
+                                </div>                              
+                            </div>
+
+                            <div class="order-modal-action-buttons">
+                                <button id="edit-order-modal" class="save-btn">Edit</button>
+                                <button type="submit" id="save-order-modal" class="save-btn">Save</button>
+                                <button id="close-order-modal" class="close-btn">Cancel</button>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                   
                     
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
+            </div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -651,25 +764,42 @@ function initializeFilterButtons() {
 </script>
 
 
-<!-- Script for opening a modal after clicking table rows -->
- <script>
-    document.addEventListener("DOMContentLoaded", () => {
-    const orderRows = document.querySelectorAll(".order-row");
+<!-- Script for opening a modal after clicking table rows & closes it after clicking the cancel button -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const rows = document.querySelectorAll(".order-row");
     const modal = document.getElementById("orders-detail-modal");
+    const closeBtn = document.getElementById("close-order-modal");
 
-    // When clicking any order row, show modal
-    orderRows.forEach(row => {
-        row.addEventListener("click", () => {
+    // Function to open modal
+    const openModal = () => {
+        modal.classList.remove("hidden");
         modal.classList.add("show");
-        });
+    }
+
+    // Function to close modal
+    const closeModal = () => {
+        modal.classList.remove("show");
+        modal.classList.add("hidden");
+    }
+
+    // Open modal on row click
+    rows.forEach(row => {
+        row.addEventListener("click", openModal);
     });
 
-    // Optional: close modal when clicking outside the content box
-    modal.addEventListener("click", (event) => {
-        if (event.target === modal) {
-        modal.classList.remove("show");
+    // Close modal on Cancel button click
+    closeBtn.addEventListener("click", closeModal);
+
+    // Close modal when clicking outside modal content
+    modal.addEventListener("click", e => {
+        if (e.target === modal) {
+            closeModal();
         }
     });
-    });
+});
 </script>
+
+
+
 {% endblock %}

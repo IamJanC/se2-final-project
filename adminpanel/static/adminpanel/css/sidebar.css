@@ -165,11 +165,6 @@ body {
   fill: #ffffff;
 }
 
-/* Hover effect for better feedback */
-.link-item:not(.active):hover .icon svg {
-  fill: #5f8431;
-}
-
 /* Show default (gray) icon when inactive */
 .link-item:not(.active) .default-icon {
   display: inline-block;
