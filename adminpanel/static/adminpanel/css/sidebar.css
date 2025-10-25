@@ -87,34 +87,43 @@ body {
 
 /* The <a> inside link-item */
 .link-item a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    color: #6a717f;
-    padding: 15px 20px;
-    font-family: "Lexend", sans-serif;
-    font-weight: 300;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  text-decoration: none;
+  color: #6a717f;
+  padding: 15px 20px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.2s, color 0.2s;
 }
+
 
 /* Icon sizing */
 .link-item .icon svg {
     width: auto;
     height: 25px;
     flex-shrink: 0;
+    fill: #6a717f;
+    transition: fill 0.2s ease;
 }
 
 /* Show default/active icons */
 .link-item .default-icon {
-    display: inline-block;
+    display: none;
 }
 .link-item .active-icon {
     display: none;
 }
+
+.link-item .active-icon svg {
+    fill: #ffffff;
+}
+
 
 /* Active link-item */
 .link-item.active a {
@@ -134,11 +143,39 @@ body {
 }
 
 
-.link-item a {
-    color: #6a717f; /* default text color */
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* ensures text is aligned properly */
-    gap: 10px;
+.link-item:not(.active) a {
+  background-color: transparent;
+  color: #6a717f;
 }
 
+.link-item:not(.active) a svg {
+  fill: #6a717f;
+}
+
+/* === ICON COLOR FIXES === */
+
+/* Default (inactive) icons */
+.link-item .icon svg {
+  fill: #6a717f;
+  transition: fill 0.2s ease;
+}
+
+/* Active icons (when link-item is active) */
+.link-item.active .icon svg {
+  fill: #ffffff;
+}
+
+/* Hover effect for better feedback */
+.link-item:not(.active):hover .icon svg {
+  fill: #5f8431;
+}
+
+/* Show default (gray) icon when inactive */
+.link-item:not(.active) .default-icon {
+  display: inline-block;
+}
+
+/* Show white icon only when active */
+.link-item.active .active-icon {
+  display: inline-block;
+}
