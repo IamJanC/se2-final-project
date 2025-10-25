@@ -194,16 +194,15 @@
                             </div>
 
 
-                           <div class="order-display-actions">
-
+                            <div class="order-display-actions">
                                 <!-- Orders Table Search -->
-                                <form class="admin-order-search-bar" autocomplete="off"> 
+                                <form class="admin-order-search-bar" autocomplete="off" onsubmit="return false;"> 
                                     <input class="admin-order-search__input" type="text" placeholder="Search orders" maxlength="30" id="adminOrderSearchInput"> 
                                 </form>
 
                                 <!-- Order Filter Button -->
-                                <button class="btn-order-icon" aria-label="Filter Orders">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <button class="btn-order-icon" id="filterOrdersBtn" aria-label="Filter Orders" type="button">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
                                         <path d="M4 7H20" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                         <path d="M7 12L17 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                         <path d="M11 17H13" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -211,8 +210,8 @@
                                 </button>
 
                                 <!-- Order Sort Button -->
-                                <button class="btn-order-icon" aria-label="Sort Orders">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <button class="btn-order-icon" id="sortOrdersBtn" aria-label="Sort Orders" type="button">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
                                         <path d="M11.1924 5.65685C11.5829 5.26633 11.5829 4.63316 11.1924 4.24264L8.36397 1.41421C8.30576 1.356 8.24485 1.30212 8.18165 1.25259C7.50286 0.720577 6.55947 0.689024 5.84929 1.15793C5.73839 1.23115 5.63317 1.31658 5.53554 1.41421L2.70711 4.24264C2.31658 4.63316 2.31658 5.26633 2.70711 5.65685C3.09763 6.04738 3.7308 6.04738 4.12132 5.65685L6.00003 3.77814V18C6.00003 18.5523 6.44775 19 7.00003 19C7.55232 19 8.00003 18.5523 8.00003 18V3.8787L9.77818 5.65685C10.1687 6.04737 10.8019 6.04737 11.1924 5.65685Z" fill="#0F0F0F"></path> 
                                         <path d="M12.7071 18.3432C12.3166 18.7337 12.3166 19.3668 12.7071 19.7574L15.5355 22.5858C15.6332 22.6834 15.7384 22.7689 15.8493 22.8421C16.6256 23.3546 17.6805 23.2692 18.364 22.5858L21.1924 19.7574C21.5829 19.3668 21.5829 18.7337 21.1924 18.3432C20.8019 17.9526 20.1687 17.9526 19.7782 18.3432L18 20.1213L18 6C18 5.44771 17.5523 5 17 5C16.4477 5 16 5.44771 16 6L16 20.2218L14.1213 18.3432C13.7308 17.9526 13.0976 17.9526 12.7071 18.3432Z" fill="#0F0F0F"></path> 
                                     </svg>
@@ -236,7 +235,10 @@
                                 </thead>
                                 <tbody>
                                     {% for order in orders %}
-                                    <tr>
+                                    <tr class="order-row"
+                                        data-order-id="ORD-{{ order.id }}"
+                                        data-date="{{ order.created_at|date:'Y-m-d' }}"
+                                        data-total-price="{{ order.total_amount }}">
                                         <td>#ORD-{{ order.id }}</td>
                                         <td>
                                             <div class="order-products-list">
@@ -270,20 +272,14 @@
                                             {% endif %}
                                         </td>
                                     </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="6" class="no-orders">No orders found.</td>
-                                    </tr>
                                     {% endfor %}
                                 </tbody>
-
                             </table>
                         </div>
     
                     </div>
 
-                    <!--Orders Modal-->
-                    <div id="product-display-modal" class="modal hidden">
+    
 
 
                     
@@ -302,4 +298,378 @@
 
 
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('Orders page loaded - initializing functionality');
+
+    // Global state
+    window.orderState = {
+        searchTerm: '',
+        filter: { type: 'all', value: '' },
+        sort: { key: null, dir: 1 }
+    };
+
+    initializeSearch();
+    initializeFilterButtons();
+    initializeStatusDropdowns();
+    initializePopupMenus();
+
+    console.log('All orders functionality initialized');
+});
+
+/* ------------------- SEARCH ------------------- */
+function initializeSearch() {
+    const searchInput = document.getElementById('adminOrderSearchInput');
+    if (!searchInput) {
+        console.error('Search input not found! Check the ID "adminOrderSearchInput"');
+        return;
+    }
+
+    searchInput.addEventListener('input', function (e) {
+        window.orderState.searchTerm = e.target.value.toLowerCase().trim();
+        updateVisibleOrders();
+    });
+
+    searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            searchInput.value = '';
+            window.orderState.searchTerm = '';
+            updateVisibleOrders();
+        }
+    });
+}
+
+/* ------------------- FILTER BUTTONS ------------------- */
+function initializeFilterButtons() {
+    const filterButtons = document.querySelectorAll('.btn-order-filter');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            const filterType = this.dataset.filter;
+            window.orderState.filter = { type: 'status', value: filterType };
+            updateVisibleOrders();
+        });
+    });
+}
+
+/* ------------------- STATUS DROPDOWNS ------------------- */
+function initializeStatusDropdowns() {
+    const statusDropdowns = document.querySelectorAll('.status-dropdown');
+    statusDropdowns.forEach(dropdown => {
+        const button = dropdown.querySelector('.status');
+        const options = dropdown.querySelector('.status-options');
+
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.querySelectorAll('.status-options').forEach(opt => {
+                if (opt !== options) opt.style.display = 'none';
+            });
+            options.style.display = options.style.display === 'block' ? 'none' : 'block';
+        });
+
+        options.querySelectorAll('li').forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const newStatus = this.dataset.action;
+                const row = this.closest('tr');
+                const orderId = row.dataset.orderId;
+                updateOrderStatus(orderId, newStatus, button);
+                options.style.display = 'none';
+            });
+        });
+    });
+
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.status-options').forEach(opt => opt.style.display = 'none');
+    });
+}
+
+/* ------------------- FILTER & SORT POPUPS ------------------- */
+function initializePopupMenus() {
+    const filterButton = document.getElementById('filterOrdersBtn');
+    const sortButton = document.getElementById('sortOrdersBtn');
+    if (!filterButton || !sortButton) {
+        console.error('Filter or Sort button not found!');
+        return;
+    }
+
+    const filterMenu = createPopupMenu('filter');
+    const sortMenu = createPopupMenu('sort');
+    document.body.appendChild(filterMenu);
+    document.body.appendChild(sortMenu);
+
+    buildFilterMenu(filterMenu);
+    buildSortMenu(sortMenu);
+
+    filterButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleMenu(filterMenu, filterButton);
+        sortMenu.style.display = 'none';
+    });
+
+    sortButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleMenu(sortMenu, sortButton);
+        filterMenu.style.display = 'none';
+    });
+
+    document.addEventListener('click', function () {
+        filterMenu.style.display = 'none';
+        sortMenu.style.display = 'none';
+    });
+}
+
+function createPopupMenu(type) {
+    const menu = document.createElement('div');
+    menu.className = `adb-popup-menu ${type}-menu`;
+    Object.assign(menu.style, {
+        position: 'absolute',
+        background: '#fff',
+        border: '1px solid rgba(0,0,0,0.12)',
+        boxShadow: '0 6px 18px rgba(0,0,0,0.08)',
+        padding: '6px',
+        zIndex: '9999',
+        minWidth: '180px',
+        fontSize: '14px',
+        borderRadius: '6px',
+        display: 'none'
+    });
+    return menu;
+}
+
+function toggleMenu(menu, button) {
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+    } else {
+        positionMenuRelativeToButton(menu, button);
+        menu.style.display = 'block';
+    }
+}
+
+function buildFilterMenu(menu) {
+    menu.innerHTML = '';
+
+    const allBtn = document.createElement('div');
+    allBtn.textContent = 'Show all orders';
+    stylizeMenuItem(allBtn, () => {
+        window.orderState.filter = { type: 'all', value: '' };
+        menu.style.display = 'none';
+        updateVisibleOrders();
+    });
+    menu.appendChild(allBtn);
+    menu.appendChild(createHr());
+
+    const dateHeader = document.createElement('div');
+    dateHeader.textContent = 'Filter by Date';
+    dateHeader.style.fontWeight = '600';
+    dateHeader.style.margin = '6px 0 4px';
+    dateHeader.style.padding = '0 8px';
+    menu.appendChild(dateHeader);
+
+    const dates = new Set();
+    document.querySelectorAll('tr.order-row').forEach(r => {
+        const date = (r.dataset.date || '').trim();
+        if (date) dates.add(date);
+    });
+
+    if (dates.size === 0) {
+        const none = document.createElement('div');
+        none.textContent = 'No dates available';
+        none.style.padding = '8px';
+        none.style.color = '#666';
+        menu.appendChild(none);
+    } else {
+        Array.from(dates).sort().reverse().forEach(date => {
+            const dateItem = document.createElement('div');
+            dateItem.textContent = date;
+            stylizeMenuItem(dateItem, () => {
+                window.orderState.filter = { type: 'date', value: date };
+                menu.style.display = 'none';
+                updateVisibleOrders();
+            });
+            menu.appendChild(dateItem);
+        });
+    }
+}
+
+function buildSortMenu(menu) {
+    menu.innerHTML = '';
+    const sortOptions = [
+        { label: 'Order ID ↑', key: 'id', dir: 1 },
+        { label: 'Order ID ↓', key: 'id', dir: -1 },
+        { label: 'Date: Newest → Oldest', key: 'date', dir: -1 },
+        { label: 'Date: Oldest → Newest', key: 'date', dir: 1 },
+        { label: 'Total Price ↑', key: 'total', dir: 1 },
+        { label: 'Total Price ↓', key: 'total', dir: -1 }
+    ];
+
+    sortOptions.forEach(option => {
+        const item = document.createElement('div');
+        item.textContent = option.label;
+        stylizeMenuItem(item, () => {
+            window.orderState.sort = { key: option.key, dir: option.dir };
+            menu.style.display = 'none';
+            updateVisibleOrders();
+        });
+        menu.appendChild(item);
+    });
+}
+
+function stylizeMenuItem(item, onClick) {
+    item.style.padding = '8px';
+    item.style.cursor = 'pointer';
+    item.style.borderRadius = '4px';
+    item.addEventListener('mouseenter', () => item.style.background = '#f5f5f5');
+    item.addEventListener('mouseleave', () => item.style.background = '');
+    item.addEventListener('click', onClick);
+}
+
+function createHr() {
+    const hr = document.createElement('hr');
+    hr.style.margin = '6px 0';
+    hr.style.border = 'none';
+    hr.style.borderTop = '1px solid #eee';
+    return hr;
+}
+
+function positionMenuRelativeToButton(menu, button) {
+    const rect = button.getBoundingClientRect();
+    menu.style.left = (window.scrollX + rect.left) + 'px';
+    menu.style.top = (window.scrollY + rect.bottom + 6) + 'px';
+}
+
+/* ------------------- UNIFIED UPDATE ------------------- */
+function updateVisibleOrders() {
+    const { searchTerm, filter, sort } = window.orderState;
+    const rows = Array.from(document.querySelectorAll('tr.order-row'));
+    let visibleRows = [];
+
+    rows.forEach(row => {
+        const orderId = norm(row.querySelector('td:first-child')?.textContent);
+        const products = norm(row.querySelector('.order-products-list')?.textContent);
+        const date = norm(row.dataset.date);
+        const total = norm(row.dataset.totalPrice);
+        const status = norm(row.querySelector('.status')?.textContent);
+
+        let visible = true;
+
+        // Search
+        if (searchTerm) {
+            visible = orderId.includes(searchTerm) || products.includes(searchTerm) || date.includes(searchTerm) || total.includes(searchTerm);
+        }
+
+        // Filter
+        if (visible && filter.type === 'date') {
+            visible = date === norm(filter.value);
+        } else if (visible && filter.type === 'status') {
+            visible = status.includes(filter.value);
+        }
+
+        row.style.display = visible ? '' : 'none';
+        if (visible) visibleRows.push(row);
+    });
+
+    // Sort
+    if (sort.key) {
+        const tbody = rows[0]?.closest('tbody');
+        if (tbody) {
+            visibleRows.sort((a, b) => {
+                const getVal = (r) => {
+                    switch (sort.key) {
+                        case 'id': return parseInt(r.querySelector('td:first-child')?.textContent) || 0;
+                        case 'date': return new Date(r.dataset.date);
+                        case 'total': return parseFloat(r.dataset.totalPrice) || 0;
+                    }
+                };
+                const valA = getVal(a), valB = getVal(b);
+                return (valA > valB ? 1 : -1) * sort.dir;
+            });
+            visibleRows.forEach(r => tbody.appendChild(r));
+        }
+    }
+
+    // No results message
+    let noMsg = document.getElementById('noOrdersMessage');
+    if (!noMsg) {
+        noMsg = document.createElement('tr');
+        noMsg.id = 'noOrdersMessage';
+        noMsg.innerHTML = `<td colspan="6" style="text-align:center; padding:20px; color:#666;">No orders found</td>`;
+        document.querySelector('table tbody')?.appendChild(noMsg);
+    }
+    noMsg.style.display = visibleRows.length === 0 ? '' : 'none';
+
+    console.log(`Visible orders: ${visibleRows.length}`);
+}
+
+/* ------------------- HELPERS ------------------- */
+function updateOrderStatus(orderId, newStatus, statusButton) {
+    statusButton.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+    statusButton.className = 'status ' + newStatus;
+    showNotification(`Order ${orderId} status updated to ${newStatus}`, 'success');
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    Object.assign(notification.style, {
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        padding: '12px 20px',
+        background: type === 'success' ? '#4CAF50' : '#2196F3',
+        color: 'white',
+        borderRadius: '4px',
+        zIndex: '10000',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+    });
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+}
+
+function norm(text) {
+    return ('' + (text || '')).toLowerCase();
+}
+
+function initializeFilterButtons() {
+    const filterButtons = document.querySelectorAll('.btn-order-filter');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active state from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+
+            const filterType = this.dataset.filter;
+            // Update global filter state
+            window.orderState.filter = { type: 'status', value: filterType === 'all' ? '' : filterType };
+            updateVisibleOrders(); // 🔥 Refresh table instantly
+
+            console.log(`Filtering by status: ${filterType}`);
+        });
+    });
+}
+</script>
+
+
+<!-- Script for opening a modal after clicking table rows -->
+ <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const orderRows = document.querySelectorAll(".order-row");
+    const modal = document.getElementById("orders-detail-modal");
+
+    // When clicking any order row, show modal
+    orderRows.forEach(row => {
+        row.addEventListener("click", () => {
+        modal.classList.add("show");
+        });
+    });
+
+    // Optional: close modal when clicking outside the content box
+    modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+        modal.classList.remove("show");
+        }
+    });
+    });
+</script>
 {% endblock %}

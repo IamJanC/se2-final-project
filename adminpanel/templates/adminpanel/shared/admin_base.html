@@ -86,6 +86,8 @@
             if(savedTab && savedTitle){
                 showTab(savedTab, savedTitle);
             } else {
+
+            
                 // Default
                 showTab("dashboard", "Dashboard");
             }
@@ -355,10 +357,7 @@
                     if (data.success) {
                         alert("✅ Product updated successfully!");
                         location.reload();
-                    } else {
-                        console.error("Form errors:", data.errors);
-                        alert("⚠️ Failed to update product. Check console for details.");
-                    }
+                    } 
                 })
                 .catch(err => {
                     console.error("Error saving product:", err);

@@ -19,7 +19,6 @@ from django.utils import timezone
 from datetime import timedelta
 
 
-
 def staff_required(user):
     return user.is_staff
 
@@ -298,6 +297,7 @@ def dashboard_view(request):
 
 
 
+
 # ========================
 # PRODUCTS PAGE VIEW
 # ========================
@@ -423,5 +423,104 @@ def admin_orders(request):
     # Render the new template under templates/main/
     return render(request, "adminpanel/main/orders.html", context)
 
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+@csrf_exempt  # only for testing, remove if you're using {% csrf_token %}
+def save_product(request):
+    if request.method != "POST":
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405
+        )
+
+    try:
+        data = request.POST
+
+        custom_id = data.get("custom_id", "").strip()
+        name = data.get("name", "")
+        description = data.get("description", "")
+        price = data.get("price", "")
+        discount_price = data.get("discount_price", "")
+        discount_start = data.get("discount_start", "")
+        discount_end = data.get("discount_end", "")
+        stock_quantity = data.get("stock_quantity", "")
+        stock_status = data.get("stock_status", "")
+        category = data.get("category", "")
+        image_url = data.get("image_url", "")
+
+        # ✅ If product with this custom_id exists, UPDATE it
+        product = Product.objects.filter(custom_id=custom_id).first()
+
+        if product:
+            product.name = name
+            product.description = description
+            product.price = price
+            product.discount_price = discount_price
+            product.discount_start = discount_start or None
+            product.discount_end = discount_end or None
+            product.stock_quantity = stock_quantity
+            product.stock_status = stock_status
+            product.category = category
+            product.image_url = image_url
+            product.save()
+
+            return JsonResponse({
+                "status": "success",
+                "message": f"Product '{product.name}' (ID: {product.custom_id}) updated successfully!"
+            })
+
+        # ✅ Otherwise, CREATE a new one
+        product = Product.objects.create(
+            custom_id=custom_id,  # use your custom one like "EG1"
+            name=name,
+            description=description,
+            price=price,
+            discount_price=discount_price,
+            discount_start=discount_start or None,
+            discount_end=discount_end or None,
+            stock_quantity=stock_quantity,
+            stock_status=stock_status,
+            category=category,
+            image_url=image_url,
+        )
+
+        return JsonResponse({
+            "status": "success",
+            "message": f"Product '{product.name}' created successfully (Custom ID: {product.custom_id})!"
+        })
+
+    except Exception as e:
+        return JsonResponse({
+            "status": "error",
+            "message": f"Error saving product: {str(e)}"
+        }, status=500)
 
 
+
+def staff_required(user):
+    return user.is_staff or user.is_superuser
+
+
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+@csrf_exempt  # only for JS testing; remove in production if not needed
+def delete_product(request, custom_id):
+    if request.method != "POST":
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405
+        )
+
+    try:
+        product = get_object_or_404(Product, custom_id=custom_id)
+        product_name = product.name  # store before deleting
+        product.delete()
+
+        return JsonResponse(
+            {"status": "success", "message": f"Product '{product_name}' deleted successfully!"}
+        )
+    except Exception as e:
+        return JsonResponse(
+            {"status": "error", "message": f"Error deleting product: {str(e)}"},
+            status=500
+        )

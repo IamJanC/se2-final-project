@@ -962,7 +962,7 @@ label{
     padding-left: 16px;
 }
 
-#edit-product-modal, #save-product-modal, #close-product-modal{
+#edit-product-modal, #save-product-modal, #close-product-modal, #delete-product-modal{
     flex: 0 0 auto;            /* don’t stretch full width */
     padding: 12px 20px;
     color: #fff;
@@ -994,4 +994,14 @@ label{
 #close-product-modal:hover {
     background: #c0c0c0;  
 }
+
+#delete-product-modal {
+    background: #c62828;       /* deep red */
+    color: #fff;
+}
+
+#delete-product-modal:hover {
+    background: #8e0000;       /* darker on hover */
+}
+
 /*=== End of Products Section ===*/

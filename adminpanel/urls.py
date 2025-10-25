@@ -7,9 +7,10 @@ app_name = 'adminpanel'
 urlpatterns = [
     path('admin/', views.dashboard_view, name='dashboard'),
     path('logout/', LogoutView.as_view(next_page='main:home'), name='logout'),
-    path('delete/<int:pk>/', views.delete_product, name='delete_product'),
     path("edit/<int:pk>/", views.edit_product, name="edit_product"),
     path("export-pdf/", views.export_pdf, name="export_pdf"),
+    path("save_product/", views.save_product, name='save_product'),
+    path("delete-product/<str:custom_id>/", views.delete_product, name="delete_product"),
 
     # ✅ Fixed the duplicate "custom-dashboard"
     path("custom-dashboard/", views.dashboard_view, name="custom_dashboard"),
