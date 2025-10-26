@@ -521,6 +521,9 @@ body {
   opacity: 1;
 }
 
+.modal.hidden {
+  display: none !important;
+}
 
 
 #category-modal h2{

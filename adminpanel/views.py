@@ -570,3 +570,150 @@ def admin_list_view(request):
         "users": users,
     }
     return render(request, "adminpanel/main/admin_list.html", context)
+
+
+# ==============================
+# Admin Users List Page - FIXED
+# ==============================
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def admin_list_view(request):
+    """
+    Displays the list of all admin users and customers.
+    """
+    User = get_user_model()
+    
+    # Filter admin users (is_staff=True) - only active users
+    admin_users = User.objects.filter(is_staff=True, is_active=True).order_by('-date_joined')
+    
+    # Filter regular customers (is_staff=False) - only active users
+    customer_users = User.objects.filter(is_staff=False, is_active=True).order_by('-date_joined')
+
+    # DEBUG: Print to console
+    print(f"Found {admin_users.count()} admins")
+    print(f"Found {customer_users.count()} customers")
+    
+    context = {
+        "title": "Admin List",
+        "admin_users": admin_users,
+        "customer_users": customer_users,
+    }
+    return render(request, "adminpanel/main/admin_list.html", context)
+
+
+# ==============================
+# Delete Admin User
+# ==============================
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+@csrf_exempt
+def delete_admin_user(request, user_id):
+    """
+    Deletes an admin user (staff) by ID.
+    Prevents deleting yourself or superusers.
+    """
+    if request.method != "POST":
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405
+        )
+    
+    try:
+        User = get_user_model()
+        user = get_object_or_404(User, id=user_id)
+        
+        # Prevent deleting yourself
+        if user.id == request.user.id:
+            return JsonResponse(
+                {"status": "error", "message": "You cannot delete your own account."},
+                status=400
+            )
+        
+        # Prevent deleting superusers
+        if user.is_superuser:
+            return JsonResponse(
+                {"status": "error", "message": "Cannot delete superuser accounts."},
+                status=400
+            )
+        
+        user_email = user.email or user.username
+        user.delete()
+        
+        return JsonResponse(
+            {"status": "success", "message": f"Admin '{user_email}' deleted successfully!"}
+        )
+    
+    except Exception as e:
+        return JsonResponse(
+            {"status": "error", "message": f"Error deleting admin: {str(e)}"},
+            status=500
+        )
+
+
+# ==============================
+# Delete Customer User
+# ==============================
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+@csrf_exempt
+def delete_customer_user(request, user_id):
+    """
+    Deletes a customer user by ID.
+    """
+    if request.method != "POST":
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405
+        )
+    
+    try:
+        User = get_user_model()
+        user = get_object_or_404(User, id=user_id, is_staff=False)
+        
+        user_email = user.email or user.username
+        user.delete()
+        
+        return JsonResponse(
+            {"status": "success", "message": f"Customer '{user_email}' deleted successfully!"}
+        )
+    
+    except Exception as e:
+        return JsonResponse(
+            {"status": "error", "message": f"Error deleting customer: {str(e)}"},
+            status=500
+        )
+
+
+# ==============================
+# Promote Customer to Admin
+# ==============================
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+@csrf_exempt
+def promote_to_admin(request, user_id):
+    """
+    Promotes a customer to admin (sets is_staff=True).
+    """
+    if request.method != "POST":
+        return JsonResponse(
+            {"status": "error", "message": "Invalid request method."},
+            status=405
+        )
+    
+    try:
+        User = get_user_model()
+        user = get_object_or_404(User, id=user_id, is_staff=False)
+        
+        user.is_staff = True
+        user.save()
+        
+        user_email = user.email or user.username
+        return JsonResponse(
+            {"status": "success", "message": f"Customer '{user_email}' promoted to admin successfully!"}
+        )
+    
+    except Exception as e:
+        return JsonResponse(
+            {"status": "error", "message": f"Error promoting user: {str(e)}"},
+            status=500
+        )

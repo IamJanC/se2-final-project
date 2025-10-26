@@ -434,115 +434,149 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-  const modal = document.getElementById("product-display-modal");
+    document.addEventListener("DOMContentLoaded", function () {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const modal = document.getElementById("product-display-modal");
+    const addProductBtn = document.querySelector(".btn-add-products-action");
 
-  // 🟢 Open modal
-  document.querySelectorAll(".product-row").forEach((row) => {
-    row.addEventListener("click", () => {
-      // ✅ Use data-custom-id, not dataset.id
-      document.getElementById("product-id").value = row.dataset.customId || "";
-      document.getElementById("product-name").value = row.dataset.name || "";
-      document.getElementById("product-description").value = row.dataset.description || "";
-      document.getElementById("product-price").value = row.dataset.price || "";
-      document.getElementById("discount-price").value = row.dataset.discount || "";
-      document.getElementById("discount-start").value = row.dataset.discountStart || "";
-      document.getElementById("discount-end").value = row.dataset.discountEnd || "";
-      document.getElementById("stock-quantity").value = row.dataset.stock || "";
-      document.getElementById("stock-status").value = (row.dataset.stockStatus || "").toLowerCase();
-      document.getElementById("image-url").value = row.dataset.image || "";
-      document.getElementById("category-select").value = (row.dataset.category || "").toLowerCase();
+    // Buttons inside modal
+    const editBtn = document.getElementById("edit-product-modal");
+    const saveBtn = document.getElementById("save-product-modal");
+    const deleteBtn = document.getElementById("delete-product-modal");
+    const cancelBtn = document.getElementById("close-product-modal");
 
-      modal.classList.remove("hidden");
-      console.log("🟢 Editing Product custom_id:", row.dataset.customId);
+    let isEditing = false; // flag for edit vs add
 
-      const categoryName = (row.dataset.category || "").trim().toLowerCase();
-      const categorySelect = document.getElementById("category-select");
-      for (const option of categorySelect.options) {
-        if (option.text.trim().toLowerCase() === categoryName) {
-          categorySelect.value = option.value;
-          break;
-        }
-      }
+    // 🟢 Open modal for ADD PRODUCT
+    addProductBtn.addEventListener("click", () => {
+        isEditing = false;
+
+        // clear all fields
+        document.getElementById("product-form").reset();
+        document.getElementById("product-id").value = "";
+
+        // Show only Save + Cancel
+        editBtn.style.display = "none";
+        deleteBtn.style.display = "none";
+        saveBtn.style.display = "inline-block";
+        cancelBtn.style.display = "inline-block";
+
+        modal.classList.remove("hidden");
     });
-  });
 
-  // 🟢 Close modal
-  document.getElementById("close-product-modal").addEventListener("click", () => {
-    modal.classList.add("hidden");
-  });
+    // 🟢 Open modal for EDIT PRODUCT
+    document.querySelectorAll(".product-row").forEach((row) => {
+        row.addEventListener("click", () => {
+        isEditing = true;
 
-  // 🟢 Save / Update product
-  document.getElementById("save-product-modal").addEventListener("click", async () => {
-    const formData = new FormData();
-    formData.append("custom_id", document.getElementById("product-id").value.trim());
-    formData.append("name", document.getElementById("product-name").value);
-    formData.append("description", document.getElementById("product-description").value);
-    formData.append("price", document.getElementById("product-price").value);
-    formData.append("discount_price", document.getElementById("discount-price").value);
-    formData.append("discount_start", document.getElementById("discount-start").value);
-    formData.append("discount_end", document.getElementById("discount-end").value);
-    formData.append("stock_quantity", document.getElementById("stock-quantity").value);
-    formData.append("stock_status", document.getElementById("stock-status").value);
-    formData.append("category", document.getElementById("category-select").value);
-    formData.append("image_url", document.getElementById("image-url").value);
+        // Fill form with existing product data
+        document.getElementById("product-id").value = row.dataset.customId || "";
+        document.getElementById("product-name").value = row.dataset.name || "";
+        document.getElementById("product-description").value = row.dataset.description || "";
+        document.getElementById("product-price").value = row.dataset.price || "";
+        document.getElementById("discount-price").value = row.dataset.discount || "";
+        document.getElementById("discount-start").value = row.dataset.discountStart || "";
+        document.getElementById("discount-end").value = row.dataset.discountEnd || "";
+        document.getElementById("stock-quantity").value = row.dataset.stock || "";
+        document.getElementById("stock-status").value = (row.dataset.stockStatus || "").toLowerCase();
+        document.getElementById("image-url").value = row.dataset.image || "";
 
-    try {
-      const response = await fetch("/adminpanel/save_product/", {
-        method: "POST",
-        headers: { "X-CSRFToken": csrftoken },
-        body: formData,
-      });
+        const categoryName = (row.dataset.category || "").trim().toLowerCase();
+        const categorySelect = document.getElementById("category-select");
+        for (const option of categorySelect.options) {
+            if (option.text.trim().toLowerCase() === categoryName) {
+            categorySelect.value = option.value;
+            break;
+            }
+        }
 
-      const data = await response.json();
-      alert(data.message);
+        // Show all buttons (edit, save, delete, cancel)
+        editBtn.style.display = "inline-block";
+        deleteBtn.style.display = "inline-block";
+        saveBtn.style.display = "inline-block";
+        cancelBtn.style.display = "inline-block";
 
-      if (data.status === "success") {
+        modal.classList.remove("hidden");
+        });
+    });
+
+    // 🟢 Close modal
+    cancelBtn.addEventListener("click", () => {
         modal.classList.add("hidden");
-        location.reload();
-      }
-    } catch (error) {
-      console.error("❌ Error saving product:", error);
-      alert("Error saving product.");
-    }
-  });
+    });
 
-  // 🟢 Delete product by custom_id
-  document.getElementById("delete-product-modal").addEventListener("click", async () => {
-    const productId = document.getElementById("product-id").value.trim();
+    // 🟢 Save / Update product
+    saveBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
 
-    if (!productId) {
-      alert("⚠️ No product selected.");
-      return;
-    }
+        const formData = new FormData();
+        formData.append("custom_id", document.getElementById("product-id").value.trim());
+        formData.append("name", document.getElementById("product-name").value);
+        formData.append("description", document.getElementById("product-description").value);
+        formData.append("price", document.getElementById("product-price").value);
+        formData.append("discount_price", document.getElementById("discount-price").value);
+        formData.append("discount_start", document.getElementById("discount-start").value);
+        formData.append("discount_end", document.getElementById("discount-end").value);
+        formData.append("stock_quantity", document.getElementById("stock-quantity").value);
+        formData.append("stock_status", document.getElementById("stock-status").value);
+        formData.append("category", document.getElementById("category-select").value);
+        formData.append("image_url", document.getElementById("image-url").value);
 
-    if (!confirm("Are you sure you want to delete this product?")) return;
+        try {
+        const response = await fetch("/adminpanel/save_product/", {
+            method: "POST",
+            headers: { "X-CSRFToken": csrftoken },
+            body: formData,
+        });
 
-    try {
-      const response = await fetch(`/adminpanel/delete-product/${productId}/`, {
-        method: "POST",
-        headers: { "X-CSRFToken": csrftoken },
-      });
+        const data = await response.json();
+        alert(data.message);
 
-      const data = await response.json();
+        if (data.status === "success") {
+            modal.classList.add("hidden");
+            location.reload();
+        }
+        } catch (error) {
+        console.error("❌ Error saving product:", error);
+        alert("Error saving product.");
+        }
+    });
 
-      if (data.status === "success") {
-        alert("✅ " + data.message);
-        modal.classList.add("hidden");
+    // 🟢 Delete product by custom_id
+    deleteBtn.addEventListener("click", async () => {
+        const productId = document.getElementById("product-id").value.trim();
+        if (!productId) {
+        alert("⚠️ No product selected.");
+        return;
+        }
 
-        const deletedRow = document.querySelector(`.product-row[data-custom-id='${productId}']`);
-        if (deletedRow) deletedRow.remove();
-      } else {
-        alert("⚠️ " + data.message);
-      }
-    } catch (error) {
-      console.error("Error deleting product:", error);
-      alert("❌ Failed to delete product.");
-    }
-  });
-});
+        if (!confirm("Are you sure you want to delete this product?")) return;
+
+        try {
+        const response = await fetch(`/adminpanel/delete-product/${productId}/`, {
+            method: "POST",
+            headers: { "X-CSRFToken": csrftoken },
+        });
+
+        const data = await response.json();
+
+        if (data.status === "success") {
+            alert("✅ " + data.message);
+            modal.classList.add("hidden");
+
+            const deletedRow = document.querySelector(`.product-row[data-custom-id='${productId}']`);
+            if (deletedRow) deletedRow.remove();
+        } else {
+            alert("⚠️ " + data.message);
+        }
+        } catch (error) {
+        console.error("Error deleting product:", error);
+        alert("❌ Failed to delete product.");
+        }
+    });
+    });
 </script>
+
 
 
 

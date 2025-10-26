@@ -12,191 +12,688 @@
 {% block content %}
 <div class="admin-container">
 
+    <!-- ============================== -->
+    <!-- ADMINS SECTION -->
+    <!-- ============================== -->
     <div class="admin-users-display-section section">
-            
+        
+        <!-- Table Header / Top Actions -->
+        <div class="admin-users-display-section-top">
+            <h3>Admins</h3>
 
-            <!-- Table Header / Top Actions -->
-            <div class="admin-users-display-section-top">
-                <h3>Admins</h3>
+            <div class="admin-users-display-actions">
 
-                <div class="admin-users-display-actions">
+                <!-- Search Bar -->
+                <form class="admin-user-search-bar" autocomplete="off">
+                    <input 
+                        class="admin-user-search__input" 
+                        type="text" 
+                        placeholder="Search admin" 
+                        maxlength="30"
+                        id="adminUserSearchInput"
+                    >
+                </form>
 
-                    <!-- Search Bar -->
-                    <form class="admin-user-search-bar" autocomplete="off">
-                        <input 
-                            class="admin-user-search__input" 
-                            type="text" 
-                            placeholder="Search admin" 
-                            maxlength="30"
-                            id="adminUserSearchInput"
-                        >
-                    </form>
+                <!-- Filter Button -->
+                <button type="button" class="btn-users-icon" aria-label="Filter Admins">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 12L17 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M11 17H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
 
-                    <!-- Filter Button -->
-                    <button type="button" class="btn-users-icon" aria-label="Filter Admins">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M7 12L17 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M11 17H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
+                <!-- Sort Button -->
+                <button type="button" class="btn-users-icon" aria-label="Sort Admins">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.1924 5.65685C11.5829 5.26633 11.5829 4.63316 11.1924 4.24264L8.36397 1.41421C8.30576 1.356 8.24485 1.30212 8.18165 1.25259C7.50286 0.720577 6.55947 0.689024 5.84929 1.15793C5.73839 1.23115 5.63317 1.31658 5.53554 1.41421L2.70711 4.24264C2.31658 4.63316 2.31658 5.26633 2.70711 5.65685C3.09763 6.04738 3.7308 6.04738 4.12132 5.65685L6.00003 3.77814V18C6.00003 18.5523 6.44775 19 7.00003 19C7.55232 19 8.00003 18.5523 8.00003 18V3.8787L9.77818 5.65685C10.1687 6.04737 10.8019 6.04737 11.1924 5.65685Z" fill="currentColor"></path> 
+                        <path d="M12.7071 18.3432C12.3166 18.7337 12.3166 19.3668 12.7071 19.7574L15.5355 22.5858C15.6332 22.6834 15.7384 22.7689 15.8493 22.8421C16.6256 23.3546 17.6805 23.2692 18.364 22.5858L21.1924 19.7574C21.5829 19.3668 21.5829 18.7337 21.1924 18.3432C20.8019 17.9526 20.1687 17.9526 19.7782 18.3432L18 20.1213L18 6C18 5.44771 17.5523 5 17 5C16.4477 5 16 5.44771 16 6L16 20.2218L14.1213 18.3432C13.7308 17.9526 13.0976 17.9526 12.7071 18.3432Z" fill="currentColor"></path> 
+                    </svg>
+                </button>
 
-                    <!-- Sort Button -->
-                    <button type="button" class="btn-users-icon" aria-label="Sort Admins">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M11.1924 5.65685C11.5829 5.26633 11.5829 4.63316 11.1924 4.24264L8.36397 1.41421C8.30576 1.356 8.24485 1.30212 8.18165 1.25259C7.50286 0.720577 6.55947 0.689024 5.84929 1.15793C5.73839 1.23115 5.63317 1.31658 5.53554 1.41421L2.70711 4.24264C2.31658 4.63316 2.31658 5.26633 2.70711 5.65685C3.09763 6.04738 3.7308 6.04738 4.12132 5.65685L6.00003 3.77814V18C6.00003 18.5523 6.44775 19 7.00003 19C7.55232 19 8.00003 18.5523 8.00003 18V3.8787L9.77818 5.65685C10.1687 6.04737 10.8019 6.04737 11.1924 5.65685Z" fill="currentColor"></path> 
-                            <path d="M12.7071 18.3432C12.3166 18.7337 12.3166 19.3668 12.7071 19.7574L15.5355 22.5858C15.6332 22.6834 15.7384 22.7689 15.8493 22.8421C16.6256 23.3546 17.6805 23.2692 18.364 22.5858L21.1924 19.7574C21.5829 19.3668 21.5829 18.7337 21.1924 18.3432C20.8019 17.9526 20.1687 17.9526 19.7782 18.3432L18 20.1213L18 6C18 5.44771 17.5523 5 17 5C16.4477 5 16 5.44771 16 6L16 20.2218L14.1213 18.3432C13.7308 17.9526 13.0976 17.9526 12.7071 18.3432Z" fill="currentColor"></path> 
-                        </svg>
-                    </button>
-
-                    <!-- Add Admin Button -->
-                    <button type="button" class="btn-add-users-action">Add Admin</button>
-                </div>
+                <!-- Add Admin Button -->
+                <button type="button" class="btn-add-users-action">Add Admin</button>
             </div>
+        </div>
 
-            <!-- Container for horizontal scrolling -->
-            <div class="table-container">
-                <table class="admin-products-table admin-users-table">
-                    <thead>
+        <!-- Container for horizontal scrolling -->
+        <div class="table-container">
+            <table class="admin-products-table admin-users-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if admin_users %}
+                        {% for admin in admin_users %}
                         <tr>
-                            <th>Last Name</th>
-                            <th>First Name</th>
-                            <th>Email</th>
-                            <th>Contact</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Smith</td>
-                            <td>John</td>
-                            <td>john.smith@example.com</td>
-                            <td>09171234567</td>
+                            <td>{{ admin.username }}</td>
+                            <td>{{ admin.first_name|default:"—" }}</td>
+                            <td>{{ admin.last_name|default:"—" }}</td>
+                            <td>{{ admin.email|default:"—" }}</td>
                             <td>
-                                <button class="delete-icon" aria-label="Delete user">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M20.5 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                        <path d="M9.17 4C9.58 2.83 10.69 2 12 2C13.31 2 14.42 2.83 14.83 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                        <path d="M18.37 15.4C18.2 18.05 18.11 19.38 17.24 20.19C16.38 21 15.05 21 12.39 21H11.61C8.95 21 7.62 21 6.76 20.19C5.89 19.38 5.8 18.05 5.63 15.4L5.17 8.5M18.83 8.5L18.63 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                    </svg>
-
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Doe</td>
-                            <td>Jane</td>
-                            <td>jane.doe@example.com</td>
-                            <td>09179876543</td>
-                            <td>
-                                <button class="delete-icon" aria-label="Delete user">
+                                <button class="delete-icon delete-admin-btn" 
+                                        data-user-id="{{ admin.id }}"
+                                        data-user-name="{{ admin.username }}"
+                                        aria-label="Delete user"
+                                        {% if admin.id == request.user.id or admin.is_superuser %}disabled style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M20.5 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                         <path d="M9.17 4C9.58 2.83 10.69 2 12 2C13.31 2 14.42 2.83 14.83 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                         <path d="M18.37 15.4C18.2 18.05 18.11 19.38 17.24 20.19C16.38 21 15.05 21 12.39 21H11.61C8.95 21 7.62 21 6.76 20.19C5.89 19.38 5.8 18.05 5.63 15.4L5.17 8.5M18.83 8.5L18.63 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                     </svg>
-
                                 </button>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 20px; color: #666;">
+                                No admin users found.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- CUSTOMERS SECTION -->
+    <!-- ============================== -->
+    <div class="admin-users-display-section section">
+        
+        <!-- Table Header / Top Actions -->
+        <div class="admin-users-display-section-top">
+            <h3>Customers</h3>
+
+            <div class="admin-users-display-actions">
+
+                <!-- Search Bar -->
+                <form class="admin-user-search-bar" autocomplete="off">
+                    <input 
+                        class="admin-user-search__input" 
+                        type="text" 
+                        placeholder="Search customer" 
+                        maxlength="30"
+                        id="adminCustomerSearchInput"
+                    >
+                </form>
+
+                <!-- Filter Button -->
+                <button type="button" class="btn-users-icon" aria-label="Filter Customers">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 12L17 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M11 17H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+                <!-- Sort Button -->
+                <button type="button" class="btn-users-icon" aria-label="Sort Customers">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.1924 5.65685C11.5829 5.26633 11.5829 4.63316 11.1924 4.24264L8.36397 1.41421C8.30576 1.356 8.24485 1.30212 8.18165 1.25259C7.50286 0.720577 6.55947 0.689024 5.84929 1.15793C5.73839 1.23115 5.63317 1.31658 5.53554 1.41421L2.70711 4.24264C2.31658 4.63316 2.31658 5.26633 2.70711 5.65685C3.09763 6.04738 3.7308 6.04738 4.12132 5.65685L6.00003 3.77814V18C6.00003 18.5523 6.44775 19 7.00003 19C7.55232 19 8.00003 18.5523 8.00003 18V3.8787L9.77818 5.65685C10.1687 6.04737 10.8019 6.04737 11.1924 5.65685Z" fill="currentColor"></path> 
+                        <path d="M12.7071 18.3432C12.3166 18.7337 12.3166 19.3668 12.7071 19.7574L15.5355 22.5858C15.6332 22.6834 15.7384 22.7689 15.8493 22.8421C16.6256 23.3546 17.6805 23.2692 18.364 22.5858L21.1924 19.7574C21.5829 19.3668 21.5829 18.7337 21.1924 18.3432C20.8019 17.9526 20.1687 17.9526 19.7782 18.3432L18 20.1213L18 6C18 5.44771 17.5523 5 17 5C16.4477 5 16 5.44771 16 6L16 20.2218L14.1213 18.3432C13.7308 17.9526 13.0976 17.9526 12.7071 18.3432Z" fill="currentColor"></path> 
+                    </svg>
+                </button>
             </div>
         </div>
-    
 
-
-
-
-
-
-        <div class="admin-users-display-section section">
-            <!-- Table Header / Top Actions -->
-            <div class="admin-users-display-section-top">
-                <h3>Customers</h3>
-
-                <div class="admin-users-display-actions">
-
-                    <!-- Search Bar -->
-                    <form class="admin-user-search-bar" autocomplete="off">
-                        <input 
-                            class="admin-user-search__input" 
-                            type="text" 
-                            placeholder="Search customer" 
-                            maxlength="30"
-                            id="adminCustomerSearchInput"
-                        >
-                    </form>
-
-                    <!-- Filter Button -->
-                    <button type="button" class="btn-users-icon" aria-label="Filter Customers">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M7 12L17 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M11 17H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-
-                    <!-- Sort Button -->
-                    <button type="button" class="btn-users-icon" aria-label="Sort Customers">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M11.1924 5.65685C11.5829 5.26633 11.5829 4.63316 11.1924 4.24264L8.36397 1.41421C8.30576 1.356 8.24485 1.30212 8.18165 1.25259C7.50286 0.720577 6.55947 0.689024 5.84929 1.15793C5.73839 1.23115 5.63317 1.31658 5.53554 1.41421L2.70711 4.24264C2.31658 4.63316 2.31658 5.26633 2.70711 5.65685C3.09763 6.04738 3.7308 6.04738 4.12132 5.65685L6.00003 3.77814V18C6.00003 18.5523 6.44775 19 7.00003 19C7.55232 19 8.00003 18.5523 8.00003 18V3.8787L9.77818 5.65685C10.1687 6.04737 10.8019 6.04737 11.1924 5.65685Z" fill="currentColor"></path> 
-                            <path d="M12.7071 18.3432C12.3166 18.7337 12.3166 19.3668 12.7071 19.7574L15.5355 22.5858C15.6332 22.6834 15.7384 22.7689 15.8493 22.8421C16.6256 23.3546 17.6805 23.2692 18.364 22.5858L21.1924 19.7574C21.5829 19.3668 21.5829 18.7337 21.1924 18.3432C20.8019 17.9526 20.1687 17.9526 19.7782 18.3432L18 20.1213L18 6C18 5.44771 17.5523 5 17 5C16.4477 5 16 5.44771 16 6L16 20.2218L14.1213 18.3432C13.7308 17.9526 13.0976 17.9526 12.7071 18.3432Z" fill="currentColor"></path> 
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Container for horizontal scrolling -->
-            <div class="table-container">
-                <table class="admin-products-table admin-users-table">
-                    <thead>
+        <!-- Container for horizontal scrolling -->
+        <div class="table-container">
+            <table class="admin-products-table admin-users-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if customer_users %}
+                        {% for customer in customer_users %}
                         <tr>
-                            <th>Last Name</th>
-                            <th>First Name</th>
-                            <th>Email</th>
-                            <th>Contact</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Smith</td>
-                            <td>John</td>
-                            <td>john.smith@example.com</td>
-                            <td>09171234567</td>
+                            <td>{{ customer.username }}</td>
+                            <td>{{ customer.first_name|default:"—" }}</td>
+                            <td>{{ customer.last_name|default:"—" }}</td>
+                            <td>{{ customer.email|default:"—" }}</td>
                             <td>
-                                <button class="btn-promote-user" aria-label="Promote to Admin">Promote</button>
-                                <button class="delete-icon" aria-label="Delete customer">
-                                    <!-- SVG delete icon -->
+                                <button class="btn-promote-user promote-customer-btn" 
+                                        data-user-id="{{ customer.id }}"
+                                        data-user-name="{{ customer.username }}"
+                                        aria-label="Promote to Admin">
+                                    Promote
+                                </button>
+                                <button class="delete-icon delete-customer-btn" 
+                                        data-user-id="{{ customer.id }}"
+                                        data-user-name="{{ customer.username }}"
+                                        aria-label="Delete customer">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20.5 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                        <path d="M9.17 4C9.58 2.83 10.69 2 12 2C13.31 2 14.42 2.83 14.83 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                        <path d="M18.37 15.4C18.2 18.05 18.11 19.38 17.24 20.19C16.38 21 15.05 21 12.39 21H11.61C8.95 21 7.62 21 6.76 20.19C5.89 19.38 5.8 18.05 5.63 15.4L5.17 8.5M18.83 8.5L18.63 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                    </svg>
                                 </button>
                             </td>
                         </tr>
+                        {% endfor %}
+                    {% else %}
                         <tr>
-                            <td>Doe</td>
-                            <td>Jane</td>
-                            <td>jane.doe@example.com</td>
-                            <td>09179876543</td>
-                            <td>
-                                <button class="btn-promote-user" aria-label="Promote to Admin">Promote</button>
-                                <button class="delete-icon" aria-label="Delete customer">
-                                    <!-- SVG delete icon -->
-                                </button>
+                            <td colspan="5" style="text-align: center; padding: 20px; color: #666;">
+                                No customers found.
                             </td>
                         </tr>
-                    </tbody>
-                </table>
-            </div>
+                    {% endif %}
+                </tbody>
+            </table>
         </div>
-    
-
-
-
-
-
-
-
-
+    </div>
 
 </div>
+
+<!-- ============================== -->
+<!-- INLINE JAVASCRIPT -->
+<!-- ============================== -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('Admin users page loaded - initializing functionality');
+
+    // Global state for Admins section
+    window.adminUserState = {
+        searchTerm: '',
+        filter: { type: 'all', value: '' },
+        sort: { key: null, dir: 1 }
+    };
+
+    // Global state for Customers section
+    window.customerUserState = {
+        searchTerm: '',
+        filter: { type: 'all', value: '' },
+        sort: { key: null, dir: 1 }
+    };
+
+    initializeAdminSection();
+    initializeCustomerSection();
+    initializeDeleteButtons();
+    initializePromoteButtons();
+
+    console.log('All admin and customer users functionality initialized');
+});
+
+/* =============================================== */
+/* ADMIN SECTION - Search, Filter, Sort           */
+/* =============================================== */
+function initializeAdminSection() {
+    const searchInput = document.getElementById('adminUserSearchInput');
+    if (!searchInput) {
+        console.error('Admin search input not found!');
+        return;
+    }
+
+    // Search functionality
+    searchInput.addEventListener('input', function (e) {
+        window.adminUserState.searchTerm = e.target.value.toLowerCase().trim();
+        updateVisibleUsers('admin');
+    });
+
+    searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            searchInput.value = '';
+            window.adminUserState.searchTerm = '';
+            updateVisibleUsers('admin');
+        }
+    });
+
+    // Get the first section's buttons
+    const adminSection = document.querySelector('.admin-users-display-section');
+    if (!adminSection) return;
+    
+    const adminButtons = adminSection.querySelectorAll('.btn-users-icon');
+    
+    if (adminButtons.length < 2) {
+        console.error('Admin filter/sort buttons not found!');
+        return;
+    }
+
+    const filterButton = adminButtons[0];
+    const sortButton = adminButtons[1];
+
+    const filterMenu = createPopupMenu('admin-filter');
+    const sortMenu = createPopupMenu('admin-sort');
+    document.body.appendChild(filterMenu);
+    document.body.appendChild(sortMenu);
+
+    buildAdminFilterMenu(filterMenu);
+    buildAdminSortMenu(sortMenu);
+
+    filterButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleMenu(filterMenu, filterButton);
+        sortMenu.style.display = 'none';
+    });
+
+    sortButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleMenu(sortMenu, sortButton);
+        filterMenu.style.display = 'none';
+    });
+
+    document.addEventListener('click', function () {
+        filterMenu.style.display = 'none';
+        sortMenu.style.display = 'none';
+    });
+}
+
+function buildAdminFilterMenu(menu) {
+    menu.innerHTML = '';
+
+    const allBtn = document.createElement('div');
+    allBtn.textContent = 'Show all admins';
+    stylizeMenuItem(allBtn, () => {
+        window.adminUserState.filter = { type: 'all', value: '' };
+        menu.style.display = 'none';
+        updateVisibleUsers('admin');
+    });
+    menu.appendChild(allBtn);
+}
+
+function buildAdminSortMenu(menu) {
+    menu.innerHTML = '';
+    const sortOptions = [
+        { label: 'Username A → Z', key: 'username', dir: 1 },
+        { label: 'Username Z → A', key: 'username', dir: -1 },
+        { label: 'First Name A → Z', key: 'firstname', dir: 1 },
+        { label: 'First Name Z → A', key: 'firstname', dir: -1 },
+        { label: 'Last Name A → Z', key: 'lastname', dir: 1 },
+        { label: 'Last Name Z → A', key: 'lastname', dir: -1 },
+        { label: 'Email A → Z', key: 'email', dir: 1 },
+        { label: 'Email Z → A', key: 'email', dir: -1 }
+    ];
+
+    sortOptions.forEach(option => {
+        const item = document.createElement('div');
+        item.textContent = option.label;
+        stylizeMenuItem(item, () => {
+            window.adminUserState.sort = { key: option.key, dir: option.dir };
+            menu.style.display = 'none';
+            updateVisibleUsers('admin');
+        });
+        menu.appendChild(item);
+    });
+}
+
+/* =============================================== */
+/* CUSTOMER SECTION - Search, Filter, Sort        */
+/* =============================================== */
+function initializeCustomerSection() {
+    const searchInput = document.getElementById('adminCustomerSearchInput');
+    if (!searchInput) {
+        console.error('Customer search input not found!');
+        return;
+    }
+
+    // Search functionality
+    searchInput.addEventListener('input', function (e) {
+        window.customerUserState.searchTerm = e.target.value.toLowerCase().trim();
+        updateVisibleUsers('customer');
+    });
+
+    searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            searchInput.value = '';
+            window.customerUserState.searchTerm = '';
+            updateVisibleUsers('customer');
+        }
+    });
+
+    // Get the second section's buttons
+    const sections = document.querySelectorAll('.admin-users-display-section');
+    if (sections.length < 2) {
+        console.error('Customer section not found!');
+        return;
+    }
+    
+    const customerSection = sections[1];
+    const customerButtons = customerSection.querySelectorAll('.btn-users-icon');
+    
+    if (customerButtons.length < 2) {
+        console.error('Customer filter/sort buttons not found!');
+        return;
+    }
+
+    const filterButton = customerButtons[0];
+    const sortButton = customerButtons[1];
+
+    const filterMenu = createPopupMenu('customer-filter');
+    const sortMenu = createPopupMenu('customer-sort');
+    document.body.appendChild(filterMenu);
+    document.body.appendChild(sortMenu);
+
+    buildCustomerFilterMenu(filterMenu);
+    buildCustomerSortMenu(sortMenu);
+
+    filterButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleMenu(filterMenu, filterButton);
+        sortMenu.style.display = 'none';
+    });
+
+    sortButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleMenu(sortMenu, sortButton);
+        filterMenu.style.display = 'none';
+    });
+
+    document.addEventListener('click', function () {
+        filterMenu.style.display = 'none';
+        sortMenu.style.display = 'none';
+    });
+}
+
+function buildCustomerFilterMenu(menu) {
+    menu.innerHTML = '';
+
+    const allBtn = document.createElement('div');
+    allBtn.textContent = 'Show all customers';
+    stylizeMenuItem(allBtn, () => {
+        window.customerUserState.filter = { type: 'all', value: '' };
+        menu.style.display = 'none';
+        updateVisibleUsers('customer');
+    });
+    menu.appendChild(allBtn);
+}
+
+function buildCustomerSortMenu(menu) {
+    menu.innerHTML = '';
+    const sortOptions = [
+        { label: 'Username A → Z', key: 'username', dir: 1 },
+        { label: 'Username Z → A', key: 'username', dir: -1 },
+        { label: 'First Name A → Z', key: 'firstname', dir: 1 },
+        { label: 'First Name Z → A', key: 'firstname', dir: -1 },
+        { label: 'Last Name A → Z', key: 'lastname', dir: 1 },
+        { label: 'Last Name Z → A', key: 'lastname', dir: -1 },
+        { label: 'Email A → Z', key: 'email', dir: 1 },
+        { label: 'Email Z → A', key: 'email', dir: -1 }
+    ];
+
+    sortOptions.forEach(option => {
+        const item = document.createElement('div');
+        item.textContent = option.label;
+        stylizeMenuItem(item, () => {
+            window.customerUserState.sort = { key: option.key, dir: option.dir };
+            menu.style.display = 'none';
+            updateVisibleUsers('customer');
+        });
+        menu.appendChild(item);
+    });
+}
+
+/* =============================================== */
+/* DELETE FUNCTIONALITY                           */
+/* =============================================== */
+function initializeDeleteButtons() {
+    // Admin delete buttons
+    document.querySelectorAll('.delete-admin-btn').forEach(btn => {
+        if (btn.disabled) return; // Skip disabled buttons
+        
+        btn.addEventListener('click', function() {
+            const userId = this.dataset.userId;
+            const userName = this.dataset.userName;
+            
+            if (confirm(`Are you sure you want to delete admin "${userName}"?`)) {
+                deleteUser(userId, 'admin', this.closest('tr'));
+            }
+        });
+    });
+
+    // Customer delete buttons
+    document.querySelectorAll('.delete-customer-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const userId = this.dataset.userId;
+            const userName = this.dataset.userName;
+            
+            if (confirm(`Are you sure you want to delete customer "${userName}"?`)) {
+                deleteUser(userId, 'customer', this.closest('tr'));
+            }
+        });
+    });
+}
+
+function deleteUser(userId, userType, rowElement) {
+    const url = userType === 'admin' 
+        ? `/admin-panel/users/delete-admin/${userId}/`
+        : `/admin-panel/users/delete-customer/${userId}/`;
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Remove the row with animation
+            rowElement.style.transition = 'opacity 0.3s';
+            rowElement.style.opacity = '0';
+            setTimeout(() => {
+                rowElement.remove();
+                updateVisibleUsers(userType);
+            }, 300);
+            
+            alert(data.message);
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to delete user. Please try again.');
+    });
+}
+
+/* =============================================== */
+/* PROMOTE FUNCTIONALITY                          */
+/* =============================================== */
+function initializePromoteButtons() {
+    document.querySelectorAll('.promote-customer-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const userId = this.dataset.userId;
+            const userName = this.dataset.userName;
+            
+            if (confirm(`Promote "${userName}" to admin?`)) {
+                promoteToAdmin(userId, this.closest('tr'));
+            }
+        });
+    });
+}
+
+function promoteToAdmin(userId, rowElement) {
+    const url = `/admin-panel/users/promote/${userId}/`;
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            // Reload page to refresh both tables
+            window.location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to promote user. Please try again.');
+    });
+}
+
+/* =============================================== */
+/* SHARED UTILITIES                               */
+/* =============================================== */
+function createPopupMenu(type) {
+    const menu = document.createElement('div');
+    menu.className = `adb-popup-menu ${type}-menu`;
+    Object.assign(menu.style, {
+        position: 'absolute',
+        background: '#fff',
+        border: '1px solid rgba(0,0,0,0.12)',
+        boxShadow: '0 6px 18px rgba(0,0,0,0.08)',
+        padding: '6px',
+        zIndex: '9999',
+        minWidth: '180px',
+        fontSize: '14px',
+        borderRadius: '6px',
+        display: 'none'
+    });
+    return menu;
+}
+
+function toggleMenu(menu, button) {
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+    } else {
+        positionMenuRelativeToButton(menu, button);
+        menu.style.display = 'block';
+    }
+}
+
+function stylizeMenuItem(item, onClick) {
+    item.style.padding = '8px';
+    item.style.cursor = 'pointer';
+    item.style.borderRadius = '4px';
+    item.addEventListener('mouseenter', () => item.style.background = '#f5f5f5');
+    item.addEventListener('mouseleave', () => item.style.background = '');
+    item.addEventListener('click', onClick);
+}
+
+function createHr() {
+    const hr = document.createElement('hr');
+    hr.style.margin = '6px 0';
+    hr.style.border = 'none';
+    hr.style.borderTop = '1px solid #eee';
+    return hr;
+}
+
+function positionMenuRelativeToButton(menu, button) {
+    const rect = button.getBoundingClientRect();
+    menu.style.left = (window.scrollX + rect.left) + 'px';
+    menu.style.top = (window.scrollY + rect.bottom + 6) + 'px';
+}
+
+/* =============================================== */
+/* UNIFIED UPDATE - Search, Filter, Sort          */
+/* =============================================== */
+function updateVisibleUsers(sectionType) {
+    const state = sectionType === 'admin' ? window.adminUserState : window.customerUserState;
+    const { searchTerm, filter, sort } = state;
+    
+    // Get the correct section
+    const sections = document.querySelectorAll('.admin-users-display-section');
+    const section = sectionType === 'admin' ? sections[0] : sections[1];
+    
+    if (!section) {
+        console.error(`Section not found: ${sectionType}`);
+        return;
+    }
+
+    const tbody = section.querySelector('tbody');
+    if (!tbody) {
+        console.error(`Table body not found in ${sectionType} section`);
+        return;
+    }
+
+    const rows = Array.from(tbody.querySelectorAll('tr:not(#noAdminsMessage):not(#noCustomersMessage)'));
+    let visibleRows = [];
+
+    rows.forEach(row => {
+        const username = norm(row.querySelector('td:nth-child(1)')?.textContent);
+        const firstname = norm(row.querySelector('td:nth-child(2)')?.textContent);
+        const lastname = norm(row.querySelector('td:nth-child(3)')?.textContent);
+        const email = norm(row.querySelector('td:nth-child(4)')?.textContent);
+
+        let visible = true;
+
+        // Search - search across all fields
+        if (searchTerm) {
+            visible = username.includes(searchTerm) || 
+                     firstname.includes(searchTerm) || 
+                     lastname.includes(searchTerm) || 
+                     email.includes(searchTerm);
+        }
+
+        row.style.display = visible ? '' : 'none';
+        if (visible) visibleRows.push(row);
+    });
+
+    // Sort
+    if (sort.key) {
+        visibleRows.sort((a, b) => {
+            const getVal = (r) => {
+                switch (sort.key) {
+                    case 'username': return r.querySelector('td:nth-child(1)')?.textContent.toLowerCase() || '';
+                    case 'firstname': return r.querySelector('td:nth-child(2)')?.textContent.toLowerCase() || '';
+                    case 'lastname': return r.querySelector('td:nth-child(3)')?.textContent.toLowerCase() || '';
+                    case 'email': return r.querySelector('td:nth-child(4)')?.textContent.toLowerCase() || '';
+                }
+            };
+            const valA = getVal(a), valB = getVal(b);
+            return (valA > valB ? 1 : valA < valB ? -1 : 0) * sort.dir;
+        });
+        visibleRows.forEach(r => tbody.appendChild(r));
+    }
+
+    // No results message
+    const msgId = sectionType === 'admin' ? 'noAdminsMessage' : 'noCustomersMessage';
+    const msgText = sectionType === 'admin' ? 'No admins found' : 'No customers found';
+    
+    let noMsg = document.getElementById(msgId);
+    if (!noMsg) {
+        noMsg = document.createElement('tr');
+        noMsg.id = msgId;
+        const colCount = section.querySelector('table thead tr')?.children.length || 5;
+        noMsg.innerHTML = `<td colspan="${colCount}" style="text-align:center; padding:20px; color:#666;">${msgText}</td>`;
+        tbody.appendChild(noMsg);
+    }
+    noMsg.style.display = visibleRows.length === 0 ? '' : 'none';
+
+    console.log(`Visible ${sectionType}s: ${visibleRows.length}`);
+}
+
+/* =============================================== */
+/* HELPER FUNCTIONS                               */
+/* =============================================== */
+function norm(str) {
+    return (str || '').toLowerCase().trim();
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
 {% endblock %}
