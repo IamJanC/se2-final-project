@@ -428,7 +428,7 @@ def admin_orders(request):
 
 @login_required
 @user_passes_test(staff_required, login_url='main:home')
-@csrf_exempt  # only for testing, remove if you're using {% csrf_token %}
+@csrf_exempt
 def save_product(request):
     if request.method != "POST":
         return JsonResponse(
@@ -451,9 +451,17 @@ def save_product(request):
         category = data.get("category", "")
         image_url = data.get("image_url", "")
 
-        # ✅ If product with this custom_id exists, UPDATE it
-        product = Product.objects.filter(custom_id=custom_id).first()
+        category_instance = None
+        if category:
+            try:
+                category_instance = Category.objects.get(id=category)
+            except Category.DoesNotExist:
+                return JsonResponse({
+                    "status": "error",
+                    "message": f"Category with id {category} does not exist."
+                }, status=400)
 
+        product = Product.objects.filter(custom_id=custom_id).first()
         if product:
             product.name = name
             product.description = description
@@ -463,7 +471,7 @@ def save_product(request):
             product.discount_end = discount_end or None
             product.stock_quantity = stock_quantity
             product.stock_status = stock_status
-            product.category = category
+            product.category = category_instance
             product.image_url = image_url
             product.save()
 
@@ -472,9 +480,8 @@ def save_product(request):
                 "message": f"Product '{product.name}' (ID: {product.custom_id}) updated successfully!"
             })
 
-        # ✅ Otherwise, CREATE a new one
         product = Product.objects.create(
-            custom_id=custom_id,  # use your custom one like "EG1"
+            custom_id=custom_id,
             name=name,
             description=description,
             price=price,
@@ -483,7 +490,7 @@ def save_product(request):
             discount_end=discount_end or None,
             stock_quantity=stock_quantity,
             stock_status=stock_status,
-            category=category,
+            category=category_instance,
             image_url=image_url,
         )
 
@@ -497,6 +504,7 @@ def save_product(request):
             "status": "error",
             "message": f"Error saving product: {str(e)}"
         }, status=500)
+
 
 
 
