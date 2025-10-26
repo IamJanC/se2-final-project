@@ -17,6 +17,9 @@ from django.http import JsonResponse
 from products.models import Category
 from django.utils import timezone
 from datetime import timedelta
+from django.contrib.auth import get_user_model
+
+
 
 
 def staff_required(user):
@@ -524,3 +527,38 @@ def delete_product(request, custom_id):
             {"status": "error", "message": f"Error deleting product: {str(e)}"},
             status=500
         )
+
+
+# ==============================
+# Admin Credentials / Account Page
+# ==============================
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def admin_accounts_view(request):
+    """
+    Displays the Admin tab for managing the current admin's credentials and password.
+    """
+    context = {
+        "title": "Admin Account",  # for sidebar active class
+    }
+    return render(request, "adminpanel/main/admin_accounts.html", context)
+
+
+# ==============================
+# Admin Users List Page
+# ==============================
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def admin_list_view(request):
+    """
+    Displays the list of all admin users.
+    """
+    User = get_user_model()
+    # Filter only staff/admin users
+    users = User.objects.filter(is_staff=True).order_by("id")
+
+    context = {
+        "title": "Admin List",  # for sidebar active class
+        "users": users,
+    }
+    return render(request, "adminpanel/main/admin_list.html", context)

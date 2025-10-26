@@ -1,0 +1,256 @@
+/* === vvv GLOBAL CSS DO NOT TOUCH vvv === */
+/* Logo Font Temporary */
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+/* Search (Don't Touch) */
+@use postcss-color-function;
+@use postcss-nested;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+/* Reset Everything */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+    background: #f9fbfa;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    height: 100vh;
+}
+/* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
+
+/* Container for admin sections */
+.admin-container {
+    display: flex;
+    flex-direction: column;   /* vertical stacking now */
+    gap: 20px;                /* space between rows */
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 80vw;
+    box-sizing: border-box;
+}
+
+/* Top row: credentials + password side by side */
+.admin-top-row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+/* Width proportions */
+.div-account-credentials {
+    flex: 2;   /* 2/3 of top row */
+}
+
+.div-account-password {
+    flex: 1;   /* 1/3 of top row */
+}
+
+/* Full-width bottom section (admin users/products) */
+.admin-products-display-section {
+    width: 100%;
+}
+
+/* Responsive layout for small screens */
+@media (max-width: 768px) {
+    .admin-top-row {
+        flex-direction: column;  /* stack credentials + password */
+    }
+}
+
+
+
+/* === Credentials Section === */
+
+/* === Section styling (applies to all sections) === */
+.section {
+  border: 1px solid #d4d5d5;
+  border-radius: 15px;
+  padding: 24px;
+  margin-bottom: 25px;
+  background-color: #ffffff;
+}
+
+
+/* === Section headings === */
+.section h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-optical-sizing: auto;
+}
+
+/* === Input fields === */
+/* Apply form-group styling to each input-field */
+.input-field {
+    display: flex;
+    flex-direction: column;  /* label above input */
+    margin-bottom: 1rem;     /* space between fields */
+}
+
+.input-field label,
+.password-field label {
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-weight: 300;
+    margin-bottom: 6px;
+}
+.input-field input {
+    width: 100%;             /* fill parent width */
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 8px 8px 8px 15px;
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    height: 50px;            /* single line height */
+    line-height: 40px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+}
+
+/* Optional: disabled input styling */
+.input-field input:disabled {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+/* Layout for side-by-side fields */
+.admin-name,
+.admin-contacts,
+.admin-location {
+    display: flex;
+    gap: 20px;           /* space between fields */
+    flex-wrap: wrap;      /* responsive stacking */
+}
+
+.admin-name .input-field,
+.admin-contacts .input-field {
+    flex: 1;               /* grow to fill available space */
+    min-width: 200px;      /* ensures they don’t shrink too small */
+}
+
+/* Stretch input fields in location section */
+.admin-location .input-field {
+    flex: 1;           /* grow to fill available space */
+    min-width: 200px;  /* ensures they don’t shrink too much on smaller screens */
+}
+
+
+/* === Password Section === */
+.div-account-password h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-family: "Lexend", sans-serif;
+    font-weight: 300;
+}
+
+.password-field {
+    display: flex;
+    flex-direction: column;  /* label on top, input below */
+    margin-bottom: 15px;
+}
+
+
+/* Password input container with eye icon */
+.password-input-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;          /* fill parent width like input-field */
+}
+
+/* Password input styling same as .input-field input */
+.password-input-container input {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 8px 40px 8px 15px;  /* right padding for eye icon */
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    height: 50px;               /* match input-field height */
+    line-height: 40px;
+    box-sizing: border-box;
+}
+
+/* Eye icon styling */
+.eye-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+}
+
+.eye-icon:hover {
+    color: #000;
+}
+
+.hidden {
+    display: none;
+}
+
+/* === Admin Action Buttons (Credentials + Password) === */
+.admin-credentials-action-buttons,
+.admin-password-action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Common styles for all buttons */
+#edit-admin-credential, #save-admin-credential, #close-admin-credential,
+#edit-admin-password, #save-admin-password, #close-admin-password {
+    flex: 0 0 auto;          /* don’t stretch full width */
+    padding: 12px 20px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+    border-radius: 3px;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    margin-top: 10px;
+}
+
+/* Edit & Save buttons */
+#edit-admin-credential, #save-admin-credential,
+#edit-admin-password, #save-admin-password {
+    background: #5c8b25; 
+}
+
+#edit-admin-credential:hover, #save-admin-credential:hover,
+#edit-admin-password:hover, #save-admin-password:hover {
+    background: #325a00;
+}
+
+/* Cancel buttons */
+#close-admin-credential, #close-admin-password {
+    background: #e0e0e0;
+    color: #333;
+}
+
+#close-admin-credential:hover, #close-admin-password:hover {
+    background: #c0c0c0;
+}

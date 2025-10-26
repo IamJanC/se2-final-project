@@ -872,7 +872,8 @@ body {
 
 #edit-order-modal,
 #save-order-modal,
-#close-order-modal {
+#close-order-modal,
+#print-order-modal {
     flex: 0 0 auto; /* don’t stretch full width */
     padding: 12px 20px;
     color: #fff;
@@ -893,11 +894,13 @@ body {
 
 /* Edit and Save buttons */
 #edit-order-modal,
-#save-order-modal {
+#save-order-modal,
+#print-order-modal {
     background: #5c8b25; 
 }
 #edit-order-modal:hover,
-#save-order-modal:hover {
+#save-order-modal:hover,
+#print-order-modal:hover {
     background: #325a00;
 }
 

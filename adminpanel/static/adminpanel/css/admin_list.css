@@ -1,0 +1,325 @@
+/* === vvv GLOBAL CSS DO NOT TOUCH vvv === */
+/* Logo Font Temporary */
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&family=Lilita+One&family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
+
+/* Search (Don't Touch) */
+@use postcss-color-function;
+@use postcss-nested;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700,900');
+
+/* Reset Everything */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+    background: #f9fbfa;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    height: 100vh;
+}
+/* === ^^^ GLOBAL CSS DO NOT TOUCH ^^^ === */
+
+.admin-container {
+    display: flex;
+    flex-direction: column;   /* vertical stacking now */
+    gap: 20px;                /* space between rows */
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 80vw;
+    box-sizing: border-box;
+}
+
+
+/* === Section styling (applies to all sections) === */
+.section {
+  border: 1px solid #d4d5d5;
+  border-radius: 15px;
+  padding: 24px;
+  margin-bottom: 25px;
+  background-color: #ffffff;
+}
+
+
+/* === Section headings === */
+.section h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-optical-sizing: auto;
+}
+
+
+
+/* === Admin Users Section === */
+/* === Table Container === */
+.table-container {
+  overflow-x: auto; /* horizontal scroll if content overflows */
+  padding: 10px 0;
+}
+
+/* === Shared Table Styling === */
+.admin-products-table {
+  border-collapse: separate; /* for rounded corners */
+  border-spacing: 0px 15px;  /* horizontal | vertical spacing */
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Header cells */
+.admin-products-table th {
+  background-color: #f5f5f5;
+  position: sticky;
+  top: 0;
+  padding: 20px 15px;
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-optical-sizing: auto;
+  text-align: left;
+}
+
+/* Round table header corners */
+.admin-products-table th:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.admin-products-table th:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Body cells */
+.admin-products-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  font-family: "Lexend", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-optical-sizing: auto;
+}
+
+/* Optional: images in products table */
+.admin-products-table td img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Delete icon column for admins table */
+.admin-users-table td .delete-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #c00;
+  transition: color 0.2s ease;
+}
+
+.admin-users-table td .delete-icon:hover {
+  color: #900;
+}
+
+/* Hover effects for rows */
+.admin-products-table tbody tr:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+/* Rounded corners on hover */
+.admin-products-table tbody tr:hover td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.admin-products-table tbody tr:hover td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Bottom row rounded corners */
+.admin-products-table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.admin-products-table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+.admin-users-table td .delete-icon svg {
+  width: 25px;
+  height: 25px;
+}
+
+.admin-users-table td .delete-icon {
+  background: none; /* remove default button style */
+  border: none;
+  padding: 4px; /* optional for clickable area */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgb(0, 0, 0);
+  transition: color 0.2s ease;
+}
+
+.admin-users-table td .delete-icon:hover {
+  color: rgb(170, 12, 12);
+}
+
+/* === Admins Section Top === */
+.admin-users-display-section-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.admin-users-display-section-top h3{
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-family: "Lexend", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-optical-sizing: auto;
+}
+
+.admin-users-display-actions {
+    display: flex;
+    gap: 20px;           /* space between elements */
+    align-items: center;
+    max-width: 750px;
+    width: 100%;
+    flex-wrap: nowrap;    /* prevent wrapping */
+}
+
+/* Search Bar */
+.admin-user-search-bar {
+    flex-grow: 1;         /* takes available space */
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+}
+
+.admin-user-search__input {
+    width: 100%;
+    padding: 12px 24px 12px 60px; /* top, right, bottom, left */
+    font-size: 16px;
+    font-family: "Lexend", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    line-height: 18px;
+    color: #575756;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    background-position: 25px center;
+    border: 1px solid #575756;
+    border-radius: 0px;
+    transition: all 250ms ease-in-out;
+}
+
+.admin-user-search__input::placeholder {
+    color: rgba(87, 87, 86, 0.8);
+    letter-spacing: 1.5px;
+    font-size: 14px;
+    font-family: "Lexend", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.admin-user-search__input:hover,
+.admin-user-search__input:focus {
+    padding: 12px 14px 12px 40px;
+    outline: 0;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #575756;
+    background-position: 13px center;
+}
+
+/* Filter & Sort Buttons */
+.btn-users-icon {
+    flex: 0 0 auto;      /* do not stretch */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    color: #000;          /* icon color */
+}
+
+.btn-users-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-users-icon:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+    color: #900;          /* icon turns red on hover */
+}
+
+/* Add Admin Button */
+.btn-add-users-action {
+    flex: 0 0 auto;
+    width: 150px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 3px;
+    background-color: #5c8b25;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-family: "Lexend", sans-serif;
+    font-weight: 300;
+    transition: background-color 0.3s ease;
+}
+
+.btn-add-users-action:hover {
+    background-color: #325a00;
+}
+
+.btn-promote-user {
+    flex: 0 0 auto;
+    padding: 6px 6px;
+    background-color: #5e862d;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    font-size: 14px;
+    font-family: "Lexend", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-optical-sizing: auto;
+}
+
+.btn-promote-user:hover {
+    background-color: #325a01;
+}

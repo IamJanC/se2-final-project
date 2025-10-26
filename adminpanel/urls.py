@@ -29,4 +29,8 @@ urlpatterns = [
     path("category/delete/<int:pk>/", views.delete_category, name="delete_category"),
     path("category/validate/", views.validate_category, name="validate_category"),
     
+    # ✅ Accounts & Admins
+    path('admins/account/', views.admin_accounts_view, name='admin_accounts'),
+    path('admins/list/', views.admin_list_view, name='admin_list'),
+
 ]

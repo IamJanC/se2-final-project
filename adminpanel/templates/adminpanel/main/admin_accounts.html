@@ -1,0 +1,136 @@
+{% extends 'adminpanel/shared/admin_base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block header_title %}Admin Account Management{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'adminpanel/css/admin_account.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+
+    <div class="admin-top-row">
+
+        <div class="div-account-credentials section">
+            <h2>Your Account</h2>
+
+            <!-- Name fields: first and last -->
+            <div class="admin-name">
+                <div class="input-field">
+                    <label for="first-name">First Name</label>
+                    <input type="text" id="first-name" name="first-name" maxlength="50">
+                </div>
+                <div class="input-field">
+                    <label for="last-name">Last Name</label>
+                    <input type="text" id="last-name" name="last-name" maxlength="50">
+                </div>
+            </div>
+
+            <!-- Contacts: email and phone -->
+            <div class="admin-contacts">
+                <div class="input-field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" maxlength="100">
+                </div>
+                <div class="input-field">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" maxlength="15">
+                </div>
+            </div>
+
+            <div class="admin-credentials-action-buttons">
+                <button id="edit-admin-credential" class="save-btn">Edit</button>
+                <button id="save-admin-credential" class="save-btn">Save</button>
+                <button id="close-admin-credential" class="close-btn">Cancel</button>
+            </div>
+
+
+
+
+        </div>
+
+
+        <div class="div-account-password section">
+            <h2>Change Password</h2>
+
+            <!-- Current Password -->
+            <div class="password-field">
+                <label for="current-password">Current Password:</label>
+                <div class="password-input-container">
+                    <input type="password" id="current-password" name="current-password" minlength="8" maxlength="20">
+
+                    <span class="eye-icon" onclick="togglePassword('current-password', this)">
+                        <!-- Open eye -->
+                        <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+
+                        <!-- Closed eye -->
+                        <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.05 10.05 0 0112 19c-7 0-11-7-11-7
+                                a20.3 20.3 0 014.48-5.94M9.88 9.88
+                                A3 3 0 0012 15a3 3 0 002.12-5.12M1 1l22 22"/>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+
+            <!-- New Password -->
+            <div class="password-field">
+                <label for="new-password">New Password:</label>
+                <div class="password-input-container">
+                    <input type="password" id="new-password" name="new-password" minlength="8" maxlength="20">
+
+                    <span class="eye-icon" onclick="togglePassword('new-password', this)">
+                        <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+
+                        <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.05 10.05 0 0112 19c-7 0-11-7-11-7
+                                a20.3 20.3 0 014.48-5.94M9.88 9.88
+                                A3 3 0 0012 15a3 3 0 002.12-5.12M1 1l22 22"/>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Confirm New Password -->
+            <div class="password-field">
+                <label for="confirm-new-password">Confirm New Password:</label>
+                <div class="password-input-container">
+                    <input type="password" id="confirm-new-password" name="confirm-new-password" minlength="8" maxlength="20">
+
+                    <span class="eye-icon" onclick="togglePassword('confirm-new-password', this)">
+                        <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+
+                        <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M17.94 17.94A10.05 10.05 0 0112 19c-7 0-11-7-11-7
+                                a20.3 20.3 0 014.48-5.94M9.88 9.88
+                                A3 3 0 0012 15a3 3 0 002.12-5.12M1 1l22 22"/>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+
+            <div class="admin-password-action-buttons">
+                <button id="edit-admin-password" class="save-btn">Edit</button>
+                <button id="save-admin-password" class="save-btn">Save</button>
+                <button id="close-admin-password" class="close-btn">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+
+    
+
+</div>
+{% endblock %}
