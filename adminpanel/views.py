@@ -193,12 +193,21 @@ def export_pdf(request):
 
 
 # ========================
-# Dashboard View
+# Dashboard View - FINAL CORRECTED VERSION FOR YOUR MODELS
 # ========================
+# Required imports (add at top of your views.py if not already there)
+from django.db.models import Sum, Count, Q, F, FloatField
+from decimal import Decimal
+
 @login_required
 @user_passes_test(staff_required, login_url='main:home')
 def dashboard_view(request):
     """Displays the main admin dashboard with categories, products, and order stats."""
+
+    now = timezone.now()
+    seven_days_ago = now - timedelta(days=7)
+    thirty_days_ago = now - timedelta(days=30)
+    sixty_days_ago = now - timedelta(days=60)
 
     # -----------------------------
     # Categories & Products
@@ -206,29 +215,88 @@ def dashboard_view(request):
     categories = Category.objects.all()
     products = Product.objects.select_related("category").all().order_by("id")
 
-    # Low stock products
-    low_stock_products = products.filter(stock__lt=20).order_by("stock")
+    # Low stock products (stock < 20) - Uses 'stock' field
+    low_stock_products = products.filter(stock__lt=20).order_by("stock")[:5]
 
     # -----------------------------
-    # Pending & Cancelled Orders (Last 30 days)
+    # TOTAL SALES (Last 30 days vs Previous 30 days)
     # -----------------------------
-    now = timezone.now()
-    thirty_days_ago = now - timedelta(days=30)
-    sixty_days_ago = now - timedelta(days=60)
+    # Current 30 days sales - FIXED: Calculate from OrderItems
+    current_sales = OrderItem.objects.filter(
+        order__created_at__gte=thirty_days_ago,
+        order__status__in=['completed', 'shipped', 'delivered']
+    ).aggregate(
+        total=Sum(F('quantity') * F('price_at_purchase'), output_field=FloatField())
+    )['total'] or Decimal('0.00')
 
-    # Pending orders (last 30 days)
-    pending_orders_count = Order.objects.filter(status="pending", created_at__gte=thirty_days_ago).count()
-    pending_orders_users_count = Order.objects.filter(status="pending", created_at__gte=thirty_days_ago).values("user").distinct().count()
+    # Previous 30 days sales - FIXED: Calculate from OrderItems
+    previous_sales = OrderItem.objects.filter(
+        order__created_at__gte=sixty_days_ago,
+        order__created_at__lt=thirty_days_ago,
+        order__status__in=['completed', 'shipped', 'delivered']
+    ).aggregate(
+        total=Sum(F('quantity') * F('price_at_purchase'), output_field=FloatField())
+    )['total'] or Decimal('0.00')
+
+    # Calculate sales % change
+    sales_change_percent = 0
+    if previous_sales > 0:
+        sales_change_percent = round(
+            ((current_sales - previous_sales) / previous_sales) * 100, 1
+        )
+    elif current_sales > 0:
+        sales_change_percent = 100.0
+
+    sales_change_percent_up = sales_change_percent if sales_change_percent > 0 else 0
+    sales_change_percent_down = abs(sales_change_percent) if sales_change_percent < 0 else 0
+
+    # -----------------------------
+    # TOTAL ORDERS (Last 30 days vs Previous 30 days)
+    # -----------------------------
+    current_orders_count = Order.objects.filter(created_at__gte=thirty_days_ago).count()
+    previous_orders_count = Order.objects.filter(
+        created_at__gte=sixty_days_ago,
+        created_at__lt=thirty_days_ago
+    ).count()
+
+    # Calculate orders % change
+    orders_change_percent = 0
+    if previous_orders_count > 0:
+        orders_change_percent = round(
+            ((current_orders_count - previous_orders_count) / previous_orders_count) * 100, 1
+        )
+    elif current_orders_count > 0:
+        orders_change_percent = 100.0
+
+    orders_change_percent_up = orders_change_percent if orders_change_percent > 0 else 0
+    orders_change_percent_down = abs(orders_change_percent) if orders_change_percent < 0 else 0
+
+    # -----------------------------
+    # PENDING & CANCELLED ORDERS (Last 30 days)
+    # -----------------------------
+    pending_orders_count = Order.objects.filter(
+        status="pending",
+        created_at__gte=thirty_days_ago
+    ).count()
     
-    # Cancelled orders (last 30 days vs previous 30 days)
-    current_cancelled_orders_count = Order.objects.filter(status="cancelled", created_at__gte=thirty_days_ago).count()
+    pending_orders_users_count = Order.objects.filter(
+        status="pending",
+        created_at__gte=thirty_days_ago
+    ).values("user").distinct().count()
+    
+    # Cancelled orders (current vs previous period)
+    current_cancelled_orders_count = Order.objects.filter(
+        status="cancelled",
+        created_at__gte=thirty_days_ago
+    ).count()
+    
     previous_cancelled_orders_count = Order.objects.filter(
         status="cancelled",
         created_at__gte=sixty_days_ago,
         created_at__lt=thirty_days_ago
     ).count()
 
-    # Calculate cancelled orders % change - FIXED LOGIC
+    # Calculate cancelled orders % change
     cancelled_change_percent = 0
     if previous_cancelled_orders_count > 0:
         cancelled_change_percent = round(
@@ -237,35 +305,121 @@ def dashboard_view(request):
     elif current_cancelled_orders_count > 0:
         cancelled_change_percent = 100.0
 
-    # FIXED: Always show the actual percentage value (positive or negative)
     cancelled_change_percent_up = cancelled_change_percent if cancelled_change_percent > 0 else 0
     cancelled_change_percent_down = abs(cancelled_change_percent) if cancelled_change_percent < 0 else 0
 
     # -----------------------------
-    # Total Orders (Last 30 days vs Previous 30 days) - FIXED
+    # FAST MOVING PRODUCTS (Last 7 days)
     # -----------------------------
-    # Current 30-day period
-    current_orders_count = Order.objects.filter(created_at__gte=thirty_days_ago).count()
+    # Uses price_at_purchase from OrderItem, stock and image_url from Product
+    fast_moving_products = OrderItem.objects.filter(
+        order__created_at__gte=seven_days_ago,
+        order__status__in=['completed', 'shipped', 'delivered', 'pending']
+    ).values(
+        'product__id',
+        'product__name',
+        'product__image_url',  # CORRECTED: uses image_url
+        'product__price',
+        'product__stock'  # CORRECTED: uses stock
+    ).annotate(
+        total_quantity=Sum('quantity'),
+        total_sales=Sum(F('quantity') * F('price_at_purchase'))
+    ).order_by('-total_quantity')[:3]
 
-    # Previous 30-day period
-    previous_orders_count = Order.objects.filter(
-        created_at__gte=sixty_days_ago,
-        created_at__lt=thirty_days_ago
-    ).count()
+    # Add stock status to fast moving products
+    for product in fast_moving_products:
+        stock = product['product__stock']  # CORRECTED: uses stock
+        if stock == 0:
+            product['stock_status'] = 'danger'
+            product['stock_label'] = 'Out of Stock'
+        elif stock < 20:
+            product['stock_status'] = 'warning'
+            product['stock_label'] = 'Low Stock'
+        else:
+            product['stock_status'] = 'success'
+            product['stock_label'] = 'In Stock'
 
-    # Calculate % change - FIXED: Handle case when both are 0
-    orders_change_percent = 0
-    if previous_orders_count > 0:
-        orders_change_percent = round(
-            ((current_orders_count - previous_orders_count) / previous_orders_count) * 100, 1
-        )
-    elif current_orders_count > 0:
-        orders_change_percent = 100.0  # new orders this period
-    # If both are 0, orders_change_percent remains 0
+    # -----------------------------
+    # SLOW MOVING PRODUCTS (Last 7 days)
+    # -----------------------------
+    # Uses price_at_purchase from OrderItem, stock and image_url from Product
+    slow_moving_products = OrderItem.objects.filter(
+        order__created_at__gte=seven_days_ago,
+        order__status__in=['completed', 'shipped', 'delivered', 'pending']
+    ).values(
+        'product__id',
+        'product__name',
+        'product__image_url',  # CORRECTED: uses image_url
+        'product__price',
+        'product__stock'  # CORRECTED: uses stock
+    ).annotate(
+        total_quantity=Sum('quantity'),
+        total_sales=Sum(F('quantity') * F('price_at_purchase'))
+    ).order_by('total_quantity')[:3]
 
-    # FIXED: Show actual values - if percentage is positive, show in up; if negative, show in down
-    orders_change_percent_up = orders_change_percent if orders_change_percent > 0 else 0
-    orders_change_percent_down = abs(orders_change_percent) if orders_change_percent < 0 else 0
+    # Add stock status to slow moving products
+    for product in slow_moving_products:
+        stock = product['product__stock']  # CORRECTED: uses stock
+        if stock == 0:
+            product['stock_status'] = 'danger'
+            product['stock_label'] = 'Out of Stock'
+        elif stock < 20:
+            product['stock_status'] = 'warning'
+            product['stock_label'] = 'Low Stock'
+        else:
+            product['stock_status'] = 'success'
+            product['stock_label'] = 'In Stock'
+
+    # -----------------------------
+    # RECENT TRANSACTIONS (Last 10)
+    # -----------------------------
+    recent_transactions = Order.objects.select_related('user').order_by('-created_at')[:10]
+
+    # Format transactions for template
+    formatted_transactions = []
+    for order in recent_transactions:
+        # Get status badge class
+        if order.status == 'completed' or order.status == 'delivered':
+            status_class = 'success'
+            status_label = 'Completed'
+        elif order.status == 'cancelled':
+            status_class = 'danger'
+            status_label = 'Cancelled'
+        else:
+            status_class = 'pending'
+            status_label = order.status.capitalize()
+
+        # FIXED: Calculate total from OrderItems
+        order_total = OrderItem.objects.filter(order=order).aggregate(
+            total=Sum(F('quantity') * F('price_at_purchase'), output_field=FloatField())
+        )['total'] or 0
+
+        formatted_transactions.append({
+            'customer_id': f'CUST-{order.user.id:03d}',
+            'order_date': order.created_at.strftime('%Y-%m-%d'),
+            'order_time': order.created_at.strftime('%H:%M'),
+            'status_class': status_class,
+            'status_label': status_label,
+            'amount': order_total
+        })
+
+    # -----------------------------
+    # RECENT SESSION LOGS (Last 10 logins)
+    # -----------------------------
+    # Uses recent orders as proxy for user activity
+    recent_sessions = []
+    recent_user_activities = Order.objects.select_related('user').order_by('-created_at').values(
+        'user__id',
+        'user__username',
+        'created_at'
+    ).distinct()[:10]
+
+    for activity in recent_user_activities:
+        recent_sessions.append({
+            'user_id': activity['user__id'],
+            'username': activity['user__username'],
+            'time': activity['created_at'].strftime('%H:%M')
+        })
 
     # -----------------------------
     # Context
@@ -276,23 +430,34 @@ def dashboard_view(request):
         "products": products,
         "low_stock_products": low_stock_products,
 
-        # Pending & Cancelled Orders (last 30 days)
-        "pending_orders_count": pending_orders_count,
-        "pending_orders_users_count": pending_orders_users_count,
-        "cancelled_orders_count": current_cancelled_orders_count,
-        
-        # Cancelled orders change
-        "cancelled_change_percent_up": cancelled_change_percent_up,
-        "cancelled_change_percent_down": cancelled_change_percent_down,
+        # Sales Data
+        "current_sales": f"{current_sales:,.2f}",
+        "previous_sales": f"{previous_sales:,.2f}",
+        "sales_change_percent_up": sales_change_percent_up,
+        "sales_change_percent_down": sales_change_percent_down,
+        "sales_change_percent_raw": sales_change_percent,
 
-        # Total Orders
+        # Orders Data
         "current_orders_count": current_orders_count,
         "previous_orders_count": previous_orders_count,
         "orders_change_percent_up": orders_change_percent_up,
         "orders_change_percent_down": orders_change_percent_down,
-        
-        # DEBUG: Add the raw percentage for troubleshooting
         "orders_change_percent_raw": orders_change_percent,
+
+        # Pending & Cancelled Orders
+        "pending_orders_count": pending_orders_count,
+        "pending_orders_users_count": pending_orders_users_count,
+        "cancelled_orders_count": current_cancelled_orders_count,
+        "cancelled_change_percent_up": cancelled_change_percent_up,
+        "cancelled_change_percent_down": cancelled_change_percent_down,
+
+        # Product Movement
+        "fast_moving_products": fast_moving_products,
+        "slow_moving_products": slow_moving_products,
+
+        # Recent Activity
+        "recent_transactions": formatted_transactions,
+        "recent_sessions": recent_sessions,
     }
 
     return render(request, "adminpanel/main/dashboard.html", context)
@@ -538,21 +703,6 @@ def delete_product(request, custom_id):
 
 
 # ==============================
-# Admin Credentials / Account Page
-# ==============================
-@login_required
-@user_passes_test(staff_required, login_url='main:home')
-def admin_accounts_view(request):
-    """
-    Displays the Admin tab for managing the current admin's credentials and password.
-    """
-    context = {
-        "title": "Admin Account",  # for sidebar active class
-    }
-    return render(request, "adminpanel/main/admin_accounts.html", context)
-
-
-# ==============================
 # Admin Users List Page
 # ==============================
 @login_required
@@ -717,3 +867,14 @@ def promote_to_admin(request, user_id):
             {"status": "error", "message": f"Error promoting user: {str(e)}"},
             status=500
         )
+        
+
+# =============================
+# Suppliers List
+# =============================
+
+def supplier_list(request):
+    context = {
+        'title': 'Supplier List',
+    }
+    return render(request, "adminpanel/main/suppliers.html", context)

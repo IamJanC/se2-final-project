@@ -1,0 +1,764 @@
+{% extends 'adminpanel/shared/admin_base.html' %}
+
+{% block title %}Suppliers{% endblock %}
+{% block header_title %}Supplier Management{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'adminpanel/css/admin_list.css' %}">
+    <style>
+        /* Modal Styles */
+        .supplier-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .supplier-modal.active {
+            display: flex;
+        }
+
+        .supplier-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .supplier-modal-header {
+            margin-bottom: 25px;
+        }
+
+        .supplier-modal-header h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .supplier-form-group {
+            margin-bottom: 20px;
+        }
+
+        .supplier-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .supplier-form-group input,
+        .supplier-form-group select,
+        .supplier-form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .supplier-form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .supplier-form-group input:focus,
+        .supplier-form-group select:focus,
+        .supplier-form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .supplier-modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .btn-supplier-save {
+            flex: 1;
+            padding: 12px 24px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-supplier-save:hover {
+            background: #229954;
+        }
+
+        .btn-supplier-cancel {
+            flex: 1;
+            padding: 12px 24px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-supplier-cancel:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-add-supplier {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-add-supplier:hover {
+            background: #2980b9;
+        }
+
+        .btn-edit-supplier {
+            padding: 6px 12px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-right: 8px;
+        }
+
+        .btn-edit-supplier:hover {
+            background: #2980b9;
+        }
+
+        .supplier-status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+
+    <!-- ============================== -->
+    <!-- SUPPLIERS SECTION -->
+    <!-- ============================== -->
+    <div class="admin-users-display-section section">
+        
+        <!-- Table Header / Top Actions -->
+        <div class="admin-users-display-section-top">
+            <h3>Suppliers</h3>
+
+            <div class="admin-users-display-actions">
+
+                <!-- Search Bar -->
+                <form class="admin-user-search-bar" autocomplete="off">
+                    <input 
+                        class="admin-user-search__input" 
+                        type="text" 
+                        placeholder="Search supplier" 
+                        maxlength="30"
+                        id="supplierSearchInput"
+                    >
+                </form>
+
+                <!-- Filter Button -->
+                <button type="button" class="btn-users-icon" aria-label="Filter Suppliers">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 12L17 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M11 17H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+                <!-- Sort Button -->
+                <button type="button" class="btn-users-icon" aria-label="Sort Suppliers">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.1924 5.65685C11.5829 5.26633 11.5829 4.63316 11.1924 4.24264L8.36397 1.41421C8.30576 1.356 8.24485 1.30212 8.18165 1.25259C7.50286 0.720577 6.55947 0.689024 5.84929 1.15793C5.73839 1.23115 5.63317 1.31658 5.53554 1.41421L2.70711 4.24264C2.31658 4.63316 2.31658 5.26633 2.70711 5.65685C3.09763 6.04738 3.7308 6.04738 4.12132 5.65685L6.00003 3.77814V18C6.00003 18.5523 6.44775 19 7.00003 19C7.55232 19 8.00003 18.5523 8.00003 18V3.8787L9.77818 5.65685C10.1687 6.04737 10.8019 6.04737 11.1924 5.65685Z" fill="currentColor"></path> 
+                        <path d="M12.7071 18.3432C12.3166 18.7337 12.3166 19.3668 12.7071 19.7574L15.5355 22.5858C15.6332 22.6834 15.7384 22.7689 15.8493 22.8421C16.6256 23.3546 17.6805 23.2692 18.364 22.5858L21.1924 19.7574C21.5829 19.3668 21.5829 18.7337 21.1924 18.3432C20.8019 17.9526 20.1687 17.9526 19.7782 18.3432L18 20.1213L18 6C18 5.44771 17.5523 5 17 5C16.4477 5 16 5.44771 16 6L16 20.2218L14.1213 18.3432C13.7308 17.9526 13.0976 17.9526 12.7071 18.3432Z" fill="currentColor"></path> 
+                    </svg>
+                </button>
+
+                <!-- Add Supplier Button -->
+                <button type="button" class="btn-add-supplier" id="addSupplierBtn">
+                    + Add Supplier
+                </button>
+            </div>
+        </div>
+
+        <!-- Container for horizontal scrolling -->
+        <div class="table-container">
+            <table class="admin-products-table admin-users-table">
+                <thead>
+                    <tr>
+                        <th>Supplier Name</th>
+                        <th>Contact Person</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Products/Services</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="suppliersTableBody">
+                    <!-- Suppliers will be populated by JavaScript -->
+                    <tr id="noSuppliersMessage">
+                        <td colspan="7" style="text-align: center; padding: 20px; color: #666;">
+                            No suppliers found. Click "Add Supplier" to get started.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- ============================== -->
+<!-- SUPPLIER MODAL -->
+<!-- ============================== -->
+<div id="supplierModal" class="supplier-modal">
+    <div class="supplier-modal-content">
+        <div class="supplier-modal-header">
+            <h2 id="supplierModalTitle">Add New Supplier</h2>
+        </div>
+        <form id="supplierForm">
+            <div class="supplier-form-group">
+                <label>Supplier Name *</label>
+                <input type="text" id="supplierName" required>
+            </div>
+            <div class="supplier-form-group">
+                <label>Contact Person *</label>
+                <input type="text" id="contactPerson" required>
+            </div>
+            <div class="supplier-form-group">
+                <label>Email *</label>
+                <input type="email" id="supplierEmail" required>
+            </div>
+            <div class="supplier-form-group">
+                <label>Phone *</label>
+                <input type="tel" id="supplierPhone" required>
+            </div>
+            <div class="supplier-form-group">
+                <label>Address</label>
+                <textarea id="supplierAddress"></textarea>
+            </div>
+            <div class="supplier-form-group">
+                <label>Products/Services</label>
+                <input type="text" id="supplierProducts" placeholder="e.g., Electronics, Food Items">
+            </div>
+            <div class="supplier-form-group">
+                <label>Status</label>
+                <select id="supplierStatus">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="supplier-modal-actions">
+                <button type="submit" class="btn-supplier-save">Save Supplier</button>
+                <button type="button" class="btn-supplier-cancel" id="cancelSupplierBtn">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ============================== -->
+<!-- INLINE JAVASCRIPT -->
+<!-- ============================== -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('Supplier management page loaded - initializing functionality');
+
+    // Global state for Suppliers section
+    window.supplierState = {
+        searchTerm: '',
+        filter: { type: 'all', value: '' },
+        sort: { key: null, dir: 1 }
+    };
+
+    // Static supplier data (in-memory storage)
+    window.suppliers = [
+        {
+            id: 1,
+            name: "Tech Solutions Inc.",
+            contactPerson: "John Smith",
+            email: "john@techsolutions.com",
+            phone: "+1-555-0123",
+            address: "123 Tech Street, Silicon Valley, CA",
+            products: "Computer Hardware, Software",
+            status: "active"
+        },
+        {
+            id: 2,
+            name: "Global Foods Co.",
+            contactPerson: "Maria Garcia",
+            email: "maria@globalfoods.com",
+            phone: "+1-555-0456",
+            address: "456 Food Ave, New York, NY",
+            products: "Food Items, Beverages",
+            status: "active"
+        }
+    ];
+
+    window.editingSupplierId = null;
+    window.nextSupplierId = 3;
+
+    initializeSupplierSection();
+    initializeSupplierModal();
+    renderSuppliers();
+
+    console.log('Supplier management functionality initialized');
+});
+
+/* =============================================== */
+/* SUPPLIER SECTION - Search, Filter, Sort        */
+/* =============================================== */
+function initializeSupplierSection() {
+    const searchInput = document.getElementById('supplierSearchInput');
+    if (!searchInput) {
+        console.error('Supplier search input not found!');
+        return;
+    }
+
+    // Search functionality
+    searchInput.addEventListener('input', function (e) {
+        window.supplierState.searchTerm = e.target.value.toLowerCase().trim();
+        updateVisibleSuppliers();
+    });
+
+    searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            searchInput.value = '';
+            window.supplierState.searchTerm = '';
+            updateVisibleSuppliers();
+        }
+    });
+
+    const section = document.querySelector('.admin-users-display-section');
+    if (!section) return;
+    
+    const buttons = section.querySelectorAll('.btn-users-icon');
+    
+    if (buttons.length < 2) {
+        console.error('Supplier filter/sort buttons not found!');
+        return;
+    }
+
+    const filterButton = buttons[0];
+    const sortButton = buttons[1];
+
+    const filterMenu = createPopupMenu('supplier-filter');
+    const sortMenu = createPopupMenu('supplier-sort');
+    document.body.appendChild(filterMenu);
+    document.body.appendChild(sortMenu);
+
+    buildSupplierFilterMenu(filterMenu);
+    buildSupplierSortMenu(sortMenu);
+
+    filterButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleMenu(filterMenu, filterButton);
+        sortMenu.style.display = 'none';
+    });
+
+    sortButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleMenu(sortMenu, sortButton);
+        filterMenu.style.display = 'none';
+    });
+
+    document.addEventListener('click', function () {
+        filterMenu.style.display = 'none';
+        sortMenu.style.display = 'none';
+    });
+}
+
+function buildSupplierFilterMenu(menu) {
+    menu.innerHTML = '';
+
+    const allBtn = document.createElement('div');
+    allBtn.textContent = 'Show all suppliers';
+    stylizeMenuItem(allBtn, () => {
+        window.supplierState.filter = { type: 'all', value: '' };
+        menu.style.display = 'none';
+        updateVisibleSuppliers();
+    });
+    menu.appendChild(allBtn);
+
+    menu.appendChild(createHr());
+
+    const activeBtn = document.createElement('div');
+    activeBtn.textContent = 'Active suppliers';
+    stylizeMenuItem(activeBtn, () => {
+        window.supplierState.filter = { type: 'status', value: 'active' };
+        menu.style.display = 'none';
+        updateVisibleSuppliers();
+    });
+    menu.appendChild(activeBtn);
+
+    const inactiveBtn = document.createElement('div');
+    inactiveBtn.textContent = 'Inactive suppliers';
+    stylizeMenuItem(inactiveBtn, () => {
+        window.supplierState.filter = { type: 'status', value: 'inactive' };
+        menu.style.display = 'none';
+        updateVisibleSuppliers();
+    });
+    menu.appendChild(inactiveBtn);
+}
+
+function buildSupplierSortMenu(menu) {
+    menu.innerHTML = '';
+    const sortOptions = [
+        { label: 'Supplier Name A → Z', key: 'name', dir: 1 },
+        { label: 'Supplier Name Z → A', key: 'name', dir: -1 },
+        { label: 'Contact Person A → Z', key: 'contactPerson', dir: 1 },
+        { label: 'Contact Person Z → A', key: 'contactPerson', dir: -1 },
+        { label: 'Email A → Z', key: 'email', dir: 1 },
+        { label: 'Email Z → A', key: 'email', dir: -1 }
+    ];
+
+    sortOptions.forEach(option => {
+        const item = document.createElement('div');
+        item.textContent = option.label;
+        stylizeMenuItem(item, () => {
+            window.supplierState.sort = { key: option.key, dir: option.dir };
+            menu.style.display = 'none';
+            updateVisibleSuppliers();
+        });
+        menu.appendChild(item);
+    });
+}
+
+/* =============================================== */
+/* RENDER SUPPLIERS                               */
+/* =============================================== */
+function renderSuppliers() {
+    const tbody = document.getElementById('suppliersTableBody');
+    if (!tbody) return;
+
+    // Clear existing rows
+    tbody.innerHTML = '';
+
+    if (window.suppliers.length === 0) {
+        const noMsg = document.createElement('tr');
+        noMsg.id = 'noSuppliersMessage';
+        noMsg.innerHTML = `<td colspan="7" style="text-align: center; padding: 20px; color: #666;">
+            No suppliers found. Click "Add Supplier" to get started.
+        </td>`;
+        tbody.appendChild(noMsg);
+        return;
+    }
+
+    window.suppliers.forEach(supplier => {
+        const row = document.createElement('tr');
+        row.dataset.supplierId = supplier.id;
+        
+        row.innerHTML = `
+            <td>${supplier.name}</td>
+            <td>${supplier.contactPerson}</td>
+            <td>${supplier.email}</td>
+            <td>${supplier.phone}</td>
+            <td>${supplier.products || '—'}</td>
+            <td>
+                <span class="supplier-status-badge status-${supplier.status}">
+                    ${supplier.status.charAt(0).toUpperCase() + supplier.status.slice(1)}
+                </span>
+            </td>
+            <td>
+                <button class="btn-edit-supplier edit-supplier-btn" 
+                        data-supplier-id="${supplier.id}"
+                        aria-label="Edit supplier">
+                    Edit
+                </button>
+                <button class="delete-icon delete-supplier-btn" 
+                        data-supplier-id="${supplier.id}"
+                        data-supplier-name="${supplier.name}"
+                        aria-label="Delete supplier">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.5 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M9.17 4C9.58 2.83 10.69 2 12 2C13.31 2 14.42 2.83 14.83 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M18.37 15.4C18.2 18.05 18.11 19.38 17.24 20.19C16.38 21 15.05 21 12.39 21H11.61C8.95 21 7.62 21 6.76 20.19C5.89 19.38 5.8 18.05 5.63 15.4L5.17 8.5M18.83 8.5L18.63 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+
+    // Attach event listeners
+    attachSupplierEventListeners();
+    updateVisibleSuppliers();
+}
+
+function attachSupplierEventListeners() {
+    // Edit buttons
+    document.querySelectorAll('.edit-supplier-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const supplierId = parseInt(this.dataset.supplierId);
+            openEditSupplierModal(supplierId);
+        });
+    });
+
+    // Delete buttons
+    document.querySelectorAll('.delete-supplier-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const supplierId = parseInt(this.dataset.supplierId);
+            const supplierName = this.dataset.supplierName;
+            
+            if (confirm(`Are you sure you want to delete supplier "${supplierName}"?`)) {
+                deleteSupplier(supplierId);
+            }
+        });
+    });
+}
+
+/* =============================================== */
+/* MODAL FUNCTIONALITY                            */
+/* =============================================== */
+function initializeSupplierModal() {
+    const addBtn = document.getElementById('addSupplierBtn');
+    const modal = document.getElementById('supplierModal');
+    const cancelBtn = document.getElementById('cancelSupplierBtn');
+    const form = document.getElementById('supplierForm');
+
+    addBtn.addEventListener('click', openAddSupplierModal);
+    cancelBtn.addEventListener('click', closeSupplierModal);
+
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeSupplierModal();
+        }
+    });
+
+    // Form submit
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveSupplier();
+    });
+}
+
+function openAddSupplierModal() {
+    window.editingSupplierId = null;
+    document.getElementById('supplierModalTitle').textContent = 'Add New Supplier';
+    document.getElementById('supplierForm').reset();
+    document.getElementById('supplierModal').classList.add('active');
+}
+
+function openEditSupplierModal(supplierId) {
+    window.editingSupplierId = supplierId;
+    const supplier = window.suppliers.find(s => s.id === supplierId);
+    
+    if (!supplier) return;
+
+    document.getElementById('supplierModalTitle').textContent = 'Edit Supplier';
+    document.getElementById('supplierName').value = supplier.name;
+    document.getElementById('contactPerson').value = supplier.contactPerson;
+    document.getElementById('supplierEmail').value = supplier.email;
+    document.getElementById('supplierPhone').value = supplier.phone;
+    document.getElementById('supplierAddress').value = supplier.address || '';
+    document.getElementById('supplierProducts').value = supplier.products || '';
+    document.getElementById('supplierStatus').value = supplier.status;
+    
+    document.getElementById('supplierModal').classList.add('active');
+}
+
+function closeSupplierModal() {
+    document.getElementById('supplierModal').classList.remove('active');
+    document.getElementById('supplierForm').reset();
+    window.editingSupplierId = null;
+}
+
+function saveSupplier() {
+    const supplierData = {
+        name: document.getElementById('supplierName').value,
+        contactPerson: document.getElementById('contactPerson').value,
+        email: document.getElementById('supplierEmail').value,
+        phone: document.getElementById('supplierPhone').value,
+        address: document.getElementById('supplierAddress').value,
+        products: document.getElementById('supplierProducts').value,
+        status: document.getElementById('supplierStatus').value
+    };
+
+    if (window.editingSupplierId) {
+        // Edit existing supplier
+        const index = window.suppliers.findIndex(s => s.id === window.editingSupplierId);
+        if (index !== -1) {
+            window.suppliers[index] = { ...window.suppliers[index], ...supplierData };
+            alert('Supplier updated successfully!');
+        }
+    } else {
+        // Add new supplier
+        const newSupplier = {
+            id: window.nextSupplierId++,
+            ...supplierData
+        };
+        window.suppliers.push(newSupplier);
+        alert('Supplier added successfully!');
+    }
+
+    renderSuppliers();
+    closeSupplierModal();
+}
+
+function deleteSupplier(supplierId) {
+    const index = window.suppliers.findIndex(s => s.id === supplierId);
+    if (index !== -1) {
+        window.suppliers.splice(index, 1);
+        renderSuppliers();
+        alert('Supplier deleted successfully!');
+    }
+}
+
+/* =============================================== */
+/* UPDATE VISIBLE SUPPLIERS                       */
+/* =============================================== */
+function updateVisibleSuppliers() {
+    const { searchTerm, filter, sort } = window.supplierState;
+    const tbody = document.getElementById('suppliersTableBody');
+    if (!tbody) return;
+
+    const rows = Array.from(tbody.querySelectorAll('tr:not(#noSuppliersMessage)'));
+    let visibleRows = [];
+
+    rows.forEach(row => {
+        const supplierId = parseInt(row.dataset.supplierId);
+        const supplier = window.suppliers.find(s => s.id === supplierId);
+        
+        if (!supplier) {
+            row.style.display = 'none';
+            return;
+        }
+
+        let visible = true;
+
+        // Search
+        if (searchTerm) {
+            const searchableText = `${supplier.name} ${supplier.contactPerson} ${supplier.email} ${supplier.phone} ${supplier.products || ''}`.toLowerCase();
+            visible = searchableText.includes(searchTerm);
+        }
+
+        // Filter
+        if (visible && filter.type === 'status') {
+            visible = supplier.status === filter.value;
+        }
+
+        row.style.display = visible ? '' : 'none';
+        if (visible) visibleRows.push({ row, supplier });
+    });
+
+    // Sort
+    if (sort.key) {
+        visibleRows.sort((a, b) => {
+            const valA = (a.supplier[sort.key] || '').toLowerCase();
+            const valB = (b.supplier[sort.key] || '').toLowerCase();
+            return (valA > valB ? 1 : valA < valB ? -1 : 0) * sort.dir;
+        });
+        visibleRows.forEach(item => tbody.appendChild(item.row));
+    }
+
+    // No results message
+    let noMsg = document.getElementById('noSuppliersMessage');
+    if (!noMsg) {
+        noMsg = document.createElement('tr');
+        noMsg.id = 'noSuppliersMessage';
+        noMsg.innerHTML = '<td colspan="7" style="text-align:center; padding:20px; color:#666;">No suppliers found</td>';
+        tbody.appendChild(noMsg);
+    }
+    noMsg.style.display = visibleRows.length === 0 ? '' : 'none';
+
+    console.log(`Visible suppliers: ${visibleRows.length}`);
+}
+
+/* =============================================== */
+/* SHARED UTILITIES                               */
+/* =============================================== */
+function createPopupMenu(type) {
+    const menu = document.createElement('div');
+    menu.className = `adb-popup-menu ${type}-menu`;
+    Object.assign(menu.style, {
+        position: 'absolute',
+        background: '#fff',
+        border: '1px solid rgba(0,0,0,0.12)',
+        boxShadow: '0 6px 18px rgba(0,0,0,0.08)',
+        padding: '6px',
+        zIndex: '9999',
+        minWidth: '180px',
+        fontSize: '14px',
+        borderRadius: '6px',
+        display: 'none'
+    });
+    return menu;
+}
+
+function toggleMenu(menu, button) {
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+    } else {
+        positionMenuRelativeToButton(menu, button);
+        menu.style.display = 'block';
+    }
+}
+
+function stylizeMenuItem(item, onClick) {
+    item.style.padding = '8px';
+    item.style.cursor = 'pointer';
+    item.style.borderRadius = '4px';
+    item.addEventListener('mouseenter', () => item.style.background = '#f5f5f5');
+    item.addEventListener('mouseleave', () => item.style.background = '');
+    item.addEventListener('click', onClick);
+}
+
+function createHr() {
+    const hr = document.createElement('hr');
+    hr.style.margin = '6px 0';
+    hr.style.border = 'none';
+    hr.style.borderTop = '1px solid #eee';
+    return hr;
+}
+
+function positionMenuRelativeToButton(menu, button) {
+    const rect = button.getBoundingClientRect();
+    menu.style.left = (window.scrollX + rect.left) + 'px';
+    menu.style.top = (window.scrollY + rect.bottom + 6) + 'px';
+}
+</script>
+{% endblock %}

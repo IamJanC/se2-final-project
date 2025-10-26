@@ -251,7 +251,7 @@
                                         </td>
                                         <td>{{ order.created_at|date:"Y-m-d" }}</td>
                                         <td>₱{{ order.total_amount|floatformat:2 }}</td>
-                                        <td>{{ order.payment_method|title }}</td>
+                                        <td>COD</td>
                                         <td>
                                             {% if order.status in "completed,delivered,cancelled" %}
                                                 <span class="status {{ order.status }}">{{ order.status|title }}</span>
