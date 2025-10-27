@@ -1,0 +1,666 @@
+{% extends 'adminpanel/shared/admin_base.html' %}
+
+{% block title %}Reports{% endblock %}
+{% block header_title %}Reports{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: #f5f7fa;
+        color: #2d3748;
+    }
+
+    /* Reports Container */
+    .reports-container {
+        max-width: 1200px;
+        margin-left: 260px;
+        padding: 2rem;
+        transition: margin-left 0.3s ease;
+    }
+
+    @media (max-width: 992px) {
+        .reports-container {
+            margin-left: 0;
+            padding: 1.5rem;
+        }
+    }
+
+    /* Report Navigation */
+    .report-nav {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .report-nav-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .report-nav h1 {
+        font-size: 1.75rem;
+        color: #1a202c;
+    }
+
+    /* Buttons */
+    .print-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #22c55e;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .print-btn:hover {
+        background: #16a34a;
+    }
+
+    /* Report Tabs */
+    .report-tabs {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background: #f3f4f6;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #6b7280;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+        background: #e5e7eb;
+    }
+
+    .tab-btn.active {
+        background: #dcfce7;
+        color: #16a34a;
+    }
+
+    /* Date Filter */
+    .date-filter {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .date-filter label {
+        font-size: 0.875rem;
+        color: #6b7280;
+        font-weight: 500;
+    }
+
+    .date-filter input {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 0.875rem;
+    }
+
+    /* Report Content */
+    .report-content {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .report-header {
+        border-bottom: 3px solid #1f2937;
+        padding: 2rem;
+    }
+
+    .report-header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .report-header h2 {
+        font-size: 2rem;
+        color: #1a202c;
+        margin-bottom: 0.5rem;
+    }
+
+    .report-meta {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    .report-info {
+        text-align: right;
+    }
+
+    .report-info-label {
+        font-size: 0.75rem;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .report-info-value {
+        font-size: 1.125rem;
+        font-family: 'Courier New', monospace;
+        color: #1f2937;
+    }
+
+    .report-body {
+        padding: 2rem;
+    }
+
+    .report-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1a202c;
+        margin-bottom: 1.5rem;
+    }
+
+    .report-subtitle {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-bottom: 2rem;
+    }
+
+    /* Report Table */
+    .report-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+    }
+
+    .report-table thead {
+        background: #f9fafb;
+    }
+
+    .report-table th {
+        text-align: left;
+        padding: 1rem;
+        font-weight: 700;
+        font-size: 0.875rem;
+        color: #374151;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 2px solid #e5e7eb;
+    }
+
+    .report-table th.text-right {
+        text-align: right;
+    }
+
+    .report-table td {
+        padding: 1rem;
+        color: #4b5563;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .report-table td.text-right {
+        text-align: right;
+    }
+
+    .report-table tbody tr:hover {
+        background: #f9fafb;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1f2937;
+        background: #f3f4f6;
+        padding: 0.75rem 1rem;
+        margin: 2rem 0 1rem 0;
+        border-radius: 6px;
+    }
+
+    /* Report Footer */
+    .report-footer {
+        border-top: 3px solid #1f2937;
+        background: #f9fafb;
+        padding: 1.5rem 2rem;
+        text-align: center;
+    }
+
+    .report-footer p {
+        font-size: 0.75rem;
+        color: #6b7280;
+        margin: 0.25rem 0;
+    }
+
+    .report-footer .contacts {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 0.75rem;
+        font-size: 0.75rem;
+        color: #9ca3af;
+    }
+
+    .report-footer .page-number {
+        margin-top: 0.5rem;
+        color: #9ca3af;
+    }
+
+    /* Loading State */
+    .loading {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    .spinner {
+        display: inline-block;
+        width: 3rem;
+        height: 3rem;
+        border: 3px solid #f3f4f6;
+        border-top: 3px solid #22c55e;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading p {
+        margin-top: 1rem;
+        color: #6b7280;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    /* Print Styles */
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        .reports-container,
+        .reports-container * {
+            visibility: visible;
+        }
+
+        .reports-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            max-width: 100%;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .report-nav,
+        .sidebar,
+        .nav-sidebar,
+        .main-sidebar,
+        header,
+        .header,
+        .top-nav,
+        .navigation,
+        nav {
+            display: none !important;
+            visibility: hidden !important;
+        }
+
+        body {
+            background: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .report-content {
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
+        }
+
+        .report-header {
+            padding: 1.5rem !important;
+        }
+
+        .report-body {
+            padding: 1.5rem !important;
+        }
+
+        .report-table th,
+        .report-table td {
+            padding: 0.5rem !important;
+            font-size: 0.75rem !important;
+        }
+
+        .report-footer {
+            padding: 1rem 1.5rem !important;
+        }
+
+        .report-table tbody tr:hover {
+            background: transparent !important;
+        }
+
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        .report-table tr {
+            page-break-inside: avoid;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="reports-container">
+        <div class="report-nav">
+            <div class="report-nav-header">
+                <h1>Admin Reports</h1>
+                <button class="print-btn" onclick="window.print()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+                        <path d="M6 14h12v8H6z"/>
+                    </svg>
+                    Print Report
+                </button>
+            </div>
+
+            <div class="report-tabs">
+                <button class="tab-btn active" data-report="suppliers">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                    </svg>
+                    Supplier List
+                </button>
+                <button class="tab-btn" data-report="directory">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                        <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+                    </svg>
+                    Supplier Directory
+                </button>
+                <button class="tab-btn" data-report="statistics">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20V10M18 20V4M6 20v-4"/>
+                    </svg>
+                    Product Statistics
+                </button>
+            </div>
+
+            <div class="date-filter hidden" id="dateFilter">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/>
+                </svg>
+                <label>From:</label>
+                <input type="date" id="startDate" value="2025-09-01">
+                <label>To:</label>
+                <input type="date" id="endDate" value="2025-09-30">
+            </div>
+        </div>
+
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Loading report data...</p>
+        </div>
+
+        <div class="report-content" id="reportContent">
+            <div class="report-header">
+                <div class="report-header-top">
+                    <div>
+                        <h2>AgriHub</h2>
+                        <p class="report-meta">For internal use only - Generated on <span id="generatedTime"></span></p>
+                    </div>
+                    <div class="report-info">
+                        <p class="report-info-label">Reference No.</p>
+                        <p class="report-info-value">000-000</p>
+                        <p class="report-info-label" style="margin-top: 0.5rem;">Date Issued</p>
+                        <p class="report-info-value" id="dateIssued"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-body" id="reportBody"></div>
+
+            <div class="report-footer">
+                <p>THIS IS A SYSTEM-GENERATED REPORT. NO SIGNATURE REQUIRED.</p>
+                <p>AGRIHUB ECOMMERCE 2025, ALL RIGHTS RESERVED</p>
+                <div class="contacts">
+                    <span>agrihub@contact.com</span>
+                    <span>(+63) 555-014</span>
+                    <span>@Store_Agrihub</span>
+                </div>
+                <p class="page-number">PAGE 1</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Static supplier data
+        const STATIC_SUPPLIERS = [
+            { name: "Kyle Trinidad", email: "kyle.trinidad@supplyco.com", phone: "+63-912-123-4567", products: ["White Egg", "Red Egg", "Quail Egg"] },
+            { name: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", products: ["Lakatan Banana (1 bunch)", "Melon (1pc)", "Watermelon (500g)", "Apple Red Fuji (per pc)", "Papaya (1kg)", "Grapes (200g)", "Durian (350g)", "Ponkan (1kg)", "Avocado (500g)", "Rambutan (1kg)", "Indian Mango (1kg)", "Pinya (1pc)", "Pakwan (500g)"] },
+            { name: "Andre Leon", email: "andre.leon@veggiehub.com", phone: "+63-918-234-5678", products: ["Carrots (250g)", "Cabbage (500g)", "Baguio Beans (100g)", "Sitaw (100g)", "Ampalaya (250g)", "Kamatis (350g)", "Sayote (600g)", "Talong (500g)", "Kangkong (500g)"] },
+            { name: "Christian Bautista", email: "christian.bautista@agrosupply.com", phone: "+63-915-456-3210", products: ["Cucumber (250g)", "Singkamas (250g)", "Tanglad (per bundle)", "Upo (500g)", "Patola (per pc)", "Kundol (1kg)", "Labanos (150g)"] },
+            { name: "Patrick Navarro", email: "patrick.navarro@greengrowers.com", phone: "+63-910-222-3344", products: ["Malunggay (per bundle)", "Munggo (per pack)", "Itlog na maalat (1 dozen)", "Mani with Shell (per pack)", "Mani - Adobo (500g)"] },
+            { name: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", products: ["Longan (500g)", "Cauliflower (200g)", "Red Bell Pepper (250g)", "Sibuyas (400g)", "Bawang (300g)", "Siling Labuyo (100g)", "Kalabasa (1pc)", "Kalabasa (1kg)", "Kamote Yellow (500g)", "Kamote Violet (500g)", "Gabi (250g)", "Luya (250g)"] }
+        ];
+
+        const now = new Date();
+        document.getElementById('generatedTime').textContent = now.toLocaleString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+        document.getElementById('dateIssued').textContent = now.toLocaleDateString('en-US', {
+            month: 'long', day: 'numeric', year: 'numeric'
+        });
+
+        let currentReport = 'suppliers';
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentReport = btn.dataset.report;
+                
+                const dateFilter = document.getElementById('dateFilter');
+                if (currentReport === 'statistics') {
+                    dateFilter.classList.remove('hidden');
+                } else {
+                    dateFilter.classList.add('hidden');
+                }
+                
+                loadReport();
+            });
+        });
+
+        document.getElementById('startDate').addEventListener('change', () => {
+            if (currentReport === 'statistics') loadReport();
+        });
+        document.getElementById('endDate').addEventListener('change', () => {
+            if (currentReport === 'statistics') loadReport();
+        });
+
+        async function loadReport() {
+            const loading = document.getElementById('loading');
+            const reportBody = document.getElementById('reportBody');
+            
+            loading.classList.remove('hidden');
+            reportBody.innerHTML = '';
+
+            try {
+                if (currentReport === 'suppliers') {
+                    loadSuppliersReport();
+                } else if (currentReport === 'directory') {
+                    loadDirectoryReport();
+                } else if (currentReport === 'statistics') {
+                    await loadStatisticsReport();
+                }
+            } catch (error) {
+                reportBody.innerHTML = `<p style="color: #ef4444; text-align: center;">Error loading report: ${error.message}</p>`;
+            } finally {
+                loading.classList.add('hidden');
+            }
+        }
+
+        function loadSuppliersReport() {
+            const reportBody = document.getElementById('reportBody');
+            reportBody.innerHTML = `
+                <h3 class="report-title">List of Suppliers</h3>
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>SUPPLIER</th>
+                            <th>CONTACTS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${STATIC_SUPPLIERS.map(s => `
+                            <tr>
+                                <td>${s.name}</td>
+                                <td>${s.email} / ${s.phone}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function loadDirectoryReport() {
+            const reportBody = document.getElementById('reportBody');
+            const allProducts = [];
+            
+            STATIC_SUPPLIERS.forEach(supplier => {
+                supplier.products.forEach(product => {
+                    allProducts.push({ product, supplier: supplier.name });
+                });
+            });
+            
+            reportBody.innerHTML = `
+                <h3 class="report-title">Supplier Directory</h3>
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>PRODUCT</th>
+                            <th>SUPPLIER</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${allProducts.map(p => `
+                            <tr>
+                                <td>${p.product}</td>
+                                <td>${p.supplier}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        async function loadStatisticsReport() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            try {
+                const response = await fetch(`/adminpanel/api/statistics/?start=${startDate}&end=${endDate}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const stats = await response.json();
+                
+                const reportBody = document.getElementById('reportBody');
+                reportBody.innerHTML = `
+                    <h3 class="report-title">Product Statistics Report</h3>
+                    <p class="report-subtitle">Report Period: ${new Date(startDate).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})} - ${new Date(endDate).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}</p>
+                    
+                    <div class="section-title">FAST MOVING PRODUCTS</div>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>PRODUCT</th>
+                                <th class="text-right">PRODUCT SOLD</th>
+                                <th class="text-right">UNIT PRICE</th>
+                                <th class="text-right">TOTAL SALES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${stats.fast.length > 0 ? stats.fast.map(item => `
+                                <tr>
+                                    <td>${item.product}</td>
+                                    <td class="text-right">${item.sold.toLocaleString()}</td>
+                                    <td class="text-right">₱${item.unitPrice.toFixed(2)}</td>
+                                    <td class="text-right">₱${item.total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                                </tr>
+                            `).join('') : '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #666;">No sales data available for this period</td></tr>'}
+                        </tbody>
+                    </table>
+
+                    <div class="section-title">SLOW MOVING PRODUCTS</div>
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>PRODUCT</th>
+                                <th class="text-right">PRODUCT SOLD</th>
+                                <th class="text-right">UNIT PRICE</th>
+                                <th class="text-right">TOTAL SALES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${stats.slow.length > 0 ? stats.slow.map(item => `
+                                <tr>
+                                    <td>${item.product}</td>
+                                    <td class="text-right">${item.sold.toLocaleString()}</td>
+                                    <td class="text-right">₱${item.unitPrice.toFixed(2)}</td>
+                                    <td class="text-right">₱${item.total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                                </tr>
+                            `).join('') : '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #666;">No sales data available for this period</td></tr>'}
+                        </tbody>
+                    </table>
+                `;
+            } catch (error) {
+                console.error('Statistics fetch error:', error);
+                const reportBody = document.getElementById('reportBody');
+                reportBody.innerHTML = `<p style="color: #ef4444; text-align: center; padding: 20px;">Error loading statistics: ${error.message}. Please ensure you have order data in the system.</p>`;
+            }
+        }
+
+        // Load initial report
+        loadReport();
+    </script>
+{% endblock %}

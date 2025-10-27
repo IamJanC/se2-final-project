@@ -35,4 +35,12 @@ urlpatterns = [
     # ✅ Suppliers
     path("suppliers/list/", views.supplier_list, name="supplier_list"),
 
+    # ✅ Reports
+    path('reports/', views.reports, name='reports'),
+    
+    # API endpoints for fetching report data
+    path('api/suppliers/', views.get_suppliers_api, name='api_suppliers'),
+    path('api/products/', views.get_products_api, name='api_products'),
+    path('api/statistics/', views.get_statistics_api, name='api_statistics')
+
 ]

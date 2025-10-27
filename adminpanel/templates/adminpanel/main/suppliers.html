@@ -123,7 +123,7 @@
 
         .btn-add-supplier {
             padding: 10px 20px;
-            background: #3498db;
+            background: #325a01;
             color: white;
             border: none;
             border-radius: 8px;
@@ -134,12 +134,12 @@
         }
 
         .btn-add-supplier:hover {
-            background: #2980b9;
+            background: #325a00;
         }
 
         .btn-edit-supplier {
             padding: 6px 12px;
-            background: #3498db;
+            background: #325a01;
             color: white;
             border: none;
             border-radius: 6px;
@@ -151,7 +151,7 @@
         }
 
         .btn-edit-supplier:hover {
-            background: #2980b9;
+            background: #155724;
         }
 
         .supplier-status-badge {
@@ -315,26 +315,66 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Static supplier data (in-memory storage)
     window.suppliers = [
-        {
-            id: 1,
-            name: "Tech Solutions Inc.",
-            contactPerson: "John Smith",
-            email: "john@techsolutions.com",
-            phone: "+1-555-0123",
-            address: "123 Tech Street, Silicon Valley, CA",
-            products: "Computer Hardware, Software",
-            status: "active"
-        },
-        {
-            id: 2,
-            name: "Global Foods Co.",
-            contactPerson: "Maria Garcia",
-            email: "maria@globalfoods.com",
-            phone: "+1-555-0456",
-            address: "456 Food Ave, New York, NY",
-            products: "Food Items, Beverages",
-            status: "active"
-        }
+        // Kyle Trinidad - Eggs
+        { id: 1,  name: "Kyle Trinidad", contactPerson: "Kyle Trinidad", email: "kyle.trinidad@supplyco.com", phone: "+63-912-123-4567", address: "Brgy. Mabini, Batangas City, PH", products: "White Egg", status: "active" },
+        { id: 2,  name: "Kyle Trinidad", contactPerson: "Kyle Trinidad", email: "kyle.trinidad@supplyco.com", phone: "+63-912-123-4567", address: "Brgy. Mabini, Batangas City, PH", products: "Red Egg", status: "active" },
+        { id: 3,  name: "Kyle Trinidad", contactPerson: "Kyle Trinidad", email: "kyle.trinidad@supplyco.com", phone: "+63-912-123-4567", address: "Brgy. Mabini, Batangas City, PH", products: "Quail Egg", status: "active" },
+
+        // Chris Trinidad - Fruits
+        { id: 4,  name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Lakatan Banana (1 bunch)", status: "active" },
+        { id: 5,  name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Melon (1pc)", status: "active" },
+        { id: 6,  name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Watermelon (500g)", status: "active" },
+        { id: 7,  name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Apple Red Fuji (per pc)", status: "active" },
+        { id: 8,  name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Papaya (1kg)", status: "active" },
+        { id: 9,  name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Grapes (200g)", status: "active" },
+        { id: 10, name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Durian (350g)", status: "active" },
+        { id: 11, name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Ponkan (1kg)", status: "active" },
+        { id: 12, name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Avocado (500g)", status: "active" },
+        { id: 13, name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Rambutan (1kg)", status: "active" },
+        { id: 14, name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Indian Mango (1kg)", status: "active" },
+        { id: 15, name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Pinya (1pc)", status: "active" },
+        { id: 16, name: "Chris Trinidad", contactPerson: "Chris Trinidad", email: "chris.trinidad@freshharvest.com", phone: "+63-917-456-7890", address: "San Pablo City, Laguna, PH", products: "Pakwan (500g)", status: "active" },
+
+        // Andre Leon - Vegetables
+        { id: 17, name: "Andre Leon", contactPerson: "Andre Leon", email: "andre.leon@veggiehub.com", phone: "+63-918-234-5678", address: "Baguio City, Benguet, PH", products: "Carrots (250g)", status: "active" },
+        { id: 18, name: "Andre Leon", contactPerson: "Andre Leon", email: "andre.leon@veggiehub.com", phone: "+63-918-234-5678", address: "Baguio City, Benguet, PH", products: "Cabbage (500g)", status: "active" },
+        { id: 19, name: "Andre Leon", contactPerson: "Andre Leon", email: "andre.leon@veggiehub.com", phone: "+63-918-234-5678", address: "Baguio City, Benguet, PH", products: "Baguio Beans (100g)", status: "active" },
+        { id: 20, name: "Andre Leon", contactPerson: "Andre Leon", email: "andre.leon@veggiehub.com", phone: "+63-918-234-5678", address: "Baguio City, Benguet, PH", products: "Sitaw (100g)", status: "active" },
+        { id: 21, name: "Andre Leon", contactPerson: "Andre Leon", email: "andre.leon@veggiehub.com", phone: "+63-918-234-5678", address: "Baguio City, Benguet, PH", products: "Ampalaya (250g)", status: "active" },
+        { id: 22, name: "Andre Leon", contactPerson: "Andre Leon", email: "andre.leon@veggiehub.com", phone: "+63-918-234-5678", address: "Baguio City, Benguet, PH", products: "Kamatis (350g)", status: "active" },
+        { id: 23, name: "Andre Leon", contactPerson: "Andre Leon", email: "andre.leon@veggiehub.com", phone: "+63-918-234-5678", address: "Baguio City, Benguet, PH", products: "Sayote (600g)", status: "active" },
+        { id: 24, name: "Andre Leon", contactPerson: "Andre Leon", email: "andre.leon@veggiehub.com", phone: "+63-918-234-5678", address: "Baguio City, Benguet, PH", products: "Talong (500g)", status: "active" },
+        { id: 25, name: "Andre Leon", contactPerson: "Andre Leon", email: "andre.leon@veggiehub.com", phone: "+63-918-234-5678", address: "Baguio City, Benguet, PH", products: "Kangkong (500g)", status: "active" },
+
+        // Christian Bautista - Others
+        { id: 26, name: "Christian Bautista", contactPerson: "Christian Bautista", email: "christian.bautista@agrosupply.com", phone: "+63-915-456-3210", address: "Lucena City, Quezon, PH", products: "Cucumber (250g)", status: "active" },
+        { id: 27, name: "Christian Bautista", contactPerson: "Christian Bautista", email: "christian.bautista@agrosupply.com", phone: "+63-915-456-3210", address: "Lucena City, Quezon, PH", products: "Singkamas (250g)", status: "active" },
+        { id: 28, name: "Christian Bautista", contactPerson: "Christian Bautista", email: "christian.bautista@agrosupply.com", phone: "+63-915-456-3210", address: "Lucena City, Quezon, PH", products: "Tanglad (per bundle)", status: "active" },
+        { id: 29, name: "Christian Bautista", contactPerson: "Christian Bautista", email: "christian.bautista@agrosupply.com", phone: "+63-915-456-3210", address: "Lucena City, Quezon, PH", products: "Upo (500g)", status: "active" },
+        { id: 30, name: "Christian Bautista", contactPerson: "Christian Bautista", email: "christian.bautista@agrosupply.com", phone: "+63-915-456-3210", address: "Lucena City, Quezon, PH", products: "Patola (per pc)", status: "active" },
+        { id: 31, name: "Christian Bautista", contactPerson: "Christian Bautista", email: "christian.bautista@agrosupply.com", phone: "+63-915-456-3210", address: "Lucena City, Quezon, PH", products: "Kundol (1kg)", status: "active" },
+        { id: 32, name: "Christian Bautista", contactPerson: "Christian Bautista", email: "christian.bautista@agrosupply.com", phone: "+63-915-456-3210", address: "Lucena City, Quezon, PH", products: "Labanos (150g)", status: "active" },
+
+        // Patrick Navarro - Packaged / Local Goods
+        { id: 33, name: "Patrick Navarro", contactPerson: "Patrick Navarro", email: "patrick.navarro@greengrowers.com", phone: "+63-910-222-3344", address: "Tarlac City, Tarlac, PH", products: "Malunggay (per bundle)", status: "active" },
+        { id: 34, name: "Patrick Navarro", contactPerson: "Patrick Navarro", email: "patrick.navarro@greengrowers.com", phone: "+63-910-222-3344", address: "Tarlac City, Tarlac, PH", products: "Munggo (per pack)", status: "active" },
+        { id: 35, name: "Patrick Navarro", contactPerson: "Patrick Navarro", email: "patrick.navarro@greengrowers.com", phone: "+63-910-222-3344", address: "Tarlac City, Tarlac, PH", products: "Itlog na maalat (1 dozen)", status: "active" },
+        { id: 36, name: "Patrick Navarro", contactPerson: "Patrick Navarro", email: "patrick.navarro@greengrowers.com", phone: "+63-910-222-3344", address: "Tarlac City, Tarlac, PH", products: "Mani with Shell (per pack)", status: "active" },
+        { id: 37, name: "Patrick Navarro", contactPerson: "Patrick Navarro", email: "patrick.navarro@greengrowers.com", phone: "+63-910-222-3344", address: "Tarlac City, Tarlac, PH", products: "Mani - Adobo (500g)", status: "active" },
+
+        // Joseph Cruz - Spices & Root Crops
+        { id: 38, name: "Joseph Cruz", contactPerson: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", address: "Silang, Cavite, PH", products: "Longan (500g)", status: "active" },
+        { id: 39, name: "Joseph Cruz", contactPerson: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", address: "Silang, Cavite, PH", products: "Cauliflower (200g)", status: "active" },
+        { id: 40, name: "Joseph Cruz", contactPerson: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", address: "Silang, Cavite, PH", products: "Red Bell Pepper (250g)", status: "active" },
+        { id: 41, name: "Joseph Cruz", contactPerson: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", address: "Silang, Cavite, PH", products: "Sibuyas (400g)", status: "active" },
+        { id: 42, name: "Joseph Cruz", contactPerson: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", address: "Silang, Cavite, PH", products: "Bawang (300g)", status: "active" },
+        { id: 43, name: "Joseph Cruz", contactPerson: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", address: "Silang, Cavite, PH", products: "Siling Labuyo (100g)", status: "active" },
+        { id: 44, name: "Joseph Cruz", contactPerson: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", address: "Silang, Cavite, PH", products: "Kalabasa (1pc)", status: "active" },
+        { id: 45, name: "Joseph Cruz", contactPerson: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", address: "Silang, Cavite, PH", products: "Kalabasa (1kg)", status: "active" },
+        { id: 46, name: "Joseph Cruz", contactPerson: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", address: "Silang, Cavite, PH", products: "Kamote Yellow (500g)", status: "active" },
+        { id: 47, name: "Joseph Cruz", contactPerson: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", address: "Silang, Cavite, PH", products: "Kamote Violet (500g)", status: "active" },
+        { id: 48, name: "Joseph Cruz", contactPerson: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", address: "Silang, Cavite, PH", products: "Gabi (250g)", status: "active" },
+        { id: 49, name: "Joseph Cruz", contactPerson: "Joseph Cruz", email: "joseph.cruz@farmfresh.com", phone: "+63-927-987-6543", address: "Silang, Cavite, PH", products: "Luya (250g)", status: "active" }
     ];
 
     window.editingSupplierId = null;

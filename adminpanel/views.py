@@ -18,8 +18,11 @@ from products.models import Category
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth import get_user_model
-
-
+from django.contrib.admin.views.decorators import staff_member_required
+from products.models import Product
+from orders.models import Order
+from django.db.models import Sum, F, FloatField, ExpressionWrapper
+from datetime import datetime
 
 
 def staff_required(user):
@@ -868,6 +871,186 @@ def promote_to_admin(request, user_id):
             status=500
         )
         
+
+# =============================
+# Reports - FIXED VERSION
+# =============================
+
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.db.models import Sum, F, FloatField
+from django.utils import timezone
+from datetime import datetime, timedelta
+
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def reports(request):
+    context = {
+        'title': 'Reports',
+    }
+    return render(request, 'adminpanel/main/reports.html', context)
+
+# API endpoints to fetch data
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def get_suppliers_api(request):
+    """Returns static supplier data matching the suppliers page"""
+    # This matches the STATIC_SUPPLIERS in reports.html
+    suppliers = [
+        {'name': 'Kyle Trinidad', 'email': 'kyle.trinidad@supplyco.com', 'phone': '+63-912-123-4567'},
+        {'name': 'Chris Trinidad', 'email': 'chris.trinidad@freshharvest.com', 'phone': '+63-917-456-7890'},
+        {'name': 'Andre Leon', 'email': 'andre.leon@veggiehub.com', 'phone': '+63-918-234-5678'},
+        {'name': 'Christian Bautista', 'email': 'christian.bautista@agrosupply.com', 'phone': '+63-915-456-3210'},
+        {'name': 'Patrick Navarro', 'email': 'patrick.navarro@greengrowers.com', 'phone': '+63-910-222-3344'},
+        {'name': 'Joseph Cruz', 'email': 'joseph.cruz@farmfresh.com', 'phone': '+63-927-987-6543'},
+    ]
+    
+    return JsonResponse(list(suppliers), safe=False)
+
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def get_products_api(request):
+    """Returns products with their suppliers - static data matching your suppliers page"""
+    products = [
+        # Kyle Trinidad - Eggs
+        {'product': 'White Egg', 'supplier': 'Kyle Trinidad'},
+        {'product': 'Red Egg', 'supplier': 'Kyle Trinidad'},
+        {'product': 'Quail Egg', 'supplier': 'Kyle Trinidad'},
+        
+        # Chris Trinidad - Fruits
+        {'product': 'Lakatan Banana (1 bunch)', 'supplier': 'Chris Trinidad'},
+        {'product': 'Melon (1pc)', 'supplier': 'Chris Trinidad'},
+        {'product': 'Watermelon (500g)', 'supplier': 'Chris Trinidad'},
+        {'product': 'Apple Red Fuji (per pc)', 'supplier': 'Chris Trinidad'},
+        {'product': 'Papaya (1kg)', 'supplier': 'Chris Trinidad'},
+        {'product': 'Grapes (200g)', 'supplier': 'Chris Trinidad'},
+        {'product': 'Durian (350g)', 'supplier': 'Chris Trinidad'},
+        {'product': 'Ponkan (1kg)', 'supplier': 'Chris Trinidad'},
+        {'product': 'Avocado (500g)', 'supplier': 'Chris Trinidad'},
+        {'product': 'Rambutan (1kg)', 'supplier': 'Chris Trinidad'},
+        {'product': 'Indian Mango (1kg)', 'supplier': 'Chris Trinidad'},
+        {'product': 'Pinya (1pc)', 'supplier': 'Chris Trinidad'},
+        {'product': 'Pakwan (500g)', 'supplier': 'Chris Trinidad'},
+        
+        # Andre Leon - Vegetables
+        {'product': 'Carrots (250g)', 'supplier': 'Andre Leon'},
+        {'product': 'Cabbage (500g)', 'supplier': 'Andre Leon'}, 
+        {'product': 'Baguio Beans (100g)', 'supplier': 'Andre Leon'},
+        {'product': 'Sitaw (100g)', 'supplier': 'Andre Leon'},
+        {'product': 'Ampalaya (250g)', 'supplier': 'Andre Leon'},
+        {'product': 'Kamatis (350g)', 'supplier': 'Andre Leon'},
+        {'product': 'Sayote (600g)', 'supplier': 'Andre Leon'},
+        {'product': 'Talong (500g)', 'supplier': 'Andre Leon'},
+        {'product': 'Kangkong (500g)', 'supplier': 'Andre Leon'},
+        
+        # Christian Bautista
+        {'product': 'Cucumber (250g)', 'supplier': 'Christian Bautista'},
+        {'product': 'Singkamas (250g)', 'supplier': 'Christian Bautista'},
+        {'product': 'Tanglad (per bundle)', 'supplier': 'Christian Bautista'},
+        {'product': 'Upo (500g)', 'supplier': 'Christian Bautista'},
+        {'product': 'Patola (per pc)', 'supplier': 'Christian Bautista'},
+        {'product': 'Kundol (1kg)', 'supplier': 'Christian Bautista'},
+        {'product': 'Labanos (150g)', 'supplier': 'Christian Bautista'},
+        
+        # Patrick Navarro
+        {'product': 'Malunggay (per bundle)', 'supplier': 'Patrick Navarro'},
+        {'product': 'Munggo (per pack)', 'supplier': 'Patrick Navarro'},
+        {'product': 'Itlog na maalat (1 dozen)', 'supplier': 'Patrick Navarro'},
+        {'product': 'Mani with Shell (per pack)', 'supplier': 'Patrick Navarro'},
+        {'product': 'Mani - Adobo (500g)', 'supplier': 'Patrick Navarro'},
+        
+        # Joseph Cruz
+        {'product': 'Longan (500g)', 'supplier': 'Joseph Cruz'},
+        {'product': 'Cauliflower (200g)', 'supplier': 'Joseph Cruz'},
+        {'product': 'Red Bell Pepper (250g)', 'supplier': 'Joseph Cruz'},
+        {'product': 'Sibuyas (400g)', 'supplier': 'Joseph Cruz'},
+        {'product': 'Bawang (300g)', 'supplier': 'Joseph Cruz'},
+        {'product': 'Siling Labuyo (100g)', 'supplier': 'Joseph Cruz'},
+        {'product': 'Kalabasa (1pc)', 'supplier': 'Joseph Cruz'},
+        {'product': 'Kalabasa (1kg)', 'supplier': 'Joseph Cruz'},
+        {'product': 'Kamote Yellow (500g)', 'supplier': 'Joseph Cruz'},
+        {'product': 'Kamote Violet (500g)', 'supplier': 'Joseph Cruz'},
+        {'product': 'Gabi (250g)', 'supplier': 'Joseph Cruz'},
+        {'product': 'Luya (250g)', 'supplier': 'Joseph Cruz'},
+    ]
+    
+    return JsonResponse(list(products), safe=False)
+
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def get_statistics_api(request):
+    """Calculate fast and slow moving products based on actual sales data"""
+    from main.models import OrderItem, Product  # Import your models
+    
+    start_date = request.GET.get('start')
+    end_date = request.GET.get('end')
+    
+    # Convert string dates to datetime objects
+    if start_date and end_date:
+        try:
+            start_dt = datetime.strptime(start_date, '%Y-%m-%d')
+            end_dt = datetime.strptime(end_date, '%Y-%m-%d')
+            # Make them timezone aware
+            start_dt = timezone.make_aware(start_dt) if timezone.is_naive(start_dt) else start_dt
+            end_dt = timezone.make_aware(end_dt) if timezone.is_naive(end_dt) else end_dt
+        except ValueError:
+            # If date parsing fails, use default
+            end_dt = timezone.now()
+            start_dt = end_dt - timedelta(days=30)
+    else:
+        # Default to last 30 days
+        end_dt = timezone.now()
+        start_dt = end_dt - timedelta(days=30)
+    
+    # Get product sales within date range
+    product_sales = OrderItem.objects.filter(
+        order__created_at__gte=start_dt,
+        order__created_at__lte=end_dt,
+        order__status__in=['completed', 'shipped', 'delivered']
+    ).values(
+        'product__name'
+    ).annotate(
+        sold=Sum('quantity'),
+        total=Sum(F('quantity') * F('price_at_purchase'), output_field=FloatField())
+    ).order_by('-sold')
+    
+    # Get fast moving (top 5 or more)
+    fast_moving = []
+    for item in product_sales[:10]:  # Get top 10 to show more data
+        try:
+            product = Product.objects.get(name=item['product__name'])
+            fast_moving.append({
+                'product': item['product__name'],
+                'sold': int(item['sold']),
+                'unitPrice': float(product.price),
+                'total': float(item['total']) if item['total'] else 0
+            })
+        except Product.DoesNotExist:
+            continue
+    
+    # Get slow moving (bottom products with at least 1 sale)
+    slow_moving = []
+    if product_sales.count() > 10:
+        slow_items = list(product_sales.order_by('sold')[:10])
+        for item in slow_items:
+            try:
+                product = Product.objects.get(name=item['product__name'])
+                slow_moving.append({
+                    'product': item['product__name'],
+                    'sold': int(item['sold']),
+                    'unitPrice': float(product.price),
+                    'total': float(item['total']) if item['total'] else 0
+                })
+            except Product.DoesNotExist:
+                continue
+    
+    statistics = {
+        'fast': fast_moving,
+        'slow': slow_moving
+    }
+    
+    return JsonResponse(statistics)
 
 # =============================
 # Suppliers List
