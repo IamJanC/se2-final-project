@@ -715,3 +715,19 @@ body {
 
     color: #444;
 }
+
+.dropdown-menu a {
+    text-decoration: none;       /* removes underline */
+    color: inherit;              /* uses same color as parent text */
+    display: block;              /* makes full clickable area */
+}
+
+.dropdown-menu a:hover {
+    color: inherit;              /* prevents hover color change */
+    background-color: #f5f5f5;   /* optional: same hover bg as before */
+}
+
+.low-stock-alerts-section,
+.recent-transaction-dashboard {
+    scrollbar-gutter: stable; /* avoids layout shifts when scroll appears */
+}

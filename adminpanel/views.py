@@ -237,6 +237,13 @@ def dashboard_view(request):
         previous_end = current_start
         period_label = "This Month"
         comparison_label = "Previous Month"
+    elif date_filter == 'all_time':  # ✨ NEW: All time stats
+        current_start = Order.objects.order_by('created_at').first()
+        current_start = current_start.created_at if current_start else now
+        previous_start = current_start
+        previous_end = current_start
+        period_label = "All Time"
+        comparison_label = "N/A"
     else:  # custom range (implement later)
         current_start = now - timedelta(days=30)
         previous_start = now - timedelta(days=60)
@@ -251,7 +258,9 @@ def dashboard_view(request):
     # -----------------------------
     categories = Category.objects.annotate(product_count=Count('product'))
     products = Product.objects.select_related("category").all().order_by("id")
-    low_stock_products = products.filter(stock__lt=20).order_by("stock")[:5]
+    
+    # ✨ ENHANCED: Get up to 5 low stock products (scrollable in template)
+    low_stock_products = products.filter(stock__lt=20).order_by("stock")[:10]  # Get more for scrolling
 
     # ========================================
     # TOTAL SALES with detailed breakdown
@@ -275,33 +284,38 @@ def dashboard_view(request):
     current_sales = Decimal(str(current_sales_raw)) if current_sales_raw else Decimal('0.00')
     current_sales_orders = current_sales_data['order_count']
 
-    # Previous period sales
-    previous_sales_data = OrderItem.objects.filter(
-        order__created_at__gte=previous_start,
-        order__created_at__lt=previous_end,
-        order__status__in=['completed', 'shipped', 'delivered']
-    ).aggregate(
-        total=Sum(
-            ExpressionWrapper(
-                F('quantity') * F('price_at_purchase'),
-                output_field=FloatField()
-            )
-        ),
-        order_count=Count('order', distinct=True)
-    )
-    
-    previous_sales_raw = previous_sales_data['total'] or 0
-    previous_sales = Decimal(str(previous_sales_raw)) if previous_sales_raw else Decimal('0.00')
-    previous_sales_orders = previous_sales_data['order_count']
-
-    # Calculate sales % change
-    sales_change_percent = 0
-    if previous_sales > 0:
-        sales_change_percent = round(
-            float((current_sales - previous_sales) / previous_sales * 100), 1
+    # Previous period sales (skip for all_time)
+    if date_filter == 'all_time':
+        previous_sales = Decimal('0.00')
+        previous_sales_orders = 0
+        sales_change_percent = 0
+    else:
+        previous_sales_data = OrderItem.objects.filter(
+            order__created_at__gte=previous_start,
+            order__created_at__lt=previous_end,
+            order__status__in=['completed', 'shipped', 'delivered']
+        ).aggregate(
+            total=Sum(
+                ExpressionWrapper(
+                    F('quantity') * F('price_at_purchase'),
+                    output_field=FloatField()
+                )
+            ),
+            order_count=Count('order', distinct=True)
         )
-    elif current_sales > 0:
-        sales_change_percent = 100.0
+        
+        previous_sales_raw = previous_sales_data['total'] or 0
+        previous_sales = Decimal(str(previous_sales_raw)) if previous_sales_raw else Decimal('0.00')
+        previous_sales_orders = previous_sales_data['order_count']
+
+        # Calculate sales % change
+        sales_change_percent = 0
+        if previous_sales > 0:
+            sales_change_percent = round(
+                float((current_sales - previous_sales) / previous_sales * 100), 1
+            )
+        elif current_sales > 0:
+            sales_change_percent = 100.0
 
     sales_change_percent_up = sales_change_percent if sales_change_percent > 0 else 0
     sales_change_percent_down = abs(sales_change_percent) if sales_change_percent < 0 else 0
@@ -312,24 +326,25 @@ def dashboard_view(request):
     
     # Current period orders
     current_orders_count = Order.objects.filter(created_at__gte=current_start).count()
-    current_orders_by_status = Order.objects.filter(
-        created_at__gte=current_start
-    ).values('status').annotate(count=Count('id'))
     
-    # Previous period orders
-    previous_orders_count = Order.objects.filter(
-        created_at__gte=previous_start,
-        created_at__lt=previous_end
-    ).count()
+    # Previous period orders (skip for all_time)
+    if date_filter == 'all_time':
+        previous_orders_count = 0
+        orders_change_percent = 0
+    else:
+        previous_orders_count = Order.objects.filter(
+            created_at__gte=previous_start,
+            created_at__lt=previous_end
+        ).count()
 
-    # Calculate orders % change
-    orders_change_percent = 0
-    if previous_orders_count > 0:
-        orders_change_percent = round(
-            ((current_orders_count - previous_orders_count) / previous_orders_count) * 100, 1
-        )
-    elif current_orders_count > 0:
-        orders_change_percent = 100.0
+        # Calculate orders % change
+        orders_change_percent = 0
+        if previous_orders_count > 0:
+            orders_change_percent = round(
+                ((current_orders_count - previous_orders_count) / previous_orders_count) * 100, 1
+            )
+        elif current_orders_count > 0:
+            orders_change_percent = 100.0
 
     orders_change_percent_up = orders_change_percent if orders_change_percent > 0 else 0
     orders_change_percent_down = abs(orders_change_percent) if orders_change_percent < 0 else 0
@@ -354,20 +369,24 @@ def dashboard_view(request):
         created_at__gte=current_start
     ).count()
     
-    previous_cancelled_orders_count = Order.objects.filter(
-        status="cancelled",
-        created_at__gte=previous_start,
-        created_at__lt=previous_end
-    ).count()
+    if date_filter == 'all_time':
+        previous_cancelled_orders_count = 0
+        cancelled_change_percent = 0
+    else:
+        previous_cancelled_orders_count = Order.objects.filter(
+            status="cancelled",
+            created_at__gte=previous_start,
+            created_at__lt=previous_end
+        ).count()
 
-    # Calculate cancelled orders % change
-    cancelled_change_percent = 0
-    if previous_cancelled_orders_count > 0:
-        cancelled_change_percent = round(
-            ((current_cancelled_orders_count - previous_cancelled_orders_count) / previous_cancelled_orders_count) * 100, 1
-        )
-    elif current_cancelled_orders_count > 0:
-        cancelled_change_percent = 100.0
+        # Calculate cancelled orders % change
+        cancelled_change_percent = 0
+        if previous_cancelled_orders_count > 0:
+            cancelled_change_percent = round(
+                ((current_cancelled_orders_count - previous_cancelled_orders_count) / previous_cancelled_orders_count) * 100, 1
+            )
+        elif current_cancelled_orders_count > 0:
+            cancelled_change_percent = 100.0
 
     cancelled_change_percent_up = cancelled_change_percent if cancelled_change_percent > 0 else 0
     cancelled_change_percent_down = abs(cancelled_change_percent) if cancelled_change_percent < 0 else 0
@@ -445,10 +464,10 @@ def dashboard_view(request):
             product['stock_label'] = 'In Stock'
 
     # ========================================
-    # RECENT TRANSACTIONS (Last 10)
+    # ✨ ENHANCED: RECENT TRANSACTIONS (Get 20 for scrolling)
     # ========================================
     
-    recent_transactions_qs = Order.objects.select_related('user').prefetch_related('items').order_by('-created_at')[:10]
+    recent_transactions_qs = Order.objects.select_related('user').prefetch_related('items').order_by('-created_at')[:20]
     formatted_transactions = []
     
     for order in recent_transactions_qs:
@@ -486,17 +505,17 @@ def dashboard_view(request):
         })
 
     # ========================================
-    # RECENT SESSION LOGS (Last 10 unique users)
+    # ✨ ENHANCED: RECENT SESSION LOGS (Get 30 for scrolling)
     # ========================================
     
     # Get recent orders with unique users
-    recent_user_orders = Order.objects.select_related('user').order_by('-created_at')[:50]
+    recent_user_orders = Order.objects.select_related('user').order_by('-created_at')[:100]
     
     seen_users = set()
     recent_sessions = []
     
     for order in recent_user_orders:
-        if order.user.id not in seen_users and len(recent_sessions) < 10:
+        if order.user.id not in seen_users and len(recent_sessions) < 30:
             seen_users.add(order.user.id)
             recent_sessions.append({
                 'user_id': order.user.id,
@@ -1082,8 +1101,7 @@ def get_products_api(request):
 @login_required
 @user_passes_test(staff_required, login_url='main:home')
 def get_statistics_api(request):
-    """Calculate fast and slow moving products based on actual sales data"""
-    from main.models import OrderItem, Product  # Import your models
+    """Calculate fast and slow moving products based on actual sales data with date filtering"""
     
     start_date = request.GET.get('start')
     end_date = request.GET.get('end')
@@ -1093,10 +1111,18 @@ def get_statistics_api(request):
         try:
             start_dt = datetime.strptime(start_date, '%Y-%m-%d')
             end_dt = datetime.strptime(end_date, '%Y-%m-%d')
+            
+            # Set end date to end of day
+            end_dt = end_dt.replace(hour=23, minute=59, second=59)
+            
             # Make them timezone aware
             start_dt = timezone.make_aware(start_dt) if timezone.is_naive(start_dt) else start_dt
             end_dt = timezone.make_aware(end_dt) if timezone.is_naive(end_dt) else end_dt
-        except ValueError:
+            
+            print(f"📅 Date Range: {start_dt} to {end_dt}")
+            
+        except ValueError as e:
+            print(f"❌ Date parsing error: {e}")
             # If date parsing fails, use default
             end_dt = timezone.now()
             start_dt = end_dt - timedelta(days=30)
@@ -1105,54 +1131,71 @@ def get_statistics_api(request):
         end_dt = timezone.now()
         start_dt = end_dt - timedelta(days=30)
     
+    print(f"🔍 Querying orders from {start_dt} to {end_dt}")
+    
     # Get product sales within date range
     product_sales = OrderItem.objects.filter(
         order__created_at__gte=start_dt,
         order__created_at__lte=end_dt,
-        order__status__in=['completed', 'shipped', 'delivered']
+        order__status__in=['completed', 'shipped', 'delivered', 'pending']  # Include pending for more data
     ).values(
+        'product__id',
         'product__name'
     ).annotate(
         sold=Sum('quantity'),
         total=Sum(F('quantity') * F('price_at_purchase'), output_field=FloatField())
     ).order_by('-sold')
     
-    # Get fast moving (top 5 or more)
+    print(f"📊 Found {product_sales.count()} products with sales in this period")
+    
+    # Get fast moving (top products)
     fast_moving = []
-    for item in product_sales[:10]:  # Get top 10 to show more data
+    for item in product_sales[:15]:  # Get top 15 for better visibility
         try:
-            product = Product.objects.get(name=item['product__name'])
+            product = Product.objects.get(id=item['product__id'])
             fast_moving.append({
                 'product': item['product__name'],
                 'sold': int(item['sold']),
                 'unitPrice': float(product.price),
                 'total': float(item['total']) if item['total'] else 0
             })
+            print(f"✅ Fast: {item['product__name']} - {item['sold']} units - ₱{item['total']}")
         except Product.DoesNotExist:
+            print(f"⚠️ Product ID {item['product__id']} not found")
             continue
     
     # Get slow moving (bottom products with at least 1 sale)
     slow_moving = []
-    if product_sales.count() > 10:
-        slow_items = list(product_sales.order_by('sold')[:10])
+    if product_sales.count() > 15:
+        slow_items = list(product_sales.order_by('sold')[:15])
         for item in slow_items:
             try:
-                product = Product.objects.get(name=item['product__name'])
+                product = Product.objects.get(id=item['product__id'])
                 slow_moving.append({
                     'product': item['product__name'],
                     'sold': int(item['sold']),
                     'unitPrice': float(product.price),
                     'total': float(item['total']) if item['total'] else 0
                 })
+                print(f"🐌 Slow: {item['product__name']} - {item['sold']} units - ₱{item['total']}")
             except Product.DoesNotExist:
+                print(f"⚠️ Product ID {item['product__id']} not found")
                 continue
     
     statistics = {
         'fast': fast_moving,
-        'slow': slow_moving
+        'slow': slow_moving,
+        'period': {
+            'start': start_dt.strftime('%Y-%m-%d'),
+            'end': end_dt.strftime('%Y-%m-%d'),
+            'total_products': product_sales.count()
+        }
     }
     
+    print(f"📤 Returning {len(fast_moving)} fast and {len(slow_moving)} slow moving products")
+    
     return JsonResponse(statistics)
+
 
 # =============================
 # Suppliers List

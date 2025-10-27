@@ -8,6 +8,68 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'adminpanel/css/dashboard.css' %}">
+<style>
+    /* ✨ Enhanced scrollable sections */
+    .low-stock-alerts-section .low-stock-alerts-row:nth-child(n+7) {
+        /* Show first 5 items (header + 5 rows = 6 children), make rest scrollable */
+    }
+    
+    .low-stock-alerts-section {
+        max-height: 400px;
+        overflow-y: auto;
+        overflow-X: hidden;
+    }
+
+    .recent-transaction-dashboard {
+        overflow-y: auto;
+        max-height: 500px;
+    }
+    
+    .recent-transaction-dashboard table {
+        width: 100%;              /* ✅ makes table fill container */
+        border-collapse: collapse;
+    }
+    
+    .recent-transaction-dashboard thead {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 10;
+    }
+    
+    .recent-session-dashboard ul {
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+    
+    /* Custom scrollbar styling */
+    .low-stock-alerts-section::-webkit-scrollbar,
+    .recent-transaction-dashboard table::-webkit-scrollbar,
+    .recent-session-dashboard ul::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .low-stock-alerts-section::-webkit-scrollbar-track,
+    .recent-transaction-dashboard table::-webkit-scrollbar-track,
+    .recent-session-dashboard ul::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    .low-stock-alerts-section::-webkit-scrollbar-thumb,
+    .recent-transaction-dashboard table::-webkit-scrollbar-thumb,
+    .recent-session-dashboard ul::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+    
+    .low-stock-alerts-section::-webkit-scrollbar-thumb:hover,
+    .recent-transaction-dashboard table::-webkit-scrollbar-thumb:hover,
+    .recent-session-dashboard ul::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -31,16 +93,16 @@
                             <circle cx="12" cy="18" r="2" fill="#000000"></circle>
                         </svg>
                         <ul class="dropdown-menu">
-                            <li>Last 7 days</li>
-                            <li>Last 30 days</li>
-                            <li>This Month</li>
-                            <li>Custom Range…</li>
+                            <li><a href="?filter=last_7">Last 7 days</a></li>
+                            <li><a href="?filter=last_30">Last 30 days</a></li>
+                            <li><a href="?filter=this_month">This Month</a></li>
+                            <li><a href="?filter=all_time">All Time</a></li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="number-cards-timeline">
-                    <span>Last 30 days</span>
+                    <span>{{ period_label }}</span>
                 </div>
 
                 <div class="number-cards-sales-current">
@@ -71,11 +133,15 @@
                 </div>
 
                 <div class="number-cards-sales-previous">
-                    <span>Previous 30 days (₱{{ previous_sales }})</span>
+                    {% if current_filter != 'all_time' %}
+                        <span>{{ comparison_label }} (₱{{ previous_sales }})</span>
+                    {% else %}
+                        <span>Since first order</span>
+                    {% endif %}
                 </div>
             </div>
 
-            <!-- Total Orders -->
+            <!-- Total Orders - Same pattern as Sales -->
             <div class="number-cards" id="orders-card">
                 <div class="number-cards-top">
                     <h3>Total Orders</h3>
@@ -87,16 +153,16 @@
                             <circle cx="12" cy="18" r="2" fill="#000000"></circle>
                         </svg>
                         <ul class="dropdown-menu">
-                            <li>Last 7 days</li>
-                            <li>Last 30 days</li>
-                            <li>This Month</li>
-                            <li>Custom Range…</li>
+                            <li><a href="?filter=last_7">Last 7 days</a></li>
+                            <li><a href="?filter=last_30">Last 30 days</a></li>
+                            <li><a href="?filter=this_month">This Month</a></li>
+                            <li><a href="?filter=all_time">All Time</a></li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="number-cards-timeline">
-                    <span>Last 30 days</span>
+                    <span>{{ period_label }}</span>
                 </div>
 
                 <div class="number-cards-orders-current">
@@ -127,11 +193,15 @@
                 </div>
 
                 <div class="number-cards-orders-previous">
-                    <span>Previous 30 days ({{ previous_orders_count }})</span>
+                    {% if current_filter != 'all_time' %}
+                        <span>{{ comparison_label }} ({{ previous_orders_count }})</span>
+                    {% else %}
+                        <span>Since first order</span>
+                    {% endif %}
                 </div>
             </div>
 
-            <!-- Total Pending Orders & Cancelled Orders -->
+            <!-- Pending & Cancelled Orders -->
             <div class="number-cards" id="pending-card">
                 <div class="number-cards-top">
                     <h3>Pending & Cancelled Orders</h3>
@@ -143,16 +213,16 @@
                             <circle cx="12" cy="18" r="2" fill="#000000"></circle>
                         </svg>
                         <ul class="dropdown-menu">
-                            <li>Last 7 days</li>
-                            <li>Last 30 days</li>
-                            <li>This Month</li>
-                            <li>Custom Range…</li>
+                            <li><a href="?filter=last_7">Last 7 days</a></li>
+                            <li><a href="?filter=last_30">Last 30 days</a></li>
+                            <li><a href="?filter=this_month">This Month</a></li>
+                            <li><a href="?filter=all_time">All Time</a></li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="number-cards-timeline">
-                    <span>Last 30 days</span>
+                    <span>{{ period_label }}</span>
                 </div>
 
                 <div class="pending-cancelled-section">
@@ -197,6 +267,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Product Statistics -->
         <div class="product-dashboard-section">
