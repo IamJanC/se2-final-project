@@ -17,6 +17,10 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         background: #f5f7fa;
         color: #2d3748;
+
+        font-family: "Lexend", sans-serif;
+        font-optical-sizing: auto;
+        font-style: normal;
     }
 
     /* Reports Container */
@@ -138,7 +142,7 @@
     }
 
     .report-header {
-        border-bottom: 3px solid #1f2937;
+        border-bottom: 1px solid #1f2937;
         padding: 2rem;
     }
 
@@ -152,6 +156,11 @@
         font-size: 2rem;
         color: #1a202c;
         margin-bottom: 0.5rem;
+    }
+
+    .report-logo img {
+        height: 50px;
+        width: auto;
     }
 
     .report-meta {
@@ -171,8 +180,18 @@
     }
 
     .report-info-value {
-        font-size: 1.125rem;
-        font-family: 'Courier New', monospace;
+        font-size: 0.80rem;
+        font-family: "Lexend", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 300;
+        font-style: normal;
+        color: #9ca3af;
+    }
+
+    .report-info-reference{
+        display: flex;
+        gap: 5px;
+        padding-left: 2px;
         color: #1f2937;
     }
 
@@ -182,9 +201,11 @@
 
     .report-title {
         font-size: 1.75rem;
-        font-weight: 700;
+        font-weight: 400;
         color: #1a202c;
         margin-bottom: 1.5rem;
+
+        
     }
 
     .report-subtitle {
@@ -245,16 +266,22 @@
 
     /* Report Footer */
     .report-footer {
-        border-top: 3px solid #1f2937;
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #1f2937;
         background: #f9fafb;
-        padding: 1.5rem 2rem;
-        text-align: center;
+        padding: 1rem 2rem;
     }
 
     .report-footer p {
+     
+        font-family: "Lexend", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 300;
+        font-style: normal;
         font-size: 0.75rem;
         color: #6b7280;
-        margin: 0.25rem 0;
+        margin: 0;
     }
 
     .report-footer .contacts {
@@ -442,13 +469,15 @@
         <div class="report-content" id="reportContent">
             <div class="report-header">
                 <div class="report-header-top">
-                    <div>
-                        <h2>AgriHub</h2>
-                        <p class="report-meta">For internal use only - Generated on <span id="generatedTime"></span></p>
+                    <div class="report-logo">
+                        <img src="{% static 'images/Temporaries/Logo 9.png' %}" alt="AgriHub Logo">
+
+                        <div class="report-info-reference">
+                            <p class="report-info-label">Reference No.:</p>
+                            <p class="report-info-value">000-000</p>
+                        </div>
                     </div>
                     <div class="report-info">
-                        <p class="report-info-label">Reference No.</p>
-                        <p class="report-info-value">000-000</p>
                         <p class="report-info-label" style="margin-top: 0.5rem;">Date Issued</p>
                         <p class="report-info-value" id="dateIssued"></p>
                     </div>
@@ -458,13 +487,7 @@
             <div class="report-body" id="reportBody"></div>
 
             <div class="report-footer">
-                <p>THIS IS A SYSTEM-GENERATED REPORT. NO SIGNATURE REQUIRED.</p>
-                <p>AGRIHUB ECOMMERCE 2025, ALL RIGHTS RESERVED</p>
-                <div class="contacts">
-                    <span>agrihub@contact.com</span>
-                    <span>(+63) 555-014</span>
-                    <span>@Store_Agrihub</span>
-                </div>
+                <p class="report-meta">For internal use only - Generated on <span id="generatedTime"></span></p>
                 <p class="page-number">PAGE 1</p>
             </div>
         </div>

@@ -4,6 +4,7 @@
 {% block header_title %}Dashboard{% endblock %}
 
 {% load static %}
+{% load humanize %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'adminpanel/css/dashboard.css' %}">
@@ -241,7 +242,7 @@
                             </div>
                             <div class="price-col">₱{{ product.product__price }}</div>
                             <div class="qty-col">{{ product.total_quantity }}</div>
-                            <div class="subtotal-col">₱{{ product.total_sales|floatformat:2 }}</div>
+                            <div class="subtotal-col">₱{{ product.total_sales|floatformat:2|intcomma }}</div>
                             <div class="status-col">
                                 <span class="status-badge {{ product.stock_status }}">{{ product.stock_label }}</span>
                             </div>
@@ -294,7 +295,7 @@
                             </div>
                             <div class="price-col">₱{{ product.product__price }}</div>
                             <div class="qty-col">{{ product.total_quantity }}</div>
-                            <div class="subtotal-col">₱{{ product.total_sales|floatformat:2 }}</div>
+                            <div class="subtotal-col">₱{{ product.total_sales|floatformat:2|intcomma }}</div>
                             <div class="status-col">
                                 <span class="status-badge {{ product.stock_status }}">{{ product.stock_label }}</span>
                             </div>
@@ -400,7 +401,8 @@
                 <ul>
                     {% if recent_sessions %}
                         {% for session in recent_sessions %}
-                        <li>User-{{ session.user_id }} ({{ session.username }}) logged in at {{ session.time }}</li>
+                        <li>User-<strong>User-{{ session.user_id }}</strong> ({{ session.username }}) 
+                            {{ session.action }} at {{ session.time }} on {{ session.date }}</li>
                         {% endfor %}
                     {% else %}
                         <li><em>No recent sessions</em></li>
@@ -413,4 +415,5 @@
     </div>
 
 </div>
+
 {% endblock %}

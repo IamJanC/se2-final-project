@@ -23,6 +23,7 @@ from products.models import Product
 from orders.models import Order
 from django.db.models import Sum, F, FloatField, ExpressionWrapper
 from datetime import datetime
+from decimal import Decimal
 
 
 def staff_required(user):
@@ -195,57 +196,109 @@ def export_pdf(request):
 # ========================
 
 
-# ========================
-# Dashboard View - FINAL CORRECTED VERSION FOR YOUR MODELS
-# ========================
 # Required imports (add at top of your views.py if not already there)
 from django.db.models import Sum, Count, Q, F, FloatField
 from decimal import Decimal
+
+User = get_user_model()
 
 @login_required
 @user_passes_test(staff_required, login_url='main:home')
 def dashboard_view(request):
     """Displays the main admin dashboard with categories, products, and order stats."""
 
+    # ========================================
+    # DATE RANGE CALCULATION BASED ON FILTER
+    # ========================================
     now = timezone.now()
+    date_filter = request.GET.get('filter', 'last_30')  # default to last 30 days
+    
+    # Calculate date ranges based on filter
+    if date_filter == 'last_7':
+        current_start = now - timedelta(days=7)
+        previous_start = now - timedelta(days=14)
+        previous_end = current_start
+        period_label = "Last 7 days"
+        comparison_label = "Previous 7 days"
+    elif date_filter == 'last_30':
+        current_start = now - timedelta(days=30)
+        previous_start = now - timedelta(days=60)
+        previous_end = current_start
+        period_label = "Last 30 days"
+        comparison_label = "Previous 30 days"
+    elif date_filter == 'this_month':
+        # First day of current month
+        current_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        # First day of previous month
+        if current_start.month == 1:
+            previous_start = current_start.replace(year=current_start.year - 1, month=12)
+        else:
+            previous_start = current_start.replace(month=current_start.month - 1)
+        previous_end = current_start
+        period_label = "This Month"
+        comparison_label = "Previous Month"
+    else:  # custom range (implement later)
+        current_start = now - timedelta(days=30)
+        previous_start = now - timedelta(days=60)
+        previous_end = current_start
+        period_label = "Last 30 days"
+        comparison_label = "Previous 30 days"
+
     seven_days_ago = now - timedelta(days=7)
-    thirty_days_ago = now - timedelta(days=30)
-    sixty_days_ago = now - timedelta(days=60)
 
     # -----------------------------
     # Categories & Products
     # -----------------------------
-    categories = Category.objects.all()
+    categories = Category.objects.annotate(product_count=Count('product'))
     products = Product.objects.select_related("category").all().order_by("id")
-
-    # Low stock products (stock < 20) - Uses 'stock' field
     low_stock_products = products.filter(stock__lt=20).order_by("stock")[:5]
 
-    # -----------------------------
-    # TOTAL SALES (Last 30 days vs Previous 30 days)
-    # -----------------------------
-    # Current 30 days sales - FIXED: Calculate from OrderItems
-    current_sales = OrderItem.objects.filter(
-        order__created_at__gte=thirty_days_ago,
+    # ========================================
+    # TOTAL SALES with detailed breakdown
+    # ========================================
+    
+    # Current period sales
+    current_sales_data = OrderItem.objects.filter(
+        order__created_at__gte=current_start,
         order__status__in=['completed', 'shipped', 'delivered']
     ).aggregate(
-        total=Sum(F('quantity') * F('price_at_purchase'), output_field=FloatField())
-    )['total'] or Decimal('0.00')
+        total=Sum(
+            ExpressionWrapper(
+                F('quantity') * F('price_at_purchase'),
+                output_field=FloatField()
+            )
+        ),
+        order_count=Count('order', distinct=True)
+    )
+    
+    current_sales_raw = current_sales_data['total'] or 0
+    current_sales = Decimal(str(current_sales_raw)) if current_sales_raw else Decimal('0.00')
+    current_sales_orders = current_sales_data['order_count']
 
-    # Previous 30 days sales - FIXED: Calculate from OrderItems
-    previous_sales = OrderItem.objects.filter(
-        order__created_at__gte=sixty_days_ago,
-        order__created_at__lt=thirty_days_ago,
+    # Previous period sales
+    previous_sales_data = OrderItem.objects.filter(
+        order__created_at__gte=previous_start,
+        order__created_at__lt=previous_end,
         order__status__in=['completed', 'shipped', 'delivered']
     ).aggregate(
-        total=Sum(F('quantity') * F('price_at_purchase'), output_field=FloatField())
-    )['total'] or Decimal('0.00')
+        total=Sum(
+            ExpressionWrapper(
+                F('quantity') * F('price_at_purchase'),
+                output_field=FloatField()
+            )
+        ),
+        order_count=Count('order', distinct=True)
+    )
+    
+    previous_sales_raw = previous_sales_data['total'] or 0
+    previous_sales = Decimal(str(previous_sales_raw)) if previous_sales_raw else Decimal('0.00')
+    previous_sales_orders = previous_sales_data['order_count']
 
     # Calculate sales % change
     sales_change_percent = 0
     if previous_sales > 0:
         sales_change_percent = round(
-            ((current_sales - previous_sales) / previous_sales) * 100, 1
+            float((current_sales - previous_sales) / previous_sales * 100), 1
         )
     elif current_sales > 0:
         sales_change_percent = 100.0
@@ -253,13 +306,20 @@ def dashboard_view(request):
     sales_change_percent_up = sales_change_percent if sales_change_percent > 0 else 0
     sales_change_percent_down = abs(sales_change_percent) if sales_change_percent < 0 else 0
 
-    # -----------------------------
-    # TOTAL ORDERS (Last 30 days vs Previous 30 days)
-    # -----------------------------
-    current_orders_count = Order.objects.filter(created_at__gte=thirty_days_ago).count()
+    # ========================================
+    # TOTAL ORDERS with detailed breakdown
+    # ========================================
+    
+    # Current period orders
+    current_orders_count = Order.objects.filter(created_at__gte=current_start).count()
+    current_orders_by_status = Order.objects.filter(
+        created_at__gte=current_start
+    ).values('status').annotate(count=Count('id'))
+    
+    # Previous period orders
     previous_orders_count = Order.objects.filter(
-        created_at__gte=sixty_days_ago,
-        created_at__lt=thirty_days_ago
+        created_at__gte=previous_start,
+        created_at__lt=previous_end
     ).count()
 
     # Calculate orders % change
@@ -274,29 +334,30 @@ def dashboard_view(request):
     orders_change_percent_up = orders_change_percent if orders_change_percent > 0 else 0
     orders_change_percent_down = abs(orders_change_percent) if orders_change_percent < 0 else 0
 
-    # -----------------------------
-    # PENDING & CANCELLED ORDERS (Last 30 days)
-    # -----------------------------
+    # ========================================
+    # PENDING & CANCELLED ORDERS
+    # ========================================
+    
     pending_orders_count = Order.objects.filter(
         status="pending",
-        created_at__gte=thirty_days_ago
+        created_at__gte=current_start
     ).count()
     
     pending_orders_users_count = Order.objects.filter(
         status="pending",
-        created_at__gte=thirty_days_ago
+        created_at__gte=current_start
     ).values("user").distinct().count()
     
-    # Cancelled orders (current vs previous period)
+    # Cancelled orders comparison
     current_cancelled_orders_count = Order.objects.filter(
         status="cancelled",
-        created_at__gte=thirty_days_ago
+        created_at__gte=current_start
     ).count()
     
     previous_cancelled_orders_count = Order.objects.filter(
         status="cancelled",
-        created_at__gte=sixty_days_ago,
-        created_at__lt=thirty_days_ago
+        created_at__gte=previous_start,
+        created_at__lt=previous_end
     ).count()
 
     # Calculate cancelled orders % change
@@ -311,27 +372,32 @@ def dashboard_view(request):
     cancelled_change_percent_up = cancelled_change_percent if cancelled_change_percent > 0 else 0
     cancelled_change_percent_down = abs(cancelled_change_percent) if cancelled_change_percent < 0 else 0
 
-    # -----------------------------
-    # FAST MOVING PRODUCTS (Last 7 days)
-    # -----------------------------
-    # Uses price_at_purchase from OrderItem, stock and image_url from Product
+    # ========================================
+    # FAST MOVING PRODUCTS (Last 7 days - always)
+    # ========================================
+    
     fast_moving_products = OrderItem.objects.filter(
         order__created_at__gte=seven_days_ago,
         order__status__in=['completed', 'shipped', 'delivered', 'pending']
     ).values(
         'product__id',
         'product__name',
-        'product__image_url',  # CORRECTED: uses image_url
+        'product__image_url',
         'product__price',
-        'product__stock'  # CORRECTED: uses stock
+        'product__stock'
     ).annotate(
         total_quantity=Sum('quantity'),
-        total_sales=Sum(F('quantity') * F('price_at_purchase'))
+        total_sales=Sum(
+            ExpressionWrapper(
+                F('quantity') * F('price_at_purchase'),
+                output_field=FloatField()
+            )
+        )
     ).order_by('-total_quantity')[:3]
 
-    # Add stock status to fast moving products
+    # Add stock status
     for product in fast_moving_products:
-        stock = product['product__stock']  # CORRECTED: uses stock
+        stock = product['product__stock']
         if stock == 0:
             product['stock_status'] = 'danger'
             product['stock_label'] = 'Out of Stock'
@@ -342,27 +408,32 @@ def dashboard_view(request):
             product['stock_status'] = 'success'
             product['stock_label'] = 'In Stock'
 
-    # -----------------------------
-    # SLOW MOVING PRODUCTS (Last 7 days)
-    # -----------------------------
-    # Uses price_at_purchase from OrderItem, stock and image_url from Product
+    # ========================================
+    # SLOW MOVING PRODUCTS (Last 7 days - always)
+    # ========================================
+    
     slow_moving_products = OrderItem.objects.filter(
         order__created_at__gte=seven_days_ago,
         order__status__in=['completed', 'shipped', 'delivered', 'pending']
     ).values(
         'product__id',
         'product__name',
-        'product__image_url',  # CORRECTED: uses image_url
+        'product__image_url',
         'product__price',
-        'product__stock'  # CORRECTED: uses stock
+        'product__stock'
     ).annotate(
         total_quantity=Sum('quantity'),
-        total_sales=Sum(F('quantity') * F('price_at_purchase'))
+        total_sales=Sum(
+            ExpressionWrapper(
+                F('quantity') * F('price_at_purchase'),
+                output_field=FloatField()
+            )
+        )
     ).order_by('total_quantity')[:3]
 
-    # Add stock status to slow moving products
+    # Add stock status
     for product in slow_moving_products:
-        stock = product['product__stock']  # CORRECTED: uses stock
+        stock = product['product__stock']
         if stock == 0:
             product['stock_status'] = 'danger'
             product['stock_label'] = 'Out of Stock'
@@ -373,65 +444,78 @@ def dashboard_view(request):
             product['stock_status'] = 'success'
             product['stock_label'] = 'In Stock'
 
-    # -----------------------------
+    # ========================================
     # RECENT TRANSACTIONS (Last 10)
-    # -----------------------------
-    recent_transactions = Order.objects.select_related('user').order_by('-created_at')[:10]
-
-    # Format transactions for template
+    # ========================================
+    
+    recent_transactions_qs = Order.objects.select_related('user').prefetch_related('items').order_by('-created_at')[:10]
     formatted_transactions = []
-    for order in recent_transactions:
-        # Get status badge class
-        if order.status == 'completed' or order.status == 'delivered':
+    
+    for order in recent_transactions_qs:
+        # Proper status mapping
+        if order.status in ['completed', 'delivered']:
             status_class = 'success'
             status_label = 'Completed'
         elif order.status == 'cancelled':
             status_class = 'danger'
             status_label = 'Cancelled'
-        else:
+        elif order.status == 'pending':
             status_class = 'pending'
+            status_label = 'Pending'
+        elif order.status == 'shipped':
+            status_class = 'info'
+            status_label = 'Shipped'
+        else:
+            status_class = 'secondary'
             status_label = order.status.capitalize()
 
-        # FIXED: Calculate total from OrderItems
-        order_total = OrderItem.objects.filter(order=order).aggregate(
-            total=Sum(F('quantity') * F('price_at_purchase'), output_field=FloatField())
-        )['total'] or 0
+        # Calculate order total
+        order_total = sum(
+            item.quantity * item.price_at_purchase 
+            for item in order.items.all()
+        )
 
         formatted_transactions.append({
             'customer_id': f'CUST-{order.user.id:03d}',
+            'customer_name': order.user.username,
             'order_date': order.created_at.strftime('%Y-%m-%d'),
             'order_time': order.created_at.strftime('%H:%M'),
             'status_class': status_class,
             'status_label': status_label,
-            'amount': order_total
+            'amount': f"{order_total:,.2f}"
         })
 
-    # -----------------------------
-    # RECENT SESSION LOGS (Last 10 logins)
-    # -----------------------------
-    # Uses recent orders as proxy for user activity
+    # ========================================
+    # RECENT SESSION LOGS (Last 10 unique users)
+    # ========================================
+    
+    # Get recent orders with unique users
+    recent_user_orders = Order.objects.select_related('user').order_by('-created_at')[:50]
+    
+    seen_users = set()
     recent_sessions = []
-    recent_user_activities = Order.objects.select_related('user').order_by('-created_at').values(
-        'user__id',
-        'user__username',
-        'created_at'
-    ).distinct()[:10]
+    
+    for order in recent_user_orders:
+        if order.user.id not in seen_users and len(recent_sessions) < 10:
+            seen_users.add(order.user.id)
+            recent_sessions.append({
+                'user_id': order.user.id,
+                'username': order.user.username,
+                'time': order.created_at.strftime('%H:%M'),
+                'date': order.created_at.strftime('%Y-%m-%d'),
+                'action': 'placed order'
+            })
 
-    for activity in recent_user_activities:
-        recent_sessions.append({
-            'user_id': activity['user__id'],
-            'username': activity['user__username'],
-            'time': activity['created_at'].strftime('%H:%M')
-        })
-
-    # -----------------------------
-    # Context
-    # -----------------------------
     context = {
         "title": "Dashboard",
         "categories": categories,
         "products": products,
         "low_stock_products": low_stock_products,
+
+        # Date filter info
+        "current_filter": date_filter,
+        "period_label": period_label,
+        "comparison_label": comparison_label,
 
         # Sales Data
         "current_sales": f"{current_sales:,.2f}",
@@ -464,7 +548,6 @@ def dashboard_view(request):
     }
 
     return render(request, "adminpanel/main/dashboard.html", context)
-
 
 
 
@@ -593,6 +676,25 @@ def admin_orders(request):
 
     # Render the new template under templates/main/
     return render(request, "adminpanel/main/orders.html", context)
+
+
+@csrf_exempt
+@login_required
+@user_passes_test(staff_required, login_url='main:home')
+def update_order_status(request, order_id):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            new_status = data.get("status")
+
+            order = Order.objects.get(id=order_id)
+            order.status = new_status
+            order.save()
+
+            return JsonResponse({"success": True})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)}, status=400)
+    return JsonResponse({"success": False, "error": "Invalid request"}, status=405)
 
 @login_required
 @user_passes_test(staff_required, login_url='main:home')

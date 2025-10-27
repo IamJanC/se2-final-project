@@ -6,6 +6,9 @@
 
 {% load static %}
 
+{% load custom_filters %}
+
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'adminpanel/css/orders.css' %}">
 {% endblock %}
@@ -224,22 +227,43 @@
                         <div class="table-container">
                             <table class="admin-orders-table">
                                 <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Products</th>
-                                    <th>Date</th>
-                                    <th>Price</th>
-                                    <th>Payment</th>
-                                    <th>Status</th>
-                                </tr>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Products</th>
+                                        <th>Date</th>
+                                        <th>Price</th>
+                                        <th>Payment</th>
+                                        <th>Status</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {% for order in orders %}
                                     <tr class="order-row"
                                         data-order-id="ORD-{{ order.id }}"
-                                        data-date="{{ order.created_at|date:'Y-m-d' }}"
-                                        data-total-price="{{ order.total_amount }}">
+                                        data-date="{{ order.created_at|date:'Y-m-d H:i' }}"
+                                        data-total-price="{{ order.total_amount|floatformat:2 }}"
+                                        data-status="{{ order.status }}"
+                                        data-customer-name="{{ order.full_name|default:'N/A'|escapejs }}"
+                                        data-customer-email="{{ order.email|default:'N/A'|escapejs }}"
+                                        data-customer-contact="{{ order.phone|default:'N/A'|escapejs }}"
+                                        data-customer-address="{{ order.address|default:'N/A'|escapejs }}"
+
+                                        data-payment-method="Cash on Delivery"
+                                        data-products='[
+                                            {% for item in order.items.all %}
+                                                {
+                                                    "name": "{{ item.product.name|escapejs }}",
+                                                    "quantity": {{ item.quantity }},
+                                                    "unit_price": {{ item.price_at_purchase|floatformat:2 }},
+                                                    "subtotal": {{ item.price_at_purchase|mul:item.quantity|floatformat:2 }}
+                                                }{% if not forloop.last %},{% endif %}
+                                            {% endfor %}
+                                        ]'>
+
+                                        <!-- Order ID -->
                                         <td>#ORD-{{ order.id }}</td>
+
+                                        <!-- Products List -->
                                         <td>
                                             <div class="order-products-list">
                                                 {% for item in order.items.all %}
@@ -249,9 +273,17 @@
                                                 {% endfor %}
                                             </div>
                                         </td>
+
+                                        <!-- Date -->
                                         <td>{{ order.created_at|date:"Y-m-d" }}</td>
+
+                                        <!-- Total Amount -->
                                         <td>₱{{ order.total_amount|floatformat:2 }}</td>
+
+                                        <!-- Payment Method -->
                                         <td>COD</td>
+
+                                        <!-- Order Status -->
                                         <td>
                                             {% if order.status in "completed,delivered,cancelled" %}
                                                 <span class="status {{ order.status }}">{{ order.status|title }}</span>
@@ -276,6 +308,7 @@
                                 </tbody>
                             </table>
                         </div>
+
     
                     </div>
 
@@ -292,7 +325,7 @@
 
                             <div class="order-status-section">
                                 <label for="order-status-select">Order Status</label>
-                                <select id="order-status-select">
+                                <select id="order-status-select" disabled>
                                     <option value="pending">Pending</option>
                                     <option value="processing">Processing</option>
                                     <option value="shipped">Shipped</option>
@@ -300,6 +333,7 @@
                                     <option value="cancelled">Cancelled</option>
                                 </select>
                             </div>
+
 
                             <div class="order-customer-information">
 
@@ -800,6 +834,206 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 </script>
+
+
+<!-- Script for populating values in modal-->
+ <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const rows = document.querySelectorAll(".order-row");
+    const modal = document.getElementById("orders-detail-modal");
+    const closeModalBtn = document.getElementById("close-order-modal");
+
+    // Elements inside modal
+    const orderIdEl = document.getElementById("modal-order-id");
+    const orderDateEl = document.getElementById("modal-order-date");
+    const orderStatusSelect = document.getElementById("order-status-select");
+    const customerNameEl = modal.querySelector(".info-item:nth-child(1) span");
+    const customerEmailEl = modal.querySelector(".info-item:nth-child(2) span");
+    const customerContactEl = modal.querySelector(".info-item:nth-child(3) span");
+    const customerAddressEl = modal.querySelector(".info-item:nth-child(4) span");
+    const paymentMethodEl = document.getElementById("payment-method-info");
+
+    const productsTableBody = modal.querySelector(".admin-products-table tbody");
+    const summaryContainer = modal.querySelector(".order-summary");
+
+    // Handle row click
+    rows.forEach(row => {
+        row.addEventListener("click", () => {
+            // Read order data
+            const orderId = row.dataset.orderId;
+            const orderDate = row.dataset.date;
+            const orderStatus = row.dataset.status;
+            const customerName = row.dataset.customerName;
+            const customerEmail = row.dataset.customerEmail;
+            const customerContact = row.dataset.customerContact;
+            const customerAddress = row.dataset.customerAddress;
+            const paymentMethod = row.dataset.paymentMethod;
+
+            // Fill basic modal data
+            orderIdEl.textContent = `Order ID: #${orderId}`;
+            orderDateEl.textContent = `Date: ${orderDate}`;
+            orderStatusSelect.value = orderStatus;
+            customerNameEl.textContent = customerName || "N/A";
+            customerEmailEl.textContent = customerEmail || "N/A";
+            customerContactEl.textContent = customerContact || "N/A";
+            customerAddressEl.textContent = customerAddress || "N/A";
+            paymentMethodEl.textContent = paymentMethod || "N/A";
+
+            // ================================
+            // Handle Product Table and Summary
+            // ================================
+            try {
+                const products = JSON.parse(row.dataset.products);
+
+                // Clear existing rows
+                productsTableBody.innerHTML = "";
+
+                let total = 0;
+
+                // Populate new rows
+                products.forEach(p => {
+                    const subtotal = p.quantity * p.unit_price;
+                    total += subtotal;
+
+                    const rowHTML = `
+                        <tr>
+                            <td>${p.name}</td>
+                            <td>${p.quantity}</td>
+                            <td>₱${p.unit_price.toFixed(2)}</td>
+                            <td>₱${subtotal.toFixed(2)}</td>
+                        </tr>
+                    `;
+                    productsTableBody.insertAdjacentHTML("beforeend", rowHTML);
+                });
+
+                // Update Summary Section
+                summaryContainer.innerHTML = `
+                    <div class="summary-row">
+                        <span>Item(s) Total</span>
+                        <span>PHP ${total.toFixed(2)}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping Fee</span>
+                        <span>PHP 80.00</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="summary-row total">
+                        <span>Total (${products.length} items)</span>
+                        <span><strong>PHP ${(total + 80).toFixed(2)}</strong></span>
+                    </div>
+                `;
+            } catch (err) {
+                console.error("Error parsing products data:", err);
+                productsTableBody.innerHTML = `<tr><td colspan="4">Error loading products</td></tr>`;
+            }
+
+            // Show modal
+            modal.classList.remove("hidden");
+            setTimeout(() => modal.classList.add("show"), 10);
+        });
+    });
+
+    // Close modal
+    closeModalBtn.addEventListener("click", () => {
+        modal.classList.remove("show");
+        setTimeout(() => modal.classList.add("hidden"), 200);
+    });
+});
+</script>
+
+<!-- Script for Edit/Save Order Status -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("orders-detail-modal");
+    const editBtn = document.getElementById("edit-order-modal");
+    const saveBtn = document.getElementById("save-order-modal");
+    const closeBtn = document.getElementById("close-order-modal");
+    const orderStatusSelect = document.getElementById("order-status-select");
+
+    let currentOrderId = null;
+
+    // When a row opens the modal, capture the order ID
+    document.querySelectorAll(".order-row").forEach(row => {
+        row.addEventListener("click", () => {
+            currentOrderId = row.dataset.orderId?.replace("ORD-", "");
+            orderStatusSelect.disabled = true;
+            saveBtn.disabled = true;
+            editBtn.disabled = false;
+        });
+    });
+
+    // --- Edit Mode ---
+    editBtn.addEventListener("click", () => {
+        orderStatusSelect.disabled = false;
+        editBtn.disabled = true;
+        saveBtn.disabled = false;
+        saveBtn.classList.add("active");
+    });
+
+    // --- Save Status ---
+    saveBtn.addEventListener("click", async () => {
+        if (!currentOrderId) {
+            alert("No order selected!");
+            return;
+        }
+
+        const newStatus = orderStatusSelect.value;
+
+        try {
+            const response = await fetch(`/adminpanel/orders/update-status/${currentOrderId}/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken(),
+                },
+                body: JSON.stringify({ status: newStatus }),
+            });
+
+            if (response.ok) {
+                // Success feedback
+                alert("✅ Order status updated successfully!");
+                
+                // Disable editing again
+                orderStatusSelect.disabled = true;
+                editBtn.disabled = false;
+                saveBtn.disabled = true;
+                saveBtn.classList.remove("active");
+
+                // Optionally update the table without reload
+                const row = document.querySelector(`.order-row[data-order-id="ORD-${currentOrderId}"]`);
+                if (row) {
+                    const statusCell = row.querySelector(".status");
+                    if (statusCell) statusCell.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+                    row.dataset.status = newStatus;
+                }
+            } else {
+                const data = await response.json();
+                alert("❌ Failed to update order: " + (data.error || "Server error"));
+            }
+        } catch (error) {
+            console.error("Error updating order:", error);
+            alert("⚠️ Something went wrong while saving.");
+        }
+    });
+
+    // --- Close resets edit state ---
+    closeBtn.addEventListener("click", () => {
+        orderStatusSelect.disabled = true;
+        editBtn.disabled = false;
+        saveBtn.disabled = true;
+        saveBtn.classList.remove("active");
+    });
+
+    // --- Helper: Get CSRF token ---
+    function getCSRFToken() {
+        return document.cookie
+            .split("; ")
+            .find(row => row.startsWith("csrftoken="))
+            ?.split("=")[1];
+    }
+});
+</script>
+
 
 
 

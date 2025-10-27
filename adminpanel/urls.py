@@ -22,6 +22,7 @@ urlpatterns = [
 
     # ✅ Orders
     path("orders/", views.admin_orders, name="admin_orders"),
+    path("orders/update-status/<int:order_id>/", views.update_order_status, name="update_order_status"),
 
     # ✅ Products
     path("products/", views.products_view, name="products"),
