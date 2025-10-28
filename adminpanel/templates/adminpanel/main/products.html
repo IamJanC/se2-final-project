@@ -1,588 +1,704 @@
 {% extends 'adminpanel/shared/admin_base.html' %}
 
-
 {% block title %}Products{% endblock %}
 {% block header_title %}Products{% endblock %}
 
 {% load static %}
 
-
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'adminpanel/css/products.css' %}">
 {% endblock %}
 
-
 {% block content %}
 <div class="product-container">
-   
-
-
     <!-- === PRODUCTS === -->
-                <div id="products" class="tab-content">
-
-                   
-                    <div class="admin-products-category-section">
-                        <!-- Table Title -->
-                        <div class="category-section-top">
-                           
-                            <h3>Product Categories</h3>
-                           
-                            <!-- Action buttons -->
-                            <div class="category-actions">
-                                <button type="button" class="btn-add-categories-action">Add Categories</button>
-                            </div>
-                        </div>
-
-
-
-                       
-                        <div class="category-list">
-                            {% for cat in categories %}
-                            <div
-                                class="category-item"
-                                data-id="{{ cat.id }}"
-                                data-slug="{{ cat.slug }}"
-                                data-name="{{ cat.name }}"
-                                data-count="{{ cat.product_count }}"
-                            >
-                                <span>{{ cat.name }} ({{ cat.product_count }} items)</span>
-                                <div class="category-actions-icons">
-                                    <!-- Edit -->
-                                    <button class="icon-btn edit-btn" aria-label="Edit {{ cat.name }}">
-                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 20H20.5M18 10L21 7L17 3L14 6M18 10L8 20H4V16L14 6M18 10L14 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                    </button>
-                                    <!-- Delete -->
-                                    <button class="icon-btn delete-btn" aria-label="Delete {{ cat.name }}">
-                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path> <path d="M9.5 11L10 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path> <path d="M14.5 11L14 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="currentColor" stroke-width="1.5"></path> <path d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
-                                    </button>
-                                </div>
-                            </div>
-                            {% empty %}
-                            <p>No categories available yet.</p>
-                            {% endfor %}
-                        </div>
-
-
-                       
-
-                        <!-- Category Modal -->
-                        <div id="category-modal" class="modal hidden">
-                            <div class="modal-content">
-                                <h2>Add Category</h2>
-
-                                <form method="POST" id="category-form" action="{% url 'adminpanel:create_category' %}">
-                                    {% csrf_token %}
-                                   
-                                    <!-- Hidden input for editing -->
-                                    <input type="hidden" id="category-id" name="category-id">
-
-                                    <!-- Change Category Name -->
-                                    <div class="form-group">
-                                        <label for="category-name">Category Name: </label>
-                                        <input type="text" id="category-name" name="category-name" placeholder="Enter Category Name" autocomplete="off">
-                                        <small id="name-error" class="error-message"></small>
-                                    </div>
-
-                                    <!-- Change Category Slug Name -->
-                                    <div class="form-group">
-                                        <label for="category-slug">Category Slug: </label>
-                                        <input type="text" id="category-slug" name="category-slug" placeholder="Enter Category Slug" autocomplete="off">
-                                        <small id="slug-error" class="error-message"></small>
-                                    </div>
-
-                                    <div class="category-modal-action-buttons">
-                                        <button type="submit" id="save-category-modal" class="save-btn">Save</button>
-                                        <button type="button" id="close-category-modal" class="close-btn">Cancel</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-
-
-
-                        <!-- Confirmation of Deletion Modal -->
-                        <div class="modal" id="deleteModal">
-                            <div class="modal-content delete-modal">
-                                <p class="delete-message" id="delete-message">
-                                Are you sure you want to delete this category?
-                                </p>
-                                <div class="delete-actions">
-                                <form id="delete-form" method="POST">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn-confirm">Yes</button>
-                                    <button type="button" class="btn-cancel">Cancel</button>
-                                </form>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-
-
-
-
-
-
-                    </div>
-
-
-
-                    <div class="admin-products-display-section">
-                        <!-- Table Title -->
-                        <div class="product-display-section-top">
-                            <h3>Products Display</h3>
-
-                            <!-- Action buttons -->
-                            <div class="product-display-actions">
-
-
-                                <!-- Product Page Table Search -->
-                                <form class="admin-product-search-bar" autocomplete="off">
-                                    <input
-                                        class="admin-product-search__input"
-                                        type="text"
-                                        placeholder="Search product"
-                                        maxlength="30"
-                                        id="adminProductSearchInput"
-                                    >
-                                </form>
-
-
-                                <!-- Filter Button -->
-                                <button type="button" class="btn-products-icon" aria-label="Filter Products">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M4 7H20" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path d="M7 12L17 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path d="M11 17H13" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </button>
-
-                                <!-- Sort Button -->
-                                <button type="button" class="btn-products-icon" aria-label="Sort Products">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M11.1924 5.65685C11.5829 5.26633 11.5829 4.63316 11.1924 4.24264L8.36397 1.41421C8.30576 1.356 8.24485 1.30212 8.18165 1.25259C7.50286 0.720577 6.55947 0.689024 5.84929 1.15793C5.73839 1.23115 5.63317 1.31658 5.53554 1.41421L2.70711 4.24264C2.31658 4.63316 2.31658 5.26633 2.70711 5.65685C3.09763 6.04738 3.7308 6.04738 4.12132 5.65685L6.00003 3.77814V18C6.00003 18.5523 6.44775 19 7.00003 19C7.55232 19 8.00003 18.5523 8.00003 18V3.8787L9.77818 5.65685C10.1687 6.04737 10.8019 6.04737 11.1924 5.65685Z" fill="#0F0F0F"></path>
-                                        <path d="M12.7071 18.3432C12.3166 18.7337 12.3166 19.3668 12.7071 19.7574L15.5355 22.5858C15.6332 22.6834 15.7384 22.7689 15.8493 22.8421C16.6256 23.3546 17.6805 23.2692 18.364 22.5858L21.1924 19.7574C21.5829 19.3668 21.5829 18.7337 21.1924 18.3432C20.8019 17.9526 20.1687 17.9526 19.7782 18.3432L18 20.1213L18 6C18 5.44771 17.5523 5 17 5C16.4477 5 16 5.44771 16 6L16 20.2218L14.1213 18.3432C13.7308 17.9526 13.0976 17.9526 12.7071 18.3432Z" fill="#0F0F0F"></path>
-                                    </svg>
-                                </button>
-
-                                <!-- Add Products button -->
-                                <button type="button" class="btn-add-products-action">Add Products</button>
-                            </div>
-
-                        </div>
-
-                       
-
-                        <!-- Container for horizontal scrolling -->
-                        <div class="table-container">
-                            <table class="admin-products-table">
-                                <thead>
-                                    <tr>
-                                    <th>ID</th>
-                                    <th>Product</th>
-                                    <th>Price</th>
-                                    <th>Stock</th>
-                                    <th>Image</th>
-                                    <th>Category</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for product in products %}
-                                    <tr class="product-row"
-                                        data-id="{{ product.id }}"
-                                        data-custom-id="{{ product.custom_id }}"
-                                        data-name="{{ product.name }}"
-                                        data-description="{{ product.description }}"
-                                        data-price="{{ product.price }}"
-                                        data-discount="{{ product.discount_price }}"
-                                        data-discount-start="{{ product.discount_start|date:'Y-m-d' }}"
-                                        data-discount-end="{{ product.discount_end|date:'Y-m-d' }}"
-                                        data-stock="{{ product.stock }}"
-                                        data-stock-status="{{ product.stock_status }}"
-                                        data-image="{{ product.image_url }}"
-                                        data-category="{{ product.category.name }}">
-
-                                        <td>{{ product.custom_id|default:product.id }}</td>
-                                        <td>{{ product.name }}</td>
-                                        <td>₱{{ product.price }}</td>
-                                        <td>{{ product.stock }}</td>
-                                        <td>
-                                            {% if product.image_url %}
-                                                <img src="{{ product.image_url }}" alt="{{ product.name }} Image">
-                                            {% else %}
-                                                <span>No image</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>{{ product.category.name }}</td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="6" style="text-align:center;">No products available</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-
-                            </table>
-                        </div>
-
-                       
-                   
-                        <!-- Product Modal -->
-                        <div id="product-display-modal" class="modal hidden">
-                            <div class="modal-content product-modal-content">
-                                <h2>Add/Edit Products</h2>
-                               
-
-                                <!-- Main Content -->
-                                <form id="product-form" method="POST">
-                                    {% csrf_token %}
-                                    <input type="hidden" id="product-id" name="product-custom_id" value="">
-                                    <div class="left-right-content">
-
-                                        <!--LEFT-->
-                                        <div class="product-left-modal">
-                                            <h3>Basic Details</h3>
-
-                                            <!-- Change Product Name -->
-                                            <div class="form-group">
-                                                <label for="product-name">Product Name: </label>
-                                                <input type="text" id="product-name" name="product-name" placeholder="Product Name">
-                                            </div>
-
-                                            <!-- Change Product Description -->
-                                            <div class="form-group">
-                                                <label for="product-description">Product Description: </label>
-                                                <textarea
-                                                    id="product-description"
-                                                    name="product-description"
-                                                    placeholder="Enter product description"
-                                                    rows="4"></textarea>
-                                            </div>
-
-                                            <!-- Change Product Price -->
-                                            <div class="form-group">
-                                                <label for="product-price">Product Price: </label>
-                                                <input type="text" id="product-price" name="product-price" placeholder="Product Price">
-                                            </div>
-
-                                            <!-- Discount (all in one div) -->
-                                            <div class="form-group discount-period">
-                                                <label for="discount-price">Discount:</label>
-
-                                                <div class="discount-controls">
-                                                    <!-- Discount price (full width) -->
-                                                    <input
-                                                    type="number"
-                                                    id="discount-price"
-                                                    name="discount-price"
-                                                    placeholder="Discount price (e.g. 149.99)"
-                                                    step="0.01"
-                                                    min="0"
-                                                    />
-
-                                                    <!-- Two dates side-by-side with labels -->
-                                                    <div class="date-range">
-                                                        <div class="date-field">
-                                                            <label for="discount-start">Start Date</label>
-                                                            <input
-                                                            type="date"
-                                                            id="discount-start"
-                                                            name="discount-start"
-                                                            aria-label="Discount start date"
-                                                            />
-                                                        </div>
-
-                                                        <div class="date-field">
-                                                            <label for="discount-end">End Date</label>
-                                                            <input
-                                                            type="date"
-                                                            id="discount-end"
-                                                            name="discount-end"
-                                                            aria-label="Discount end date"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                       
-
-
-                                        <!-- Change Inventory -->
-                                        <div class="form-group inventory-section">
-                                            <label>Inventory</label>
-
-                                            <div class="inventory-controls">
-                                                <!-- Stock Quantity -->
-                                                <div class="inventory-field">
-                                                <label for="stock-quantity">Stock Quantity:</label>
-                                                <input
-                                                    type="number"
-                                                    id="stock-quantity"
-                                                    name="stock-quantity"
-                                                    placeholder="Enter stock quantity"
-                                                    min="0"
-                                                />
-                                                </div>
-
-                                                <!-- Stock Status -->
-                                                <div class="inventory-field">
-                                                    <label for="stock-status">Stock Status:</label>
-                                                    <select id="stock-status" name="stock-status">
-                                                        <option value="in-stock">In Stock</option>
-                                                        <option value="out-of-stock">Low Stock</option>
-                                                        <option value="pre-order">Out of Stock</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        </div>
-
-                                           
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                        <!--RIGHT-->
-                                        <div class="product-right-modal">
-                                       
-                                            <div class="product-image-section">
-                                                <h3>Product Image</h3>
-                                                <img src="https://cdn.britannica.com/16/187216-050-CB57A09B/tomatoes-tomato-plant-Fruit-vegetable.jpg" alt="Product Picture">
-                                           
-                                                <!-- Change Image URL -->
-                                                <div class="form-group">
-                                                    <label for="image-url">Image Url: </label>
-                                                    <input type="text" id="image-url" name="image-url" placeholder="Image URL">
-                                                </div>
-                                           
-                                            </div>    
-                                           
-                                            <!-- Change Category -->
-                                            <div class="form-group" id="select-cat">
-                                                <label for="category-select">Category:</label>
-                                                <select id="category-select" name="category">
-                                                    <option value="">-- Select a Category --</option>
-                                                    {% for cat in categories %}
-                                                        <option value="{{ cat.id }}">{{ cat.name }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-
-                                       
-
-                                        </div>
-
-                                       
-                                    </div>
-                                   
-
-
-
-                               
-
-                                    <div class="product-modal-action-buttons">
-                                        <button id="edit-product-modal" class="save-btn">Edit</button>
-                                        <button type="submit" id="save-product-modal" class="save-btn">Save</button>
-                                        <button id="delete-product-modal" class="delete-btn" type="button">Delete</button>
-                                        <button type="button" id="close-product-modal" class="close-btn">Cancel</button>
-                                    </div>
-
-                                </form>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-
-
-
-                   
-
-
-
-
-
-
-
+    <div id="products" class="tab-content">
+        
+        <div class="admin-products-category-section">
+            <!-- Table Title -->
+            <div class="category-section-top">
+                <h3>Product Categories</h3>
+                
+                <!-- Action buttons -->
+                <div class="category-actions">
+                    <button type="button" class="btn-add-categories-action">Add Categories</button>
                 </div>
+            </div>
 
+            <div class="category-list">
+                {% for cat in categories %}
+                <div
+                    class="category-item"
+                    data-id="{{ cat.id }}"
+                    data-slug="{{ cat.slug }}"
+                    data-name="{{ cat.name }}"
+                    data-count="{{ cat.product_count }}"
+                >
+                    <span>{{ cat.name }} ({{ cat.product_count }} items)</span>
+                    <div class="category-actions-icons">
+                        <!-- Edit -->
+                        <button class="icon-btn edit-btn" aria-label="Edit {{ cat.name }}">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 20H20.5M18 10L21 7L17 3L14 6M18 10L8 20H4V16L14 6M18 10L14 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                        </button>
+                        <!-- Delete -->
+                        <button class="icon-btn delete-btn" aria-label="Delete {{ cat.name }}">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.5001 6H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path> <path d="M9.5 11L10 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path> <path d="M14.5 11L14 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="currentColor" stroke-width="1.5"></path> <path d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+                        </button>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No categories available yet.</p>
+                {% endfor %}
+            </div>
 
+            <!-- Category Modal -->
+            <div id="category-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h2 id="category-modal-title">Add Category</h2>
 
+                    <form method="POST" id="category-form" action="{% url 'adminpanel:create_category' %}">
+                        {% csrf_token %}
+                        
+                        <!-- Hidden input for editing -->
+                        <input type="hidden" id="category-id" name="category-id">
 
+                        <!-- Change Category Name -->
+                        <div class="form-group">
+                            <label for="category-name">Category Name: </label>
+                            <input type="text" id="category-name" name="category-name" placeholder="Enter Category Name" autocomplete="off">
+                            <small id="name-error" class="error-message"></small>
+                        </div>
 
+                        <!-- Change Category Slug Name -->
+                        <div class="form-group">
+                            <label for="category-slug">Category Slug: </label>
+                            <input type="text" id="category-slug" name="category-slug" placeholder="Enter Category Slug" autocomplete="off">
+                            <small id="slug-error" class="error-message"></small>
+                        </div>
 
+                        <div class="category-modal-action-buttons">
+                            <button type="submit" id="save-category-modal" class="save-btn">Save</button>
+                            <button type="button" id="close-category-modal" class="close-btn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
+            <!-- Confirmation of Deletion Modal -->
+            <div class="modal hidden" id="deleteModal">
+                <div class="modal-content delete-modal">
+                    <p class="delete-message" id="delete-message">
+                    Are you sure you want to delete this category?
+                    </p>
+                    <div class="delete-actions">
+                        <form id="delete-form" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-confirm">Yes</button>
+                            <button type="button" class="btn-cancel">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="admin-products-display-section">
+            <!-- Table Title -->
+            <div class="product-display-section-top">
+                <h3>Products Display</h3>
 
+                <!-- Action buttons -->
+                <div class="product-display-actions">
+                    <!-- Product Page Table Search -->
+                    <form class="admin-product-search-bar" autocomplete="off">
+                        <input
+                            class="admin-product-search__input"
+                            type="text"
+                            placeholder="Search product"
+                            maxlength="30"
+                            id="adminProductSearchInput"
+                        >
+                    </form>
 
+                    <!-- Filter Button -->
+                    <button type="button" class="btn-products-icon" aria-label="Filter Products">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 7H20" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M7 12L17 12" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M11 17H13" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
 
+                    <!-- Sort Button -->
+                    <button type="button" class="btn-products-icon" aria-label="Sort Products">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.1924 5.65685C11.5829 5.26633 11.5829 4.63316 11.1924 4.24264L8.36397 1.41421C8.30576 1.356 8.24485 1.30212 8.18165 1.25259C7.50286 0.720577 6.55947 0.689024 5.84929 1.15793C5.73839 1.23115 5.63317 1.31658 5.53554 1.41421L2.70711 4.24264C2.31658 4.63316 2.31658 5.26633 2.70711 5.65685C3.09763 6.04738 3.7308 6.04738 4.12132 5.65685L6.00003 3.77814V18C6.00003 18.5523 6.44775 19 7.00003 19C7.55232 19 8.00003 18.5523 8.00003 18V3.8787L9.77818 5.65685C10.1687 6.04737 10.8019 6.04737 11.1924 5.65685Z" fill="#0F0F0F"></path>
+                            <path d="M12.7071 18.3432C12.3166 18.7337 12.3166 19.3668 12.7071 19.7574L15.5355 22.5858C15.6332 22.6834 15.7384 22.7689 15.8493 22.8421C16.6256 23.3546 17.6805 23.2692 18.364 22.5858L21.1924 19.7574C21.5829 19.3668 21.5829 18.7337 21.1924 18.3432C20.8019 17.9526 20.1687 17.9526 19.7782 18.3432L18 20.1213L18 6C18 5.44771 17.5523 5 17 5C16.4477 5 16 5.44771 16 6L16 20.2218L14.1213 18.3432C13.7308 17.9526 13.0976 17.9526 12.7071 18.3432Z" fill="#0F0F0F"></path>
+                        </svg>
+                    </button>
 
+                    <!-- Add Products button -->
+                    <button type="button" class="btn-add-products-action">Add Products</button>
+                </div>
+            </div>
 
+            <!-- Container for horizontal scrolling -->
+            <div class="table-container">
+                <table class="admin-products-table">
+                    <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Image</th>
+                        <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr class="product-row"
+                            data-id="{{ product.id }}"
+                            data-custom-id="{{ product.custom_id }}"
+                            data-name="{{ product.name }}"
+                            data-description="{{ product.description }}"
+                            data-price="{{ product.price }}"
+                            data-stock="{{ product.stock }}"
+                            data-image="{{ product.image_url }}"
+                            data-category="{{ product.category.name }}"
+                            data-category-id="{{ product.category.id }}">
 
+                            <td>{{ product.custom_id|default:product.id }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>₱{{ product.price }}</td>
+                            <td>{{ product.stock }}</td>
+                            <td>
+                                {% if product.image_url %}
+                                    <img src="{{ product.image_url }}" alt="{{ product.name }} Image">
+                                {% else %}
+                                    <span>No image</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ product.category.name }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" style="text-align:center;">No products available</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Product Modal -->
+            <div id="product-display-modal" class="modal hidden">
+                <div class="modal-content product-modal-content">
+                    <h2 id="product-modal-title">Add Product</h2>
+
+                    <!-- Main Content -->
+                    <form id="product-form" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" id="product-id" name="custom_id" value="">
+                        <div class="left-right-content">
+
+                            <!--LEFT-->
+                            <div class="product-left-modal">
+                                <h3>Basic Details</h3>
+
+                                <!-- Change Product Name -->
+                                <div class="form-group">
+                                    <label for="product-name">Product Name: <span style="color:red;">*</span></label>
+                                    <input type="text" id="product-name" name="product-name" placeholder="Product Name" required>
+                                </div>
+
+                                <!-- Change Product Description -->
+                                <div class="form-group">
+                                    <label for="product-description">Product Description: </label>
+                                    <textarea
+                                        id="product-description"
+                                        name="product-description"
+                                        placeholder="Enter product description"
+                                        rows="4"></textarea>
+                                </div>
+
+                                <!-- Change Product Price -->
+                                <div class="form-group">
+                                    <label for="product-price">Product Price: <span style="color:red;">*</span></label>
+                                    <input type="number" step="0.01" id="product-price" name="product-price" placeholder="Product Price" required>
+                                </div>
+
+                                <!-- Discount -->
+                                <div class="form-group discount-period">
+                                    <label for="discount-price">Discount:</label>
+
+                                    <div class="discount-controls">
+                                        <input
+                                        type="number"
+                                        id="discount-price"
+                                        name="discount-price"
+                                        placeholder="Discount price (e.g. 149.99)"
+                                        step="0.01"
+                                        min="0"
+                                        />
+
+                                        <div class="date-range">
+                                            <div class="date-field">
+                                                <label for="discount-start">Start Date</label>
+                                                <input
+                                                type="date"
+                                                id="discount-start"
+                                                name="discount-start"
+                                                aria-label="Discount start date"
+                                                />
+                                            </div>
+
+                                            <div class="date-field">
+                                                <label for="discount-end">End Date</label>
+                                                <input
+                                                type="date"
+                                                id="discount-end"
+                                                name="discount-end"
+                                                aria-label="Discount end date"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Change Inventory -->
+                                <div class="form-group inventory-section">
+                                    <label>Inventory</label>
+
+                                    <div class="inventory-controls">
+                                        <div class="inventory-field">
+                                        <label for="stock-quantity">Stock Quantity:</label>
+                                        <input
+                                            type="number"
+                                            id="stock-quantity"
+                                            name="stock-quantity"
+                                            placeholder="Enter stock quantity"
+                                            min="0"
+                                        />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--RIGHT-->
+                            <div class="product-right-modal">
+                                <div class="product-image-section">
+                                    <h3>Product Image</h3>
+                                    <img id="product-image-preview" src="https://cdn.britannica.com/16/187216-050-CB57A09B/tomatoes-tomato-plant-Fruit-vegetable.jpg" alt="Product Picture">
+                                
+                                    <div class="form-group">
+                                        <label for="image-url">Image Url: </label>
+                                        <input type="text" id="image-url" name="image-url" placeholder="Image URL">
+                                    </div>
+                                </div>    
+                                
+                                <!-- Change Category -->
+                                <div class="form-group" id="select-cat">
+                                    <label for="category-select">Category:</label>
+                                    <select id="category-select" name="category">
+                                        <option value="">-- Select a Category --</option>
+                                        {% for cat in categories %}
+                                            <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-modal-action-buttons">
+                            <button type="submit" id="save-product-modal" class="save-btn">Save</button>
+                            <button id="delete-product-modal" class="delete-btn" type="button">Delete</button>
+                            <button type="button" id="close-product-modal" class="close-btn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    const modal = document.getElementById("product-display-modal");
-    const addProductBtn = document.querySelector(".btn-add-products-action");
 
-    // Buttons inside modal
-    const editBtn = document.getElementById("edit-product-modal");
+    // ========================================
+    // CATEGORY MANAGEMENT
+    // ========================================
+    const categoryModal = document.getElementById("category-modal");
+    const categoryForm = document.getElementById("category-form");
+    const addCategoryBtn = document.querySelector(".btn-add-categories-action");
+    const closeCategoryBtn = document.getElementById("close-category-modal");
+    const categoryModalTitle = document.getElementById("category-modal-title");
+    
+    const categoryIdInput = document.getElementById("category-id");
+    const categoryNameInput = document.getElementById("category-name");
+    const categorySlugInput = document.getElementById("category-slug");
+    const nameError = document.getElementById("name-error");
+    const slugError = document.getElementById("slug-error");
+
+    // Delete modal elements
+    const deleteModal = document.getElementById("deleteModal");
+    const deleteForm = document.getElementById("delete-form");
+    const cancelDeleteBtn = deleteModal.querySelector(".btn-cancel");
+
+    // Open modal for ADD CATEGORY
+    addCategoryBtn.addEventListener("click", () => {
+        categoryModalTitle.textContent = "Add Category";
+        categoryForm.reset();
+        categoryIdInput.value = "";
+        nameError.textContent = "";
+        slugError.textContent = "";
+        categoryModal.classList.remove("hidden");
+    });
+
+    // Open modal for EDIT CATEGORY
+    document.querySelectorAll(".category-item .edit-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const item = btn.closest(".category-item");
+            
+            categoryModalTitle.textContent = "Edit Category";
+            categoryIdInput.value = item.dataset.id;
+            categoryNameInput.value = item.dataset.name;
+            categorySlugInput.value = item.dataset.slug;
+            nameError.textContent = "";
+            slugError.textContent = "";
+            
+            categoryModal.classList.remove("hidden");
+        });
+    });
+
+    // Close category modal
+    closeCategoryBtn.addEventListener("click", () => {
+        categoryModal.classList.add("hidden");
+    });
+
+    // Close modal when clicking outside
+    categoryModal.addEventListener("click", (e) => {
+        if (e.target === categoryModal) {
+            categoryModal.classList.add("hidden");
+        }
+    });
+
+    // Real-time validation for category name
+    categoryNameInput.addEventListener("input", async () => {
+        const name = categoryNameInput.value.trim();
+        const categoryId = categoryIdInput.value;
+        
+        if (!name) {
+            nameError.textContent = "";
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `/adminpanel/categories/validate/?name=${encodeURIComponent(name)}&id=${categoryId}`
+            );
+            const data = await response.json();
+            
+            if (data.errors.name) {
+                nameError.textContent = data.errors.name;
+            } else {
+                nameError.textContent = "";
+            }
+        } catch (error) {
+            console.error("Error validating name:", error);
+        }
+    });
+
+    // Real-time validation for category slug
+    categorySlugInput.addEventListener("input", async () => {
+        const slug = categorySlugInput.value.trim();
+        const categoryId = categoryIdInput.value;
+        
+        if (!slug) {
+            slugError.textContent = "";
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `/adminpanel/categories/validate/?slug=${encodeURIComponent(slug)}&id=${categoryId}`
+            );
+            const data = await response.json();
+            
+            if (data.errors.slug) {
+                slugError.textContent = data.errors.slug;
+            } else {
+                slugError.textContent = "";
+            }
+        } catch (error) {
+            console.error("Error validating slug:", error);
+        }
+    });
+
+    // Handle category form submission
+    categoryForm.addEventListener("submit", (e) => {
+        // Check for validation errors
+        if (nameError.textContent || slugError.textContent) {
+            e.preventDefault();
+            alert("Please fix the errors before saving.");
+            return;
+        }
+
+        // Check for empty fields
+        if (!categoryNameInput.value.trim() || !categorySlugInput.value.trim()) {
+            e.preventDefault();
+            alert("Please fill in all fields.");
+            return;
+        }
+    });
+
+    // DELETE CATEGORY
+    document.querySelectorAll(".category-item .delete-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const item = btn.closest(".category-item");
+            const categoryId = item.dataset.id;
+            const categoryName = item.dataset.name;
+            
+            const deleteMessage = document.getElementById("delete-message");
+            deleteMessage.textContent = `Are you sure you want to delete "${categoryName}"?`;
+            
+            deleteForm.action = `/adminpanel/categories/delete/${categoryId}/`;
+            deleteModal.classList.remove("hidden");
+        });
+    });
+
+    // Close delete modal
+    cancelDeleteBtn.addEventListener("click", () => {
+        deleteModal.classList.add("hidden");
+    });
+
+    // Close delete modal when clicking outside
+    deleteModal.addEventListener("click", (e) => {
+        if (e.target === deleteModal) {
+            deleteModal.classList.add("hidden");
+        }
+    });
+
+    // ========================================
+    // PRODUCT MANAGEMENT
+    // ========================================
+    const modal = document.getElementById("product-display-modal");
+    const productModalTitle = document.getElementById("product-modal-title");
+    const addProductBtn = document.querySelector(".btn-add-products-action");
+    const productForm = document.getElementById("product-form");
+
     const saveBtn = document.getElementById("save-product-modal");
     const deleteBtn = document.getElementById("delete-product-modal");
     const cancelBtn = document.getElementById("close-product-modal");
 
-    let isEditing = false; // flag for edit vs add
+    let isEditMode = false;
 
-    // 🟢 Open modal for ADD PRODUCT
+    // Image preview update
+    const imageUrlInput = document.getElementById("image-url");
+    const imagePreview = document.getElementById("product-image-preview");
+    
+    imageUrlInput.addEventListener("input", () => {
+        const url = imageUrlInput.value.trim();
+        if (url) {
+            imagePreview.src = url;
+            imagePreview.onerror = () => {
+                imagePreview.src = "https://cdn.britannica.com/16/187216-050-CB57A09B/tomatoes-tomato-plant-Fruit-vegetable.jpg";
+            };
+        } else {
+            imagePreview.src = "https://cdn.britannica.com/16/187216-050-CB57A09B/tomatoes-tomato-plant-Fruit-vegetable.jpg";
+        }
+    });
+
+    // Open modal for ADD PRODUCT
     addProductBtn.addEventListener("click", () => {
-        isEditing = false;
-
-        // clear all fields
-        document.getElementById("product-form").reset();
+        isEditMode = false;
+        productModalTitle.textContent = "Add Product";
+        
+        // Reset form
+        productForm.reset();
         document.getElementById("product-id").value = "";
-
-        // Show only Save + Cancel
-        editBtn.style.display = "none";
+        
+        // Reset image preview
+        imagePreview.src = "https://cdn.britannica.com/16/187216-050-CB57A09B/tomatoes-tomato-plant-Fruit-vegetable.jpg";
+        
+        // Show/hide buttons
         deleteBtn.style.display = "none";
         saveBtn.style.display = "inline-block";
-        cancelBtn.style.display = "inline-block";
-
+        
         modal.classList.remove("hidden");
     });
 
-    // 🟢 Open modal for EDIT PRODUCT
+    // Open modal for EDIT PRODUCT
     document.querySelectorAll(".product-row").forEach((row) => {
         row.addEventListener("click", () => {
-        isEditing = true;
+            isEditMode = true;
+            productModalTitle.textContent = "Edit Product";
 
-        // Fill form with existing product data
-        document.getElementById("product-id").value = row.dataset.customId || "";
-        document.getElementById("product-name").value = row.dataset.name || "";
-        document.getElementById("product-description").value = row.dataset.description || "";
-        document.getElementById("product-price").value = row.dataset.price || "";
-        document.getElementById("discount-price").value = row.dataset.discount || "";
-        document.getElementById("discount-start").value = row.dataset.discountStart || "";
-        document.getElementById("discount-end").value = row.dataset.discountEnd || "";
-        document.getElementById("stock-quantity").value = row.dataset.stock || "";
-        document.getElementById("stock-status").value = (row.dataset.stockStatus || "").toLowerCase();
-        document.getElementById("image-url").value = row.dataset.image || "";
-
-        const categoryName = (row.dataset.category || "").trim().toLowerCase();
-        const categorySelect = document.getElementById("category-select");
-        for (const option of categorySelect.options) {
-            if (option.text.trim().toLowerCase() === categoryName) {
-            categorySelect.value = option.value;
-            break;
+            // Populate form with existing data
+            document.getElementById("product-id").value = row.dataset.customId || "";
+            document.getElementById("product-name").value = row.dataset.name || "";
+            document.getElementById("product-description").value = row.dataset.description || "";
+            document.getElementById("product-price").value = row.dataset.price || "";
+            document.getElementById("stock-quantity").value = row.dataset.stock || "";
+            
+            const imageUrl = row.dataset.image || "";
+            document.getElementById("image-url").value = imageUrl;
+            
+            // Update image preview
+            if (imageUrl) {
+                imagePreview.src = imageUrl;
+                imagePreview.onerror = () => {
+                    imagePreview.src = "https://cdn.britannica.com/16/187216-050-CB57A09B/tomatoes-tomato-plant-Fruit-vegetable.jpg";
+                };
+            } else {
+                imagePreview.src = "https://cdn.britannica.com/16/187216-050-CB57A09B/tomatoes-tomato-plant-Fruit-vegetable.jpg";
             }
-        }
 
-        // Show all buttons (edit, save, delete, cancel)
-        editBtn.style.display = "inline-block";
-        deleteBtn.style.display = "inline-block";
-        saveBtn.style.display = "inline-block";
-        cancelBtn.style.display = "inline-block";
+            // Set category
+            const categoryId = row.dataset.categoryId || "";
+            document.getElementById("category-select").value = categoryId;
 
-        modal.classList.remove("hidden");
+            // Show/hide buttons
+            deleteBtn.style.display = "inline-block";
+            saveBtn.style.display = "inline-block";
+
+            modal.classList.remove("hidden");
         });
     });
 
-    // 🟢 Close modal
+    // Close product modal
     cancelBtn.addEventListener("click", () => {
         modal.classList.add("hidden");
     });
 
-    // 🟢 Save / Update product
-    saveBtn.addEventListener("click", async (e) => {
+    // Close modal when clicking outside
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.classList.add("hidden");
+        }
+    });
+
+    // Save / Update product
+    productForm.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        // Validate required fields
+        const name = document.getElementById("product-name").value.trim();
+        const price = document.getElementById("product-price").value.trim();
+        const category = document.getElementById("category-select").value;
+
+        if (!name) {
+            alert("Product name is required.");
+            return;
+        }
+
+        if (!price) {
+            alert("Product price is required.");
+            return;
+        }
+
+        if (!category) {
+            alert("Category is required.");
+            return;
+        }
+
+        // Validate price is a positive number
+        const priceNum = parseFloat(price);
+        if (isNaN(priceNum) || priceNum < 0) {
+            alert("Please enter a valid price.");
+            return;
+        }
 
         const formData = new FormData();
         formData.append("custom_id", document.getElementById("product-id").value.trim());
-        formData.append("name", document.getElementById("product-name").value);
-        formData.append("description", document.getElementById("product-description").value);
-        formData.append("price", document.getElementById("product-price").value);
-        formData.append("discount_price", document.getElementById("discount-price").value);
-        formData.append("discount_start", document.getElementById("discount-start").value);
-        formData.append("discount_end", document.getElementById("discount-end").value);
-        formData.append("stock_quantity", document.getElementById("stock-quantity").value);
-        formData.append("stock_status", document.getElementById("stock-status").value);
-        formData.append("category", document.getElementById("category-select").value);
-        formData.append("image_url", document.getElementById("image-url").value);
+        formData.append("name", name);
+        formData.append("description", document.getElementById("product-description").value.trim());
+        formData.append("price", price);
+        formData.append("stock_quantity", document.getElementById("stock-quantity").value.trim() || "0");
+        formData.append("category", category);
+        formData.append("image_url", document.getElementById("image-url").value.trim());
 
         try {
-        const response = await fetch("/adminpanel/save_product/", {
-            method: "POST",
-            headers: { "X-CSRFToken": csrftoken },
-            body: formData,
-        });
+            const response = await fetch("/adminpanel/save_product/", {
+                method: "POST",
+                headers: { "X-CSRFToken": csrftoken },
+                body: formData,
+            });
 
-        const data = await response.json();
-        alert(data.message);
+            const data = await response.json();
 
-        if (data.status === "success") {
-            modal.classList.add("hidden");
-            location.reload();
-        }
+            if (data.status === "success") {
+                alert(data.message);
+                modal.classList.add("hidden");
+                location.reload();
+            } else {
+                alert(data.message || "Error saving product.");
+            }
         } catch (error) {
-        console.error("❌ Error saving product:", error);
-        alert("Error saving product.");
+            console.error("Error saving product:", error);
+            alert("Error saving product. Please try again.");
         }
     });
 
-    // 🟢 Delete product by custom_id
+    // Delete product
     deleteBtn.addEventListener("click", async () => {
         const productId = document.getElementById("product-id").value.trim();
+        
         if (!productId) {
-        alert("⚠️ No product selected.");
-        return;
+            alert("No product selected.");
+            return;
         }
 
-        if (!confirm("Are you sure you want to delete this product?")) return;
+        if (!confirm("Are you sure you want to delete this product?")) {
+            return;
+        }
 
         try {
-        const response = await fetch(`/adminpanel/delete-product/${productId}/`, {
-            method: "POST",
-            headers: { "X-CSRFToken": csrftoken },
-        });
+            const response = await fetch(`/adminpanel/delete-product/${productId}/`, {
+                method: "POST",
+                headers: { "X-CSRFToken": csrftoken },
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (data.status === "success") {
-            alert("✅ " + data.message);
-            modal.classList.add("hidden");
-
-            const deletedRow = document.querySelector(`.product-row[data-custom-id='${productId}']`);
-            if (deletedRow) deletedRow.remove();
-        } else {
-            alert("⚠️ " + data.message);
-        }
+            if (data.status === "success") {
+                alert(data.message);
+                modal.classList.add("hidden");
+                location.reload();
+            } else {
+                alert(data.message || "Error deleting product.");
+            }
         } catch (error) {
-        console.error("Error deleting product:", error);
-        alert("❌ Failed to delete product.");
+            console.error("Error deleting product:", error);
+            alert("Failed to delete product. Please try again.");
         }
     });
+
+    // ========================================
+    // SEARCH FUNCTIONALITY
+    // ========================================
+    const searchInput = document.getElementById("adminProductSearchInput");
+    const productRows = document.querySelectorAll(".product-row");
+
+    searchInput.addEventListener("input", () => {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+
+        productRows.forEach(row => {
+            const productName = row.dataset.name.toLowerCase();
+            const productId = row.dataset.customId.toLowerCase();
+            const category = row.dataset.category.toLowerCase();
+
+            if (productName.includes(searchTerm) || 
+                productId.includes(searchTerm) || 
+                category.includes(searchTerm)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
     });
+});
 </script>
-
-
-
-
-
-
-
-
 
 {% endblock %}

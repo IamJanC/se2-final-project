@@ -59,8 +59,6 @@
                 <thead>
                     <tr>
                         <th>Username</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
                         <th>Email</th>
                         <th>Actions</th>
                     </tr>
@@ -70,8 +68,6 @@
                         {% for admin in admin_users %}
                         <tr>
                             <td>{{ admin.username }}</td>
-                            <td>{{ admin.first_name|default:"—" }}</td>
-                            <td>{{ admin.last_name|default:"—" }}</td>
                             <td>{{ admin.email|default:"—" }}</td>
                             <td>
                                 <button class="delete-icon delete-admin-btn" 
@@ -147,8 +143,6 @@
                 <thead>
                     <tr>
                         <th>Username</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
                         <th>Email</th>
                         <th>Actions</th>
                     </tr>
@@ -158,8 +152,6 @@
                         {% for customer in customer_users %}
                         <tr>
                             <td>{{ customer.username }}</td>
-                            <td>{{ customer.first_name|default:"—" }}</td>
-                            <td>{{ customer.last_name|default:"—" }}</td>
                             <td>{{ customer.email|default:"—" }}</td>
                             <td>
                                 <button class="btn-promote-user promote-customer-btn" 
@@ -311,10 +303,6 @@ function buildAdminSortMenu(menu) {
     const sortOptions = [
         { label: 'Username A → Z', key: 'username', dir: 1 },
         { label: 'Username Z → A', key: 'username', dir: -1 },
-        { label: 'First Name A → Z', key: 'firstname', dir: 1 },
-        { label: 'First Name Z → A', key: 'firstname', dir: -1 },
-        { label: 'Last Name A → Z', key: 'lastname', dir: 1 },
-        { label: 'Last Name Z → A', key: 'lastname', dir: -1 },
         { label: 'Email A → Z', key: 'email', dir: 1 },
         { label: 'Email Z → A', key: 'email', dir: -1 }
     ];
@@ -417,10 +405,6 @@ function buildCustomerSortMenu(menu) {
     const sortOptions = [
         { label: 'Username A → Z', key: 'username', dir: 1 },
         { label: 'Username Z → A', key: 'username', dir: -1 },
-        { label: 'First Name A → Z', key: 'firstname', dir: 1 },
-        { label: 'First Name Z → A', key: 'firstname', dir: -1 },
-        { label: 'Last Name A → Z', key: 'lastname', dir: 1 },
-        { label: 'Last Name Z → A', key: 'lastname', dir: -1 },
         { label: 'Email A → Z', key: 'email', dir: 1 },
         { label: 'Email Z → A', key: 'email', dir: -1 }
     ];
@@ -624,8 +608,6 @@ function updateVisibleUsers(sectionType) {
 
     rows.forEach(row => {
         const username = norm(row.querySelector('td:nth-child(1)')?.textContent);
-        const firstname = norm(row.querySelector('td:nth-child(2)')?.textContent);
-        const lastname = norm(row.querySelector('td:nth-child(3)')?.textContent);
         const email = norm(row.querySelector('td:nth-child(4)')?.textContent);
 
         let visible = true;
@@ -633,8 +615,6 @@ function updateVisibleUsers(sectionType) {
         // Search - search across all fields
         if (searchTerm) {
             visible = username.includes(searchTerm) || 
-                     firstname.includes(searchTerm) || 
-                     lastname.includes(searchTerm) || 
                      email.includes(searchTerm);
         }
 
@@ -648,8 +628,6 @@ function updateVisibleUsers(sectionType) {
             const getVal = (r) => {
                 switch (sort.key) {
                     case 'username': return r.querySelector('td:nth-child(1)')?.textContent.toLowerCase() || '';
-                    case 'firstname': return r.querySelector('td:nth-child(2)')?.textContent.toLowerCase() || '';
-                    case 'lastname': return r.querySelector('td:nth-child(3)')?.textContent.toLowerCase() || '';
                     case 'email': return r.querySelector('td:nth-child(4)')?.textContent.toLowerCase() || '';
                 }
             };

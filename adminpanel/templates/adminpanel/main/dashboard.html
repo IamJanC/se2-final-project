@@ -85,20 +85,6 @@
             <div class="number-cards" id="sales-card">
                 <div class="number-cards-top">
                     <h3>Total Sales</h3>
-                    
-                    <div class="dropdown-wrapper">
-                        <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="6" r="2" fill="#000000"></circle>
-                            <circle cx="12" cy="12" r="2" fill="#000000"></circle>
-                            <circle cx="12" cy="18" r="2" fill="#000000"></circle>
-                        </svg>
-                        <ul class="dropdown-menu">
-                            <li><a href="?filter=last_7">Last 7 days</a></li>
-                            <li><a href="?filter=last_30">Last 30 days</a></li>
-                            <li><a href="?filter=this_month">This Month</a></li>
-                            <li><a href="?filter=all_time">All Time</a></li>
-                        </ul>
-                    </div>
                 </div>
 
                 <div class="number-cards-timeline">
@@ -145,20 +131,6 @@
             <div class="number-cards" id="orders-card">
                 <div class="number-cards-top">
                     <h3>Total Orders</h3>
-                    
-                    <div class="dropdown-wrapper">
-                        <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="6" r="2" fill="#000000"></circle>
-                            <circle cx="12" cy="12" r="2" fill="#000000"></circle>
-                            <circle cx="12" cy="18" r="2" fill="#000000"></circle>
-                        </svg>
-                        <ul class="dropdown-menu">
-                            <li><a href="?filter=last_7">Last 7 days</a></li>
-                            <li><a href="?filter=last_30">Last 30 days</a></li>
-                            <li><a href="?filter=this_month">This Month</a></li>
-                            <li><a href="?filter=all_time">All Time</a></li>
-                        </ul>
-                    </div>
                 </div>
 
                 <div class="number-cards-timeline">
@@ -205,20 +177,6 @@
             <div class="number-cards" id="pending-card">
                 <div class="number-cards-top">
                     <h3>Pending & Cancelled Orders</h3>
-                    
-                    <div class="dropdown-wrapper">
-                        <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="6" r="2" fill="#000000"></circle>
-                            <circle cx="12" cy="12" r="2" fill="#000000"></circle>
-                            <circle cx="12" cy="18" r="2" fill="#000000"></circle>
-                        </svg>
-                        <ul class="dropdown-menu">
-                            <li><a href="?filter=last_7">Last 7 days</a></li>
-                            <li><a href="?filter=last_30">Last 30 days</a></li>
-                            <li><a href="?filter=this_month">This Month</a></li>
-                            <li><a href="?filter=all_time">All Time</a></li>
-                        </ul>
-                    </div>
                 </div>
 
                 <div class="number-cards-timeline">
@@ -277,19 +235,6 @@
                 <div class="fast-moving-products-section">
                     <div class="fast-moving-product-top">
                         <h3>Fast Moving Products</h3>
-                        <div class="dropdown-wrapper">
-                            <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12" cy="6" r="2" fill="#000000"></circle>
-                                <circle cx="12" cy="12" r="2" fill="#000000"></circle>
-                                <circle cx="12" cy="18" r="2" fill="#000000"></circle>
-                            </svg>
-                            <ul class="dropdown-menu">
-                                <li>Last 7 days</li>
-                                <li>Last 30 days</li>
-                                <li>This Month</li>
-                                <li>Custom Range…</li>
-                            </ul>
-                        </div>
                     </div>
 
                     <div class="number-cards-timeline">
@@ -330,19 +275,6 @@
                 <div class="slow-moving-products-section">
                     <div class="slow-moving-product-top">
                         <h3>Slow Moving Products</h3>
-                        <div class="dropdown-wrapper">
-                            <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12" cy="6" r="2" fill="#000000"></circle>
-                                <circle cx="12" cy="12" r="2" fill="#000000"></circle>
-                                <circle cx="12" cy="18" r="2" fill="#000000"></circle>
-                            </svg>
-                            <ul class="dropdown-menu">
-                                <li>Last 7 days</li>
-                                <li>Last 30 days</li>
-                                <li>This Month</li>
-                                <li>Custom Range…</li>
-                            </ul>
-                        </div>
                     </div>
 
                     <div class="number-cards-timeline">
@@ -385,19 +317,6 @@
         <div class="low-stock-alerts-section">
             <div class="low-stock-alerts-top">
                 <h3>Low Stock Alerts</h3>
-                <div class="dropdown-wrapper">
-                    <svg class="kebab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="6" r="2" fill="#000000"></circle>
-                        <circle cx="12" cy="12" r="2" fill="#000000"></circle>
-                        <circle cx="12" cy="18" r="2" fill="#000000"></circle>
-                    </svg>
-                    <ul class="dropdown-menu">
-                        <li>Last 7 days</li>
-                        <li>Last 30 days</li>
-                        <li>This Month</li>
-                        <li>Custom Range…</li>
-                    </ul>
-                </div>
             </div>
 
             <div class="number-cards-timeline">
@@ -472,7 +391,7 @@
                 <ul>
                     {% if recent_sessions %}
                         {% for session in recent_sessions %}
-                        <li>User-<strong>User-{{ session.user_id }}</strong> ({{ session.username }}) 
+                        <li><strong>User-{{ session.user_id }}</strong> ({{ session.username }}) 
                             {{ session.action }} at {{ session.time }} on {{ session.date }}</li>
                         {% endfor %}
                     {% else %}

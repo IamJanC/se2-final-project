@@ -22,7 +22,6 @@ urlpatterns = [
 
     # ✅ Orders
     path("orders/", views.admin_orders, name="admin_orders"),
-    path("orders/update-status/<int:order_id>/", views.update_order_status, name="update_order_status"),
 
     # ✅ Products
     path("products/", views.products_view, name="products"),
@@ -38,10 +37,13 @@ urlpatterns = [
 
     # ✅ Reports
     path('reports/', views.reports, name='reports'),
-    
-    # API endpoints for fetching report data
     path('api/suppliers/', views.get_suppliers_api, name='api_suppliers'),
     path('api/products/', views.get_products_api, name='api_products'),
-    path('api/statistics/', views.get_statistics_api, name='api_statistics')
+    path('api/statistics/', views.get_statistics_api, name='api_statistics'),
+
+    #
+    path('users/delete-admin/<int:user_id>/', views.delete_admin_user, name='delete_admin_user'),
+    path('users/delete-customer/<int:user_id>/', views.delete_customer_user, name='delete_customer_user'),
+    path('users/promote/<int:user_id>/', views.promote_to_admin, name='promote_to_admin'),
 
 ]

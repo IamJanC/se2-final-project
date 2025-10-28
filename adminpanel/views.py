@@ -876,6 +876,7 @@ def update_order_status(request, order_id):
 @user_passes_test(staff_required, login_url='main:home')
 @csrf_exempt
 def save_product(request):
+    """Handles both creating new products and updating existing products"""
     if request.method != "POST":
         return JsonResponse(
             {"status": "error", "message": "Invalid request method."},
@@ -884,73 +885,122 @@ def save_product(request):
 
     try:
         data = request.POST
-
+        
+        # Get form data
         custom_id = data.get("custom_id", "").strip()
-        name = data.get("name", "")
-        description = data.get("description", "")
-        price = data.get("price", "")
-        discount_price = data.get("discount_price", "")
-        discount_start = data.get("discount_start", "")
-        discount_end = data.get("discount_end", "")
-        stock_quantity = data.get("stock_quantity", "")
-        stock_status = data.get("stock_status", "")
-        category = data.get("category", "")
-        image_url = data.get("image_url", "")
+        name = data.get("name", "").strip()
+        description = data.get("description", "").strip()
+        price = data.get("price", "").strip()
+        stock_quantity = data.get("stock_quantity", "").strip()
+        category_id = data.get("category", "").strip()
+        image_url = data.get("image_url", "").strip()
 
+        # Validate required fields
+        if not name:
+            return JsonResponse({
+                "status": "error",
+                "message": "Product name is required."
+            }, status=400)
+
+        if not price:
+            return JsonResponse({
+                "status": "error",
+                "message": "Product price is required."
+            }, status=400)
+
+        # Get category
         category_instance = None
-        if category:
+        if category_id:
             try:
-                category_instance = Category.objects.get(id=category)
+                category_instance = Category.objects.get(id=category_id)
             except Category.DoesNotExist:
                 return JsonResponse({
                     "status": "error",
-                    "message": f"Category with id {category} does not exist."
+                    "message": "Category does not exist."
                 }, status=400)
+        else:
+            return JsonResponse({
+                "status": "error",
+                "message": "Category is required."
+            }, status=400)
 
-        product = Product.objects.filter(custom_id=custom_id).first()
-        if product:
-            product.name = name
-            product.description = description
-            product.price = price
-            product.discount_price = discount_price
-            product.discount_start = discount_start or None
-            product.discount_end = discount_end or None
-            product.stock_quantity = stock_quantity
-            product.stock_status = stock_status
-            product.category = category_instance
-            product.image_url = image_url
-            product.save()
+        # Convert price to decimal
+        try:
+            price_decimal = Decimal(price)
+            if price_decimal < 0:
+                return JsonResponse({
+                    "status": "error",
+                    "message": "Price cannot be negative."
+                }, status=400)
+        except (ValueError, InvalidOperation):
+            return JsonResponse({
+                "status": "error",
+                "message": "Invalid price format."
+            }, status=400)
+
+        # Handle stock quantity
+        stock_qty = 0
+        if stock_quantity:
+            try:
+                stock_qty = int(stock_quantity)
+                if stock_qty < 0:
+                    stock_qty = 0
+            except ValueError:
+                stock_qty = 0
+
+        # Check if we're editing or creating
+        if custom_id:
+            # EDIT MODE - Update existing product
+            try:
+                product = Product.objects.get(custom_id=custom_id)
+                product.name = name
+                product.description = description
+                product.price = price_decimal
+                product.stock = stock_qty
+                product.category = category_instance
+                product.image_url = image_url if image_url else None
+                product.save()
+
+                return JsonResponse({
+                    "status": "success",
+                    "message": f"Product '{product.name}' updated successfully!"
+                })
+            except Product.DoesNotExist:
+                return JsonResponse({
+                    "status": "error",
+                    "message": "Product not found."
+                }, status=404)
+        else:
+            # CREATE MODE - Generate new custom_id
+            # Generate next custom_id
+            last_product = Product.objects.order_by('-id').first()
+            next_id = (last_product.id + 1) if last_product else 1
+            new_custom_id = f"PROD-{next_id:04d}"
+
+            # Create new product
+            product = Product.objects.create(
+                custom_id=new_custom_id,
+                name=name,
+                description=description,
+                price=price_decimal,
+                stock=stock_qty,
+                category=category_instance,
+                image_url=image_url if image_url else None,
+            )
 
             return JsonResponse({
                 "status": "success",
-                "message": f"Product '{product.name}' (ID: {product.custom_id}) updated successfully!"
+                "message": f"Product '{product.name}' created successfully!"
             })
 
-        product = Product.objects.create(
-            custom_id=custom_id,
-            name=name,
-            description=description,
-            price=price,
-            discount_price=discount_price,
-            discount_start=discount_start or None,
-            discount_end=discount_end or None,
-            stock_quantity=stock_quantity,
-            stock_status=stock_status,
-            category=category_instance,
-            image_url=image_url,
-        )
-
-        return JsonResponse({
-            "status": "success",
-            "message": f"Product '{product.name}' created successfully (Custom ID: {product.custom_id})!"
-        })
-
     except Exception as e:
+        import traceback
+        print(f"Error in save_product: {str(e)}")
+        print(traceback.format_exc())
         return JsonResponse({
             "status": "error",
             "message": f"Error saving product: {str(e)}"
         }, status=500)
-
 
 
 
@@ -960,8 +1010,9 @@ def staff_required(user):
 
 @login_required
 @user_passes_test(staff_required, login_url='main:home')
-@csrf_exempt  # only for JS testing; remove in production if not needed
+@csrf_exempt
 def delete_product(request, custom_id):
+    """Delete a product by custom_id"""
     if request.method != "POST":
         return JsonResponse(
             {"status": "error", "message": "Invalid request method."},
@@ -970,13 +1021,14 @@ def delete_product(request, custom_id):
 
     try:
         product = get_object_or_404(Product, custom_id=custom_id)
-        product_name = product.name  # store before deleting
+        product_name = product.name
         product.delete()
 
         return JsonResponse(
             {"status": "success", "message": f"Product '{product_name}' deleted successfully!"}
         )
     except Exception as e:
+        print(f"Error deleting product: {str(e)}")
         return JsonResponse(
             {"status": "error", "message": f"Error deleting product: {str(e)}"},
             status=500
