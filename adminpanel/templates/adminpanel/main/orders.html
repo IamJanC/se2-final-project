@@ -35,32 +35,42 @@
                                         <circle cx="12" cy="18" r="2"></circle>
                                     </svg>
                                     <ul class="dropdown-menu">
-                                        <li>Last 7 days</li>
-                                        <li>Last 30 days</li>
-                                        <li>This Month</li>
-                                        <li>Custom Range…</li>
+                                        <li><a href="?filter=last_7">Last 7 days</a></li>
+                                        <li><a href="?filter=last_30">Last 30 days</a></li>
+                                        <li><a href="?filter=this_month">This Month</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="number-cards-timeline">
-                                <span>Last 7 days</span>
+                                <span>{{ period_label }}</span>
                             </div>
 
                             <div class="number-cards-sales-current">
-                                <h1>1,240</h1>
+                                <h1>{{ current_total_orders }}</h1>
                                 <span id="current-total-orders">Orders</span>
 
                                 <div class="sales-current-group">
-                                    <div class="sales-current-up-group">
-                                        <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm5.1 28.3V49H26.9V30.3H16L32 15l16 15.3H37.1z" fill="#5c842d"></path></svg>
-                                        <span class="sales-status-up">+12%</span>
-                                    </div>
+                                    {% if total_orders_change > 0 %}
+                                        <div class="sales-current-up-group">
+                                            <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm5.1 28.3V49H26.9V30.3H16L32 15l16 15.3H37.1z" fill="#5c842d"></path></svg>
+                                            <span class="sales-status-up">+{{ total_orders_change_up }}%</span>
+                                        </div>
+                                    {% elif total_orders_change < 0 %}
+                                        <div class="sales-current-down-group">
+                                            <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm0 47L16 33.7h10.9V15h10.3v18.7H48L32 49z" fill="#842d2d"></path></svg>
+                                            <span class="sales-status-down">{{ total_orders_change_down }}%</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="sales-current-neutral-group">
+                                            <span class="sales-status-neutral">0%</span>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
 
                             <div class="number-cards-sales-previous">
-                                <span>Previous 7 days (0)</span>
+                                <span>Previous period ({{ previous_total_orders }})</span>
                             </div>
                         </div>
 
@@ -75,31 +85,41 @@
                                         <circle cx="12" cy="18" r="2"></circle>
                                     </svg>
                                     <ul class="dropdown-menu">
-                                        <li>Last 7 days</li>
-                                        <li>Last 30 days</li>
-                                        <li>This Month</li>
-                                        <li>Custom Range…</li>
+                                        <li><a href="?filter=last_7">Last 7 days</a></li>
+                                        <li><a href="?filter=last_30">Last 30 days</a></li>
+                                        <li><a href="?filter=this_month">This Month</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="number-cards-timeline">
-                                <span>Last 7 days</span>
+                                <span>{{ period_label }}</span>
                             </div>
 
                             <div class="number-cards-sales-current">
-                                <h1>240</h1>
+                                <h1>{{ current_new_orders }}</h1>
                                 <span id="current-new-orders">Orders</span>
                                 <div class="sales-current-group">
-                                    <div class="sales-current-up-group">
-                                        <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm5.1 28.3V49H26.9V30.3H16L32 15l16 15.3H37.1z" fill="#5c842d"></path></svg>
-                                        <span class="sales-status-up">+5%</span>
-                                    </div>
+                                    {% if new_orders_change > 0 %}
+                                        <div class="sales-current-up-group">
+                                            <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm5.1 28.3V49H26.9V30.3H16L32 15l16 15.3H37.1z" fill="#5c842d"></path></svg>
+                                            <span class="sales-status-up">+{{ new_orders_change_up }}%</span>
+                                        </div>
+                                    {% elif new_orders_change < 0 %}
+                                        <div class="sales-current-down-group">
+                                            <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm0 47L16 33.7h10.9V15h10.3v18.7H48L32 49z" fill="#842d2d"></path></svg>
+                                            <span class="sales-status-down">{{ new_orders_change_down }}%</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="sales-current-neutral-group">
+                                            <span class="sales-status-neutral">0%</span>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
 
                             <div class="number-cards-sales-previous">
-                                <span>Previous 7 days (0)</span>
+                                <span>Previous period ({{ previous_new_orders }})</span>
                             </div>
                         </div>
 
@@ -114,31 +134,41 @@
                                         <circle cx="12" cy="18" r="2"></circle>
                                     </svg>
                                     <ul class="dropdown-menu">
-                                        <li>Last 7 days</li>
-                                        <li>Last 30 days</li>
-                                        <li>This Month</li>
-                                        <li>Custom Range…</li>
+                                        <li><a href="?filter=last_7">Last 7 days</a></li>
+                                        <li><a href="?filter=last_30">Last 30 days</a></li>
+                                        <li><a href="?filter=this_month">This Month</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="number-cards-timeline">
-                                <span>Last 7 days</span>
+                                <span>{{ period_label }}</span>
                             </div>
 
                             <div class="number-cards-sales-current">
-                                <h1>960</h1>
+                                <h1>{{ current_completed_orders }}</h1>
                                 <span id="current-completed-orders">Orders</span>
                                 <div class="sales-current-group">
-                                    <div class="sales-current-up-group">
-                                        <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm5.1 28.3V49H26.9V30.3H16L32 15l16 15.3H37.1z" fill="#5c842d"></path></svg>
-                                        <span class="sales-status-up">+8%</span>
-                                    </div>
+                                    {% if completed_orders_change > 0 %}
+                                        <div class="sales-current-up-group">
+                                            <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm5.1 28.3V49H26.9V30.3H16L32 15l16 15.3H37.1z" fill="#5c842d"></path></svg>
+                                            <span class="sales-status-up">+{{ completed_orders_change_up }}%</span>
+                                        </div>
+                                    {% elif completed_orders_change < 0 %}
+                                        <div class="sales-current-down-group">
+                                            <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm0 47L16 33.7h10.9V15h10.3v18.7H48L32 49z" fill="#842d2d"></path></svg>
+                                            <span class="sales-status-down">{{ completed_orders_change_down }}%</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="sales-current-neutral-group">
+                                            <span class="sales-status-neutral">0%</span>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
 
                             <div class="number-cards-sales-previous">
-                                <span>Previous 7 days (0)</span>
+                                <span>Previous period ({{ previous_completed_orders }})</span>
                             </div>
                         </div>
 
@@ -153,31 +183,41 @@
                                         <circle cx="12" cy="18" r="2"></circle>
                                     </svg>
                                     <ul class="dropdown-menu">
-                                        <li>Last 7 days</li>
-                                        <li>Last 30 days</li>
-                                        <li>This Month</li>
-                                        <li>Custom Range…</li>
+                                        <li><a href="?filter=last_7">Last 7 days</a></li>
+                                        <li><a href="?filter=last_30">Last 30 days</a></li>
+                                        <li><a href="?filter=this_month">This Month</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="number-cards-timeline">
-                                <span>Last 7 days</span>
+                                <span>{{ period_label }}</span>
                             </div>
 
                             <div class="number-cards-sales-current">
-                                <h1>87</h1>
+                                <h1>{{ current_cancelled_orders }}</h1>
                                 <span id="current-cancelled-orders">Orders</span>
                                 <div class="sales-current-group">
-                                    <div class="sales-current-down-group">
-                                        <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm0 47L16 33.7h10.9V15h10.3v18.7H48L32 49z" fill="#842d2d"></path></svg>
-                                        <span class="sales-status-down">-2%</span>
-                                    </div>
+                                    {% if cancelled_orders_change > 0 %}
+                                        <div class="sales-current-up-group">
+                                            <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm5.1 28.3V49H26.9V30.3H16L32 15l16 15.3H37.1z" fill="#5c842d"></path></svg>
+                                            <span class="sales-status-up">+{{ cancelled_orders_change_up }}%</span>
+                                        </div>
+                                    {% elif cancelled_orders_change < 0 %}
+                                        <div class="sales-current-down-group">
+                                            <svg viewBox="0 0 64 64"><path d="M32 2C15.4 2 2 15.4 2 32s13.4 30 30 30 30-13.4 30-30S48.6 2 32 2zm0 47L16 33.7h10.9V15h10.3v18.7H48L32 49z" fill="#842d2d"></path></svg>
+                                            <span class="sales-status-down">{{ cancelled_orders_change_down }}%</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="sales-current-neutral-group">
+                                            <span class="sales-status-neutral">0%</span>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
 
                             <div class="number-cards-sales-previous">
-                                <span>Previous 7 days (0)</span>
+                                <span>Previous period ({{ previous_cancelled_orders }})</span>
                             </div>
                         </div>
 

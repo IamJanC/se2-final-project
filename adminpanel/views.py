@@ -673,7 +673,136 @@ def get_categories():
 @login_required
 @user_passes_test(staff_required, login_url='main:home')
 def admin_orders(request):
-    """Displays all orders inside the Admin Dashboard (Orders page)."""
+    """Displays all orders inside the Admin Dashboard (Orders page) with statistics."""
+    
+    # ========================================
+    # DATE RANGE CALCULATION BASED ON FILTER
+    # ========================================
+    now = timezone.now()
+    date_filter = request.GET.get('filter', 'last_30')  # default to last 30 days
+    
+    # Calculate date ranges based on filter
+    if date_filter == 'last_7':
+        current_start = now - timedelta(days=7)
+        previous_start = now - timedelta(days=14)
+        previous_end = current_start
+        period_label = "Last 7 days"
+    elif date_filter == 'last_30':
+        current_start = now - timedelta(days=30)
+        previous_start = now - timedelta(days=60)
+        previous_end = current_start
+        period_label = "Last 30 days"
+    elif date_filter == 'this_month':
+        current_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        if current_start.month == 1:
+            previous_start = current_start.replace(year=current_start.year - 1, month=12)
+        else:
+            previous_start = current_start.replace(month=current_start.month - 1)
+        previous_end = current_start
+        period_label = "This Month"
+    else:  # custom range (can be implemented later)
+        current_start = now - timedelta(days=7)
+        previous_start = now - timedelta(days=14)
+        previous_end = current_start
+        period_label = "Last 7 days"
+
+    # ========================================
+    # TOTAL ORDERS STATISTICS
+    # ========================================
+    
+    # Current period - all orders
+    current_total_orders = Order.objects.filter(
+        created_at__gte=current_start
+    ).count()
+    
+    # Previous period - all orders
+    previous_total_orders = Order.objects.filter(
+        created_at__gte=previous_start,
+        created_at__lt=previous_end
+    ).count()
+    
+    # Calculate percentage change
+    total_orders_change = 0
+    if previous_total_orders > 0:
+        total_orders_change = round(
+            ((current_total_orders - previous_total_orders) / previous_total_orders) * 100, 1
+        )
+    elif current_total_orders > 0:
+        total_orders_change = 100.0
+
+    # ========================================
+    # NEW ORDERS (Pending) STATISTICS
+    # ========================================
+    
+    current_new_orders = Order.objects.filter(
+        status='pending',
+        created_at__gte=current_start
+    ).count()
+    
+    previous_new_orders = Order.objects.filter(
+        status='pending',
+        created_at__gte=previous_start,
+        created_at__lt=previous_end
+    ).count()
+    
+    new_orders_change = 0
+    if previous_new_orders > 0:
+        new_orders_change = round(
+            ((current_new_orders - previous_new_orders) / previous_new_orders) * 100, 1
+        )
+    elif current_new_orders > 0:
+        new_orders_change = 100.0
+
+    # ========================================
+    # COMPLETED ORDERS STATISTICS
+    # ========================================
+    
+    current_completed_orders = Order.objects.filter(
+        status__in=['completed', 'delivered'],
+        created_at__gte=current_start
+    ).count()
+    
+    previous_completed_orders = Order.objects.filter(
+        status__in=['completed', 'delivered'],
+        created_at__gte=previous_start,
+        created_at__lt=previous_end
+    ).count()
+    
+    completed_orders_change = 0
+    if previous_completed_orders > 0:
+        completed_orders_change = round(
+            ((current_completed_orders - previous_completed_orders) / previous_completed_orders) * 100, 1
+        )
+    elif current_completed_orders > 0:
+        completed_orders_change = 100.0
+
+    # ========================================
+    # CANCELLED ORDERS STATISTICS
+    # ========================================
+    
+    current_cancelled_orders = Order.objects.filter(
+        status='cancelled',
+        created_at__gte=current_start
+    ).count()
+    
+    previous_cancelled_orders = Order.objects.filter(
+        status='cancelled',
+        created_at__gte=previous_start,
+        created_at__lt=previous_end
+    ).count()
+    
+    cancelled_orders_change = 0
+    if previous_cancelled_orders > 0:
+        cancelled_orders_change = round(
+            ((current_cancelled_orders - previous_cancelled_orders) / previous_cancelled_orders) * 100, 1
+        )
+    elif current_cancelled_orders > 0:
+        cancelled_orders_change = 100.0
+
+    # ========================================
+    # GET ALL ORDERS FOR TABLE
+    # ========================================
+    
     orders = (
         Order.objects
         .select_related("user")
@@ -691,11 +820,39 @@ def admin_orders(request):
 
     context = {
         "orders": orders,
+        "current_filter": date_filter,
+        "period_label": period_label,
+        
+        # Total Orders
+        "current_total_orders": current_total_orders,
+        "previous_total_orders": previous_total_orders,
+        "total_orders_change": total_orders_change,
+        "total_orders_change_up": total_orders_change if total_orders_change > 0 else 0,
+        "total_orders_change_down": abs(total_orders_change) if total_orders_change < 0 else 0,
+        
+        # New Orders (Pending)
+        "current_new_orders": current_new_orders,
+        "previous_new_orders": previous_new_orders,
+        "new_orders_change": new_orders_change,
+        "new_orders_change_up": new_orders_change if new_orders_change > 0 else 0,
+        "new_orders_change_down": abs(new_orders_change) if new_orders_change < 0 else 0,
+        
+        # Completed Orders
+        "current_completed_orders": current_completed_orders,
+        "previous_completed_orders": previous_completed_orders,
+        "completed_orders_change": completed_orders_change,
+        "completed_orders_change_up": completed_orders_change if completed_orders_change > 0 else 0,
+        "completed_orders_change_down": abs(completed_orders_change) if completed_orders_change < 0 else 0,
+        
+        # Cancelled Orders
+        "current_cancelled_orders": current_cancelled_orders,
+        "previous_cancelled_orders": previous_cancelled_orders,
+        "cancelled_orders_change": cancelled_orders_change,
+        "cancelled_orders_change_up": cancelled_orders_change if cancelled_orders_change > 0 else 0,
+        "cancelled_orders_change_down": abs(cancelled_orders_change) if cancelled_orders_change < 0 else 0,
     }
 
-    # Render the new template under templates/main/
     return render(request, "adminpanel/main/orders.html", context)
-
 
 @csrf_exempt
 @login_required
